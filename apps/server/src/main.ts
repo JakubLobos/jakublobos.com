@@ -1,5 +1,6 @@
 import { createApp } from './app.ts';
 import { ConfigError, loadConfig, type Config } from './config.ts';
+import type { HumanVerifier } from './domain/contact/human-verifier.port.ts';
 import { uuidGenerator } from './domain/shared/ids.ts';
 import { createHttpServer } from './http/server.ts';
 import { openDatabase } from './infra/db/connection.ts';
@@ -7,6 +8,9 @@ import { createGuestbookRepository } from './infra/db/guestbook.repository.ts';
 import { migrate } from './infra/db/migrate.ts';
 import { createContactRoutes } from './http/routes/contact.routes.ts';
 import { createHealthRoutes } from './http/routes/health.routes.ts';
+import { createPhoneRoutes } from './http/routes/phone.routes.ts';
+import { createFakeVerifier } from './infra/verification/fake.verifier.ts';
+import { createTurnstileVerifier } from './infra/verification/turnstile.verifier.ts';
 import { createMailer } from './infra/mail/index.ts';
 import { createLogger } from './logger.ts';
 import { createShutdownManager } from './shutdown.ts';
@@ -26,6 +30,19 @@ function readConfig(): Config {
   }
 }
 
+function createHumanVerifier(config: Config): HumanVerifier {
+  const { kind, turnstileSecretKey, allowedHostnames } = config.humanVerifier;
+  // Config refuses `fake` in production and requires the secret for `turnstile`.
+  if (kind === 'fake') return createFakeVerifier();
+  if (turnstileSecretKey === undefined) throw new Error('TURNSTILE_SECRET_KEY is required');
+  return createTurnstileVerifier({
+    secret: turnstileSecretKey,
+    allowedHostnames,
+    fetch,
+    nextIdempotencyKey: () => uuidGenerator.next(),
+  });
+}
+
 function main(): void {
   const config = readConfig();
   const logger = createLogger({ level: config.logLevel, pretty: config.nodeEnv === 'development' });
@@ -43,6 +60,11 @@ function main(): void {
       createHealthRoutes({ checkDatabase: guestbookRepo.ping }),
       createContactRoutes({
         mailer: createMailer(config.mail, { fetch: globalThis.fetch, logger }),
+        clientIpSource: config.clientIpSource,
+      }),
+      createPhoneRoutes({
+        verifier: createHumanVerifier(config),
+        phone: config.contactPhone,
         clientIpSource: config.clientIpSource,
       }),
     ],
