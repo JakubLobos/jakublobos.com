@@ -198,7 +198,7 @@ src/
 1. Request ID + pino-http logging (redacted, no IPs).
 2. Security headers (helmet; API CSP `default-src 'none'; frame-ancestors 'none'`).
 3. **CORS** (`cors` package): `origin` ∈ `CORS_ALLOWED_ORIGINS`, methods `GET, POST, OPTIONS`, headers `Content-Type, X-Request-Id`, `maxAge: 600`, no credentials. Disallowed origins get no CORS headers, so the browser blocks the response.
-4. `/api/*` POST: `jsonBody(limit)` (guestbook 8 KB, contact 16 KB), `require-json` (415), **allowed-origin** check (403 if `Origin` is missing or not allowlisted), per-client rate limiters (429).
+4. `/api/*` POST: **allowed-origin** check (403 if `Origin` is missing or not allowlisted) and `require-json` (415) run **before** any body parsing (a foreign site can never make the server parse a body), then `express.json({ limit })` (guestbook 8 KB, contact 16 KB, phone 4 KB) and per-client rate limiters (429). Client-side body errors map to 400/413/415 and are logged at `warn`; only genuine 5xx are logged at `error`.
 5. Routes → services.
 6. API 404 → JSON envelope. Central error handler → `INTERNAL` envelope (no stack traces).
 

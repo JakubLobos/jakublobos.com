@@ -19,7 +19,7 @@ Principles: test behaviour at the cheapest level that proves it; **deterministic
 
 ## 2. Determinism toolkit (backend)
 
-- `Clock` port (`now(): Date`). Tests use a `FakeClock` with `advance(ms)`. The worker's timers come from an injected scheduler, so tests call `tick()` directly instead of waiting.
+- `Clock` port (`now(): number`, epoch milliseconds; convert to ISO strings at the persistence boundary). Tests use a `FakeClock` with `advance(ms)`. The worker's timers come from an injected scheduler, so tests call `tick()` directly instead of waiting.
 - IDs (`randomUUID`) are injected (`IdGenerator`) so assertions are stable.
 - `fetch` is injected into the OpenAI provider.
 - The `Mailer` fake records sent messages in memory.
