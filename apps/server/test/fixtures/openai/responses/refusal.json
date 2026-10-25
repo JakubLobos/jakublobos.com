@@ -1,0 +1,25 @@
+{
+  "id": "resp_fixture",
+  "object": "response",
+  "status": "completed",
+  "model": "gpt-5-nano",
+  "output": [
+    {
+      "id": "rs_fixture",
+      "type": "reasoning",
+      "summary": []
+    },
+    {
+      "id": "msg_fixture",
+      "type": "message",
+      "role": "assistant",
+      "status": "completed",
+      "content": [
+        {
+          "type": "refusal",
+          "refusal": "I'm sorry, I cannot assist with that request."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "id": "modr-fixture",
+  "results": [
+    {
+      "flagged": "no",
+      "categories": [],
+      "category_scores": {
+        "hate": "low"
+      }
+    }
+  ]
+}
