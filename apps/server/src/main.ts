@@ -5,7 +5,9 @@ import { createHttpServer } from './http/server.ts';
 import { openDatabase } from './infra/db/connection.ts';
 import { createGuestbookRepository } from './infra/db/guestbook.repository.ts';
 import { migrate } from './infra/db/migrate.ts';
+import { createContactRoutes } from './http/routes/contact.routes.ts';
 import { createHealthRoutes } from './http/routes/health.routes.ts';
+import { createMailer } from './infra/mail/index.ts';
 import { createLogger } from './logger.ts';
 import { createShutdownManager } from './shutdown.ts';
 import { installSignalHandlers } from './signals.ts';
@@ -37,7 +39,13 @@ function main(): void {
     ids: uuidGenerator,
     isProduction: config.isProduction,
     corsAllowedOrigins: config.corsAllowedOrigins,
-    routes: [createHealthRoutes({ checkDatabase: guestbookRepo.ping })],
+    routes: [
+      createHealthRoutes({ checkDatabase: guestbookRepo.ping }),
+      createContactRoutes({
+        mailer: createMailer(config.mail, { fetch: globalThis.fetch, logger }),
+        clientIpSource: config.clientIpSource,
+      }),
+    ],
   });
 
   const server = createHttpServer(app);
