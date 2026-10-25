@@ -1,3 +1,8 @@
 packages:
   - apps/*
   - packages/*
+
+# better-sqlite3 bundles prebuilt binaries for every target we run (win32, linux glibc/musl, darwin);
+# its binding.gyp would only trigger a node-gyp rebuild, which needs a toolchain we don't install.
+allowBuilds:
+  better-sqlite3: false
