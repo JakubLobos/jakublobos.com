@@ -1,0 +1,8 @@
+pnpm-lock.yaml
+**/dist/
+**/.astro/
+**/coverage/
+**/playwright-report/
+**/test-results/
+docs/design/
+apps/server/data/

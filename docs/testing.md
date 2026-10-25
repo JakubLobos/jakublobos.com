@@ -1,0 +1,113 @@
+# Testing strategy and quality gates
+
+Principles: test behaviour at the cheapest level that proves it; **deterministic** (no wall clock, no randomness, no network, no paid APIs, no real credentials); every invariant in [`guestbook-moderation.md`](guestbook-moderation.md#1-invariants-each-has-a-named-test) has at least one test.
+
+## 1. Tools
+
+| Purpose                   | Tool                                                                           | Where                             | Notes                                                                                                                                                                                                                                                                                                                                                                                          |
+| ------------------------- | ------------------------------------------------------------------------------ | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Unit + integration        | **Vitest 5**                                                                   | each package (`vitest.config.ts`) | Web uses `getViteConfig()` from `astro/config`; node environment (DOM-free `lib/`).                                                                                                                                                                                                                                                                                                            |
+| HTTP integration          | **supertest**                                                                  | `apps/server`                     | Against `createApp(deps)` with fake providers and a temp/in-memory DB; no port binding.                                                                                                                                                                                                                                                                                                        |
+| DB behaviour              | Vitest + `better-sqlite3` `:memory:` **and** a temp file for WAL/trigger tests | `apps/server/src/infra/db`        | Real SQLite, real migrations. Never mock the DB.                                                                                                                                                                                                                                                                                                                                               |
+| Moderation provider       | Vitest with an **injected `fetch`** returning canned responses                 | `infra/moderation`                | Fixtures in `test/fixtures/openai/*.json` (valid, flagged, missing fields, extra categories, 429 with Retry-After, 500, malformed JSON).                                                                                                                                                                                                                                                       |
+| Astro component rendering | Astro Container API (`experimental_AstroContainer`)                            | `apps/web`                        | Optional. It's still experimental, so use it sparingly (Seo tags, LanguageSwitcher hrefs). Prefer e2e for behaviour.                                                                                                                                                                                                                                                                           |
+| End-to-end                | **Playwright 1.64** (`@playwright/test`)                                       | `/e2e`                            | Runs against the **production topology**: the built site served by `wrangler dev` (static assets + the real Worker, :8787) and the real API server (:3000) with `NODE_ENV=test`, fake moderation, fake suitability, console mailer, temp DB, `CORS_ALLOWED_ORIGINS=http://localhost:8787`. Projects: Chromium desktop 1440×900, Chromium mobile 390×844, WebKit desktop. Firefox runs nightly. |
+| Accessibility             | **@axe-core/playwright**                                                       | `/e2e/a11y.spec.ts`               | WCAG 2.0/2.1/2.2 A+AA tags. Zero `serious`/`critical` violations; `moderate` triaged in review.                                                                                                                                                                                                                                                                                                |
+| Visual comparison         | Playwright screenshots + design capture script                                 | `/e2e/visual`, `tools/design/`    | See §5.                                                                                                                                                                                                                                                                                                                                                                                        |
+| Static checks             | `tsc` (via `astro check` for web), ESLint, Prettier                            | root                              | `pnpm verify`                                                                                                                                                                                                                                                                                                                                                                                  |
+| Performance               | bundle budget script + Lighthouse (manual or CI)                               | `tools/check-budgets.mjs`         | See §6.                                                                                                                                                                                                                                                                                                                                                                                        |
+
+## 2. Determinism toolkit (backend)
+
+- `Clock` port (`now(): Date`). Tests use a `FakeClock` with `advance(ms)`. The worker's timers come from an injected scheduler, so tests call `tick()` directly instead of waiting.
+- IDs (`randomUUID`) are injected (`IdGenerator`) so assertions are stable.
+- `fetch` is injected into the OpenAI provider.
+- The `Mailer` fake records sent messages in memory.
+- No test sleeps longer than a microtask. Timeouts are tested with fake timers (`vi.useFakeTimers()`) or an aborted signal.
+- Each test gets a fresh DB (`:memory:` + migrations) via `createTestDb()`.
+
+## 3. Required backend test cases
+
+### Guestbook domain and API (T-012, T-013, T-014)
+
+- **Validation:** empty and whitespace-only → `empty`; 120 vs 121 UTF-16 units (including an emoji at the boundary) → OK / `too_long`; control, bidi, and zero-width characters → `invalid_characters`; ZWJ emoji allowed; links (`http://`, `www.`, `example.pl`) → `links_not_allowed`, while `Next.js`, `Node.js`, and `e.g.` pass; email and 9-digit phone → `contact_info_not_allowed`; invalid paint and UUID; non-JSON → 415; malformed JSON → 400; oversized → 413; missing or foreign Origin → 403.
+- **Normalization:** NFC composed and decomposed `ł`/`ó` hash identically; whitespace runs collapse.
+- **Review pipeline outcomes:** all layers pass → approved, and `/latest` returns it; moderation flagged → deleted; score at threshold → rejected (boundary 0.2 vs 0.1999); suitability `reject` or refusal → deleted; moderation or suitability timeout, network, 429 (Retry-After honoured), 500, 401, invalid JSON, schema-invalid or incomplete suitability output → row stays pending with backoff and is **never** visible; after 24 h → deleted (expired). The suitability provider is never called when moderation rejects.
+- **Quality rules:** the calibration corpora (`legit-messages.{en,pl}.txt` all pass, `weird-messages.txt` all caught); each rule has boundary cases (exactly 70 % uppercase, a run of 5 vs 6, 6 vs 7 consonants, `bezwzględny` and `chrząszcz` pass).
+- **Prompt-injection fixtures:** suitability requests contain the visitor text only inside the delimited user message; the developer prompt is unchanged by input (snapshot of the request body for an injection-attempt fixture).
+- **Retention and archive:** 150 approval cycles → never more than 100 rows; newest retained; oldest approved evicted first; the trigger blocks a direct 101st insert; the archive export lists approved rows newest first.
+- **Newest-wins and concurrency (I-7):** submissions A then B → only B pending (A deleted, logged `superseded`); a provider stub that resolves A _after_ B was inserted → `approve(A)` changes 0 rows and B is reviewed in the immediately following tick (rerun flag); the provider is called only for the newest pending row while retrying; 20 concurrent identical submissions (same `clientRequestId`) → 1 row, all 202; same text with different IDs → 1 row; 25 distinct concurrent submissions → exactly 1 pending row afterwards (the partial unique index holds), no 500s.
+- **Abuse controls:** honeypot → 202, no row; quality-rule or blocked-term hit → 202, no row, no provider call; recently rejected text → 202, no provider call; per-IP 4th request → 429 + `Retry-After`; global hourly (21st) and daily (51st) → 503 `GUESTBOOK_BUSY`; spoofed `X-Real-IP` values that aren't valid IPs fall back to the socket address.
+- **XSS payload** stored and returned byte-for-byte as data (escaping is the client's job and is e2e-tested).
+- **Logs:** a submission never logs the body or IP (capture the pino destination in the test).
+
+### Contact (T-015)
+
+Field rules at their boundaries; CR/LF in name stripped from the subject; `reply_to` set; the Resend request carries `Idempotency-Key = clientRequestId` (injected fetch); Resend 4xx, 5xx, timeout → 503; honeypot; per-IP limits; global hourly and daily caps (60/day).
+
+### Phone reveal (T-018)
+
+Fake verifier and the Turnstile verifier against stubbed `siteverify` responses (test secret `1x0000000000000000000000000000000AA`): verified → 200 + formatted number + `no-store`; `success:false`, wrong hostname, wrong action, `timeout-or-duplicate` → 403; 5xx, timeout, malformed → 503; per-client and global limits; `remoteip` + `idempotency_key` present; the secret and the number never appear in logs or error bodies; the fixture number is `+48000000000`.
+
+### Platform (T-011) and edge Worker (T-016)
+
+**API:** config refuses fake providers, a missing key, and non-https CORS origins in production; security headers on all responses; CORS preflight from an allowed origin → 204 with headers, from a foreign origin → no CORS headers; POST with a foreign or missing `Origin` → 403; `resolveClientIp` matrix (valid v4 and v6 `X-Real-IP`, garbage, missing, `socket` mode).
+
+**Worker** (`apps/web/worker`, Vitest in Node with standard `Request`/`Response` and a stub `env.ASSETS`): the `GET /` negotiation matrix — no header → EN asset; `pl-PL,pl;q=0.9,en;q=0.8` → 302 `/pl`; `en-US,pl;q=0.5` → EN; `de,pl;q=0.5` → 302 `/pl`; cookie `lang=en` with a Polish header → EN; cookie `lang=pl` → 302 `/pl`. Responses carry `Vary` and `private, no-cache` plus every security header from `security-headers.ts`. `/set-language` sets the cookie and redirects only to allowlisted paths (`to=https://evil.example`, `to=//evil`, and `to=/unknown` → locale home); an invalid `lang` → 400. A unit test asserts that `dist/_headers` generation and the Worker use the same header source.
+
+## 4. End-to-end journeys (T-041)
+
+| Journey                               | Assertions                                                                                                                                                                                                                                                                                                                                                                                                          |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Language                              | A Polish `Accept-Language` at `/` lands on `/pl`; the switcher to EN (via `/set-language`) sticks on reload of `/`; `html[lang]`, title, hreflang, and OG image per locale are correct; `/pl/missing` shows the PL 404.                                                                                                                                                                                             |
+| Navigation                            | Desktop nav anchors scroll and set `aria-current`; the mobile menu opens, traps focus, closes on Escape and link click, and locks body scroll.                                                                                                                                                                                                                                                                      |
+| Guestbook display states              | Loading state visible before the fetch resolves (route delayed); `message: null` → "No marks yet. Be the first to leave one!"; API 500 or abort → error line + "Try again" works; no layout shift between states (bounding-box height constant).                                                                                                                                                                    |
+| Guestbook happy path                  | Type a message, pick a paint, submit → modal echoes the text with the tint → close → input empty; `expect.poll` on `/latest` until approved (fake) → reload shows the new quote with the tint.                                                                                                                                                                                                                      |
+| Guestbook rejected                    | `[flag]` and `[unsuitable]` messages → modal shown (uniform) → the quote never changes.                                                                                                                                                                                                                                                                                                                             |
+| Guestbook provider down + newest wins | A `[fail]` message, then a normal message → only the second is ever published.                                                                                                                                                                                                                                                                                                                                      |
+| Guestbook validation                  | A link → inline localized error, text kept; XSS payload `<img src=x onerror=alert(1)>` approved → renders literally, no dialog fired.                                                                                                                                                                                                                                                                               |
+| Contact                               | Empty submit → three errors, focus on Name; valid → Sending → Message sent with the echoed email; "Send another" resets and focuses Name; mailer failure (test hook: recipient env set to fail) → error status, fields kept.                                                                                                                                                                                        |
+| Phone reveal                          | "Show number" with Turnstile **test sitekey** `1x00000000000000000000BB` (always passes, invisible; `challenges.cloudflare.com` intercepted with a local stub) and the fake verifier → a `tel:` link with the fixture number, focus moved, announced; the always-fail key → error line and retry; the number is absent from the page HTML before the reveal.                                                        |
+| Cookie consent                        | With stub analytics IDs: before a choice, no request to Google or PostHog hosts (route interception); "Only essential" → no Google requests, PostHog in opt-out (cookieless) mode, no `_ga`/`ph_` cookies; "Accept" → gtag.js requested and PostHog opted in; "Cookie settings" re-opens the banner, and withdrawal removes `_ga*` cookies. External hosts are intercepted and fulfilled locally (no real network). |
+| Reduced motion                        | `reducedMotion: 'reduce'` → no marquee animation, no type-in animation, `scroll-behavior: auto`.                                                                                                                                                                                                                                                                                                                    |
+| CSP                                   | On every page, zero `securitypolicyviolation` events and zero console errors.                                                                                                                                                                                                                                                                                                                                       |
+| No-JS                                 | `javaScriptEnabled: false` → all content visible, links work.                                                                                                                                                                                                                                                                                                                                                       |
+
+## 5. Visual fidelity
+
+The prototype is dynamic (mascot, marquee, mirror animations), so automated pixel-diffing **against `design.html`** isn't reliable. Approach:
+
+1. `tools/design/capture-design.mjs` renders `design.html` and the built site at 390/768/1024/1440 with reduced motion, the same scroll positions, and dynamic elements masked. It writes side-by-side PNGs to `e2e/visual/compare/` (git-ignored).
+2. The **reviewer agent** inspects the pairs for every UI task and records deviations as findings.
+3. After the owner signs off the implemented design (T-042), Playwright `toHaveScreenshot()` **baselines of the implementation** are committed for key sections × 3 viewports (Chromium only, animations disabled, `maxDiffPixelRatio: 0.01`). They guard against regressions from then on.
+
+## 6. Performance budgets (T-043)
+
+`tools/check-budgets.mjs` (Node, no dependencies) gzips the eagerly referenced built assets of `index.html` and `pl.html` and fails if first-party JS > 35 KB, CSS > 25 KB, lazy analytics chunks > 80 KB in total, fonts preloaded > 1 file, or the HTML contains `zod`. A Lighthouse mobile run (Chrome DevTools or `npx lighthouse` against `pnpm preview`) is recorded in the review for UI-heavy tasks: Performance ≥ 95, Accessibility 100, Best Practices 100, SEO 100.
+
+## 7. Coverage
+
+V8 coverage via `@vitest/coverage-v8`. Thresholds (lines/branches): `apps/server/src/domain/**` 90/85; `apps/server/src` overall 80/75; `packages/contracts/src` 95/90; `apps/web/src/lib/**` 85/80. Coverage is a floor, not a goal. Reviewers check that assertions are meaningful.
+
+## 8. Quality gates
+
+### Gate A: every task, before requesting review (implementer runs; reviewer re-runs)
+
+```
+pnpm install --frozen-lockfile
+pnpm verify          # format:check · lint · typecheck · test · build
+```
+
+Plus task-specific commands listed in the task file (for example `pnpm test:e2e --grep @guestbook`). All must pass, and output is pasted into the completion report.
+
+### Gate B: review approval (reviewer)
+
+Gate A passes on the reviewer's run · all acceptance criteria verified with evidence · no BLOCKER/MAJOR findings open · new code has tests per this document · UI tasks: side-by-side screenshots inspected and axe clean for the affected pages and states · no unapproved dependency or shared-surface change.
+
+### Gate C: merge to `main` (orchestrator)
+
+Gate B approved · rebased on the latest `main` · `pnpm verify && pnpm test:e2e` pass on the rebased branch.
+
+### Gate D: release (before go-live)
+
+All tasks done · open decisions resolved · `pnpm test:e2e` across all projects including Firefox · Lighthouse targets met · budgets pass · security checklist ([`security.md` §9](security.md#9-go-live-security-checklist)) complete · owner sign-off of PL copy, blocked-term list, privacy policy, and visuals.

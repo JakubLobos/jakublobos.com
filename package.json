@@ -1,0 +1,35 @@
+{
+  "name": "portfolio",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Jakub Łobos portfolio — Astro static site + Express API (guestbook with moderation, contact form).",
+  "engines": {
+    "node": ">=24.11.0",
+    "pnpm": ">=10"
+  },
+  "scripts": {
+    "dev": "pnpm --recursive --parallel --filter \"./apps/*\" dev",
+    "build": "pnpm --recursive build",
+    "start": "pnpm --filter @portfolio/server start",
+    "typecheck": "pnpm --recursive typecheck",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "pnpm --recursive test",
+    "verify": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "eslint": "10.13.0",
+    "eslint-config-prettier": "10.1.8",
+    "eslint-plugin-astro": "3.2.1",
+    "eslint-plugin-jsx-a11y": "6.10.2",
+    "globals": "17.13.0",
+    "prettier": "3.9.10",
+    "prettier-plugin-astro": "1.1.2",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.72.0"
+  }
+}

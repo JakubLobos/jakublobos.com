@@ -1,0 +1,25 @@
+node_modules/
+dist/
+.astro/
+coverage/
+playwright-report/
+test-results/
+blob-report/
+*.log
+
+# Secrets — only .env.example is committed
+.env
+.env.*
+!.env.example
+
+# Runtime data (SQLite database, WAL/SHM files)
+apps/server/data/
+*.db
+*.db-wal
+*.db-shm
+
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json

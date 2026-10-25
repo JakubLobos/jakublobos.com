@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="d79771da-4fca-4c00-be5a-6a4c25c8085a"></script>
+<style>/* cyrillic-ext */
+</style>
+
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<style>/* cyrillic-ext */
+</style>
+<style>
+:root{--bg:#f7f7f6;--surface:#fbfbfa;--ink:#2b2b2b;--body:#3d3d3b;--muted:#7a7a78;--muted2:#5c5c5a;--faint:#a9a9a6;--line:#e4e4e1;--line2:#d6d6d3;--grid:#ececea;--hover:#e4e4e0;--figma:#f9c9c9;--hl:55%;color-scheme:light}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Poppins,sans-serif;-webkit-font-smoothing:antialiased;transition:background 250ms ease,color 250ms ease}
+a{color:var(--ink);text-decoration:none}
+a:hover{color:#2a64e0}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:88px}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+html{scrollbar-width:none}
+html::-webkit-scrollbar{display:none}
+::selection{background:#fdf25c;color:#1f1f1e}
+input::placeholder,textarea::placeholder{color:var(--faint);opacity:1}
+@keyframes twIn{0%{transform:translateY(.6em) rotate(4deg);opacity:0}60%{transform:translateY(-.08em);opacity:1}100%{transform:none;opacity:1}}
+@keyframes twSpin{to{transform:rotate(360deg)}}
+</style>
+</helmet>
+<div style="position:relative;min-height:100vh;background-color:var(--bg);background-image:{{ gridBg }};background-size:235px 106px;overflow-x:clip">
+
+  <header style="position:sticky;top:0;z-index:4;display:flex;justify-content:space-between;align-items:center;gap:24px;padding:clamp(14px,2.4vw,24px) clamp(20px,4vw,56px) clamp(12px,2vw,20px)">
+    <a href="#top" style="display:grid;grid-template-columns:auto auto;column-gap:8px;font-weight:600;font-size:18px;line-height:1.3;letter-spacing:0.02em">
+      <span style="font-family:'JetBrains Mono',monospace;font-size:15px;line-height:1.55">{}</span>
+      <span>JAKUB<br>ŁOBOS.</span>
+    </a>
+    <sc-if value="{{ showNav }}" hint-placeholder-val="{{ true }}">
+    <nav aria-label="Main" style="display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px clamp(4px,1vw,12px);font-size:15px;margin-right:-12px">
+      <sc-for list="{{ navItems }}" as="l" hint-placeholder-count="5">
+        <a href="{{ l.href }}" aria-current="{{ l.current }}" style="padding:6px 12px;border-radius:6px;background:{{ l.bg }};transition:background 150ms ease" style-hover="background:var(--hover);color:var(--ink)">{{ l.label }}</a>
+      </sc-for>
+    </nav>
+    </sc-if>
+    <sc-if value="{{ showBurger }}" hint-placeholder-val="{{ false }}">
+      <button type="button" sc-camel-on-click="{{ openMenu }}" aria-label="Open menu" aria-expanded="{{ menuOpen }}" style="display:flex;align-items:center;gap:10px;min-height:44px;padding:0 16px;font-family:Ubuntu,sans-serif;font-weight:500;font-size:16px;color:var(--ink);background:var(--surface);border:2px solid var(--ink);border-radius:8px;box-shadow:0 4px 0 var(--ink);cursor:pointer" style-active="transform:translateY(3px);box-shadow:0 1px 0 var(--ink)">
+        <span style="display:flex;flex-direction:column;gap:4px"><span style="width:16px;height:2px;background:var(--ink);border-radius:1px"></span><span style="width:16px;height:2px;background:var(--ink);border-radius:1px"></span><span style="width:10px;height:2px;background:var(--ink);border-radius:1px"></span></span>
+        Menu
+      </button>
+    </sc-if>
+  </header>
+
+  <sc-if value="{{ showDrips }}" hint-placeholder-val="{{ true }}">
+    <div ref="{{ rainbowRef }}" style="position:fixed;top:0;left:clamp(160px,19vw,300px);display:flex;z-index:1;pointer-events:none;will-change:transform">
+      <div style="width:22px;height:48px;background:#e05a6a;border-radius:0 0 11px 11px"></div>
+      <div style="width:22px;height:90px;background:#ff7a5c;border-radius:0 0 11px 11px"></div>
+      <div style="width:22px;height:64px;background:#fdf25c;border-radius:0 0 11px 11px"></div>
+      <div style="width:22px;height:90px;background:#a334d0;border-radius:0 0 11px 11px"></div>
+      <div style="width:22px;height:166px;background:#7b5cff;border-radius:0 0 11px 11px"></div>
+      <div style="width:22px;height:118px;background:#2e88d0;border-radius:0 0 11px 11px"></div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ showAside }}" hint-placeholder-val="{{ true }}">
+  <aside style="position:fixed;right:clamp(16px,3vw,40px);top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:6px;z-index:3;font-size:12px;letter-spacing:0.08em;text-transform:uppercase">
+    <a href="https://github.com/JakubLobos" style="writing-mode:vertical-rl;padding:12px 6px;border-radius:6px;transition:background 150ms ease" style-hover="background:var(--hover);color:var(--ink)">GitHub</a>
+    <a href="https://linkedin.com/in/JakubLobos" style="writing-mode:vertical-rl;padding:12px 6px;border-radius:6px;transition:background 150ms ease" style-hover="background:var(--hover);color:var(--ink)">LinkedIn</a>
+    <a href="mailto:jakubloboskontakt@gmail.com" style="writing-mode:vertical-rl;padding:12px 6px;border-radius:6px;transition:background 150ms ease" style-hover="background:var(--hover);color:var(--ink)">Email</a>
+  </aside>
+  </sc-if>
+  <div aria-hidden="true" sc-camel-on-pointer-down="{{ sbTrackDown }}" style="position:fixed;top:14px;bottom:14px;right:8px;width:18px;z-index:5;cursor:pointer;display:{{ sbDisplay }}">
+    <div style="position:absolute;top:0;bottom:0;left:8px;border-left:2px dashed var(--line2)"></div>
+    <div style="position:absolute;top:-2px;left:3px;width:12px;height:2px;background:var(--ink);border-radius:2px;transform:rotate(-6deg)"></div>
+    <div style="position:absolute;bottom:-2px;left:3px;width:12px;height:2px;background:var(--ink);border-radius:2px;transform:rotate(5deg)"></div>
+    <div ref="{{ sbThumb }}" sc-camel-on-pointer-down="{{ sbThumbDown }}" style="position:absolute;left:1px;top:0;width:16px;height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:var(--surface);border:2px solid var(--ink);border-radius:255px 15px 225px 15px/15px 225px 15px 255px;box-shadow:2px 3px 0 var(--ink);cursor:grab;touch-action:none;transition:background 150ms ease" style-hover="background:#fdf25c" style-active="cursor:grabbing;background:#fdf25c">
+      <span style="width:7px;height:2px;background:var(--ink);border-radius:2px;transform:rotate(-8deg)"></span>
+      <span style="width:8px;height:2px;background:var(--ink);border-radius:2px;transform:rotate(4deg)"></span>
+      <span style="width:6px;height:2px;background:var(--ink);border-radius:2px;transform:rotate(-5deg)"></span>
+    </div>
+  </div>
+
+  <main id="top" style="position:relative;z-index:2;max-width:1000px;margin:0 auto;padding:0 {{ sidePad }}">
+
+    <section style="min-height:calc(100svh - 240px);padding:40px 0 32px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px">
+      <div aria-hidden="true" style="position:relative;width:156px;height:124px;margin-bottom:-6px;transition:transform 250ms cubic-bezier(.3,1.6,.5,1)" style-hover="transform:translateY(-5px) rotate(-3deg)">
+        <div style="position:absolute;left:8px;top:62px;width:140px;height:24px;background:#fdf25c;border-radius:40% 60% 50% 45%/60% 40% 60% 40%;transform:rotate(-5deg)"></div>
+        <div style="position:absolute;left:20px;top:8px;width:116px;height:88px;background:var(--bg);border:2px solid var(--ink);border-radius:58% 42% 46% 54%/62% 58% 42% 38%"></div>
+        <div style="position:absolute;left:21px;top:9px;width:116px;height:88px;border:1.5px solid var(--ink);border-radius:52% 48% 50% 50%/58% 62% 38% 42%;transform:rotate(-3deg);opacity:0.45"></div>
+        <div style="position:absolute;left:52px;top:90px;width:15px;height:24px;background:var(--bg);border:2px solid var(--ink);border-top:0;border-radius:0 0 9px 7px"></div>
+        <div style="position:absolute;left:90px;top:90px;width:12px;height:16px;background:var(--bg);border:2px solid var(--ink);border-top:0;border-radius:0 0 7px 6px"></div>
+        <div style="position:absolute;left:46px;top:30px;width:12px;height:2px;background:var(--ink);border-radius:2px;transform:rotate(-12deg)"></div>
+        <div style="position:absolute;left:88px;top:28px;width:12px;height:2px;background:var(--ink);border-radius:2px;transform:rotate(10deg)"></div>
+        <div style="position:absolute;left:40px;top:36px;display:flex;align-items:center;gap:12px">
+          <div ref="{{ eyeL }}" style="width:26px;height:28px;border-radius:52% 48% 50% 50%/50% 55% 45% 50%;background:var(--surface);border:2px solid var(--ink);display:grid;place-items:center;overflow:hidden;transform:rotate(-4deg)"><div ref="{{ pupilL }}" style="width:10px;height:11px;border-radius:50%;background:var(--ink);will-change:transform"></div></div>
+          <div ref="{{ eyeR }}" style="width:28px;height:28px;border-radius:48% 52% 46% 54%/55% 50% 50% 45%;background:var(--surface);border:2px solid var(--ink);display:grid;place-items:center;overflow:hidden;transform:rotate(5deg)"><div ref="{{ pupilR }}" style="width:10px;height:11px;border-radius:50%;background:var(--ink);will-change:transform"></div></div>
+        </div>
+        <div style="position:absolute;left:30px;top:64px;width:16px;height:10px;border-radius:50%;background:repeating-linear-gradient(-50deg,#e05a6a 0 1.5px,transparent 1.5px 4px)"></div>
+        <div style="position:absolute;left:108px;top:63px;width:16px;height:10px;border-radius:50%;background:repeating-linear-gradient(-50deg,#e05a6a 0 1.5px,transparent 1.5px 4px)"></div>
+        <div style="position:absolute;left:68px;top:68px;width:18px;height:8px;border:2px solid var(--ink);border-top:0;border-radius:0 0 12px 9px;transform:rotate(-4deg)"></div>
+        <div style="position:absolute;left:138px;top:10px;width:12px;height:2px;background:var(--ink);border-radius:2px;transform:rotate(-40deg)"></div>
+        <div style="position:absolute;left:142px;top:24px;width:10px;height:2px;background:var(--ink);border-radius:2px;transform:rotate(-10deg)"></div>
+        <div style="position:absolute;left:6px;top:20px;width:10px;height:2px;background:var(--ink);border-radius:2px;transform:rotate(35deg)"></div>
+      </div>
+      <h1 style="margin:0;font-family:'Rubik Doodle Shadow',cursive;font-weight:400;font-size:clamp(40px,6vw,68px);line-height:1.1;text-wrap:balance">I’m a Frontend Developer!</h1>
+      <p style="margin:0;font-size:clamp(17px,1.6vw,20px);line-height:1.7;max-width:560px">I’m making web-apps mostly in <span style="color:#1f9fe6;font-weight:500">react</span> &amp; <span style="color:#1f9fe6;font-weight:500">typescript</span><br>Designing web-apps in <span style="background:linear-gradient(transparent var(--hl),var(--figma) var(--hl),var(--figma) 90%,transparent 90%);padding:0 4px">figma</span></p>
+      <div style="width:40px;height:1px;background:var(--line2)"></div>
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:16px;padding-top:8px">
+        <a href="#contact" style="font-family:Ubuntu,sans-serif;font-weight:500;font-size:17px;padding:12px 24px;border-radius:8px;background:#2a64e0;color:#fff;border:2px solid #1a3f94;box-shadow:0 6px 0 #1a3f94;transform:translateY(0);transition:transform 120ms ease,box-shadow 120ms ease,background 120ms ease;display:inline-block" style-hover="background:#3570ea;color:#fff;transform:translateY(-2px);box-shadow:0 8px 0 #1a3f94" style-active="transform:translateY(5px);box-shadow:0 1px 0 #1a3f94">Reach me out</a>
+        <a href="#" style="font-family:Ubuntu,sans-serif;font-weight:500;font-size:17px;padding:12px 24px;border-radius:8px;border:2px solid var(--ink);color:var(--ink);background:var(--surface);box-shadow:0 6px 0 var(--ink);transform:translateY(0);transition:transform 120ms ease,box-shadow 120ms ease,background 120ms ease;display:inline-block" style-hover="background:#fdf25c;color:#1f1f1e;transform:translateY(-2px);box-shadow:0 8px 0 var(--ink)" style-active="transform:translateY(5px);box-shadow:0 1px 0 var(--ink)">Get my resume</a>
+      </div>
+    </section>
+    
+    <section aria-label="Skills and about me" style="position:relative;width:100vw;margin-left:calc(50% - 50vw);height:clamp(160px,17vw,220px);display:grid;place-items:center;overflow:hidden">
+      <div sc-camel-on-mouse-enter="{{ pauseA }}" sc-camel-on-mouse-leave="{{ playA }}" style="grid-area:1/1;width:115vw;transform:rotate(-4deg);background:var(--bg);color:var(--ink);border-block:2px solid var(--ink);padding:11px 0;overflow:hidden">
+        <div ref="{{ trackA }}" style="display:flex;width:max-content;will-change:transform">
+          <sc-for list="{{ lineA }}" as="t" hint-placeholder-count="12">
+            <span style="display:flex;align-items:center;gap:20px;padding-right:20px;font-size:clamp(15px,1.5vw,19px);font-weight:500;line-height:1.2;white-space:nowrap;color:{{ t.word }}">{{ t.text }}<span style="flex:none;width:7px;height:7px;border-radius:50%;background:var(--ink)"></span></span>
+          </sc-for>
+        </div>
+      </div>
+      <div sc-camel-on-mouse-enter="{{ pauseB }}" sc-camel-on-mouse-leave="{{ playB }}" style="grid-area:1/1;width:115vw;transform:rotate(3deg);background:var(--bg);color:var(--ink);border-block:2px solid var(--ink);padding:11px 0;overflow:hidden">
+        <div ref="{{ trackB }}" style="display:flex;width:max-content;will-change:transform">
+          <sc-for list="{{ lineB }}" as="t" hint-placeholder-count="12">
+            <span style="display:flex;align-items:center;gap:20px;padding-right:20px;font-size:clamp(15px,1.5vw,19px);font-weight:500;line-height:1.2;white-space:nowrap">{{ t.text }}<span style="flex:none;width:7px;height:7px;border-radius:50%;background:{{ t.dot }}"></span></span>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+    
+
+    <section id="experience">
+      <div ref="{{ expRef }}" style="position:relative;height:{{ expHeight }}">
+        <div style="position:{{ stickyPos }};top:0;height:{{ stickyH }};display:flex;flex-direction:column;justify-content:center;gap:48px;padding:clamp(48px,8vw,64px) 0">
+          <div style="display:flex;flex-direction:column;gap:20px">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--muted);letter-spacing:0.06em">01 — EXPERIENCE</span>
+            <h2 style="margin:0;font-family:'Rubik Doodle Shadow',cursive;font-weight:400;font-size:clamp(34px,4vw,46px);line-height:1.15">Where I work</h2>
+          </div>
+          <div style="display:grid;grid-template-columns:{{ expCols }};gap:clamp(32px,6vw,80px);align-items:start">
+            <sc-if value="{{ showRail }}" hint-placeholder-val="{{ true }}">
+            <div style="position:relative;display:flex;flex-direction:column;gap:36px;padding-left:32px">
+              <div style="position:absolute;left:5px;top:8px;bottom:8px;width:1px;background:var(--line2)"></div>
+              <div style="position:absolute;left:4px;top:8px;width:3px;border-radius:2px;background:var(--ink);height:{{ fillHeight }};transition:height 80ms linear"></div>
+              <sc-for list="{{ exp }}" as="e" hint-placeholder-count="3">
+                <button sc-camel-on-click="{{ e.go }}" style="position:relative;display:flex;flex-direction:column;gap:4px;text-align:left;background:none;border:0;padding:0;cursor:pointer;font-family:Poppins,sans-serif;color:{{ e.ink }};transition:color 200ms ease">
+                  <span style="position:absolute;left:-32px;top:4px;width:11px;height:11px;border-radius:50%;background:{{ e.dot }};border:2px solid {{ e.color }};box-shadow:0 0 0 4px var(--bg);transform:scale({{ e.scale }});transition:transform 200ms ease,background 200ms ease"></span>
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.04em">{{ e.date }}</span>
+                  <span style="font-size:17px;font-weight:500;line-height:1.35">{{ e.org }}</span>
+                </button>
+              </sc-for>
+            </div>
+            </sc-if>
+            <div style="display:grid;gap:56px">
+              <sc-for list="{{ exp }}" as="e" hint-placeholder-count="1">
+                <div style="grid-area:{{ e.area }};display:flex;flex-direction:column;gap:16px;opacity:{{ e.op }};transform:translateY({{ e.ty }});pointer-events:{{ e.pe }};transition:opacity 350ms ease,transform 350ms ease">
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.06em;color:{{ e.color }}">{{ e.meta }}</span>
+                  <div style="display:flex;flex-direction:column;gap:4px">
+                    <h3 style="margin:0;font-size:24px;font-weight:500;line-height:1.3">{{ e.title }}</h3>
+                    <p style="margin:0;font-size:14px;color:var(--muted)">{{ e.sub }}</p>
+                  </div>
+                  <ul style="margin:0;padding:0 0 0 18px;display:flex;flex-direction:column;gap:8px;font-size:15px;line-height:1.7;color:var(--body);max-width:600px">
+                    <sc-for list="{{ e.bullets }}" as="t" hint-placeholder-count="3">
+                      <li>{{ t }}</li>
+                    </sc-for>
+                  </ul>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects" style="background:var(--bg);box-shadow:0 0 0 100vmax var(--bg);clip-path:inset(0 -100vmax);padding:clamp(64px,10vw,96px) 0;display:flex;flex-direction:column;gap:clamp(32px,5vw,48px)">
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--muted);letter-spacing:0.06em">02 — PROJECTS</span>
+        <h2 style="margin:0;font-family:'Rubik Doodle Shadow',cursive;font-weight:400;font-size:clamp(34px,4vw,46px);line-height:1.15;max-width:520px">I’m specializing in making web-apps</h2>
+      </div>
+      <div style="display:flex;flex-direction:column">
+        <sc-for list="{{ projects }}" as="p" hint-placeholder-count="6">
+          <div style="display:grid;grid-template-columns:clamp(32px,6vw,48px) minmax(0,1fr);column-gap:clamp(12px,2.4vw,24px);padding:28px 0;border-bottom:1px solid var(--line);align-items:baseline">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--muted)">{{ p.n }}</span>
+            <div style="display:flex;flex-wrap:wrap;gap:12px 32px;align-items:baseline">
+            <div style="flex:1 1 340px;min-width:0;display:flex;flex-direction:column;gap:8px">
+              <h3 style="margin:0;font-size:19px;font-weight:500;line-height:1.35">{{ p.title }}</h3>
+              <p style="margin:0;font-size:15px;line-height:1.7;color:var(--muted2);max-width:560px;text-wrap:pretty">{{ p.desc }}</p>
+            </div>
+            <div style="flex:0 1 200px;display:flex;flex-direction:column;gap:4px;font-size:13px">
+              <span style="color:var(--ink)">{{ p.org }}</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#1a7fc0">{{ p.tags }}</span>
+            </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section id="skills" style="background:var(--bg);box-shadow:0 0 0 100vmax var(--bg);clip-path:inset(0 -100vmax);padding:clamp(64px,10vw,96px) 0;display:flex;flex-direction:column;gap:clamp(32px,5vw,48px)">
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--muted);letter-spacing:0.06em">03 — SKILLS</span>
+        <h2 style="margin:0;font-family:'Rubik Doodle Shadow',cursive;font-weight:400;font-size:clamp(34px,4vw,46px);line-height:1.15">My toolbox</h2>
+      </div>
+      <div style="display:flex;flex-direction:column">
+        <sc-for list="{{ skills }}" as="s" hint-placeholder-count="5">
+          <div style="display:flex;flex-wrap:wrap;gap:6px 32px;padding:22px 0;border-bottom:1px solid var(--line);align-items:baseline">
+            <span style="flex:0 0 180px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.06em;color:var(--muted);text-transform:uppercase">{{ s.group }}</span>
+            <p style="flex:1 1 280px;min-width:0;margin:0;font-size:clamp(16px,2vw,18px);line-height:1.7;word-spacing:0.15em;text-wrap:pretty">{{ s.items }}</p>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section id="guestbook" style="padding:clamp(64px,10vw,96px) 0;display:flex;flex-direction:column;align-items:center;text-align:center;gap:clamp(36px,6vw,56px)">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:20px">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--muted);letter-spacing:0.06em">04 — GUESTBOOK</span>
+        <h2 style="margin:0;font-family:'Rubik Doodle Shadow',cursive;font-weight:400;font-size:clamp(34px,4vw,46px);line-height:1.15;max-width:640px;text-wrap:balance">I love connecting people through the power of frontend</h2>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:16px;max-width:720px;min-height:120px;justify-content:center">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.06em;color:var(--muted)">THE LAST VISITOR SAID</span>
+        <p style="margin:0;font-size:clamp(24px,3.2vw,36px);line-height:1.45;font-weight:500;text-wrap:balance"><span style="background:linear-gradient(transparent var(--hl),{{ lastTint }} var(--hl),{{ lastTint }} 92%,transparent 92%);padding:0 6px;-webkit-box-decoration-break:clone;box-decoration-break:clone;transition:background 300ms ease">{{ lastText }}</span></p>
+      </div>
+      <form sc-camel-on-submit="{{ submit }}" style="width:100%;max-width:640px;display:flex;flex-direction:column;align-items:center;gap:24px">
+        <div style="width:100%;display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--ink);padding:4px 0">
+          <div style="position:relative;flex:1;min-width:0">
+            {{ gMirror }}
+            <input ref="{{ gRef }}" value="{{ gText }}" sc-camel-on-change="{{ onText }}" sc-camel-on-scroll="{{ syncMirrors }}" sc-camel-on-key-up="{{ syncMirrors }}" maxlength="120" placeholder="Leave your mark for the next visitor…" aria-label="Your message" style="position:relative;width:100%;font-family:Poppins,sans-serif;font-size:17px;line-height:1.5;font-kerning:none;font-variant-ligatures:none;text-align:left;color:transparent;caret-color:var(--ink);background:transparent;border:0;padding:10px 0;outline:none">
+          </div>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--faint)">{{ gCount }}/120</span>
+        </div>
+        <div style="width:100%;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:20px">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:4px" role="radiogroup" aria-label="Pick your paint">
+            <sc-for list="{{ paints }}" as="c" hint-placeholder-count="6">
+              <button type="button" sc-camel-on-click="{{ c.pick }}" aria-label="{{ c.name }}" aria-checked="{{ c.checked }}" role="radio" style="width:40px;height:40px;display:grid;place-items:center;background:transparent;border:0;padding:0;cursor:pointer"><span style="width:24px;height:24px;border-radius:50%;background:{{ c.hex }};box-shadow:{{ c.ring }};transition:box-shadow 150ms ease"></span></button>
+            </sc-for>
+          </div>
+          <button type="submit" style="font-family:Ubuntu,sans-serif;font-weight:500;font-size:17px;padding:12px 24px;border-radius:8px;background:#2a64e0;color:#fff;border:2px solid #1a3f94;box-shadow:0 6px 0 #1a3f94;cursor:pointer;transition:transform 120ms ease,box-shadow 120ms ease,background 120ms ease" style-hover="background:#3570ea;transform:translateY(-2px);box-shadow:0 8px 0 #1a3f94" style-active="transform:translateY(5px);box-shadow:0 1px 0 #1a3f94">Leave a mark</button>
+        </div>
+      </form>
+    </section>
+
+    <section id="contact" style="padding:clamp(64px,10vw,96px) 0 clamp(80px,12vw,140px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:clamp(48px,7vw,80px);align-items:start">
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--muted);letter-spacing:0.06em">05 — CONTACT</span>
+        <h2 style="margin:0;font-family:'Rubik Doodle Shadow',cursive;font-weight:400;font-size:clamp(34px,4vw,46px);line-height:1.15">Let’s build something</h2>
+        <p style="margin:0;font-size:15px;line-height:1.7;color:var(--muted2);max-width:380px;text-wrap:pretty">Have a project, a role or a question? Send me a message.</p>
+        <dl style="margin:0;padding-top:12px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px 24px;font-size:15px">
+        <dt style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);padding-top:3px">EMAIL</dt>
+        <dd style="margin:0;min-width:0;overflow-wrap:anywhere"><a href="mailto:jakubloboskontakt@gmail.com">jakubloboskontakt@gmail.com</a></dd>
+        <dt style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);padding-top:3px">PHONE</dt>
+        <dd style="margin:0;min-width:0;overflow-wrap:anywhere"><a href="tel:+48000000000">+48 000 000 000</a></dd>
+        <dt style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);padding-top:3px">GITHUB</dt>
+        <dd style="margin:0;min-width:0;overflow-wrap:anywhere"><a href="https://github.com/JakubLobos">@JakubLobos</a></dd>
+        <dt style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);padding-top:3px">LINKEDIN</dt>
+        <dd style="margin:0;min-width:0;overflow-wrap:anywhere"><a href="https://linkedin.com/in/JakubLobos">@JakubLobos</a></dd>
+        <dt style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);padding-top:3px">LANGUAGES</dt>
+        <dd style="margin:0;min-width:0;overflow-wrap:anywhere">Polish (native), English (B2)</dd>
+      </dl>
+      </div>
+      <form sc-camel-no-validate="{{ true }}" sc-camel-on-submit="{{ cSubmit }}" aria-label="Contact form" style="display:flex;flex-direction:column;gap:28px">
+          <label style="display:flex;flex-direction:column;gap:6px">
+            <span style="display:flex;justify-content:space-between;gap:12px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.06em;color:var(--muted)"><span>YOUR NAME</span></span>
+            <div style="position:relative">
+              {{ cNameMirror }}
+              <input ref="{{ cNameRef }}" value="{{ cName }}" sc-camel-on-change="{{ onCName }}" sc-camel-on-blur="{{ blurCName }}" sc-camel-on-scroll="{{ syncMirrors }}" sc-camel-on-key-up="{{ syncMirrors }}" name="name" sc-camel-auto-complete="name" sc-camel-max-length="60" placeholder="Jane Doe" disabled="{{ cLocked }}" aria-invalid="{{ cNameInv }}" style="position:relative;display:block;width:100%;font-family:Poppins,sans-serif;font-size:17px;line-height:1.5;font-kerning:none;font-variant-ligatures:none;text-align:left;color:transparent;caret-color:var(--ink);background:transparent;border:0;border-bottom:2px solid {{ cNameLine }};border-radius:0;padding:10px 0;outline:none;transition:border-color 150ms ease" style-focus="border-bottom-color:#2a64e0">
+            </div>
+            <sc-if value="{{ cNameErr }}" hint-placeholder-val="{{ false }}">
+              <span role="alert" style="font-size:13px;line-height:1.5;color:#c23b4c">{{ cNameErrText }}</span>
+            </sc-if>
+          </label>
+          <label style="display:flex;flex-direction:column;gap:6px">
+            <span style="display:flex;justify-content:space-between;gap:12px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.06em;color:var(--muted)"><span>EMAIL</span></span>
+            <div style="position:relative">
+              {{ cEmailMirror }}
+              <input ref="{{ cEmailRef }}" value="{{ cEmail }}" sc-camel-on-change="{{ onCEmail }}" sc-camel-on-blur="{{ blurCEmail }}" sc-camel-on-scroll="{{ syncMirrors }}" sc-camel-on-key-up="{{ syncMirrors }}" type="email" name="email" sc-camel-auto-complete="email" sc-camel-input-mode="email" sc-camel-max-length="120" placeholder="jane@company.com" disabled="{{ cLocked }}" aria-invalid="{{ cEmailInv }}" style="position:relative;display:block;width:100%;font-family:Poppins,sans-serif;font-size:17px;line-height:1.5;font-kerning:none;font-variant-ligatures:none;text-align:left;color:transparent;caret-color:var(--ink);background:transparent;border:0;border-bottom:2px solid {{ cEmailLine }};border-radius:0;padding:10px 0;outline:none;transition:border-color 150ms ease" style-focus="border-bottom-color:#2a64e0">
+            </div>
+            <sc-if value="{{ cEmailErr }}" hint-placeholder-val="{{ false }}">
+              <span role="alert" style="font-size:13px;line-height:1.5;color:#c23b4c">{{ cEmailErrText }}</span>
+            </sc-if>
+          </label>
+          <label style="display:flex;flex-direction:column;gap:6px">
+            <span style="display:flex;justify-content:space-between;gap:12px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.06em;color:var(--muted)"><span>MESSAGE</span><span>{{ cMsgCount }}/1000</span></span>
+            <div style="position:relative">
+              {{ cMsgMirror }}
+              <textarea ref="{{ cMsgRef }}" value="{{ cMsg }}" sc-camel-on-change="{{ onCMsg }}" sc-camel-on-blur="{{ blurCMsg }}" sc-camel-on-scroll="{{ syncMirrors }}" sc-camel-on-key-up="{{ syncMirrors }}" name="message" rows="3" sc-camel-max-length="1000" placeholder="Tell me a bit about your idea…" sc-camel-on-key-down="{{ cMsgKey }}" disabled="{{ cLocked }}" aria-invalid="{{ cMsgInv }}" style="position:relative;display:block;width:100%;font-family:Poppins,sans-serif;font-size:17px;line-height:1.5;font-kerning:none;font-variant-ligatures:none;text-align:left;color:transparent;caret-color:var(--ink);background:transparent;border:0;border-bottom:2px solid {{ cMsgLine }};border-radius:0;padding:10px 0;outline:none;transition:border-color 150ms ease;resize:none;overflow:hidden;min-height:94px" style-focus="border-bottom-color:#2a64e0"></textarea>
+            </div>
+            <sc-if value="{{ cMsgErr }}" hint-placeholder-val="{{ false }}">
+              <span role="alert" style="font-size:13px;line-height:1.5;color:#c23b4c">{{ cMsgErrText }}</span>
+            </sc-if>
+          </label>
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:16px 20px;padding-top:4px">
+          <sc-if value="{{ cIdle }}" hint-placeholder-val="{{ true }}">
+            <button type="submit" style="min-width:210px;min-height:52px;display:flex;align-items:center;justify-content:center;gap:10px;font-family:Ubuntu,sans-serif;font-weight:500;font-size:17px;padding:12px 24px;border-radius:8px;background:#2a64e0;color:#fff;border:2px solid #1a3f94;box-shadow:0 6px 0 #1a3f94;cursor:pointer;transition:transform 120ms ease,box-shadow 120ms ease,background 120ms ease" style-hover="background:#3570ea;transform:translateY(-2px);box-shadow:0 8px 0 #1a3f94" style-active="transform:translateY(5px);box-shadow:0 1px 0 #1a3f94">Send message</button>
+          </sc-if>
+          <sc-if value="{{ cLoading }}" hint-placeholder-val="{{ false }}">
+            <button type="button" disabled="{{ true }}" aria-busy="true" style="min-width:210px;min-height:52px;display:flex;align-items:center;justify-content:center;gap:10px;font-family:Ubuntu,sans-serif;font-weight:500;font-size:17px;padding:12px 24px;border-radius:8px;background:#3570ea;color:#fff;border:2px solid #1a3f94;box-shadow:0 2px 0 #1a3f94;transform:translateY(4px);cursor:progress">{{ spinner }}Sending…</button>
+          </sc-if>
+          <sc-if value="{{ cSuccess }}" hint-placeholder-val="{{ false }}">
+            <button type="button" aria-disabled="true" style="min-width:210px;min-height:52px;display:flex;align-items:center;justify-content:center;gap:10px;font-family:Ubuntu,sans-serif;font-weight:500;font-size:17px;padding:12px 24px;border-radius:8px;background:#fdf25c;color:#1f1f1e;border:2px solid var(--ink);box-shadow:0 6px 0 var(--ink);cursor:default">{{ check }}Message sent</button>
+          </sc-if>
+          <span aria-live="polite" style="font-size:13px;line-height:1.6;color:var(--muted)">{{ cStatusText }}</span>
+          <sc-if value="{{ cSuccess }}" hint-placeholder-val="{{ false }}">
+            <button type="button" sc-camel-on-click="{{ cReset }}" style="font-family:Poppins,sans-serif;font-size:13px;color:var(--ink);background:transparent;border:0;border-bottom:1px solid var(--ink);padding:2px 0;cursor:pointer" style-hover="color:#2a64e0;border-bottom-color:#2a64e0">Send another</button>
+          </sc-if>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <sc-if value="{{ showDrips }}" hint-placeholder-val="{{ true }}">
+    <div style="position:absolute;bottom:0;right:0;display:flex;align-items:flex-end;z-index:1;transform:scale({{ dripScale }});transform-origin:bottom right">
+      <div style="width:22px;height:120px;background:#2e88d0;border-radius:11px 11px 0 0"></div>
+      <div style="width:22px;height:168px;background:#7b5cff;border-radius:11px 11px 0 0"></div>
+      <div style="width:22px;height:90px;background:#a334d0;border-radius:11px 11px 0 0"></div>
+      <div style="width:22px;height:64px;background:#fdf25c;border-radius:11px 11px 0 0"></div>
+      <div style="width:22px;height:90px;background:#ff7a5c;border-radius:11px 11px 0 0"></div>
+      <div style="width:22px;height:48px;background:#e05a6a;border-radius:11px 11px 0 0"></div>
+    </div>
+  </sc-if>
+
+  <footer style="position:relative;z-index:2;max-width:1000px;margin:0 auto;padding:24px {{ sidePad }} {{ footBottom }};display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 16px;font-size:13px;color:var(--muted)">
+    <span>© 2026 Jakub Łobos</span>
+    <a href="#top" style="color:var(--muted)">Back to top ↑</a>
+  </footer>
+<sc-if value="{{ showCookies }}" hint-placeholder-val="{{ false }}">
+    <div role="region" aria-label="Cookie consent" style="position:fixed;left:{{ cookieInset }};right:{{ cookieRight }};bottom:{{ cookieInset }};z-index:8;width:{{ cookieWidth }};max-width:380px;background:var(--surface);border:2px solid var(--ink);border-radius:12px;box-shadow:0 8px 0 var(--ink);padding:22px 22px 20px;display:flex;flex-direction:column;gap:14px;overflow:hidden">
+      <div style="display:flex;align-items:center;gap:12px">
+        <span aria-hidden="true" style="position:relative;flex:none;width:40px;height:40px;border-radius:50%;background:#e8b778;border:2px solid var(--ink);box-shadow:0 3px 0 var(--ink);-webkit-mask:radial-gradient(circle 9px at 88% 14%,transparent 98%,#000 100%);mask:radial-gradient(circle 9px at 88% 14%,transparent 98%,#000 100%)">
+          <span style="position:absolute;left:9px;top:10px;width:6px;height:6px;border-radius:50%;background:#5a3a22"></span>
+          <span style="position:absolute;left:20px;top:20px;width:5px;height:5px;border-radius:50%;background:#5a3a22"></span>
+          <span style="position:absolute;left:10px;top:23px;width:4px;height:4px;border-radius:50%;background:#5a3a22"></span>
+          <span style="position:absolute;left:24px;top:9px;width:3px;height:3px;border-radius:50%;background:#5a3a22"></span>
+        </span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.06em;color:var(--muted)">COOKIES</span>
+      </div>
+      <p style="margin:0;font-size:14px;line-height:1.65;color:var(--body);text-wrap:pretty">This site uses a few cookies to remember your preferences and understand how it’s used. Nothing is sold or shared.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;padding-top:4px">
+        <button type="button" sc-camel-on-click="{{ acceptCookies }}" style="flex:1 1 120px;white-space:nowrap;min-height:44px;font-family:Ubuntu,sans-serif;font-weight:500;font-size:15px;padding:10px 18px;border-radius:8px;background:#2a64e0;color:#fff;border:2px solid #1a3f94;box-shadow:0 4px 0 #1a3f94;cursor:pointer;transition:transform 120ms ease,box-shadow 120ms ease,background 120ms ease" style-hover="background:#3570ea;transform:translateY(-1px);box-shadow:0 5px 0 #1a3f94" style-active="transform:translateY(3px);box-shadow:0 1px 0 #1a3f94">Accept</button>
+        <button type="button" sc-camel-on-click="{{ declineCookies }}" style="flex:1 1 120px;white-space:nowrap;min-height:44px;font-family:Ubuntu,sans-serif;font-weight:500;font-size:15px;padding:10px 18px;border-radius:8px;background:var(--surface);color:var(--ink);border:2px solid var(--ink);box-shadow:0 4px 0 var(--ink);cursor:pointer;transition:transform 120ms ease,box-shadow 120ms ease,background 120ms ease" style-hover="background:#fdf25c;color:#1f1f1e;transform:translateY(-1px);box-shadow:0 5px 0 var(--ink)" style-active="transform:translateY(3px);box-shadow:0 1px 0 var(--ink)">Only essential</button>
+      </div>
+    </div>
+  </sc-if>
+  <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+    <div role="dialog" aria-modal="true" aria-label="Menu" style="position:fixed;inset:0;z-index:9;background-color:var(--bg);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:235px 106px;display:flex;flex-direction:column;padding:14px 20px 28px;overflow-y:auto">
+      <div style="position:absolute;top:0;left:clamp(160px,19vw,300px);display:flex;pointer-events:none">
+        <div style="width:22px;height:48px;background:#e05a6a;border-radius:0 0 11px 11px"></div>
+        <div style="width:22px;height:90px;background:#ff7a5c;border-radius:0 0 11px 11px"></div>
+        <div style="width:22px;height:64px;background:#fdf25c;border-radius:0 0 11px 11px"></div>
+        <div style="width:22px;height:90px;background:#a334d0;border-radius:0 0 11px 11px"></div>
+        <div style="width:22px;height:166px;background:#7b5cff;border-radius:0 0 11px 11px"></div>
+        <div style="width:22px;height:118px;background:#2e88d0;border-radius:0 0 11px 11px"></div>
+      </div>
+      <div style="position:relative;display:flex;justify-content:space-between;align-items:center;gap:16px">
+        <a href="#top" sc-camel-on-click="{{ closeMenu }}" style="display:grid;grid-template-columns:auto auto;column-gap:8px;font-weight:600;font-size:18px;line-height:1.3;letter-spacing:0.02em">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:15px;line-height:1.55">{}</span>
+          <span>JAKUB<br>ŁOBOS.</span>
+        </a>
+        <button type="button" sc-camel-on-click="{{ closeMenu }}" aria-label="Close menu" style="display:flex;align-items:center;gap:10px;min-height:44px;padding:0 16px;font-family:Ubuntu,sans-serif;font-weight:500;font-size:16px;color:var(--ink);background:var(--surface);border:2px solid var(--ink);border-radius:8px;box-shadow:0 4px 0 var(--ink);cursor:pointer">
+          <span style="position:relative;width:14px;height:14px"><span style="position:absolute;top:6px;left:0;width:14px;height:2px;background:var(--ink);transform:rotate(45deg)"></span><span style="position:absolute;top:6px;left:0;width:14px;height:2px;background:var(--ink);transform:rotate(-45deg)"></span></span>
+          Close
+        </button>
+      </div>
+      <nav aria-label="Mobile" style="position:relative;flex:1;display:flex;flex-direction:column;justify-content:center;gap:4px;padding:48px 0">
+        <sc-for list="{{ navItems }}" as="l" hint-placeholder-count="5">
+          <a href="{{ l.href }}" sc-camel-on-click="{{ closeMenu }}" style="display:flex;align-items:baseline;gap:16px;padding:10px 0;border-bottom:1px solid var(--line)">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);width:22px">{{ l.n }}</span>
+            <span style="font-family:'Rubik Doodle Shadow',cursive;font-size:clamp(34px,10vw,48px);line-height:1.15">{{ l.label }}</span>
+          </a>
+        </sc-for>
+      </nav>
+      <div style="position:relative;display:flex;flex-direction:column;gap:20px">
+        <a href="mailto:jakubloboskontakt@gmail.com" sc-camel-on-click="{{ closeMenu }}" style="align-self:flex-start;font-family:Ubuntu,sans-serif;font-weight:500;font-size:17px;padding:12px 24px;border-radius:8px;background:#2a64e0;color:#fff;border:2px solid #1a3f94;box-shadow:0 6px 0 #1a3f94">Reach me out</a>
+        <div style="display:flex;flex-wrap:wrap;gap:8px 4px;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;margin-left:-12px">
+          <a href="https://github.com/JakubLobos" style="padding:12px;border-radius:6px">GitHub</a>
+          <a href="https://linkedin.com/in/JakubLobos" style="padding:12px;border-radius:6px">LinkedIn</a>
+          <a href="mailto:jakubloboskontakt@gmail.com" style="padding:12px;border-radius:6px">Email</a>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+  <sc-if value="{{ showModal }}" hint-placeholder-val="{{ false }}">
+    <div sc-camel-on-click="{{ closeModal }}" style="position:fixed;inset:0;z-index:10;background:rgba(43,43,43,0.28);display:flex;align-items:center;justify-content:center;padding:24px">
+      <div sc-camel-on-click="{{ stop }}" role="dialog" aria-modal="true" aria-labelledby="gb-title" style="position:relative;width:100%;max-width:460px;background:var(--surface);border:2px solid var(--ink);border-radius:12px;box-shadow:0 10px 0 var(--ink);padding:40px 32px 32px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:20px;overflow:hidden">
+        <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);display:flex">
+          <div style="width:14px;height:22px;background:#e05a6a;border-radius:0 0 7px 7px"></div>
+          <div style="width:14px;height:34px;background:#ff7a5c;border-radius:0 0 7px 7px"></div>
+          <div style="width:14px;height:26px;background:#fdf25c;border-radius:0 0 7px 7px"></div>
+          <div style="width:14px;height:34px;background:#a334d0;border-radius:0 0 7px 7px"></div>
+          <div style="width:14px;height:44px;background:#7b5cff;border-radius:0 0 7px 7px"></div>
+          <div style="width:14px;height:30px;background:#2e88d0;border-radius:0 0 7px 7px"></div>
+        </div>
+        <span style="margin-top:28px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.06em;color:var(--muted)">IN REVIEW</span>
+        <h3 id="gb-title" style="margin:0;font-family:'Rubik Doodle Shadow',cursive;font-weight:400;font-size:34px;line-height:1.15">Thanks for your mark!</h3>
+        <p style="margin:0;font-size:18px;line-height:1.5;font-weight:500;text-wrap:balance"><span style="background:linear-gradient(transparent var(--hl),{{ sentTint }} var(--hl),{{ sentTint }} 92%,transparent 92%);padding:0 4px;-webkit-box-decoration-break:clone;box-decoration-break:clone">{{ sentText }}</span></p>
+        <p style="margin:0;font-size:14px;line-height:1.7;color:var(--muted2);max-width:340px">Your message is waiting for a quick review. Once approved, it will greet the next visitor.</p>
+        <button type="button" sc-camel-on-click="{{ closeModal }}" style="margin-top:8px;font-family:Ubuntu,sans-serif;font-weight:500;font-size:17px;padding:12px 28px;border-radius:8px;background:#2a64e0;color:#fff;border:2px solid #1a3f94;box-shadow:0 6px 0 #1a3f94;cursor:pointer;transition:transform 120ms ease,box-shadow 120ms ease,background 120ms ease" style-hover="background:#3570ea;transform:translateY(-2px);box-shadow:0 8px 0 #1a3f94" style-active="transform:translateY(5px);box-shadow:0 1px 0 #1a3f94">Got it</button>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script="" data-props="{&quot;showGrid&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;showDrips&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state = { p: 0, gText: '', gColor: 2, last: null, sent: null };
+  closeModal = () => this.setState({ sent: null });
+  onKey = (e) => { if (e.key !== 'Escape') return; if (this.state.sent) this.closeModal(); if (this.state.menuOpen) this.closeMenu(); };
+  iRefs = { g: React.createRef(), name: React.createRef(), email: React.createRef(), msg: React.createRef() };
+  mRefs = { g: React.createRef(), name: React.createRef(), email: React.createRef(), msg: React.createRef() };
+  syncMirrors = () => { for (const k in this.iRefs) { const i = this.iRefs[k].current, m = this.mRefs[k].current; if (i && m) { m.scrollLeft = i.scrollLeft; m.scrollTop = i.scrollTop; } } };
+  mirror(k, value, multi) {
+    const reduce = typeof window !== 'undefined' && window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const anim = reduce ? 'none' : 'twIn 240ms cubic-bezier(.2,.8,.2,1) both';
+    const parts = []; let idx = 0;
+    (value || '').split(/(\s+)/).forEach((w) => {
+      if (!w) return; const st = idx; idx += w.length;
+      if (/^\s+$/.test(w)) { parts.push(w); return; }
+      parts.push(React.createElement('span', { key: 'w' + st, style: { whiteSpace: 'nowrap' } }, [...w].map((ch, ci) => React.createElement('span', { key: ci, style: { display: 'inline-block', animation: anim } }, ch))));
+    });
+    return React.createElement('div', { ref: this.mRefs[k], 'aria-hidden': true, style: { position: 'absolute', top: 0, left: 0, right: 0, bottom: k === 'g' ? 0 : 2, padding: '10px 0', fontFamily: 'Poppins,sans-serif', fontSize: 17, lineHeight: 1.5, fontKerning: 'none', fontVariantLigatures: 'none', color: 'var(--ink)', textAlign: 'left', whiteSpace: multi ? 'pre-wrap' : 'pre', overflowWrap: 'break-word', overflow: 'hidden', pointerEvents: 'none' } }, parts);
+  }
+  cErrors() {
+    const e = {}, s = this.state;
+    if ((s.cName || '').trim().length < 2) e.name = 'Please tell me your name.';
+    const em = (s.cEmail || '').trim();
+    if (!em) e.email = 'I need your email to reply.';
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(em)) e.email = 'That email doesn’t look quite right.';
+    if ((s.cMsg || '').trim().length < 10) e.msg = 'A few more words, please (min. 10 characters).';
+    return e;
+  }
+  cSubmit = (ev) => {
+    ev && ev.preventDefault && ev.preventDefault();
+    if ((this.state.cStatus || 'idle') !== 'idle') return;
+    const errs = this.cErrors();
+    if (Object.keys(errs).length) {
+      this.setState({ cTried: true });
+      const first = ['name', 'email', 'msg'].find((k) => errs[k]);
+      const el = this.iRefs[first].current; el && el.focus();
+      return;
+    }
+    this.setState({ cStatus: 'loading', cTried: true });
+    this.cTimer = setTimeout(() => this.setState({ cStatus: 'success' }), 1600);
+  };
+  cReset = () => {
+    const t = this.iRefs.msg.current; if (t) t.style.height = '';
+    this.setState({ cStatus: 'idle', cName: '', cEmail: '', cMsg: '', cTried: false, cTouched: {} }, () => { const n = this.iRefs.name.current; n && n.focus(); });
+  };
+  touch = (k) => this.setState((s) => ({ cTouched: { ...(s.cTouched || {}), [k]: true } }));
+  componentDidUpdate() { this.syncMirrors(); }
+  sbThumb = React.createRef();
+  eyeL = React.createRef(); eyeR = React.createRef(); pupilL = React.createRef(); pupilR = React.createRef();
+  onLook = (e) => {
+    [[this.eyeL, this.pupilL], [this.eyeR, this.pupilR]].forEach(([eye, pupil]) => {
+      const el = eye.current, p = pupil.current; if (!el || !p) return;
+      const r = el.getBoundingClientRect();
+      const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
+      const d = Math.hypot(dx, dy), k = Math.min(7, d / 25) / (d || 1);
+      p.style.transform = 'translate(' + dx * k + 'px,' + dy * k + 'px)';
+    });
+  };
+  blink = () => {
+    [this.eyeL, this.eyeR].forEach((r) => r.current && r.current.animate([{ transform: 'scaleY(1)' }, { transform: 'scaleY(0.1)' }, { transform: 'scaleY(1)' }], { duration: 180, easing: 'ease-in-out' }));
+    this.blinkTimer = setTimeout(this.blink, 2500 + Math.random() * 3500);
+  };
+  sbMetrics() {
+    const vh = window.innerHeight, doc = document.documentElement.scrollHeight;
+    const track = vh - 28, thumb = Math.max(56, Math.min(track, track * vh / Math.max(doc, 1)));
+    return { vh, doc, track, thumb, max: Math.max(1, doc - vh) };
+  }
+  updateSb = () => {
+    const t = this.sbThumb.current; if (!t) return;
+    const m = this.sbMetrics();
+    const p = Math.min(1, Math.max(0, window.scrollY / m.max));
+    t.style.height = m.thumb + 'px';
+    t.style.transform = 'translateY(' + (p * (m.track - m.thumb)) + 'px) rotate(' + (Math.sin(p * 9) * 1.2) + 'deg)';
+    t.parentNode.style.visibility = m.doc <= m.vh + 2 ? 'hidden' : 'visible';
+  };
+  sbThumbDown = (e) => {
+    e.stopPropagation(); e.preventDefault();
+    const m = this.sbMetrics(), y0 = e.clientY, s0 = window.scrollY, ratio = m.max / Math.max(1, m.track - m.thumb);
+    const move = (ev) => window.scrollTo({ top: s0 + (ev.clientY - y0) * ratio, behavior: 'instant' });
+    const up = () => { window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up); document.body.style.userSelect = ''; };
+    document.body.style.userSelect = 'none';
+    window.addEventListener('pointermove', move); window.addEventListener('pointerup', up);
+  };
+  sbTrackDown = (e) => {
+    const r = e.currentTarget.getBoundingClientRect(), m = this.sbMetrics();
+    const p = Math.min(1, Math.max(0, (e.clientY - r.top - m.thumb / 2) / Math.max(1, m.track - m.thumb)));
+    window.scrollTo({ top: p * m.max, behavior: 'smooth' });
+  };
+  setCookies = (v) => { try { localStorage.setItem('jl-cookies', v); } catch (e) {} this.setState({ cookies: v }); };
+  openMenu = () => { document.body.style.overflow = 'hidden'; this.setState({ menuOpen: true }); };
+  closeMenu = () => { document.body.style.overflow = ''; this.setState({ menuOpen: false }); };
+  static NAV = [['experience','Experience'],['projects','Projects'],['skills','Skills'],['guestbook','Guestbook'],['contact','Contact']];
+  expRef = React.createRef();
+  rainbowRef = React.createRef();
+  trackA = React.createRef();
+  trackB = React.createRef();
+  static PAINTS = [['Red','#e05a6a','rgba(224,90,106,0.35)'],['Coral','#ff7a5c','rgba(255,122,92,0.4)'],['Yellow','#fdf25c','rgba(253,242,92,0.85)'],['Purple','#a334d0','rgba(163,52,208,0.3)'],['Violet','#7b5cff','rgba(123,92,255,0.32)'],['Blue','#2e88d0','rgba(46,136,208,0.32)']];
+  loadLast() {
+    try { const s = JSON.parse(localStorage.getItem('jl-guestbook-last') || 'null'); if (s && s.text) return s; } catch (e) {}
+    return { text: 'Love the paint drips, made me smile!', c: 2 };
+  }
+  submit = (ev) => {
+    ev.preventDefault();
+    const text = this.state.gText.trim();
+    if (!text) return;
+    this.setState({ sent: { text, c: this.state.gColor }, gText: '' });
+  };
+  componentDidMount() {
+    this.onScroll = () => {
+      this.updateSb();
+      const compact = window.innerWidth < 820 || window.innerHeight < 760;
+      if (compact !== this.state.compact) this.setState({ compact });
+      const vw = window.innerWidth;
+      const mobile = vw < 760, narrow = vw < 980;
+      if (mobile !== this.state.mobile || narrow !== this.state.narrow) this.setState({ mobile, narrow });
+      if (!mobile && this.state.menuOpen) this.closeMenu();
+      let cur = null;
+      for (const [id] of Component.NAV) { const s = document.getElementById(id); if (s && s.getBoundingClientRect().top < window.innerHeight * 0.4) cur = id; }
+      if (cur !== this.state.cur) this.setState({ cur });
+      const el = this.expRef.current; if (!el) return;
+      const r = el.getBoundingClientRect();
+      const rb = this.rainbowRef.current;
+      if (rb) {
+        const end = Math.max(1, r.top + window.scrollY);
+        const t = Math.min(1, window.scrollY / end);
+        rb.style.transform = 'translateY(' + (-t * 180) + 'px)';
+      }
+      const total = r.height - window.innerHeight;
+      const p = Math.min(1, Math.max(0, -r.top / Math.max(1, total)));
+      if (Math.abs(p - this.state.p) > 0.002) this.setState({ p });
+    };
+    window.addEventListener('scroll', this.onScroll, { passive: true });
+    window.addEventListener('resize', this.onScroll);
+    window.addEventListener('keydown', this.onKey);
+    this.startBands();
+    window.addEventListener('pointermove', this.onLook, { passive: true });
+    this.blinkTimer = setTimeout(this.blink, 2000);
+    this.sbRO = new ResizeObserver(() => this.updateSb()); this.sbRO.observe(document.body);
+    let c = null; try { c = localStorage.getItem('jl-cookies'); } catch (e) {}
+    this.cookieTimer = setTimeout(() => this.setState({ cookies: c || 'ask' }), 900);
+    this.onScroll();
+  }
+  startBands() {
+    this.animA && this.animA.cancel(); this.animB && this.animB.cancel();
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const go = (el, from, to) => el && el.animate([{ transform: 'translateX(' + from + ')' }, { transform: 'translateX(' + to + ')' }], { duration: 45000, iterations: Infinity });
+    this.animA = go(this.trackA.current, '-50%', '0%');
+    this.animB = go(this.trackB.current, '0%', '-50%');
+  }
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.onScroll);
+    window.removeEventListener('resize', this.onScroll);
+    window.removeEventListener('keydown', this.onKey);
+    this.animA && this.animA.cancel(); this.animB && this.animB.cancel();
+    document.body.style.overflow = '';
+    clearTimeout(this.cookieTimer); clearTimeout(this.cTimer);
+    this.sbRO && this.sbRO.disconnect();
+    window.removeEventListener('pointermove', this.onLook); clearTimeout(this.blinkTimer);
+  }
+  goTo(i, n) {
+    const el = this.expRef.current; if (!el) return;
+    const top = el.getBoundingClientRect().top + window.scrollY;
+    const total = el.offsetHeight - window.innerHeight;
+    window.scrollTo({ top: top + total * ((i + 0.5) / n), behavior: 'smooth' });
+  }
+  renderVals() {
+    const items = [
+      { kind: 'EXPERIENCE', date: '2023 — Present', org: 'Fundacja Peryskop', color: '#7b5cff', title: 'Frontend Developer · Fundacja Peryskop', sub: 'Free online psychological support platform · fundacjaperyskop.org', bullets: [
+        'Joined as the sole developer and grew the application from a form-handling tool into a platform supporting the delivery of psychological help.',
+        'Developed volunteer availability management, authorization and access control, forms and the landing page.',
+        'Design interfaces for non-technical users: identify pain points in their daily work and simplify key tasks',
+        'Act as a bridge between the organization and the technical team; select developer candidates, conduct code reviews, and mentor less experienced frontend developers'] },
+      { kind: 'EXPERIENCE', date: '2023 — Present', org: 'Vitresoft', color: '#2e88d0', title: 'Junior Frontend Developer · Vitresoft', sub: 'One of Poland’s largest game server hosting providers · craftserve.com', bullets: [
+        'Co-building, since the pre-launch stage, a new hosting management platform that replaced a Pterodactyl-based solution; now responsible for its ongoing development as the sole frontend developer.',
+        'Design interfaces and own UI/UX decisions; design and run A/B tests aimed at improving user experience and sales.',
+        'Work with AI agents: delegate tasks, review generated code and verify changes on staging before merging.',
+        'Mentor interns and support the growth of their programming skills.'] },
+      { kind: 'EDUCATION', date: 'Oct 2023 — Feb 2027', org: 'WSB-NLU, Nowy Sącz', color: '#e05a6a', title: 'Bachelor of Engineering (Inż.) in Computer Science', sub: 'WSB-NLU, Nowy Sącz, Poland · part-time (weekend) studies · expected Feb 2027', bullets: [] }
+    ];
+    const n = items.length, p = this.state.p, compact = !!this.state.compact;
+    const active = Math.min(n - 1, Math.floor(p * n));
+    const exp = items.map((e, i) => compact ? { ...e, meta: e.kind + ' · ' + e.date, area: 'auto', op: 1, ty: '0px', pe: 'auto', ink: 'var(--ink)', dot: e.color, scale: 1, go: () => {} } : ({ ...e, meta: e.kind, area: '1/1',
+      ink: i === active ? 'var(--ink)' : 'var(--faint)',
+      dot: i <= active ? e.color : 'var(--bg)',
+      scale: i === active ? 1.3 : 1,
+      op: i === active ? 1 : 0,
+      ty: i === active ? '0px' : (i < active ? '-16px' : '16px'),
+      pe: i === active ? 'auto' : 'none',
+      go: () => this.goTo(i, n) }));
+    const grid = this.props.showGrid ?? true;
+    const RB = ['#e05a6a','#ff7a5c','#fdf25c','#a334d0','#7b5cff','#2e88d0'];
+    const WC = ['#e05a6a','#ff7a5c','#a334d0','#7b5cff','#2e88d0'];
+    const loop = (arr) => { const half = [...arr, ...arr].map((text, i) => ({ text, dot: RB[i % RB.length], word: WC[i % WC.length] })); return [...half, ...half]; };
+    const lineA = loop(['React','TypeScript','Next.js','Astro','Figma','UI/UX','Tailwind','Redux Toolkit','TanStack','WebSocket','Storybook','A/B Testing']);
+    const lineB = loop(['Frontend Developer','Kraków, Poland','Building for people','Sole frontend dev at two teams','Mentor to interns','Computer Science student','Polish & English']);
+    const P = Component.PAINTS;
+    const last = this.state.last || this.loadLast();
+    const paints = P.map((c, i) => ({ name: c[0], hex: c[1], checked: i === this.state.gColor ? 'true' : 'false', ring: i === this.state.gColor ? '0 0 0 3px var(--bg), 0 0 0 5px var(--ink)' : 'none', pick: () => this.setState({ gColor: i }) }));
+    const mobile = !!this.state.mobile, narrow = !!this.state.narrow;
+    const navItems = Component.NAV.map(([id, label], i) => ({ href: '#' + id, label, n: '0' + (i + 1), bg: this.state.cur === id ? 'var(--hover)' : 'transparent', current: this.state.cur === id ? 'location' : undefined }));
+    return {
+      eyeL: this.eyeL, eyeR: this.eyeR, pupilL: this.pupilL, pupilR: this.pupilR,
+      sbThumb: this.sbThumb, sbThumbDown: this.sbThumbDown, sbTrackDown: this.sbTrackDown, sbDisplay: mobile ? 'none' : 'block',
+      gMirror: this.mirror('g', this.state.gText, false), gRef: this.iRefs.g, syncMirrors: this.syncMirrors,
+      ...(() => {
+        const s = this.state, st = s.cStatus || 'idle', errs = this.cErrors(), t = s.cTouched || {};
+        const show = (k) => !!((s.cTried || t[k]) && errs[k]);
+        const o = { cIdle: st === 'idle', cLoading: st === 'loading', cSuccess: st === 'success', cLocked: st !== 'idle', cSubmit: this.cSubmit, cReset: this.cReset,
+          cStatusText: st === 'loading' ? 'Sending your message…' : st === 'success' ? 'Thanks! I’ll get back to you at ' + (s.cEmail || '').trim() + '.' : '',
+          cMsgCount: (s.cMsg || '').length,
+          cMsgKey: (e) => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) this.cSubmit(e); },
+          spinner: React.createElement('span', { 'aria-hidden': true, style: { width: 16, height: 16, borderRadius: '50%', border: '2px solid rgba(255,255,255,0.4)', borderTopColor: '#fff', animation: 'twSpin 700ms linear infinite' } }),
+          check: React.createElement('svg', { width: 18, height: 18, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 3, strokeLinecap: 'round', strokeLinejoin: 'round', 'aria-hidden': true }, React.createElement('path', { d: 'M5 12.5l4.5 4.5L19 7' })) };
+        [['name', 'cName', 'Name'], ['email', 'cEmail', 'Email'], ['msg', 'cMsg', 'Msg']].forEach(([k, key, N]) => {
+          o['c' + N + 'Mirror'] = this.mirror(k, s[key] || '', k === 'msg');
+          o['c' + N + 'Ref'] = this.iRefs[k];
+          o['c' + N] = s[key] || '';
+          o['onC' + N] = (e) => { if (k === 'msg') { e.target.style.height = 'auto'; e.target.style.height = e.target.scrollHeight + 'px'; } this.setState({ [key]: e.target.value }); };
+          o['blurC' + N] = () => { if ((s[key] || '').length) this.touch(k); };
+          o['c' + N + 'Err'] = show(k); o['c' + N + 'ErrText'] = errs[k] || '';
+          o['c' + N + 'Inv'] = show(k) ? 'true' : 'false';
+          o['c' + N + 'Line'] = show(k) ? '#c23b4c' : 'var(--ink)';
+        });
+        return o;
+      })(),
+      showCookies: this.state.cookies === 'ask' && !this.state.menuOpen, acceptCookies: () => this.setCookies('all'), declineCookies: () => this.setCookies('essential'),
+      cookieInset: mobile ? '12px' : '24px', cookieRight: mobile ? '12px' : 'auto', cookieWidth: mobile ? 'auto' : 'min(380px, calc(100vw - 48px))',
+      navItems, showNav: !mobile, showBurger: mobile, showAside: !narrow, menuOpen: !!this.state.menuOpen, openMenu: this.openMenu, closeMenu: this.closeMenu,
+      sidePad: narrow ? 'clamp(20px,5vw,40px)' : 'clamp(56px,6vw,72px)', footBottom: narrow ? '120px' : '40px', dripScale: mobile ? 0.6 : 1,
+      showModal: !!this.state.sent, sentText: this.state.sent ? this.state.sent.text : '', sentTint: this.state.sent ? (P[this.state.sent.c] || P[2])[2] : 'transparent',
+      closeModal: this.closeModal, stop: (e) => e.stopPropagation(),
+      lastText: last.text, lastTint: (P[last.c] || P[2])[2], paints, submit: this.submit,
+      gText: this.state.gText, gCount: this.state.gText.length,
+      onText: (e) => this.setState({ gText: e.target.value }),
+      lineA, lineB,
+      pauseA: () => this.animA && this.animA.pause(), playA: () => this.animA && this.animA.play(),
+      pauseB: () => this.animB && this.animB.pause(), playB: () => this.animB && this.animB.play(),
+      trackA: this.trackA, trackB: this.trackB,
+      exp, expRef: this.expRef, rainbowRef: this.rainbowRef, expHeight: compact ? 'auto' : (n * 80 + 20) + 'vh',
+      stickyPos: compact ? 'relative' : 'sticky', stickyH: compact ? 'auto' : '100vh',
+      expCols: compact ? 'minmax(0,1fr)' : 'minmax(0,280px) minmax(0,1fr)', showRail: !compact,
+      fillHeight: 'calc((100% - 16px) * ' + (active / (n - 1)).toFixed(3) + ')',
+      showDrips: this.props.showDrips ?? true,
+      gridBg: grid ? 'linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px)' : 'none',
+      hoverLink: { background: 'var(--hover)', color: 'var(--ink)' },
+      hoverPrimary: { background: '#3570ea', color: '#fff', transform: 'translateY(-2px)', boxShadow: '0 8px 0 #1a3f94' },
+      activePrimary: { transform: 'translateY(5px)', boxShadow: '0 1px 0 #1a3f94' },
+      hoverSecondary: { background: '#fdf25c', color: 'var(--ink)', transform: 'translateY(-2px)', boxShadow: '0 8px 0 var(--ink)' },
+      activeSecondary: { transform: 'translateY(5px)', boxShadow: '0 1px 0 var(--ink)' },
+      projects: [
+        { n: '01', title: 'Hosting control panel', org: 'Vitresoft', tags: 'React · TypeScript · gRPC', desc: 'Evolved core modules of the control panel and product site: server configuration, purchase/upgrade flow, in-browser file manager (WebFTP), web console, and gRPC-powered server process views' },
+        { n: '02', title: 'Item shop builder', org: 'Vitresoft', tags: 'React · TypeScript', desc: 'Co-built from scratch, together with the backend team, an online store builder (item shops) for server administrators.' },
+        { n: '03', title: 'Real-time support chat', org: 'Fundacja Peryskop', tags: 'WebSocket · React', desc: 'Built a custom real-time chat frontend (WebSocket) for help seekers, volunteers and admins; created and maintain the shared React / React Native component library.' },
+        { n: '04', title: 'Volunteer matching system', org: 'Fundacja Peryskop', tags: 'Requirements · Diagrams', desc: 'Prepared requirements, documentation and logic diagrams for an automated matching system pairing help seekers with volunteers, used as the basis for its backend implementation.' },
+        { n: '05', title: 'Gaming event web apps', org: 'Vitresoft', tags: 'Next.js · Astro', desc: 'Built web apps for Polish gaming-industry events featuring popular Polish content creators.' }
+      ],
+      skills: [
+        { group: 'Core', items: 'React  /  TypeScript  /  UI/UX  /  Figma  /  AI' },
+        { group: 'Frameworks', items: 'Next.js  /  Astro  /  SSG  /  Tailwind' },
+        { group: 'Data & state', items: 'Redux Toolkit  /  TanStack  /  WebSocket' },
+        { group: 'Testing', items: 'Jest  /  Vitest  /  React Testing Library  /  Storybook  /  A/B Testing' },
+        { group: 'Workflow', items: 'Git  /  GitHub Packages' }
+      ]
+    };
+  }
+}
+</script>
+
+
+</body></html>
