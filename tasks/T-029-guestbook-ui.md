@@ -47,6 +47,10 @@ Build the "I love connecting people through the power of frontend" section. It s
 
 Validate guestbook bodies only through `checkGuestbookBody(raw)` from `@portfolio/contracts`. Don't compose `normalizeGuestbookBody` + `validateGuestbookBody`: they miss trimmed/collapsed U+FEFF cases.
 
+### Orchestrator note (2026-10-25): T-022 button states
+
+`Button` renders `busy` as native `disabled` + `aria-busy` (the design's "sending" look) and `disabled` as `aria-disabled` only (the design's "sent" look; still focusable, so it does **not** block activation). Keep the sent button `type="button"` and guard your own submit handler. At runtime toggle `data-busy` / `data-done`, `disabled`, `aria-busy`, and `aria-disabled` (see `components/ui/Button.astro`).
+
 ## Out of scope
 
 Server behaviour (T-014). E2E journeys (T-041), though a smoke spec is welcome if T-040 has merged.
