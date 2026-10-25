@@ -2,6 +2,9 @@ import { createApp } from './app.ts';
 import { ConfigError, loadConfig, type Config } from './config.ts';
 import { uuidGenerator } from './domain/shared/ids.ts';
 import { createHttpServer } from './http/server.ts';
+import { openDatabase } from './infra/db/connection.ts';
+import { createGuestbookRepository } from './infra/db/guestbook.repository.ts';
+import { migrate } from './infra/db/migrate.ts';
 import { createHealthRoutes } from './http/routes/health.routes.ts';
 import { createLogger } from './logger.ts';
 import { createShutdownManager } from './shutdown.ts';
@@ -25,15 +28,16 @@ function main(): void {
   const config = readConfig();
   const logger = createLogger({ level: config.logLevel, pretty: config.nodeEnv === 'development' });
 
+  const db = openDatabase(config.databasePath);
+  migrate(db);
+  const guestbookRepo = createGuestbookRepository(db);
+
   const app = createApp({
     logger,
     ids: uuidGenerator,
     isProduction: config.isProduction,
     corsAllowedOrigins: config.corsAllowedOrigins,
-    routes: [
-      // T-012 replaces this with a real `SELECT 1` against the SQLite connection.
-      createHealthRoutes({ checkDatabase: () => undefined }),
-    ],
+    routes: [createHealthRoutes({ checkDatabase: guestbookRepo.ping })],
   });
 
   const server = createHttpServer(app);
@@ -46,6 +50,10 @@ function main(): void {
     onError: (error) => {
       logger.error({ err: error }, 'shutdown hook failed');
     },
+  });
+  // Registered before the server hook: hooks run in reverse, so the DB closes after requests drain.
+  shutdown.onShutdown(() => {
+    db.close();
   });
   shutdown.onShutdown(
     () =>
