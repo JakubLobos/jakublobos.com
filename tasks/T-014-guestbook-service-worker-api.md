@@ -65,7 +65,7 @@ Admin CLI (T-017), frontend (T-029).
 
 ```
 pnpm verify
-pnpm --filter @portfolio/server test -- --coverage     # domain/** ≥ 90/85
+pnpm --filter @portfolio/server test:coverage     # domain/** ≥ 90/85
 ```
 
 ## Definition of done

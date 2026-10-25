@@ -79,7 +79,7 @@ Table-driven `*.test.ts` covering:
 
 - guestbook length 0, 1, 120, and 121 (including a 120-unit string ending with a surrogate pair)
 - whitespace collapse
-- NFC (decomposed `ł`)
+- NFC (decomposed `ó`/`ą`; `ł` has no canonical decomposition)
 - each forbidden code point, and a ZWJ emoji allowed
 - link positives and negatives (as listed)
 - email, phone positives, and years like `2023 2024` (8 digits) allowed
@@ -89,7 +89,7 @@ Table-driven `*.test.ts` covering:
 
 ```
 pnpm verify
-pnpm --filter @portfolio/contracts test -- --coverage
+pnpm --filter @portfolio/contracts test:coverage
 ```
 
 ## Definition of done

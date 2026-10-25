@@ -99,6 +99,7 @@ Submit a message for review.
   "body": "Hello from Kraków!",
   "paint": "violet",
   "clientRequestId": "d1b7c0b4-3f1e-4d6c-9a52-2b9f0b8f61a1",
+  "locale": "pl", // optional: page locale ("en" | "pl"); server defaults to "en"
   "website": "",
 }
 ```
@@ -115,7 +116,7 @@ Processing order: per-client rate limit → schema → normalization → feedbac
 
 Responses **never reveal review outcomes** (uniform 202), so the filters can't be probed.
 
-Normalization:
+Normalization (forbidden characters and well-formedness are checked on the NFC text **before** trimming and collapsing, so e.g. U+FEFF can never be turned into a space):
 
 1. NFC.
 2. Trim.
@@ -124,8 +125,8 @@ Normalization:
 Feedback rules:
 
 - 1–120 UTF-16 units.
-- Forbidden characters: C0/C1 controls, bidi controls U+202A–202E and U+2066–2069, U+200B, U+2060, U+FEFF. ZWJ (U+200D) is allowed.
-- Links: `http(s)://`, `www.`, or `label.tld` with curated TLDs (`Node.js` passes).
+- Forbidden characters: C0/C1 controls, bidi controls U+202A–202E and U+2066–2069, U+200B, U+2060, U+FEFF, and lone surrogates (`!isWellFormed()`). ZWJ (U+200D) is allowed.
+- Links: `http(s)://`, `www.`, or `label.tld` where the TLD is in the curated list **and written in lowercase** in the original text, using Unicode-aware boundaries (so `пример.ru` and `żółć.pl` are caught, `to.coś` isn't). Passes: `Node.js`, `e.g.`, `i.e.`, `v1.2`, `3.14`, `ASP.NET`, `job.Me` (missing space after a period), and the tech allowlist `socket.io`. Anything that slips through is still subject to moderation and the suitability check.
 - Contact info: an email address, or 9+ digits.
 
 ### `POST /api/contact`
@@ -136,6 +137,7 @@ Feedback rules:
   "email": "jane@company.com",
   "message": "I'd love to talk about…",
   "clientRequestId": "…uuid…",
+  "locale": "en", // optional: page locale; server defaults to "en"
   "website": "",
 }
 ```

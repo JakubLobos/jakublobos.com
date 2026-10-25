@@ -91,7 +91,7 @@ DB (T-012), review providers (T-013), routes (T-014/T-015), the Worker (T-016), 
 
 ```
 pnpm verify
-pnpm --filter @portfolio/server test -- --coverage
+pnpm --filter @portfolio/server test:coverage
 pnpm --filter @portfolio/server start   # curl -i localhost:3000/api/health ; curl -i -X OPTIONS -H 'Origin: http://localhost:4321' -H 'Access-Control-Request-Method: POST' localhost:3000/api/health
 ```
 
