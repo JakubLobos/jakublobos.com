@@ -44,6 +44,12 @@ Establish the bilingual page skeleton and every frontend extension point, so sec
 
 - Follow-up from T-001 review: fix `site` in `astro.config.ts` (fallback `http://localhost:4321`, not the API port) and load `PUBLIC_*` variables from the repo-root `.env` with Vite `loadEnv(mode, '../..', 'PUBLIC_')`.
 
+- Follow-ups from the T-020 review (orchestrator-approved; you may edit `apps/web/src/styles/tokens.css` and `base.css` for these only):
+  - R1-01: preload only the `latin` subset of the display font (`<Font cssVariable="--font-display" preload={[{ subset: 'latin' }]} />`); on PL pages also preload `latin-ext` only if the PL hero headline contains latin-ext glyphs.
+  - R1-03: give the page wrapper `display: flow-root` so child margins can't shift the grid background; verify grid rows at y = 106/212 at 1440 against `desktop-1440-hero.png`.
+  - R1-04: move `color-scheme: light` from `tokens.css` to `base.css` (`tokens.css` holds custom properties only).
+  - Add `--leading-cookie: 1.65` and `--leading-status: 1.6` to `tokens.css` (`docs/design-system.md` §2.3) and extend `tokens.test.ts`.
+
 ## Out of scope
 
 Real section and chrome implementations (T-023…T-033), translations review (T-034), OG images (T-035), Worker and `_headers` (T-016).

@@ -10,7 +10,7 @@ apps/web/src/styles/
   base.css        reset, element defaults (html, body, a, ::selection, placeholders,
                   focus ring), hidden native scrollbar, reduced-motion defaults
   utilities.css   tiny set: .visually-hidden, .full-bleed, .container (main width + side padding)
-  keyframes.css   shared @keyframes (type-in, spin, marquee, blink)
+  keyframes.css   shared @keyframes (type-in, spin, marquee-ltr, marquee-rtl); the mascot blink uses the Web Animations API
 ```
 
 - Global CSS is imported **once** in `BaseLayout.astro`.
@@ -97,6 +97,8 @@ Type roles. Font sizes are in **rem** (px ÷ 16), so user font-size settings are
 | `--text-caption`                       | 13px / 1.5–1.6                  | footer, errors, status, project org, eyebrow (mono) |
 | `--text-label`                         | 12px                            | mono labels, dates, counters, aside                 |
 
+Line heights are tokens too (added in T-020, approved): `--leading-display 1.1`, `--leading-heading 1.15`, `--leading-quote 1.45`, `--leading-h3 1.3`, `--leading-lead 1.7`, `--leading-title 1.35`, `--leading-skill 1.7`, `--leading-marquee 1.2`, `--leading-logo 1.3`, `--leading-modal-quote 1.5`, `--leading-field 1.5`, `--leading-body 1.7`, `--leading-small 1.7`, `--leading-caption 1.5`, plus `--leading-cookie 1.65` (cookie banner text) and `--leading-status 1.6` (contact status line), added by T-021.
+
 Weights: `--weight-regular 400`, `--weight-medium 500`, `--weight-semibold 600`.
 Tracking: `--tracking-logo .02em`, `--tracking-date .04em`, `--tracking-label .06em`, `--tracking-wide .08em`, `--word-spacing-skill .15em`.
 
@@ -143,20 +145,20 @@ CSS custom properties can't be used inside media queries, so breakpoints are con
 
 ### 2.7 Shape, borders, shadows
 
-| Token                                               | Value                                                             |
-| --------------------------------------------------- | ----------------------------------------------------------------- |
-| `--radius-sm` / `--radius-md` / `--radius-lg`       | `6px` / `8px` / `12px`                                            |
-| `--radius-drip`                                     | `11px`                                                            |
-| `--radius-sketch`                                   | `255px 15px 225px 15px / 15px 225px 15px 255px` (scrollbar thumb) |
-| `--border-thick` / `--border-hairline`              | `2px` / `1px`                                                     |
-| `--press-rest` / `--press-hover` / `--press-active` | `6px` / `8px` / `1px` (hard-shadow Y offsets, large buttons)      |
-| `--press-sm-rest` / `--press-sm-hover`              | `4px` / `5px` (small and chrome buttons)                          |
-| `--lift-hover` / `--sink-active`                    | `-2px` / `5px` (translateY)                                       |
-| `--shadow-card`                                     | `0 8px 0 var(--color-ink)` (cookie banner)                        |
-| `--shadow-dialog`                                   | `0 10px 0 var(--color-ink)` (modal)                               |
-| `--shadow-thumb`                                    | `2px 3px 0 var(--color-ink)`                                      |
-| `--ring-swatch`                                     | `0 0 0 3px var(--color-bg), 0 0 0 5px var(--color-ink)`           |
-| `--focus-ring`                                      | `2px solid var(--color-focus)`, offset `3px` (addition, D-19)     |
+| Token                                               | Value                                                                                                                                  |
+| --------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `--radius-sm` / `--radius-md` / `--radius-lg`       | `6px` / `8px` / `12px`                                                                                                                 |
+| `--radius-drip`                                     | `11px`                                                                                                                                 |
+| `--radius-sketch`                                   | `255px 15px 225px 15px / 15px 225px 15px 255px` (scrollbar thumb)                                                                      |
+| `--border-thick` / `--border-hairline`              | `2px` / `1px`                                                                                                                          |
+| `--press-rest` / `--press-hover` / `--press-active` | `6px` / `8px` / `1px` (hard-shadow Y offsets, large buttons)                                                                           |
+| `--press-sm-rest` / `--press-sm-hover`              | `4px` / `5px` (small and chrome buttons)                                                                                               |
+| `--lift-hover` / `--sink-active`                    | `-2px` / `5px` (translateY)                                                                                                            |
+| `--shadow-card`                                     | `0 8px 0 var(--color-ink)` (cookie banner)                                                                                             |
+| `--shadow-dialog`                                   | `0 10px 0 var(--color-ink)` (modal)                                                                                                    |
+| `--shadow-thumb`                                    | `2px 3px 0 var(--color-ink)`                                                                                                           |
+| `--ring-swatch`                                     | `0 0 0 3px var(--color-bg), 0 0 0 5px var(--color-ink)`                                                                                |
+| `--focus-ring` / `--focus-ring-offset`              | `2px solid var(--color-focus)` / `3px` (addition, D-19; the offset is a separate token because the `outline` shorthand can't carry it) |
 
 ### 2.8 Motion
 
