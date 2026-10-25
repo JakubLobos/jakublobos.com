@@ -99,7 +99,7 @@ The HTTP response never waits for review. The modal appears instantly ("IN REVIE
   - `approve` → `repo.approve(id, now)` (`UPDATE … WHERE id=? AND status='pending'`; 0 rows ⇒ superseded or expired meanwhile ⇒ log and ignore).
   - `reject` → `repo.deletePending(id)` + `recentRejections.add(hash)`.
   - `transient` → `repo.recordFailure(id, code, now + backoff(attempts, retryAfter))`.
-- Backoff: 30 s, 2 min, 10 min, 30 min, 1 h, then every 2 h until the 24 h expiry. Provider `Retry-After` is respected (`max`).
+- Backoff: 30 s, 2 min, 10 min, 30 min, 1 h, then every 2 h until the 24 h expiry. Provider `Retry-After` is respected (`max`), capped at 2 h so a bogus header can't park the newest message until it expires.
 - Shutdown: stop the timer and await the in-flight pipeline (bounded by provider timeouts).
 
 ## 6. Review pipeline (`domain/guestbook/review-pipeline.ts`)
