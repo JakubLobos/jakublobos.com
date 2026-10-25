@@ -58,7 +58,7 @@ Trust boundaries:
 ## 3. XSS rules (normative)
 
 1. Untrusted strings are inserted only via `textContent`, safe attributes, or Astro interpolation.
-2. Banned: `innerHTML`, `outerHTML`, `insertAdjacentHTML`, `document.write`, `set:html`, `eval`/`new Function`, and URLs built from untrusted input.
+2. Banned: `innerHTML`, `outerHTML`, `insertAdjacentHTML`, `document.write`, `set:html`, `eval`/`new Function`, and URLs built from untrusted input. **Single exception:** `set:html` on the `<script type="application/ld+json">` in `components/seo/Seo.astro`, because Astro has no other way to emit valid JSON there (`set:text` HTML-escapes the quotes). Its input is build-time constants only, `<` is escaped as `003c`, and the line carries an `eslint-disable` comment stating this. No other `set:html` is allowed.
 3. `data-messages` JSON is parsed and validated.
 
 <a id="http-headers"></a>
