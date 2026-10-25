@@ -64,7 +64,7 @@ The UI (T-030). The Turnstile widget setup in the dashboard (owner, D-23 / T-050
 
 ```
 pnpm verify
-pnpm --filter @portfolio/server test -- phone verification
+pnpm --filter @portfolio/server exec vitest run phone verification
 ```
 
 ## Definition of done

@@ -61,7 +61,7 @@ None new.
 
 ```
 pnpm verify
-pnpm --filter @portfolio/server test -- src/domain/contact src/infra/mail src/http/routes/contact
+pnpm --filter @portfolio/server exec vitest run src/domain/contact src/infra/mail src/http/routes/contact
 ```
 
 ## Definition of done

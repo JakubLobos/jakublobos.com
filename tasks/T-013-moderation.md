@@ -86,7 +86,7 @@ None new (global `fetch`, zod).
 
 ```
 pnpm verify
-pnpm --filter @portfolio/server test -- src/infra src/domain/guestbook
+pnpm --filter @portfolio/server exec vitest run src/infra src/domain/guestbook
 ```
 
 ## Definition of done

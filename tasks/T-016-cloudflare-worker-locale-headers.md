@@ -88,7 +88,7 @@ web dev: `wrangler@4.152.0`, `@cloudflare/workers-types@5.20261023.1` (round 2 a
 
 ```
 pnpm verify
-pnpm --filter @portfolio/web test -- worker
+pnpm --filter @portfolio/web exec vitest run worker
 pnpm --filter @portfolio/web build && pnpm --filter @portfolio/web preview:edge
 ```
 
