@@ -52,7 +52,7 @@ Actual Cloudflare deployment and DNS (T-050/T-051), the switcher UI (T-023), API
 
 ## Allowed files
 
-`apps/web/wrangler.jsonc`, `apps/web/security-headers.ts`, `apps/web/integrations/cloudflare-headers.ts`, `apps/web/worker/**`, `apps/web/astro.config.ts` (register the integration only), `apps/web/package.json`, `apps/web/public/robots.txt`, `apps/server/package.json` (`preview:topology` script only), root `package.json` (`preview` script), `README.md` (preview section), `pnpm-lock.yaml`.
+`apps/web/tsconfig.json` (extend `include` for new web-root TS files only; T-001 review note), `apps/web/wrangler.jsonc`, `apps/web/security-headers.ts`, `apps/web/integrations/cloudflare-headers.ts`, `apps/web/worker/**`, `apps/web/astro.config.ts` (register the integration only), `apps/web/package.json`, `apps/web/public/robots.txt`, `apps/server/package.json` (`preview:topology` script only), root `package.json` (`preview` script), `README.md` (preview section), `pnpm-lock.yaml`.
 
 ## Dependencies (exact)
 

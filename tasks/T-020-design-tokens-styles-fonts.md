@@ -44,7 +44,7 @@ Components (T-022+), i18n and SEO (T-021).
 
 ## Allowed files
 
-`apps/web/src/styles/**`, `apps/web/src/layouts/BaseLayout.astro`, `apps/web/astro.config.ts` (`fonts` + integration registration), `apps/web/integrations/**`, `apps/web/src/dev/**`, `apps/web/src/pages/index.astro` and `pl/index.astro` (layout usage only).
+`apps/web/tsconfig.json` (extend `include` for new web-root TS files only; T-001 review note), `apps/web/src/styles/**`, `apps/web/src/layouts/BaseLayout.astro`, `apps/web/astro.config.ts` (`fonts` + integration registration), `apps/web/integrations/**`, `apps/web/src/dev/**`, `apps/web/src/pages/index.astro` and `pl/index.astro` (layout usage only).
 
 ## Implementation notes
 

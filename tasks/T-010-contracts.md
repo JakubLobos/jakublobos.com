@@ -39,6 +39,8 @@ Implement `@portfolio/contracts`: the single executable definition of the HTTP A
 - `src/rules/contact-fields.ts`: `normalizeContactInput(raw)` and `validateContactInput(normalized): Partial<Record<'name'|'email'|'message', FieldErrorCode[]>>` per `api.md` §3 (email regex identical to the design's).
 - `src/index.ts` re-exports constants, types, and rules. It must **not** import `schemas.ts` at runtime (type-only imports are fine).
 
+- Follow-up from T-001 review (R1-01): `Locale` currently lives in `src/index.ts`; move it to `src/types.ts` (derived from `LOCALES`) and re-export it.
+
 ## Out of scope
 
 Server-side dedupe hashing and blocked terms (T-013/T-014). HTTP wiring.

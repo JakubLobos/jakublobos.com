@@ -42,6 +42,8 @@ Establish the bilingual page skeleton and every frontend extension point, so sec
 12. `HomePage.astro` composes the sections in order inside `<main id="top">`. `PrivacyPage` and `NotFoundPage` get stub content (T-033).
 13. `public/robots.txt`: allow all, `Disallow: /set-language` (T-016 also ensures this), and a `Sitemap: https://jakublobos.com/sitemap-index.xml` line.
 
+- Follow-up from T-001 review: fix `site` in `astro.config.ts` (fallback `http://localhost:4321`, not the API port) and load `PUBLIC_*` variables from the repo-root `.env` with Vite `loadEnv(mode, '../..', 'PUBLIC_')`.
+
 ## Out of scope
 
 Real section and chrome implementations (T-023…T-033), translations review (T-034), OG images (T-035), Worker and `_headers` (T-016).

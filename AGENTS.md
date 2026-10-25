@@ -31,6 +31,8 @@ pnpm preview                     # build + production topology: site+Worker on :
 pnpm test:e2e                    # Playwright + axe against the built site (after T-040)
 ```
 
+**Windows note:** stopping `pnpm dev` from a background shell can orphan `astro dev`/`node` children. Kill only the PIDs you started (`taskkill /PID <pid> /T /F`) and confirm ports 3000/4321/8787 are free with `netstat -ano | findstr :<port>`.
+
 ## Non-negotiable rules
 
 1. **Scope.** Do only your task and edit only its _Allowed files_. Use Change Requests for shared surfaces (`docs/agent-workflow.md#shared-surfaces`).
