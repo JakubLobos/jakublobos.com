@@ -23,3 +23,6 @@ Thumbs.db
 .idea/
 .vscode/*
 !.vscode/extensions.json
+
+# Agent worktrees (Claude Code isolation)
+.claude/worktrees/
