@@ -1,2 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /set-language
+
+Sitemap: https://jakublobos.com/sitemap-index.xml

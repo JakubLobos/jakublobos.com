@@ -1,9 +1,6 @@
 ---
-import { DEFAULT_LOCALE, LOCALES } from '@portfolio/contracts';
-import BaseLayout from '../layouts/BaseLayout.astro';
+import HomePage from '../components/pages/HomePage.astro';
+import { localeFromAstro } from '../i18n/locales.ts';
 ---
 
-<BaseLayout lang="en">
-  <h1>Jakub Łobos</h1>
-  <p hidden data-locales={LOCALES.join(',')} data-default={DEFAULT_LOCALE}></p>
-</BaseLayout>
+<HomePage locale={localeFromAstro(Astro)} />

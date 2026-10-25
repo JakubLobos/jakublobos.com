@@ -1,0 +1,15 @@
+---
+import type { Locale } from '../../i18n/locales.ts';
+import { common } from '../../i18n/messages/common.ts';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+---
+
+<!-- STUB: T-030 -->
+<section id="contact" aria-labelledby="contact-heading">
+  <h2 id="contact-heading">{common(locale).sections.contact}</h2>
+</section>

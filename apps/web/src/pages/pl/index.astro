@@ -1,7 +1,6 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import HomePage from '../../components/pages/HomePage.astro';
+import { localeFromAstro } from '../../i18n/locales.ts';
 ---
 
-<BaseLayout lang="pl">
-  <h1>Jakub Łobos</h1>
-</BaseLayout>
+<HomePage locale={localeFromAstro(Astro)} />

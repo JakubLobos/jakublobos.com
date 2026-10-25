@@ -1,0 +1,13 @@
+---
+import type { Locale } from '../../i18n/locales.ts';
+import { common } from '../../i18n/messages/common.ts';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+---
+
+<!-- STUB: T-025 -->
+<section aria-label={common(locale).sections.marquee}></section>

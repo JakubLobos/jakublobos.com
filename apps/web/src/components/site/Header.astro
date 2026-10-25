@@ -1,0 +1,30 @@
+---
+import type { Locale } from '../../i18n/locales.ts';
+import { common } from '../../i18n/messages/common.ts';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+
+interface Props {
+  locale: Locale;
+  /** Locale-neutral page path, for the language switcher. */
+  path: string;
+}
+
+const { locale, path } = Astro.props;
+const m = common(locale);
+const anchors = ['experience', 'projects', 'skills', 'guestbook', 'contact'] as const;
+---
+
+<!-- STUB: T-023 -->
+<header>
+  <a href="#top">{m.siteName}</a>
+  <nav aria-label={m.mainNavigation}>
+    <ul>
+      {anchors.map((id) => (
+        <li>
+          <a href={`#${id}`}>{m.sections[id]}</a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+  <LanguageSwitcher locale={locale} {path} />
+</header>

@@ -1,0 +1,18 @@
+---
+import type { Locale } from '../../i18n/locales.ts';
+import { seo } from '../../i18n/messages/seo.ts';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+---
+
+<BaseLayout locale={locale} seoKey="privacy" path="/privacy">
+  <main id="top" class="container">
+    <!-- STUB: T-033 -->
+    <h1>{seo(locale).privacy.title}</h1>
+  </main>
+</BaseLayout>

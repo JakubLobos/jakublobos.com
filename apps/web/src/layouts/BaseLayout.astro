@@ -1,31 +1,52 @@
 ---
 import { Font } from 'astro:assets';
+import Seo from '../components/seo/Seo.astro';
+import CookieBanner from '../components/site/CookieBanner.astro';
+import CustomScrollbar from '../components/site/CustomScrollbar.astro';
+import DecorLayer from '../components/site/DecorLayer.astro';
+import Footer from '../components/site/Footer.astro';
+import Header from '../components/site/Header.astro';
+import MobileMenu from '../components/site/MobileMenu.astro';
+import SkipLink from '../components/site/SkipLink.astro';
+import SocialAside from '../components/site/SocialAside.astro';
+import { htmlLang, type Locale } from '../i18n/locales.ts';
+import type { SeoKey } from '../i18n/messages/seo.ts';
 import '../styles/tokens.css';
 import '../styles/base.css';
 import '../styles/utilities.css';
 import '../styles/keyframes.css';
 
 interface Props {
-  title?: string;
-  lang?: string;
+  locale: Locale;
+  seoKey: SeoKey;
+  /** Locale-neutral page path ('/', '/privacy', '/404'); canonical, hreflang and the switcher derive from it. */
+  path: string;
 }
 
-const { title = 'Jakub Łobos', lang = 'en' } = Astro.props;
+const { locale, seoKey, path } = Astro.props;
 ---
 
-<html lang={lang}>
+<html lang={htmlLang(locale)}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title}</title>
-    <Font cssVariable="--font-display" preload />
+    <Seo locale={locale} seoKey={seoKey} path={path} />
+    <Font cssVariable="--font-display" preload={[{ subset: 'latin' }]} />
     <Font cssVariable="--font-body" />
     <Font cssVariable="--font-ui" />
     <Font cssVariable="--font-mono" />
   </head>
   <body>
+    <SkipLink locale={locale} />
     <div class="page">
+      <Header locale={locale} path={path} />
+      <DecorLayer />
+      <SocialAside locale={locale} />
+      <CustomScrollbar />
       <slot />
+      <Footer locale={locale} />
+      <CookieBanner locale={locale} />
+      <MobileMenu locale={locale} path={path} />
     </div>
   </body>
 </html>
@@ -33,6 +54,7 @@ const { title = 'Jakub Łobos', lang = 'en' } = Astro.props;
 <style>
   .page {
     position: relative;
+    display: flow-root;
     min-height: 100vh;
     background-color: var(--color-bg);
     background-image:
@@ -40,5 +62,10 @@ const { title = 'Jakub Łobos', lang = 'en' } = Astro.props;
       linear-gradient(90deg, var(--color-grid) 1px, transparent 1px);
     background-size: var(--grid-cell-w) var(--grid-cell-h);
     overflow-x: clip;
+  }
+
+  .page > :global(main) {
+    position: relative;
+    z-index: var(--z-content);
   }
 </style>

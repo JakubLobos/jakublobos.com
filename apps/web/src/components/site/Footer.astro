@@ -1,0 +1,15 @@
+---
+import type { Locale } from '../../i18n/locales.ts';
+import { common } from '../../i18n/messages/common.ts';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+---
+
+<!-- STUB: T-023 -->
+<footer class="container">
+  <p>© 2026 {common(locale).siteName}</p>
+</footer>

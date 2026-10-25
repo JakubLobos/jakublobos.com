@@ -1,0 +1,15 @@
+---
+import type { Locale } from '../../i18n/locales.ts';
+import { common } from '../../i18n/messages/common.ts';
+
+interface Props {
+  locale: Locale;
+  /** Locale-neutral page path, for the language switcher. */
+  path: string;
+}
+
+const { locale } = Astro.props;
+---
+
+<!-- STUB: T-023 -->
+<dialog id="mobile-menu" aria-label={common(locale).menu}></dialog>

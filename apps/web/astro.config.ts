@@ -1,17 +1,60 @@
+import sitemap from '@astrojs/sitemap';
 import { defineConfig, fontProviders } from 'astro/config';
+import { existsSync, readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { parseEnv } from 'node:util';
 import devShowcase from './integrations/dev-showcase.ts';
+
+// PUBLIC_* variables live in the repo-root .env (shared with the API); `vite.envDir` below gives
+// client code the same file. Only `.env` is read here, not `.env.<mode>`, so `site` and the CSP
+// don't vary by mode; the real environment (CI, Cloudflare build) wins over the file.
+const rootDir = fileURLToPath(new URL('../../', import.meta.url));
+
+function loadPublicEnv(): Record<string, string | undefined> {
+  const file = `${rootDir}.env`;
+  const fromFile = existsSync(file) ? parseEnv(readFileSync(file, 'utf8')) : {};
+  const merged = Object.entries({ ...fromFile, ...process.env }).filter(([key]) =>
+    key.startsWith('PUBLIC_'),
+  );
+  // An empty value (e.g. PUBLIC_API_BASE_URL= in dev) means unset.
+  return Object.fromEntries(merged.filter(([, value]) => value !== undefined && value !== ''));
+}
+
+const env = loadPublicEnv();
+const siteUrl = env.PUBLIC_SITE_URL ?? 'http://localhost:4321';
+const apiOrigin = env.PUBLIC_API_BASE_URL ? new URL(env.PUBLIC_API_BASE_URL).origin : null;
 
 const provider = fontProviders.fontsource();
 // Polish needs latin-ext (ą ć ę ł ń ó ś ź ż).
 const subsets: ['latin', 'latin-ext'] = ['latin', 'latin-ext'];
 
 export default defineConfig({
-  site: process.env.PUBLIC_SITE_URL ?? 'http://localhost:3000',
+  site: siteUrl,
   output: 'static',
   build: { format: 'file' },
   trailingSlash: 'never',
   server: { port: 4321 },
-  integrations: [devShowcase()],
+  i18n: { locales: ['en', 'pl'], defaultLocale: 'en', routing: { prefixDefaultLocale: false } },
+  integrations: [
+    devShowcase(),
+    sitemap({
+      i18n: { defaultLocale: 'en', locales: { en: 'en-US', pl: 'pl-PL' } },
+      filter: (page) => !page.endsWith('/404'),
+    }),
+  ],
+  // Meta CSP with hashes (ADR-0012). Later tasks append their origins: T-030 Turnstile
+  // (script-src, frame-src), T-032 analytics (script-src, img-src, connect-src).
+  security: {
+    csp: {
+      directives: [
+        "default-src 'self'",
+        "img-src 'self' data:",
+        "font-src 'self'",
+        `connect-src 'self'${apiOrigin ? ` ${apiOrigin}` : ''}`,
+        "manifest-src 'self'",
+      ],
+    },
+  },
   fonts: [
     {
       name: 'Poppins',
@@ -51,6 +94,7 @@ export default defineConfig({
     },
   ],
   vite: {
+    envDir: rootDir,
     server: {
       proxy: { '/api': 'http://localhost:3000' },
     },
