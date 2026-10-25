@@ -8,40 +8,40 @@ All owner decisions that affect implementation are answered (see [`docs/decision
 
 ## Index
 
-| ID                                                 | Title                                                                      | Wave | Depends on                                      | Size | Status |
-| -------------------------------------------------- | -------------------------------------------------------------------------- | ---- | ----------------------------------------------- | ---- | ------ |
-| [T-001](T-001-workspace-scaffold.md)               | Workspace scaffold and toolchain wiring                                    | 1    | none                                            | M    | READY  |
-| [T-010](T-010-contracts.md)                        | Shared API contracts, constants, validation rules                          | 2    | T-001                                           | M    | TODO   |
-| [T-011](T-011-server-foundation.md)                | API foundation (config, logging, CORS, client IP, middleware)              | 2    | T-001                                           | L    | TODO   |
-| [T-020](T-020-design-tokens-styles-fonts.md)       | Design tokens (approved contrast), styles, fonts, layout shell, showcase   | 2    | T-001                                           | M    | TODO   |
-| [T-012](T-012-database-guestbook-repository.md)    | SQLite, migrations, newest-wins repository                                 | 3    | T-010, T-011                                    | M    | TODO   |
-| [T-013](T-013-moderation.md)                       | Review providers: quality rules, blocked terms, moderation, suitability    | 3    | T-010, T-011                                    | L    | TODO   |
-| [T-015](T-015-contact-api-mailer.md)               | Contact API + Resend mailer                                                | 3    | T-010, T-011                                    | M    | TODO   |
-| [T-016](T-016-cloudflare-worker-locale-headers.md) | Cloudflare Worker (locale, `/set-language`), `_headers`, wrangler, preview | 3    | T-001                                           | M    | TODO   |
-| [T-018](T-018-phone-reveal-api.md)                 | Phone reveal API (Turnstile verification)                                  | 3    | T-010, T-011                                    | S    | TODO   |
-| [T-021](T-021-i18n-pages-seo-composition.md)       | i18n, pages, SEO, CSP, composition stubs, API client                       | 3    | T-020                                           | L    | TODO   |
-| [T-022](T-022-ui-primitives-decor.md)              | UI primitives and decor                                                    | 3    | T-020                                           | M    | TODO   |
-| [T-014](T-014-guestbook-service-worker-api.md)     | Guestbook service, review pipeline, newest-wins worker, API                | 4    | T-012, T-013                                    | L    | TODO   |
-| [T-023](T-023-site-chrome.md)                      | Header, nav, mobile menu, aside, footer, language switcher                 | 4    | T-021, T-022                                    | L    | TODO   |
-| [T-024](T-024-hero-mascot-decor-layer.md)          | Hero, mascot, drips layer                                                  | 4    | T-021, T-022                                    | M    | TODO   |
-| [T-025](T-025-marquee-bands.md)                    | Marquee bands                                                              | 4    | T-021, T-022                                    | S    | TODO   |
-| [T-026](T-026-experience-timeline.md)              | Experience sticky timeline                                                 | 4    | T-021, T-022                                    | L    | TODO   |
-| [T-027](T-027-projects-skills.md)                  | Projects and Skills sections                                               | 4    | T-021, T-022                                    | S    | TODO   |
-| [T-028](T-028-typing-field.md)                     | Animated typing field                                                      | 4    | T-020, T-022                                    | M    | TODO   |
-| [T-031](T-031-custom-scrollbar.md)                 | Custom scrollbar                                                           | 4    | T-021                                           | S    | TODO   |
-| [T-040](T-040-e2e-a11y-harness.md)                 | E2E + a11y harness (wrangler dev + API)                                    | 4    | T-011, T-016, T-021                             | M    | TODO   |
-| [T-017](T-017-guestbook-admin-cli.md)              | Guestbook admin CLI (archive list/export, takedown)                        | 5    | T-014                                           | S    | TODO   |
-| [T-029](T-029-guestbook-ui.md)                     | Guestbook UI (loading/empty/error states) + client                         | 5    | T-010, T-021, T-022, T-028                      | L    | TODO   |
-| [T-030](T-030-contact-ui.md)                       | Contact UI + client                                                        | 5    | T-010, T-021, T-022, T-028                      | L    | TODO   |
-| [T-032](T-032-cookie-consent-analytics.md)         | Cookie consent + GA4 + PostHog (cookieless on reject)                      | 5    | T-021, T-022, T-023                             | L    | TODO   |
-| [T-033](T-033-privacy-and-404-pages.md)            | Privacy policy and 404 pages                                               | 5    | T-021, T-023                                    | M    | TODO   |
-| [T-035](T-035-og-images.md)                        | Generated OG images (EN/PL)                                                | 5    | T-020, T-021, T-024, T-040                      | S    | TODO   |
-| [T-051](T-051-ci-pipeline.md)                      | CI + site deploy workflow                                                  | 5    | T-016, T-040                                    | M    | TODO   |
-| [T-034](T-034-polish-copy-review.md)               | Polish copy review pack (owner gate at the end)                            | 6    | all copy tasks                                  | M    | TODO   |
-| [T-041](T-041-e2e-critical-journeys.md)            | E2E critical journeys                                                      | 6    | T-014, T-015, T-023, T-029, T-030, T-032, T-040 | L    | TODO   |
-| [T-042](T-042-visual-fidelity-baselines.md)        | Visual fidelity pass + baselines                                           | 6    | all UI tasks, T-040                             | L    | TODO   |
-| [T-043](T-043-performance-seo-a11y-audit.md)       | Performance, SEO, a11y audit + release checks                              | 6    | all UI tasks, T-032, T-035                      | M    | TODO   |
-| [T-050](T-050-container-operations.md)             | API container, Railway + Cloudflare deployment, runbook                    | 6    | T-014, T-015, T-016, T-017                      | L    | TODO   |
+| ID                                                 | Title                                                                      | Wave | Depends on                                      | Size | Status      |
+| -------------------------------------------------- | -------------------------------------------------------------------------- | ---- | ----------------------------------------------- | ---- | ----------- |
+| [T-001](T-001-workspace-scaffold.md)               | Workspace scaffold and toolchain wiring                                    | 1    | none                                            | M    | IN_PROGRESS |
+| [T-010](T-010-contracts.md)                        | Shared API contracts, constants, validation rules                          | 2    | T-001                                           | M    | TODO        |
+| [T-011](T-011-server-foundation.md)                | API foundation (config, logging, CORS, client IP, middleware)              | 2    | T-001                                           | L    | TODO        |
+| [T-020](T-020-design-tokens-styles-fonts.md)       | Design tokens (approved contrast), styles, fonts, layout shell, showcase   | 2    | T-001                                           | M    | TODO        |
+| [T-012](T-012-database-guestbook-repository.md)    | SQLite, migrations, newest-wins repository                                 | 3    | T-010, T-011                                    | M    | TODO        |
+| [T-013](T-013-moderation.md)                       | Review providers: quality rules, blocked terms, moderation, suitability    | 3    | T-010, T-011                                    | L    | TODO        |
+| [T-015](T-015-contact-api-mailer.md)               | Contact API + Resend mailer                                                | 3    | T-010, T-011                                    | M    | TODO        |
+| [T-016](T-016-cloudflare-worker-locale-headers.md) | Cloudflare Worker (locale, `/set-language`), `_headers`, wrangler, preview | 3    | T-001                                           | M    | TODO        |
+| [T-018](T-018-phone-reveal-api.md)                 | Phone reveal API (Turnstile verification)                                  | 3    | T-010, T-011                                    | S    | TODO        |
+| [T-021](T-021-i18n-pages-seo-composition.md)       | i18n, pages, SEO, CSP, composition stubs, API client                       | 3    | T-020                                           | L    | TODO        |
+| [T-022](T-022-ui-primitives-decor.md)              | UI primitives and decor                                                    | 3    | T-020                                           | M    | TODO        |
+| [T-014](T-014-guestbook-service-worker-api.md)     | Guestbook service, review pipeline, newest-wins worker, API                | 4    | T-012, T-013                                    | L    | TODO        |
+| [T-023](T-023-site-chrome.md)                      | Header, nav, mobile menu, aside, footer, language switcher                 | 4    | T-021, T-022                                    | L    | TODO        |
+| [T-024](T-024-hero-mascot-decor-layer.md)          | Hero, mascot, drips layer                                                  | 4    | T-021, T-022                                    | M    | TODO        |
+| [T-025](T-025-marquee-bands.md)                    | Marquee bands                                                              | 4    | T-021, T-022                                    | S    | TODO        |
+| [T-026](T-026-experience-timeline.md)              | Experience sticky timeline                                                 | 4    | T-021, T-022                                    | L    | TODO        |
+| [T-027](T-027-projects-skills.md)                  | Projects and Skills sections                                               | 4    | T-021, T-022                                    | S    | TODO        |
+| [T-028](T-028-typing-field.md)                     | Animated typing field                                                      | 4    | T-020, T-022                                    | M    | TODO        |
+| [T-031](T-031-custom-scrollbar.md)                 | Custom scrollbar                                                           | 4    | T-021                                           | S    | TODO        |
+| [T-040](T-040-e2e-a11y-harness.md)                 | E2E + a11y harness (wrangler dev + API)                                    | 4    | T-011, T-016, T-021                             | M    | TODO        |
+| [T-017](T-017-guestbook-admin-cli.md)              | Guestbook admin CLI (archive list/export, takedown)                        | 5    | T-014                                           | S    | TODO        |
+| [T-029](T-029-guestbook-ui.md)                     | Guestbook UI (loading/empty/error states) + client                         | 5    | T-010, T-021, T-022, T-028                      | L    | TODO        |
+| [T-030](T-030-contact-ui.md)                       | Contact UI + client                                                        | 5    | T-010, T-021, T-022, T-028                      | L    | TODO        |
+| [T-032](T-032-cookie-consent-analytics.md)         | Cookie consent + GA4 + PostHog (cookieless on reject)                      | 5    | T-021, T-022, T-023                             | L    | TODO        |
+| [T-033](T-033-privacy-and-404-pages.md)            | Privacy policy and 404 pages                                               | 5    | T-021, T-023                                    | M    | TODO        |
+| [T-035](T-035-og-images.md)                        | Generated OG images (EN/PL)                                                | 5    | T-020, T-021, T-024, T-040                      | S    | TODO        |
+| [T-051](T-051-ci-pipeline.md)                      | CI + site deploy workflow                                                  | 5    | T-016, T-040                                    | M    | TODO        |
+| [T-034](T-034-polish-copy-review.md)               | Polish copy review pack (owner gate at the end)                            | 6    | all copy tasks                                  | M    | TODO        |
+| [T-041](T-041-e2e-critical-journeys.md)            | E2E critical journeys                                                      | 6    | T-014, T-015, T-023, T-029, T-030, T-032, T-040 | L    | TODO        |
+| [T-042](T-042-visual-fidelity-baselines.md)        | Visual fidelity pass + baselines                                           | 6    | all UI tasks, T-040                             | L    | TODO        |
+| [T-043](T-043-performance-seo-a11y-audit.md)       | Performance, SEO, a11y audit + release checks                              | 6    | all UI tasks, T-032, T-035                      | M    | TODO        |
+| [T-050](T-050-container-operations.md)             | API container, Railway + Cloudflare deployment, runbook                    | 6    | T-014, T-015, T-016, T-017                      | L    | TODO        |
 
 32 tasks.
 
