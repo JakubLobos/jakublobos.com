@@ -1,0 +1,61 @@
+---
+// The only section heading (design-system §3.5). `eyebrow` is the localized label, already
+// upper-cased in the message data, so the copy is exact per locale (no CSS text-transform).
+interface Props {
+  index: string;
+  eyebrow: string;
+  title: string;
+  as?: 'h1' | 'h2' | 'h3';
+  align?: 'start' | 'center';
+  titleMaxWidth?: 520 | 640;
+  id?: string;
+}
+
+const { index, eyebrow, title, as: Tag = 'h2', align = 'start', titleMaxWidth, id } = Astro.props;
+---
+
+<div class="heading" data-align={align} data-max={titleMaxWidth}>
+  <span class="eyebrow">
+    {index} — {eyebrow}
+  </span>
+  <Tag class="title" id={id}>
+    {title}
+  </Tag>
+</div>
+
+<style>
+  .heading {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-20);
+  }
+
+  .heading[data-align='center'] {
+    align-items: center;
+    text-align: center;
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    letter-spacing: var(--tracking-label);
+    color: var(--color-text-muted);
+  }
+
+  .heading :global(.title) {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: var(--weight-regular);
+    font-size: var(--text-h2);
+    line-height: var(--leading-heading);
+  }
+
+  .heading[data-max='520'] :global(.title) {
+    max-width: var(--title-max-narrow);
+  }
+
+  .heading[data-max='640'] :global(.title) {
+    max-width: var(--title-max-wide);
+    text-wrap: balance;
+  }
+</style>

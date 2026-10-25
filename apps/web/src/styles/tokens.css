@@ -132,6 +132,7 @@
   --grid-cell-h: 106px;
   --drips-left: clamp(160px, 19vw, 300px);
   --hl-start: 55%;
+  --hl-end: 92%;
   --z-drips: 1;
   --z-content: 2;
   --z-aside: 3;
@@ -175,4 +176,23 @@
   --ease-standard: ease;
   --ease-spring: cubic-bezier(0.3, 1.6, 0.5, 1);
   --ease-type: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  /* Controls: buttons, icons and heading measure (T-022). Aliases reuse existing sizes. */
+  --text-button-lg: var(--text-field);
+  --text-button-sm: var(--text-body);
+  --space-18: 18px;
+  --control-min-h: 44px;
+  --control-submit-w: 210px;
+  --control-submit-h: 52px;
+  --lift-sm-hover: -1px;
+  --sink-sm-active: 3px;
+  --press-busy: 2px;
+  --sink-busy: 4px;
+  --icon-spinner: 16px;
+  --icon-check: 18px;
+  --icon-menu-w: 16px;
+  --icon-menu-w-short: 10px;
+  --icon-close: 14px;
+  --title-max-narrow: 520px;
+  --title-max-wide: 640px;
 }

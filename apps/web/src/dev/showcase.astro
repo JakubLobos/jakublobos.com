@@ -1,5 +1,14 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/ui/Button.astro';
+import ChromeButton from '../components/ui/ChromeButton.astro';
+import SectionHeading from '../components/ui/SectionHeading.astro';
+import Highlight from '../components/ui/Highlight.astro';
+import Spinner from '../components/ui/Spinner.astro';
+import CheckIcon from '../components/ui/CheckIcon.astro';
+import PaintDrips from '../components/decor/PaintDrips.astro';
+import CookieIcon from '../components/decor/CookieIcon.astro';
+import { PAINT_ORDER } from '../lib/paints.ts';
 
 const colours = [
   'bg',
@@ -53,6 +62,7 @@ const spaces = [2, 4, 6, 8, 10, 12, 14, 16, 20, 22, 24, 28, 32, 36, 40, 48, 56, 
   (n) => `--space-${n}`,
 );
 const radii = ['sm', 'md', 'lg', 'drip', 'sketch'].map((n) => `--radius-${n}`);
+const quote = 'Zażółć gęślą jaźń, a quote that spans several lines of text in the guestbook';
 const shadows = ['card', 'dialog', 'thumb'].map((n) => `--shadow-${n}`);
 ---
 
@@ -130,6 +140,114 @@ const shadows = ['card', 'dialog', 'thumb'].map((n) => `--shadow-${n}`);
     <p>
       <a href="#top">Tab here to see the focus ring</a> · <a href="#top">second link</a>
     </p>
+
+    <h2>Buttons: large (links)</h2>
+    <div class="row">
+      <Button href="#top">Reach me out</Button>
+      <Button href="#top" variant="secondary">
+        Get my resume
+      </Button>
+    </div>
+
+    <h2>Buttons: large (button elements)</h2>
+    <div class="row">
+      <Button>Primary</Button>
+      <Button variant="secondary">Secondary</Button>
+      <Button disabled>Disabled (aria)</Button>
+      <Button variant="secondary" fullWidth>
+        Full width
+      </Button>
+    </div>
+
+    <h2>Buttons: contact form (idle, sending, sent)</h2>
+    <div class="row">
+      <Button type="submit" minWidth="form">
+        Send message
+      </Button>
+      <Button type="submit" minWidth="form" busy>
+        <Spinner />
+        Sending…
+      </Button>
+      <Button type="submit" minWidth="form" disabled>
+        <CheckIcon />
+        Message sent
+      </Button>
+    </div>
+
+    <h2>Buttons: small (cookie banner)</h2>
+    <div class="row">
+      <Button size="sm">Accept</Button>
+      <Button size="sm" variant="secondary">
+        Only essential
+      </Button>
+    </div>
+
+    <h2>Chrome buttons</h2>
+    <div class="row">
+      <ChromeButton icon="menu" ariaLabel="Open menu">
+        Menu
+      </ChromeButton>
+      <ChromeButton icon="close" ariaLabel="Close menu">
+        Close
+      </ChromeButton>
+    </div>
+
+    <h2>Section headings</h2>
+    <SectionHeading index="01" eyebrow="EXPERIENCE" title="Where I work" />
+    <div class="gap"></div>
+    <SectionHeading
+      index="04"
+      eyebrow="GUESTBOOK"
+      title="I love connecting people through the power of frontend"
+      titleMaxWidth={640}
+      align="center"
+    />
+    <div class="gap"></div>
+    <SectionHeading
+      index="02"
+      eyebrow="PROJECTS"
+      title="I’m specializing in making web-apps"
+      titleMaxWidth={520}
+      as="h3"
+    />
+
+    <h2>Highlight</h2>
+    <p class="hl-text">
+      Designing web-apps in <Highlight>figma</Highlight>, and a long wrapped marker highlight that
+      has to clone its padding on every line: <Highlight pad="md">{quote}</Highlight>.
+    </p>
+    <ul class="grid">
+      {PAINT_ORDER.map((id) => (
+        <li>
+          <span class="hl-text">
+            <Highlight tint={id} pad="md">
+              {id}
+            </Highlight>
+          </span>
+        </li>
+      ))}
+    </ul>
+
+    <h2>Spinner and check icon</h2>
+    <div class="row icons">
+      <Spinner />
+      <CheckIcon />
+    </div>
+
+    <h2>Paint drips</h2>
+    <div class="row">
+      {(['top', 'menu', 'bottom', 'modal'] as const).map((variant) => (
+        <figure class="stage">
+          <PaintDrips variant={variant} />
+          <figcaption>{variant}</figcaption>
+        </figure>
+      ))}
+    </div>
+
+    <h2>Cookie icon</h2>
+    <div class="row icons">
+      <CookieIcon />
+    </div>
   </main>
 </BaseLayout>
 
@@ -216,6 +334,48 @@ const shadows = ['card', 'dialog', 'thumb'].map((n) => `--shadow-${n}`);
     display: block;
     height: var(--space-12);
     background: var(--color-primary);
+  }
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-16);
+    padding-bottom: var(--space-8);
+  }
+  .icons {
+    color: var(--color-ink);
+  }
+  .gap {
+    height: var(--space-32);
+  }
+  .hl-text {
+    font-size: var(--text-lead);
+    line-height: var(--leading-lead);
+    font-weight: var(--weight-medium);
+    max-width: 560px;
+  }
+  /* The transform makes this the containing block for the fixed "top" strip. */
+  .stage {
+    position: relative;
+    transform: translate(0);
+    overflow: hidden;
+    width: 340px;
+    height: 200px;
+    margin: 0;
+    background: var(--color-surface);
+    border: var(--border-hairline) solid var(--color-line-strong);
+  }
+  .stage :global([data-variant='top']),
+  .stage :global([data-variant='menu']) {
+    left: var(--space-16);
+  }
+  .stage figcaption {
+    position: absolute;
+    right: var(--space-8);
+    top: var(--space-8);
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    color: var(--color-text-muted);
   }
   .shape {
     display: block;

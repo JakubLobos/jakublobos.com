@@ -1,0 +1,23 @@
+---
+// Inherits the button's text colour so it reads on both primary and secondary backgrounds.
+---
+
+<span class="spinner" aria-hidden="true"></span>
+
+<style>
+  .spinner {
+    flex: none;
+    width: var(--icon-spinner);
+    height: var(--icon-spinner);
+    /* 40% track alpha is the design's 40%-white ring, taken from the current text colour. */
+    border: var(--border-thick) solid color-mix(in srgb, currentColor 40%, transparent);
+    border-top-color: currentColor;
+    border-radius: 50%;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .spinner {
+      animation: spin var(--duration-spin) linear infinite;
+    }
+  }
+</style>

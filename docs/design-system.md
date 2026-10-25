@@ -180,6 +180,23 @@ CSS custom properties can't be used inside media queries, so breakpoints are con
 
 Keyframes (`keyframes.css`): `type-in` (`0% translateY(.6em) rotate(4deg) opacity 0 → 60% translateY(-.08em) opacity 1 → 100% none`), `spin`, `marquee-ltr`, `marquee-rtl`.
 
+### 2.9 Controls (T-022)
+
+Button, icon and heading-measure geometry. Button geometry isn't decor, so it uses these tokens instead of local literals (§3 rule 1).
+
+| Token                                                   | Value                                     | Use                                      |
+| ------------------------------------------------------- | ----------------------------------------- | ---------------------------------------- |
+| `--text-button-lg` / `--text-button-sm`                 | aliases of `--text-field` / `--text-body` | button labels                            |
+| `--space-18`                                            | 18px                                      | small-button inline padding              |
+| `--control-min-h`                                       | 44px                                      | small/chrome button min height           |
+| `--control-submit-w` / `--control-submit-h`             | 210px / 52px                              | contact submit min size                  |
+| `--lift-sm-hover` / `--sink-sm-active`                  | -1px / 3px                                | small-button hover lift and press sink   |
+| `--press-busy` / `--sink-busy`                          | 2px / 4px                                 | busy ("sending") resting offset          |
+| `--icon-spinner`, `--icon-check`                        | 16px, 18px                                | status icons                             |
+| `--icon-menu-w` / `--icon-menu-w-short`, `--icon-close` | 16px / 10px, 14px                         | Menu bars, Close cross                   |
+| `--title-max-narrow` / `--title-max-wide`               | 520px / 640px                             | `SectionHeading` title measure           |
+| `--hl-end`                                              | 92%                                       | `Highlight` band end (with `--hl-start`) |
+
 ## 3. Rules for consuming tokens
 
 1. **Components use semantic tokens only.** No raw hex, rgb, or font-family values outside `tokens.css`. Allowed literals: `0`, `1px` hairlines, `100%`, `auto`, and the **illustration geometry** of decor components (mascot shapes, cookie chips, drip heights). Keep that geometry in a local custom-property block at the top of the component's `<style>`.

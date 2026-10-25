@@ -1,0 +1,138 @@
+---
+import { PAINT_ORDER } from '../../lib/paints.ts';
+
+// Six paint drips (design-analysis §4.5). `top` is the fixed page strip (T-024 translates it on
+// scroll), `menu` its static copy, `bottom` the reversed strip at the page end, `modal` the small
+// strip hanging from a dialog's top edge.
+interface Props {
+  variant: 'top' | 'bottom' | 'menu' | 'modal';
+}
+
+const { variant } = Astro.props;
+const ids = variant === 'bottom' ? [...PAINT_ORDER].reverse() : PAINT_ORDER;
+---
+
+<div class="drips" data-variant={variant} data-drips aria-hidden="true">
+  {ids.map((id) => (
+    <span class="drip" data-paint={id} />
+  ))}
+</div>
+
+<style>
+  /* Illustration geometry (design-system §3.1), heights listed left to right. */
+  .drips {
+    --drip-w: 22px;
+    --h1: 48px;
+    --h2: 90px;
+    --h3: 64px;
+    --h4: 90px;
+    --h5: 166px;
+    --h6: 118px;
+    --drip-radius: 0 0 var(--radius-drip) var(--radius-drip);
+
+    display: flex;
+    pointer-events: none;
+  }
+
+  .drips[data-variant='top'] {
+    position: fixed;
+    top: 0;
+    left: var(--drips-left);
+    z-index: var(--z-drips);
+    will-change: transform;
+  }
+
+  .drips[data-variant='menu'] {
+    position: absolute;
+    top: 0;
+    left: var(--drips-left);
+  }
+
+  .drips[data-variant='bottom'] {
+    --h1: 120px;
+    --h2: 168px;
+    --h3: 90px;
+    --h4: 64px;
+    --h5: 90px;
+    --h6: 48px;
+    --drip-radius: var(--radius-drip) var(--radius-drip) 0 0;
+
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    z-index: var(--z-drips);
+    align-items: flex-end;
+    transform-origin: bottom right;
+  }
+
+  @media (width < 760px) {
+    .drips[data-variant='bottom'] {
+      transform: scale(0.6);
+    }
+  }
+
+  .drips[data-variant='modal'] {
+    --drip-w: 14px;
+    --h1: 22px;
+    --h2: 34px;
+    --h3: 26px;
+    --h4: 34px;
+    --h5: 44px;
+    --h6: 30px;
+    --drip-radius: 0 0 calc(var(--drip-w) / 2) calc(var(--drip-w) / 2);
+
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .drip {
+    width: var(--drip-w);
+    border-radius: var(--drip-radius);
+  }
+
+  .drip:nth-child(1) {
+    height: var(--h1);
+  }
+  .drip:nth-child(2) {
+    height: var(--h2);
+  }
+  .drip:nth-child(3) {
+    height: var(--h3);
+  }
+  .drip:nth-child(4) {
+    height: var(--h4);
+  }
+  .drip:nth-child(5) {
+    height: var(--h5);
+  }
+  .drip:nth-child(6) {
+    height: var(--h6);
+  }
+
+  .drip[data-paint='red'] {
+    background: var(--paint-red);
+  }
+  .drip[data-paint='coral'] {
+    background: var(--paint-coral);
+  }
+  .drip[data-paint='yellow'] {
+    background: var(--paint-yellow);
+  }
+  .drip[data-paint='purple'] {
+    background: var(--paint-purple);
+  }
+  .drip[data-paint='violet'] {
+    background: var(--paint-violet);
+  }
+  .drip[data-paint='blue'] {
+    background: var(--paint-blue);
+  }
+
+  @media (forced-colors: active) {
+    .drips {
+      display: none;
+    }
+  }
+</style>
