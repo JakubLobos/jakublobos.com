@@ -27,7 +27,7 @@ Node ≥ 24.11 · pnpm workspaces (one monorepo, two deployables) · TypeScript 
 pnpm install --frozen-lockfile   # install
 pnpm dev                         # web :4321 (proxies /api) + server :3000
 pnpm verify                      # format:check · lint · typecheck · test · build  ← must pass before review
-pnpm preview                     # build + production topology: site+Worker on :8787 (wrangler dev), API on :3000 (after T-016)
+pnpm preview                     # build + production topology: site+Worker on :8787 (Node edge emulator; real wrangler dev crashes on this Windows host), API on :3000 (after T-016)
 pnpm test:e2e                    # Playwright + axe against the built site (after T-040)
 ```
 

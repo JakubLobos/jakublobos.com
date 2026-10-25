@@ -235,15 +235,15 @@ The full list is in [`.env.example`](../.env.example).
 
 ## 8. Development, build, and deployment
 
-| Command         | What it does                                                                                                                                                    |
-| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `pnpm dev`      | `astro dev` (:4321, proxies `/api` → :3000) + API (`node --watch`, :3000) with fake providers, console mailer, and `CORS_ALLOWED_ORIGINS=http://localhost:4321` |
-| `pnpm build`    | `astro check && astro build` (writes `dist/` + `dist/_headers`); the server has no build step                                                                   |
-| `pnpm preview`  | Build + `wrangler dev` (site + Worker on :8787) + API on :3000: the production topology locally                                                                 |
-| `pnpm verify`   | format:check → lint → typecheck → unit/integration tests → build                                                                                                |
-| `pnpm test:e2e` | Playwright + axe against `pnpm preview`-style topology with fakes and a temp DB                                                                                 |
-| Deploy: site    | CI on `main`: `pnpm --filter @portfolio/web build && wrangler deploy` (Cloudflare API token in CI secrets)                                                      |
-| Deploy: API     | Railway builds `apps/server/Dockerfile` from GitHub `main`. Volume `/data`; health check `/api/health`.                                                         |
+| Command         | What it does                                                                                                                                                                                                                     |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pnpm dev`      | `astro dev` (:4321, proxies `/api` → :3000) + API (`node --watch`, :3000) with fake providers, console mailer, and `CORS_ALLOWED_ORIGINS=http://localhost:4321`                                                                  |
+| `pnpm build`    | `astro check && astro build` (writes `dist/` + `dist/_headers`); the server has no build step                                                                                                                                    |
+| `pnpm preview`  | Build + the Node edge emulator (site + real Worker code on :8787) + API on :3000: the production topology locally. `preview:edge:wrangler` runs the real `wrangler dev` (Linux/CI; workerd crashes on the owner's Windows build) |
+| `pnpm verify`   | format:check → lint → typecheck → unit/integration tests → build                                                                                                                                                                 |
+| `pnpm test:e2e` | Playwright + axe against `pnpm preview`-style topology with fakes and a temp DB                                                                                                                                                  |
+| Deploy: site    | CI on `main`: `pnpm --filter @portfolio/web build && wrangler deploy` (Cloudflare API token in CI secrets)                                                                                                                       |
+| Deploy: API     | Railway builds `apps/server/Dockerfile` from GitHub `main`. Volume `/data`; health check `/api/health`.                                                                                                                          |
 
 See `docs/operations.md` (created by T-050).
 
@@ -263,7 +263,7 @@ See `docs/operations.md` (created by T-050).
 | Package                                                         | Where             | Why                                               |
 | --------------------------------------------------------------- | ----------------- | ------------------------------------------------- |
 | `astro` 7.4.x, `@astrojs/check`, `@astrojs/sitemap`             | web               | framework, `.astro` type-check, sitemap           |
-| `wrangler` 4.152.x, `@cloudflare/workers-types`                 | web (dev)         | Worker build, deploy, `wrangler dev`              |
+| `wrangler` 4.152.x, `@cloudflare/workers-types` 5.20261023.1    | web (dev)         | Worker build, deploy, `wrangler dev` (CI parity)  |
 | `posthog-js` 1.438.x                                            | web               | PostHog (lazy chunk, consent-aware)               |
 | `express` 5.3.x, `helmet` 8.3.x, `cors` 2.8.x (+ `@types/cors`) | server            | HTTP, headers, CORS allowlist                     |
 | `express-rate-limit` 8.7.x                                      | server            | rate limiting (`ipKeyGenerator`)                  |

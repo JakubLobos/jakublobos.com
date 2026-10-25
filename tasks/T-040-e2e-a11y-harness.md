@@ -13,7 +13,7 @@
 
 Stand up Playwright + axe against the **production topology**:
 
-- the built site served by `wrangler dev` (static assets + the real Worker) on :8787
+- the built site served on :8787 by the Node edge emulator (static-assets semantics + the real Worker code), or by real `wrangler dev` in CI on Linux (`E2E_EDGE=wrangler`)
 - the real API on :3000 with fake providers and a temp DB
 
 Shared guards catch console errors, CSP violations, and unexpected external network calls, so every later UI task can add specs.
@@ -30,7 +30,7 @@ Shared guards catch console errors, CSP violations, and unexpected external netw
   - projects `chromium-desktop` (1440×900), `chromium-mobile` (390×844, touch), `webkit-desktop`; `firefox` opt-in
   - `webServer`: **two** entries:
     1. the API: `node apps/server/src/main.ts` with `NODE_ENV=test`, `PORT=3000`, `MODERATION_PROVIDER=fake`, `SUITABILITY_PROVIDER=fake`, `MAILER=console`, `DATABASE_PATH=<unique tmp>`, `CORS_ALLOWED_ORIGINS=http://localhost:8787`, `CLIENT_IP_SOURCE=socket`; waits for `/api/health`
-    2. the site: build with `PUBLIC_API_BASE_URL=http://localhost:3000` and `PUBLIC_SITE_URL=http://localhost:8787`, then `wrangler dev --port 8787` in `apps/web`
+    2. the site: build with `PUBLIC_API_BASE_URL=http://localhost:3000` and `PUBLIC_SITE_URL=http://localhost:8787`, then the edge server on :8787 — by default the **Node edge emulator** (`pnpm --filter @portfolio/web preview:edge`); when `E2E_EDGE=wrangler` is set, the real `wrangler dev` (`preview:edge:wrangler`, used by CI on Linux; it crashes on the owner's Windows build — see T-016 round 2)
   - `baseURL: http://localhost:8787`; `reuseExistingServer: !process.env.CI`; trace on first retry
 - `e2e/fixtures.ts`:
   - an extended `test` failing on `console.error`, `pageerror`, `securitypolicyviolation`

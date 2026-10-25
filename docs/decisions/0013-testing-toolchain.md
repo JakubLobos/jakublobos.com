@@ -8,6 +8,7 @@
 - **supertest 7** for HTTP integration tests against `createApp(deps)`.
 - **Real SQLite** (`:memory:` or a temp file) in tests. Never mock the DB.
 - **Playwright 1.64** for e2e against the production topology: the built site + real Worker under `wrangler dev` (:8787) and the real API (:3000) with fake providers and a temp DB. **@axe-core/playwright 4.14** for accessibility.
+- **Edge runtime for local preview and e2e:** a Node edge emulator (`apps/web/edge-emulator/`) reproducing the static-assets semantics we use (run_worker_first, html_handling, 404-page, `_headers`) and invoking the real Worker code, because `wrangler dev` (workerd) crashes on the owner's Windows build (reproduced 2026-10-25 with a one-line Worker). CI on Linux runs the smoke suite against the real `wrangler dev` to catch emulator drift.
 - **Worker logic** (negotiation, `/set-language`) is unit-tested with Vitest in Node using standard `Request`/`Response` and a stub `ASSETS` binding.
 - Visual: side-by-side review against the design, then committed implementation baselines (`toHaveScreenshot`) after owner sign-off.
 

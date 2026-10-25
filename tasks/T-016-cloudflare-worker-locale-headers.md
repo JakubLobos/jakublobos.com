@@ -46,6 +46,24 @@ Make the static site deployable as a Cloudflare Worker with static assets:
   - Root `"preview"`: build the site with `PUBLIC_API_BASE_URL=http://localhost:3000`, then `pnpm --parallel --filter @portfolio/web --filter @portfolio/server run preview:topology`. Each package defines `preview:topology` (web: `wrangler dev --port 8787`; server: `start` with `CORS_ALLOWED_ORIGINS=http://localhost:8787`). No extra process-runner dependency. Document it in the README.
 - `public/robots.txt`: add `Disallow: /set-language` (allowed edit).
 
+### Round 2 amendment (orchestrator, 2026-10-25)
+
+**Edge runtime on Windows (orchestrator decision 2026-10-25):** `wrangler dev` (workerd) crashes on the owner's Windows build with an access violation / stack overflow, even for a one-line Worker in a clean npm install. Therefore local preview and e2e use a **Node edge emulator** (`apps/web/edge-emulator/`), and CI on Linux additionally runs the e2e smoke suite against the real `wrangler dev` as a parity check (T-051). Production is unaffected.
+
+Additional scope:
+
+- `apps/web/edge-emulator/server.ts` (Node, type-stripped, no new dependencies): an HTTP server that reproduces the Cloudflare Workers static-assets behaviour we rely on, over `apps/web/dist`:
+  - `run_worker_first` routing read from `wrangler.jsonc` (`/` and `/set-language` invoke the Worker's `fetch(request, env)`; everything else is served as an asset)
+  - an `ASSETS` binding (`fetch(request)`) implementing `html_handling: "auto-trailing-slash"` (`/pl` → `pl.html`, `/foo/` → 307/308 to `/foo` for file-format pages, `/index.html` → `/`), and `not_found_handling: "404-page"` (nearest `404.html`, status 404)
+  - `_headers` parsing and application (exact path, `:splat` / `*` patterns; multiple matching rules joined by `, `), applied to asset responses **only** (never to Worker responses), as on Cloudflare
+  - correct `Content-Type` for html, css, js, woff2, png, svg, txt, xml, json; path traversal returns 404
+  - unit tests for routing, html handling, 404 lookup, `_headers` matching and traversal (`edge-emulator/*.test.ts`)
+- Scripts: `apps/web` `preview:edge` → the emulator (`node edge-emulator/server.ts --port 8787`); `preview:edge:wrangler` → `wrangler dev --port 8787` (real runtime, used by CI on Linux). The root `preview` uses the emulator.
+- **AC-4 and AC-5 are verified against the emulator** (with the `curl` checks from AC-4). The real-runtime parity check is delegated to T-051 (CI on Linux).
+- **CR-1 rejected:** remove `minimumReleaseAgeExclude` from `pnpm-workspace.yaml`. Instead pin `@cloudflare/workers-types@5.20261023.1` (older than pnpm's minimum release age), keeping pnpm's supply-chain protection intact.
+- **CR-2 accepted:** leave pnpm's ignored build scripts for `esbuild` and `workerd` as they are (the crash reproduces with scripts allowed, so they aren't the cause).
+- Before round 2, merge `main` into your branch (`git merge main`) to pick up this amendment and the docs.
+
 ## Out of scope
 
 Actual Cloudflare deployment and DNS (T-050/T-051), the switcher UI (T-023), API CORS (T-011).

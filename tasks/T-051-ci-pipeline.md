@@ -25,6 +25,7 @@ Run the quality gates on every push and pull request, and deploy the site (Cloud
   - triggers: push to `main`, pull requests
   - `verify` job: setup Node from `.nvmrc`, pnpm (lockfile version), store cache, `pnpm install --frozen-lockfile`, `pnpm verify`
   - `e2e` job (needs `verify`): Playwright browsers cached, `pnpm exec playwright install --with-deps chromium webkit`, `pnpm test:e2e`; upload the report on failure
+  - `edge-parity` job (needs `verify`, Linux): run the `@smoke` e2e suite with `E2E_EDGE=wrangler` (real `wrangler dev`), so the Node edge emulator used locally is checked against the real Cloudflare runtime on every PR
   - `audit` job: `pnpm audit --prod --audit-level=high`
   - `permissions: contents: read`; concurrency cancels superseded runs
 - `.github/workflows/deploy-site.yml`:
