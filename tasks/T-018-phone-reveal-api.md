@@ -39,13 +39,17 @@ Serve the owner's phone number only to visitors who pass a Cloudflare Turnstile 
   - `HUMAN_VERIFIER=turnstile|fake` (fake refused in production)
 - Wiring in `main.ts`.
 
+### Orchestrator amendment (2026-10-25): T-011 review R2-01
+
+Also fix `apps/server/src/http/middleware/error-handler.ts`: `clientErrorInfo` currently maps **any** thrown object with a 4xx `status`/`statusCode` to 400 `INVALID_JSON`. Limit that branch to body-parser / http-errors errors (e.g. `expose === true` and a known body-parser `type`). Everything else falls through to 500 `INTERNAL`, logged at `error`. Add one test: a route throwing `Object.assign(new Error('x'), { status: 401 })` → 500. Details: `tasks/reports/T-011/review-r2.md` R2-01. Allowed: `error-handler.ts` and its test.
+
 ## Out of scope
 
 The UI (T-030). The Turnstile widget setup in the dashboard (owner, D-23 / T-050).
 
 ## Allowed files
 
-`packages/contracts/src/**` (phone reveal schemas only, via CR if T-010 is merged), `apps/server/src/domain/contact/{human-verifier.port,phone}.ts` (+ tests), `apps/server/src/infra/verification/**`, `apps/server/src/http/routes/phone.routes.ts` (+ tests), `apps/server/src/config.ts` (new variables, via CR), `apps/server/src/main.ts` (wiring).
+`packages/contracts/src/**` (phone reveal schemas only, via CR if T-010 is merged), `apps/server/src/domain/contact/{human-verifier.port,phone}.ts` (+ tests), `apps/server/src/infra/verification/**`, `apps/server/src/http/routes/phone.routes.ts` (+ tests), `apps/server/src/config.ts` (new variables, via CR), `apps/server/src/main.ts` (wiring), `apps/server/src/http/middleware/error-handler.ts` (+ test; amendment above).
 
 ## Acceptance criteria
 

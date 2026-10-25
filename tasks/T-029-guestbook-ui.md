@@ -43,6 +43,10 @@ Build the "I love connecting people through the power of frontend" section. It s
 - `guestbook/GuestbookModal.astro`: a native `<dialog>` per §4.11 (mini drips, IN REVIEW, title, echoed text via `textContent` with the tint, body copy, "Got it"). Closes on button, Escape, or backdrop click. Focus goes to "Got it" on open and returns to the input on close. Clear the input via `TypingField.reset()` after success.
 - `messages/guestbook.ts`: all copy, including paint names, field-code errors, the loading/empty/error texts and "Try again", 429/503/network texts (generic ones from `errors.ts`). EN plus PL (agents write PL; the owner reviews at the end, D-02).
 
+### Orchestrator note (2026-10-25): T-010 review R2-03
+
+Validate guestbook bodies only through `checkGuestbookBody(raw)` from `@portfolio/contracts`. Don't compose `normalizeGuestbookBody` + `validateGuestbookBody`: they miss trimmed/collapsed U+FEFF cases.
+
 ## Out of scope
 
 Server behaviour (T-014). E2E journeys (T-041), though a smoke spec is welcome if T-040 has merged.

@@ -260,18 +260,19 @@ See `docs/operations.md` (created by T-050).
 
 ## 10. Approved dependencies
 
-| Package                                                         | Where             | Why                                               |
-| --------------------------------------------------------------- | ----------------- | ------------------------------------------------- |
-| `astro` 7.4.x, `@astrojs/check`, `@astrojs/sitemap`             | web               | framework, `.astro` type-check, sitemap           |
-| `wrangler` 4.152.x, `@cloudflare/workers-types` 5.20261023.1    | web (dev)         | Worker build, deploy, `wrangler dev` (CI parity)  |
-| `posthog-js` 1.438.x                                            | web               | PostHog (lazy chunk, consent-aware)               |
-| `express` 5.3.x, `helmet` 8.3.x, `cors` 2.8.x (+ `@types/cors`) | server            | HTTP, headers, CORS allowlist                     |
-| `express-rate-limit` 8.7.x                                      | server            | rate limiting (`ipKeyGenerator`)                  |
-| `pino`, `pino-http` (`pino-pretty` dev)                         | server            | structured logs with redaction                    |
-| `better-sqlite3` 13.0.x                                         | server            | SQLite                                            |
-| `zod` 4.6.x                                                     | contracts, server | validation at trust boundaries                    |
-| `vitest` 5.0.x, `@vitest/coverage-v8`, `supertest`              | all / server      | tests                                             |
-| `@playwright/test`, `@axe-core/playwright`                      | root (dev)        | e2e, accessibility, design capture, OG generation |
-| `typescript` 6.0.3                                              | all (dev)         | pinned below 7 (ADR-0009)                         |
+| Package                                                                                                       | Where             | Why                                                                                                                      |
+| ------------------------------------------------------------------------------------------------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `astro` 7.4.x, `@astrojs/check`, `@astrojs/sitemap`                                                           | web               | framework, `.astro` type-check, sitemap                                                                                  |
+| `wrangler` 4.152.x, `@cloudflare/workers-types` 5.20261023.1                                                  | web (dev)         | Worker build, deploy, `wrangler dev` (CI parity)                                                                         |
+| `posthog-js` 1.438.x                                                                                          | web               | PostHog (lazy chunk, consent-aware)                                                                                      |
+| `express` 5.3.x, `helmet` 8.3.x, `cors` 2.8.x (+ `@types/cors`)                                               | server            | HTTP, headers, CORS allowlist                                                                                            |
+| `express-rate-limit` 8.7.x                                                                                    | server            | rate limiting (`ipKeyGenerator`)                                                                                         |
+| `pino`, `pino-http` (`pino-pretty` dev)                                                                       | server            | structured logs with redaction                                                                                           |
+| `better-sqlite3` 13.0.x                                                                                       | server            | SQLite                                                                                                                   |
+| `zod` 4.6.x                                                                                                   | contracts, server | validation at trust boundaries                                                                                           |
+| `vitest` 5.0.x, `@vitest/coverage-v8`, `supertest`                                                            | all / server      | tests                                                                                                                    |
+| `@playwright/test`, `@axe-core/playwright`                                                                    | root (dev)        | e2e, accessibility, design capture, OG generation                                                                        |
+| `typescript` 6.0.3                                                                                            | all (dev)         | pinned below 7 (ADR-0009)                                                                                                |
+| `eslint` 10.13.x, `typescript-eslint` + `@typescript-eslint/parser` 8.72.x, `eslint-plugin-astro`, `prettier` | root (dev)        | lint and format; the parser is declared at the root so `eslint-plugin-astro` never resolves a copy from outside the repo |
 
 Deliberately not used: React/Preact, Tailwind, ORMs, OpenAI or Resend SDKs (single `fetch` calls), nodemailer (SMTP blocked on Railway Hobby), dotenv, Redis, CAPTCHA (escalation path only), GA via Tag Manager container.
