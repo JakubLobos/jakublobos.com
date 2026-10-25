@@ -1,15 +1,9 @@
 ---
 import { DEFAULT_LOCALE, LOCALES } from '@portfolio/contracts';
+import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Jakub Łobos</title>
-  </head>
-  <body>
-    <h1>Jakub Łobos</h1>
-    <p hidden data-locales={LOCALES.join(',')} data-default={DEFAULT_LOCALE}></p>
-  </body>
-</html>
+<BaseLayout lang="en">
+  <h1>Jakub Łobos</h1>
+  <p hidden data-locales={LOCALES.join(',')} data-default={DEFAULT_LOCALE}></p>
+</BaseLayout>

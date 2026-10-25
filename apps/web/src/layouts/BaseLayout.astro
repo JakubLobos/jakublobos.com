@@ -1,0 +1,44 @@
+---
+import { Font } from 'astro:assets';
+import '../styles/tokens.css';
+import '../styles/base.css';
+import '../styles/utilities.css';
+import '../styles/keyframes.css';
+
+interface Props {
+  title?: string;
+  lang?: string;
+}
+
+const { title = 'Jakub Łobos', lang = 'en' } = Astro.props;
+---
+
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <Font cssVariable="--font-display" preload />
+    <Font cssVariable="--font-body" />
+    <Font cssVariable="--font-ui" />
+    <Font cssVariable="--font-mono" />
+  </head>
+  <body>
+    <div class="page">
+      <slot />
+    </div>
+  </body>
+</html>
+
+<style>
+  .page {
+    position: relative;
+    min-height: 100vh;
+    background-color: var(--color-bg);
+    background-image:
+      linear-gradient(var(--color-grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--color-grid) 1px, transparent 1px);
+    background-size: var(--grid-cell-w) var(--grid-cell-h);
+    overflow-x: clip;
+  }
+</style>

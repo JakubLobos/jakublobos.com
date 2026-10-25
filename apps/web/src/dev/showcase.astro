@@ -1,0 +1,226 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const colours = [
+  'bg',
+  'surface',
+  'ink',
+  'text-body',
+  'text-secondary',
+  'text-muted',
+  'text-faint',
+  'line',
+  'line-strong',
+  'grid',
+  'hover',
+  'primary',
+  'primary-hover',
+  'primary-edge',
+  'on-primary',
+  'highlight',
+  'on-highlight',
+  'danger',
+  'tech',
+  'tag',
+  'marker',
+  'focus',
+  'overlay',
+  'cookie',
+  'cookie-chip',
+].map((n) => `--color-${n}`);
+const paints = ['red', 'coral', 'yellow', 'purple', 'violet', 'blue'];
+const types = [
+  'display',
+  'h2',
+  'menu',
+  'dialog-title',
+  'quote',
+  'h3',
+  'lead',
+  'title',
+  'skill',
+  'marquee',
+  'logo',
+  'modal-quote',
+  'field',
+  'ui',
+  'body',
+  'small',
+  'caption',
+  'label',
+].map((n) => `--text-${n}`);
+const spaces = [2, 4, 6, 8, 10, 12, 14, 16, 20, 22, 24, 28, 32, 36, 40, 48, 56, 64, 80].map(
+  (n) => `--space-${n}`,
+);
+const radii = ['sm', 'md', 'lg', 'drip', 'sketch'].map((n) => `--radius-${n}`);
+const shadows = ['card', 'dialog', 'thumb'].map((n) => `--shadow-${n}`);
+---
+
+<BaseLayout title="Token showcase (dev only)">
+  <main class="container showcase">
+    <h1 class="display">Token showcase</h1>
+    <p class="note">Dev only. Not part of the production build.</p>
+
+    <h2>Fonts and Polish glyphs</h2>
+    <p class="f-display">JAKUB ŁOBOS ŁÓDŹ</p>
+    <p class="f-body">Poppins 400: ąęśćżźńó ĄĘŚĆŻŹŃÓ Łobos</p>
+    <p class="f-body f-500">Poppins 500: ąęśćżźńó Łobos</p>
+    <p class="f-body f-600">Poppins 600: ąęśćżźńó Łobos</p>
+    <p class="f-ui">Ubuntu 500: Menu Close ąęśćżźńó</p>
+    <p class="f-mono">JetBrains Mono 400: 01 — EXPERIENCE ąęśćżźńó</p>
+
+    <h2>Colours</h2>
+    <ul class="grid">
+      {colours.map((t) => (
+        <li>
+          <span class="swatch" data-token={t} data-prop="background"></span>
+          <code>{t}</code>
+        </li>
+      ))}
+    </ul>
+
+    <h2>Paint palette and tints</h2>
+    <ul class="grid">
+      {paints.map((p) => (
+        <li>
+          <span class="swatch" data-token={`--paint-${p}`} data-prop="background"></span>
+          <code>--paint-{p}</code>
+          <span class="swatch" data-token={`--paint-${p}-tint`} data-prop="background"></span>
+          <code>--paint-{p}-tint</code>
+        </li>
+      ))}
+    </ul>
+
+    <h2>Type ramp</h2>
+    {types.map((t) => (
+      <p class="ramp" data-token={t} data-prop="font-size">
+        {t} — Zażółć gęślą jaźń
+      </p>
+    ))}
+
+    <h2>Spacing scale</h2>
+    {spaces.map((s) => (
+      <div class="space-row">
+        <span class="bar" data-token={s} data-prop="width"></span>
+        <code>{s}</code>
+      </div>
+    ))}
+
+    <h2>Radii</h2>
+    <ul class="grid">
+      {radii.map((r) => (
+        <li>
+          <span class="shape" data-token={r} data-prop="border-radius"></span>
+          <code>{r}</code>
+        </li>
+      ))}
+    </ul>
+
+    <h2>Shadows</h2>
+    <ul class="grid">
+      {shadows.map((s) => (
+        <li>
+          <span class="shape" data-token={s} data-prop="box-shadow"></span>
+          <code>{s}</code>
+        </li>
+      ))}
+    </ul>
+
+    <h2>Links and focus</h2>
+    <p>
+      <a href="#top">Tab here to see the focus ring</a> · <a href="#top">second link</a>
+    </p>
+  </main>
+</BaseLayout>
+
+<script>
+  // Applies each element's token through the CSSOM (inline style attributes are blocked by CSP).
+  for (const el of document.querySelectorAll<HTMLElement>('[data-token]')) {
+    const { token, prop } = el.dataset;
+    if (token && prop) el.style.setProperty(prop, `var(${token})`);
+  }
+</script>
+
+<style>
+  .showcase {
+    padding-block: var(--space-48);
+  }
+  .display {
+    font-family: var(--font-display);
+    font-size: var(--text-display);
+    line-height: var(--leading-display);
+    margin: 0;
+  }
+  h2 {
+    margin-top: var(--space-48);
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    letter-spacing: var(--tracking-label);
+    color: var(--color-text-muted);
+  }
+  .note {
+    color: var(--color-text-muted);
+  }
+  .f-display {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+  }
+  .f-body {
+    font-family: var(--font-body);
+  }
+  .f-500 {
+    font-weight: var(--weight-medium);
+  }
+  .f-600 {
+    font-weight: var(--weight-semibold);
+  }
+  .f-ui {
+    font-family: var(--font-ui);
+    font-weight: var(--weight-medium);
+  }
+  .f-mono {
+    font-family: var(--font-mono);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: var(--space-16);
+    padding: 0;
+    list-style: none;
+  }
+  li {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+  code {
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+  }
+  .swatch {
+    display: block;
+    height: 48px;
+    border: var(--border-hairline) solid var(--color-line-strong);
+    border-radius: var(--radius-md);
+  }
+  .ramp {
+    margin: var(--space-8) 0;
+  }
+  .space-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+    margin-block: var(--space-4);
+  }
+  .bar {
+    display: block;
+    height: var(--space-12);
+    background: var(--color-primary);
+  }
+  .shape {
+    display: block;
+    height: 64px;
+    background: var(--color-surface);
+    border: var(--border-thick) solid var(--color-ink);
+  }
+</style>
