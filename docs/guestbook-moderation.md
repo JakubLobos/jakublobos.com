@@ -36,7 +36,7 @@ Requirements: FR-25…FR-27, FR-40…FR-48, NFR-05…NFR-07. Decisions: [ADR-000
 
 ```sql
 CREATE TABLE guestbook_messages (
-  id                INTEGER PRIMARY KEY,
+  id                INTEGER PRIMARY KEY AUTOINCREMENT, -- never reuse ids: a stale approve(id) must not hit a newer row (I-1)
   public_id         TEXT    NOT NULL UNIQUE,
   client_request_id TEXT    NOT NULL UNIQUE,
   body              TEXT    NOT NULL CHECK (length(body) BETWEEN 1 AND 120),
