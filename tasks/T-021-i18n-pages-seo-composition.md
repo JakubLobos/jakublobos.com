@@ -56,7 +56,7 @@ Real section and chrome implementations (T-023…T-033), translations review (T-
 
 ## Allowed files
 
-`apps/web/astro.config.ts`, `apps/web/src/i18n/**` (locales, t, messages/{common,seo,errors}.ts), `apps/web/src/content/profile.ts`, `apps/web/src/lib/api/client.ts` (+ test), `apps/web/src/lib/breakpoints.ts` (+ test), `apps/web/src/pages/**`, `apps/web/src/components/{pages,seo}/**`, `apps/web/src/components/site/*.astro` (stubs), `apps/web/src/components/sections/*.astro` (stubs), `apps/web/src/layouts/BaseLayout.astro`, `apps/web/public/robots.txt`, `apps/web/package.json`, `pnpm-lock.yaml`.
+`apps/web/astro.config.ts`, `apps/web/src/i18n/**` (locales, t, messages/{common,seo,errors}.ts), `apps/web/src/content/profile.ts`, `apps/web/src/lib/api/client.ts` (+ test), `apps/web/src/lib/breakpoints.ts` (+ test), `apps/web/src/pages/**`, `apps/web/src/components/{pages,seo}/**`, `apps/web/src/components/site/*.astro` (stubs), `apps/web/src/components/sections/*.astro` (stubs), `apps/web/src/layouts/BaseLayout.astro`, `apps/web/public/robots.txt`, `apps/web/package.json`, `pnpm-lock.yaml`, `apps/web/src/styles/{tokens,base}.css` + `tokens.test.ts` (T-020 follow-ups R1-04 and the leading tokens only), `apps/web/tsconfig.json` (`include` only, if needed).
 
 ## Dependencies (exact)
 
