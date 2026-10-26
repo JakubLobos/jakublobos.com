@@ -124,6 +124,8 @@
 
   /* Layout */
   --content-max: 1000px;
+  --intro-max: 560px;
+  --divider-w: 40px;
   --gutter-wide: clamp(56px, 6vw, 72px);
   --gutter-narrow: clamp(20px, 5vw, 40px);
   --header-pad: clamp(14px, 2.4vw, 24px) clamp(20px, 4vw, 56px) clamp(12px, 2vw, 20px);

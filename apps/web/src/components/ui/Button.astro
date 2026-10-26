@@ -1,13 +1,16 @@
 ---
 // The one button implementation (design-system §3.4). Labels and icons come in through the slot.
 // `busy` is the "sending" look (native disabled + aria-busy); `disabled` is the "sent" look
-// (aria-disabled only, so it stays focusable as in the design). Neither applies to links.
+// (aria-disabled only, so it stays focusable as in the design). Neither applies to links;
+// `download` and `mimeType` (the link's `type` hint) apply to links only.
 import type { HTMLAttributes } from 'astro/types';
 
 interface Props extends Omit<HTMLAttributes<'button'>, 'type' | 'disabled' | 'class'> {
   variant?: 'primary' | 'secondary';
   size?: 'lg' | 'sm';
   href?: string;
+  download?: boolean | string;
+  mimeType?: string;
   type?: 'button' | 'submit' | 'reset';
   disabled?: boolean;
   busy?: boolean;
@@ -20,6 +23,8 @@ const {
   variant = 'primary',
   size = 'lg',
   href,
+  download,
+  mimeType,
   type = 'button',
   disabled = false,
   busy = false,
@@ -34,7 +39,15 @@ const data = { 'data-variant': variant, 'data-size': size, 'data-min-width': min
 ---
 
 {href ? (
-  <a href={href} class:list={classes} data-full={fullWidth || undefined} {...data} {...rest}>
+  <a
+    href={href}
+    download={download}
+    type={mimeType}
+    class:list={classes}
+    data-full={fullWidth || undefined}
+    {...data}
+    {...rest}
+  >
     <slot />
   </a>
 ) : (

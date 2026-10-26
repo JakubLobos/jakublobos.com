@@ -1,0 +1,233 @@
+---
+// The hero mascot (design-analysis §4.6): absolutely positioned CSS shapes in a 156 × 124 box.
+// scripts/mascot.ts drives the pupils and the blink.
+---
+
+<hero-mascot class="mascot" aria-hidden="true">
+  <div class="shape blob"></div>
+  <div class="shape body"></div>
+  <div class="shape body-sketch"></div>
+  <div class="shape leg leg-left"></div>
+  <div class="shape leg leg-right"></div>
+  <div class="shape stroke brow-left"></div>
+  <div class="shape stroke brow-right"></div>
+  <div class="eyes">
+    <div class="eye eye-left" data-eye>
+      <div class="pupil" data-pupil></div>
+    </div>
+    <div class="eye eye-right" data-eye>
+      <div class="pupil" data-pupil></div>
+    </div>
+  </div>
+  <div class="shape cheek cheek-left"></div>
+  <div class="shape cheek cheek-right"></div>
+  <div class="shape smile"></div>
+  <div class="shape stroke tick-top"></div>
+  <div class="shape stroke tick-mid"></div>
+  <div class="shape stroke tick-left"></div>
+</hero-mascot>
+
+<script>
+  import '../../scripts/mascot.ts';
+</script>
+
+<style>
+  /* Illustration geometry (design-system §3.1): each shape sets its box (--x/--y/--w/--h) and tilt (--tilt). */
+  .mascot {
+    position: relative;
+    display: block;
+    width: 156px;
+    height: 124px;
+    margin-bottom: -6px;
+  }
+
+  .shape {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: var(--w);
+    height: var(--h);
+    transform: rotate(var(--tilt, 0deg));
+  }
+
+  .blob {
+    --x: 8px;
+    --y: 62px;
+    --w: 140px;
+    --h: 24px;
+    --tilt: -5deg;
+    background: var(--paint-yellow);
+    border-radius: 40% 60% 50% 45% / 60% 40% 60% 40%;
+  }
+
+  .body {
+    --x: 20px;
+    --y: 8px;
+    --w: 116px;
+    --h: 88px;
+    background: var(--color-bg);
+    border: var(--border-thick) solid var(--color-ink);
+    border-radius: 58% 42% 46% 54% / 62% 58% 42% 38%;
+  }
+
+  /* The offset second outline gives the body its hand-drawn double line. */
+  .body-sketch {
+    --x: 21px;
+    --y: 9px;
+    --w: 116px;
+    --h: 88px;
+    --tilt: -3deg;
+    border: 1.5px solid var(--color-ink);
+    border-radius: 52% 48% 50% 50% / 58% 62% 38% 42%;
+    opacity: 0.45;
+  }
+
+  .leg {
+    background: var(--color-bg);
+    border: var(--border-thick) solid var(--color-ink);
+    border-top: 0;
+  }
+
+  .leg-left {
+    --x: 52px;
+    --y: 90px;
+    --w: 15px;
+    --h: 24px;
+    border-radius: 0 0 9px 7px;
+  }
+
+  .leg-right {
+    --x: 90px;
+    --y: 90px;
+    --w: 12px;
+    --h: 16px;
+    border-radius: 0 0 7px 6px;
+  }
+
+  /* Brows and motion ticks are the same 2 px ink stroke. */
+  .stroke {
+    --h: 2px;
+    background: var(--color-ink);
+    border-radius: 2px;
+  }
+
+  .brow-left {
+    --x: 46px;
+    --y: 30px;
+    --w: 12px;
+    --tilt: -12deg;
+  }
+
+  .brow-right {
+    --x: 88px;
+    --y: 28px;
+    --w: 12px;
+    --tilt: 10deg;
+  }
+
+  .tick-top {
+    --x: 138px;
+    --y: 10px;
+    --w: 12px;
+    --tilt: -40deg;
+  }
+
+  .tick-mid {
+    --x: 142px;
+    --y: 24px;
+    --w: 10px;
+    --tilt: -10deg;
+  }
+
+  .tick-left {
+    --x: 6px;
+    --y: 20px;
+    --w: 10px;
+    --tilt: 35deg;
+  }
+
+  .eyes {
+    position: absolute;
+    left: 40px;
+    top: 36px;
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+  }
+
+  .eye {
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    background: var(--color-surface);
+    border: var(--border-thick) solid var(--color-ink);
+  }
+
+  .eye-left {
+    width: 26px;
+    height: 28px;
+    border-radius: 52% 48% 50% 50% / 50% 55% 45% 50%;
+    transform: rotate(-4deg);
+  }
+
+  .eye-right {
+    width: 28px;
+    height: 28px;
+    border-radius: 48% 52% 46% 54% / 55% 50% 50% 45%;
+    transform: rotate(5deg);
+  }
+
+  /* --pupil-x/-y are set by scripts/mascot.ts; unset means centred. */
+  .pupil {
+    width: 10px;
+    height: 11px;
+    background: var(--color-ink);
+    border-radius: 50%;
+    transform: translate(var(--pupil-x, 0px), var(--pupil-y, 0px));
+    will-change: transform;
+  }
+
+  .cheek {
+    --w: 16px;
+    --h: 10px;
+    background: repeating-linear-gradient(-50deg, var(--paint-red) 0 1.5px, transparent 1.5px 4px);
+    border-radius: 50%;
+  }
+
+  .cheek-left {
+    --x: 30px;
+    --y: 64px;
+  }
+
+  .cheek-right {
+    --x: 108px;
+    --y: 63px;
+  }
+
+  .smile {
+    --x: 68px;
+    --y: 68px;
+    --w: 18px;
+    --h: 8px;
+    --tilt: -4deg;
+    border: var(--border-thick) solid var(--color-ink);
+    border-top: 0;
+    border-radius: 0 0 12px 9px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .mascot {
+      transition: transform var(--duration-page) var(--ease-spring);
+    }
+
+    .mascot:hover {
+      transform: translateY(-5px) rotate(-3deg);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .mascot {
+      display: none;
+    }
+  }
+</style>
