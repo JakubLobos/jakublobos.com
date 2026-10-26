@@ -91,7 +91,8 @@ export default defineConfig({
       url: SITE,
       reuseExistingServer: reuseServers,
       timeout: 240_000,
-      env: { PUBLIC_API_BASE_URL: API, PUBLIC_SITE_URL: SITE },
+      // An empty sitekey keeps the phone reveal on the fake verifier whatever the local .env says.
+      env: { PUBLIC_API_BASE_URL: API, PUBLIC_SITE_URL: SITE, PUBLIC_TURNSTILE_SITE_KEY: '' },
     },
   ],
 });
