@@ -1,15 +1,145 @@
 ---
+import { projects } from '../../content/projects.ts';
 import type { Locale } from '../../i18n/locales.ts';
-import { common } from '../../i18n/messages/common.ts';
+import { projectsMessages } from '../../i18n/messages/projects.ts';
+import SectionHeading from '../ui/SectionHeading.astro';
 
 interface Props {
   locale: Locale;
 }
 
 const { locale } = Astro.props;
+const messages = projectsMessages(locale);
 ---
 
-<!-- STUB: T-027 -->
-<section id="projects" aria-labelledby="projects-heading">
-  <h2 id="projects-heading">{common(locale).sections.projects}</h2>
+<section id="projects" class="projects" aria-labelledby="projects-heading">
+  <SectionHeading
+    index="02"
+    eyebrow={messages.eyebrow}
+    title={messages.title}
+    titleMaxWidth={520}
+    id="projects-heading"
+  />
+  <ol class="list">
+    {projects.map((project) => (
+      <li class="row">
+        <span class="number" aria-hidden="true">
+          {project.n}
+        </span>
+        <div class="body">
+          <div class="main">
+            <h3 class="title">{project.title[locale]}</h3>
+            <p class="desc">{project.desc[locale]}</p>
+          </div>
+          <div class="meta">
+            <p class="org">{project.org}</p>
+            <ul class="tags" aria-label={messages.technologies}>
+              {project.tags.map((tag) => (
+                <li>{tag}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </li>
+    ))}
+  </ol>
 </section>
+
+<style>
+  .projects {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-section-gap);
+    padding-block: var(--space-section-block);
+    background: var(--color-bg);
+    /* Paints the solid background to the viewport edges so the grid and drips are hidden behind
+       the section; the clip keeps the shadow from spilling above and below it. */
+    box-shadow: 0 0 0 100vmax var(--color-bg);
+    clip-path: inset(0 -100vmax);
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: var(--project-index-col) minmax(0, 1fr);
+    column-gap: var(--project-index-gap);
+    align-items: baseline;
+    padding-block: var(--space-28);
+    border-bottom: var(--border-hairline) solid var(--color-line);
+  }
+
+  .number {
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    color: var(--color-text-muted);
+  }
+
+  .body {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-12) var(--space-32);
+    align-items: baseline;
+  }
+
+  .main {
+    display: flex;
+    flex: 1 1 var(--project-main-basis);
+    flex-direction: column;
+    gap: var(--space-8);
+    min-width: 0;
+  }
+
+  .title {
+    margin: 0;
+    font-size: var(--text-title);
+    font-weight: var(--weight-medium);
+    line-height: var(--leading-title);
+  }
+
+  .desc {
+    max-width: var(--project-desc-max);
+    margin: 0;
+    font-size: var(--text-body);
+    line-height: var(--leading-body);
+    color: var(--color-text-secondary);
+    text-wrap: pretty;
+  }
+
+  .meta {
+    display: flex;
+    flex: 0 1 var(--project-meta-basis);
+    flex-direction: column;
+    gap: var(--space-4);
+    font-size: var(--text-caption);
+  }
+
+  .org {
+    margin: 0;
+  }
+
+  .tags {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    color: var(--color-tag);
+    list-style: none;
+  }
+
+  .tags li {
+    display: inline;
+  }
+
+  /* Visual separator only; the empty alt text keeps it out of the accessible name. */
+  .tags li:not(:last-child)::after {
+    content: ' · ';
+    content: ' · ' / '';
+  }
+</style>

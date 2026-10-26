@@ -199,6 +199,15 @@
   --title-max-narrow: 520px;
   --title-max-wide: 640px;
 
+  /* Projects and Skills row geometry (T-027) */
+  --project-index-col: clamp(32px, 6vw, 48px);
+  --project-index-gap: clamp(12px, 2.4vw, 24px);
+  --project-main-basis: 340px;
+  --project-meta-basis: 200px;
+  --project-desc-max: 560px;
+  --skill-label-basis: 180px;
+  --skill-items-basis: 280px;
+
   /* Navigation pills: desktop nav and language switcher (T-023). */
   --nav-gap: clamp(4px, 1vw, 12px);
   --nav-pill-y: var(--space-6);

@@ -1,15 +1,100 @@
 ---
+import { skillGroups } from '../../content/skills.ts';
 import type { Locale } from '../../i18n/locales.ts';
-import { common } from '../../i18n/messages/common.ts';
+import { skillsMessages } from '../../i18n/messages/skills.ts';
+import SectionHeading from '../ui/SectionHeading.astro';
 
 interface Props {
   locale: Locale;
 }
 
 const { locale } = Astro.props;
+const messages = skillsMessages(locale);
 ---
 
-<!-- STUB: T-027 -->
-<section id="skills" aria-labelledby="skills-heading">
-  <h2 id="skills-heading">{common(locale).sections.skills}</h2>
+<section id="skills" class="skills" aria-labelledby="skills-heading">
+  <SectionHeading
+    index="03"
+    eyebrow={messages.eyebrow}
+    title={messages.title}
+    id="skills-heading"
+  />
+  <dl class="list">
+    {skillGroups.map((group) => (
+      <div class="row">
+        <dt class="label">{group.label[locale]}</dt>
+        <dd class="items">
+          <ul>
+            {group.items.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        </dd>
+      </div>
+    ))}
+  </dl>
 </section>
+
+<style>
+  .skills {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-section-gap);
+    padding-block: var(--space-section-block);
+    background: var(--color-bg);
+    /* Paints the solid background to the viewport edges so the grid and drips are hidden behind
+       the section; the clip keeps the shadow from spilling above and below it. */
+    box-shadow: 0 0 0 100vmax var(--color-bg);
+    clip-path: inset(0 -100vmax);
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-6) var(--space-32);
+    align-items: baseline;
+    padding-block: var(--space-22);
+    border-bottom: var(--border-hairline) solid var(--color-line);
+  }
+
+  .label {
+    flex: 0 0 var(--skill-label-basis);
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-label);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+  }
+
+  .items {
+    flex: 1 1 var(--skill-items-basis);
+    min-width: 0;
+    margin: 0;
+    font-size: var(--text-skill);
+    line-height: var(--leading-skill);
+    word-spacing: var(--word-spacing-skill);
+    text-wrap: pretty;
+  }
+
+  .items ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .items li {
+    display: inline;
+  }
+
+  /* Visual separator only; the empty alt text keeps it out of the accessible name. */
+  .items li:not(:last-child)::after {
+    content: ' / ';
+    content: ' / ' / '';
+  }
+</style>
