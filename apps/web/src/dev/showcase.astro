@@ -6,6 +6,7 @@ import SectionHeading from '../components/ui/SectionHeading.astro';
 import Highlight from '../components/ui/Highlight.astro';
 import Spinner from '../components/ui/Spinner.astro';
 import CheckIcon from '../components/ui/CheckIcon.astro';
+import TypingField from '../components/ui/TypingField.astro';
 import LanguageSwitcher from '../components/site/LanguageSwitcher.astro';
 import PaintDrips from '../components/decor/PaintDrips.astro';
 import CookieIcon from '../components/decor/CookieIcon.astro';
@@ -258,8 +259,134 @@ const shadows = ['card', 'dialog', 'thumb'].map((n) => `--shadow-${n}`);
     <div class="row icons">
       <CookieIcon />
     </div>
+
+    <h2>Typing fields</h2>
+    <div class="tf-grid">
+      <div class="tf-field">
+        <label class="tf-label" for="tf-name">
+          YOUR NAME
+        </label>
+        <TypingField
+          id="tf-name"
+          name="name"
+          maxlength={60}
+          placeholder="Jane Doe"
+          autocomplete="name"
+        />
+      </div>
+      <div class="tf-field">
+        <label class="tf-label" for="tf-filled">
+          FILLED
+        </label>
+        <TypingField
+          id="tf-filled"
+          name="filled"
+          maxlength={120}
+          placeholder="jane@company.com"
+          inputmode="email"
+          autocomplete="email"
+        />
+      </div>
+      <div class="tf-field">
+        <label class="tf-label" for="tf-error">
+          ERROR
+        </label>
+        <TypingField
+          id="tf-error"
+          name="error"
+          maxlength={120}
+          placeholder="jane@company.com"
+          inputmode="email"
+          autocomplete="email"
+          invalid
+          describedBy="tf-error-msg"
+        />
+        <span id="tf-error-msg" class="tf-error" role="alert">
+          That email doesn’t look quite right.
+        </span>
+      </div>
+      <div class="tf-field">
+        <label class="tf-label" for="tf-disabled">
+          DISABLED
+        </label>
+        <TypingField
+          id="tf-disabled"
+          name="disabled"
+          maxlength={60}
+          placeholder="Jane Doe"
+          disabled
+        />
+      </div>
+      <div class="tf-field tf-wide">
+        <span class="tf-label tf-label-row">
+          <label for="tf-message">MESSAGE</label>
+          <span id="tf-count">0/1000</span>
+        </span>
+        <TypingField
+          as="textarea"
+          id="tf-message"
+          name="message"
+          maxlength={1000}
+          rows={3}
+          autoGrow
+          placeholder="Tell me a bit about your idea…"
+          describedBy="tf-count"
+        />
+      </div>
+      <div class="tf-field tf-wide">
+        <span class="tf-label">LONG SINGLE LINE (SCROLLS WITH THE CARET)</span>
+        <TypingField
+          id="tf-long"
+          name="long"
+          maxlength={400}
+          placeholder=""
+          ariaLabel="Long single line"
+        />
+      </div>
+      <div class="tf-field tf-wide">
+        <span class="tf-label">BARE (GUESTBOOK ROW OWNS THE LINE)</span>
+        <div class="tf-row">
+          <div class="tf-row-field">
+            <TypingField
+              id="tf-bare"
+              name="bare"
+              maxlength={120}
+              variant="bare"
+              placeholder="Leave your mark for the next visitor…"
+              ariaLabel="Your message"
+            />
+          </div>
+          <span class="tf-counter">36/120</span>
+        </div>
+      </div>
+    </div>
   </main>
 </BaseLayout>
+
+<script>
+  // Showcase fixtures for the typing fields: values are set like a user would (input events).
+  const fill = (id: string, value: string) => {
+    const control = document.getElementById(id);
+    if (!(control instanceof HTMLInputElement || control instanceof HTMLTextAreaElement)) return;
+    control.value = value;
+    control.dispatchEvent(new Event('input', { bubbles: true }));
+  };
+  fill('tf-filled', 'jakub@example.com');
+  fill('tf-error', 'jakub@example');
+  fill('tf-disabled', 'Jakub Łobos');
+  fill('tf-bare', 'Love the paint drips, made me smile!');
+  fill(
+    'tf-long',
+    'Zażółć gęślą jaźń — a deliberately long single line that scrolls horizontally with the caret, so the mirror has to follow it all the way to the end.',
+  );
+  const message = document.getElementById('tf-message');
+  const count = document.getElementById('tf-count');
+  message?.addEventListener('input', () => {
+    if (message instanceof HTMLTextAreaElement && count) {
+      count.textContent = `${message.value.length}/1000`;
+    }
+  });
+</script>
 
 <script>
   // Applies each element's token through the CSSOM (inline style attributes are blocked by CSP).
@@ -395,5 +522,51 @@ const shadows = ['card', 'dialog', 'thumb'].map((n) => `--shadow-${n}`);
     height: 64px;
     background: var(--color-surface);
     border: var(--border-thick) solid var(--color-ink);
+  }
+  .tf-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: var(--space-28) var(--space-32);
+    max-width: 800px;
+  }
+  .tf-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+  .tf-wide {
+    grid-column: 1 / -1;
+  }
+  .tf-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-label);
+    color: var(--color-text-muted);
+  }
+  .tf-label-row {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-12);
+  }
+  .tf-error {
+    font-size: var(--text-small);
+    line-height: var(--leading-field);
+    color: var(--color-danger);
+  }
+  .tf-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+    padding: var(--space-4) 0;
+    border-bottom: var(--border-thick) solid var(--color-ink);
+  }
+  .tf-row-field {
+    flex: 1;
+    min-width: 0;
+  }
+  .tf-counter {
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    color: var(--color-text-faint);
   }
 </style>
