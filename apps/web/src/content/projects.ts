@@ -1,4 +1,5 @@
 import type { Locale } from '@portfolio/contracts';
+import { polishTypography } from '../lib/pl-typography.ts';
 
 type Localized = Record<Locale, string>;
 
@@ -12,7 +13,7 @@ export interface Project {
 }
 
 // PL texts are drafts pending owner review (D-02).
-export const projects: readonly Project[] = [
+const rawProjects: readonly Project[] = [
   {
     n: '01',
     title: { en: 'Hosting control panel', pl: 'Panel zarządzania hostingiem' },
@@ -64,3 +65,9 @@ export const projects: readonly Project[] = [
     tags: ['Next.js', 'Astro'],
   },
 ];
+
+export const projects: readonly Project[] = rawProjects.map((project) => ({
+  ...project,
+  title: { ...project.title, pl: polishTypography(project.title.pl) },
+  desc: { ...project.desc, pl: polishTypography(project.desc.pl) },
+}));

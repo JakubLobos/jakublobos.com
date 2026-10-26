@@ -1,4 +1,5 @@
 import type { Locale } from '@portfolio/contracts';
+import { polishTypography } from '../lib/pl-typography.ts';
 
 /** Band A: identical in both locales (product names). */
 export const marqueeTech = [
@@ -17,7 +18,7 @@ export const marqueeTech = [
 ] as const;
 
 /** Band B. The PL lines are drafts pending owner review. */
-export const marqueeFacts = {
+const rawFacts = {
   en: [
     'Frontend Developer',
     'Kraków, Poland',
@@ -37,3 +38,8 @@ export const marqueeFacts = {
     'Polski i angielski',
   ],
 } satisfies Record<Locale, readonly string[]>;
+
+export const marqueeFacts: Record<Locale, readonly string[]> = {
+  en: rawFacts.en,
+  pl: rawFacts.pl.map(polishTypography),
+};

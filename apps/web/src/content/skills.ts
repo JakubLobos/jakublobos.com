@@ -1,4 +1,5 @@
 import type { Locale } from '@portfolio/contracts';
+import { polishTypography } from '../lib/pl-typography.ts';
 
 export interface SkillGroup {
   label: Record<Locale, string>;
@@ -7,7 +8,7 @@ export interface SkillGroup {
 }
 
 // PL group labels are drafts pending owner review (D-02).
-export const skillGroups: readonly SkillGroup[] = [
+const rawGroups: readonly SkillGroup[] = [
   { label: { en: 'Core', pl: 'Podstawy' }, items: ['React', 'TypeScript', 'UI/UX', 'Figma', 'AI'] },
   {
     label: { en: 'Frameworks', pl: 'Frameworki' },
@@ -23,3 +24,8 @@ export const skillGroups: readonly SkillGroup[] = [
   },
   { label: { en: 'Workflow', pl: 'Workflow' }, items: ['Git', 'GitHub Packages'] },
 ];
+
+export const skillGroups: readonly SkillGroup[] = rawGroups.map((group) => ({
+  ...group,
+  label: { ...group.label, pl: polishTypography(group.label.pl) },
+}));

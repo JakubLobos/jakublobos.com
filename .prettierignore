@@ -6,3 +6,4 @@ pnpm-lock.yaml
 **/test-results/
 docs/design/
 apps/server/data/
+docs/content/pl-copy-review.md

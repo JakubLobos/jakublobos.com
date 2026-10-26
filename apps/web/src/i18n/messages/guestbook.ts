@@ -92,7 +92,7 @@ export const guestbook = defineMessages({
       contact_info_not_allowed: 'Nie podawaj adresów e-mail ani numerów telefonu.',
     },
     submitErrors: {
-      rateLimited: 'Zostawiono już kilka śladów. Spróbuj ponownie za kilka minut.',
+      rateLimited: 'Zostawiono już kilka wpisów. Spróbuj ponownie za kilka minut.',
       retry: 'Nie udało się teraz wysłać wiadomości. Spróbuj ponownie za chwilę.',
     },
     modal: {

@@ -1,4 +1,5 @@
 import type { Locale } from '@portfolio/contracts';
+import { polishDeep } from '../../lib/pl-typography.ts';
 import { profile } from '../../content/profile.ts';
 
 /*
@@ -360,7 +361,7 @@ const pl: PrivacyCopy = {
               // OWNER-PLACEHOLDER (region)
               'Baza danych w Railway, region [WŁAŚCICIEL: region Railway]',
               // OWNER-PLACEHOLDER (backup retention)
-              'Widoczny publicznie, dopóki nie zastąpi go nowszy wpis, następnie przechowywany w prywatnym archiwum liczącym najwyżej 100 wpisów, dopóki nie wypchną go nowsze. Wpis, który nie został jeszcze sprawdzony, jest usuwany najpóźniej po 24 godzinach. Usuwany na żądanie. Kopie pozostają w kopiach zapasowych, dopóki nie zostaną zastąpione nowszymi [WŁAŚCICIEL: potwierdź okres przechowywania kopii].',
+              'Widoczny publicznie, dopóki nie zastąpi go nowszy wpis, następnie przechowywany w prywatnym archiwum liczącym najwyżej 100 wpisów, dopóki nie wypchną go nowsze. Wpis, który nie został jeszcze sprawdzony, jest usuwany najpóźniej po 24 godzinach. Usuwany na żądanie. Wpis pozostaje w kopiach zapasowych do czasu ich rotacji [WŁAŚCICIEL: potwierdź okres przechowywania kopii].',
             ],
             [
               'Treść wpisu wysyłana do moderacji OpenAI',
@@ -380,7 +381,7 @@ const pl: PrivacyCopy = {
               'Formularz kontaktowy: imię, e-mail, wiadomość',
               'Odpowiedź na Twoje zapytanie',
               'Działania przed zawarciem umowy / prawnie uzasadniony interes',
-              'Resend (dostarczanie poczty, w tranzycie), następnie skrzynka właściciela',
+              'Resend (dostarczanie poczty, w trakcie przesyłania), następnie skrzynka właściciela',
               // OWNER-PLACEHOLDER (mailbox period)
               'Serwer strony niczego nie zapisuje. Resend przechowuje logi dostarczenia zgodnie z własnymi ustawieniami. Skrzynka przechowuje wiadomość tak długo, jak trzeba, by obsłużyć zapytanie [WŁAŚCICIEL: potwierdź okres].',
             ],
@@ -571,7 +572,8 @@ const pl: PrivacyCopy = {
   ],
 };
 
-const copy: Record<Locale, PrivacyCopy> = { en, pl };
+// Ids and hrefs are identifiers, not prose, so they never receive non-breaking spaces.
+const copy: Record<Locale, PrivacyCopy> = { en, pl: polishDeep(pl, new Set(['id', 'href'])) };
 
 export function privacy(locale: Locale): PrivacyCopy {
   return copy[locale];
