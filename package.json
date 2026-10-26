@@ -11,6 +11,7 @@
   "scripts": {
     "dev": "pnpm --recursive --parallel --filter \"./apps/*\" dev",
     "build": "pnpm --recursive build",
+    "preview": "pnpm --filter @portfolio/web run build:preview && pnpm --parallel --filter @portfolio/web --filter @portfolio/server run preview:topology",
     "start": "pnpm --filter @portfolio/server start",
     "typecheck": "pnpm --recursive typecheck",
     "sync": "pnpm --filter @portfolio/web exec astro sync",

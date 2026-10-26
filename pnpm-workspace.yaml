@@ -6,3 +6,5 @@ packages:
 # its binding.gyp would only trigger a node-gyp rebuild, which needs a toolchain we don't install.
 allowBuilds:
   better-sqlite3: false
+  esbuild: false
+  workerd: false

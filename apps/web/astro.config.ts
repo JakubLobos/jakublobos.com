@@ -3,6 +3,7 @@ import { defineConfig, fontProviders } from 'astro/config';
 import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { parseEnv } from 'node:util';
+import cloudflareHeaders from './integrations/cloudflare-headers.ts';
 import devShowcase from './integrations/dev-showcase.ts';
 
 // PUBLIC_* variables live in the repo-root .env (shared with the API); `vite.envDir` below gives
@@ -37,6 +38,7 @@ export default defineConfig({
   i18n: { locales: ['en', 'pl'], defaultLocale: 'en', routing: { prefixDefaultLocale: false } },
   integrations: [
     devShowcase(),
+    cloudflareHeaders(),
     sitemap({
       i18n: { defaultLocale: 'en', locales: { en: 'en-US', pl: 'pl-PL' } },
       filter: (page) => !page.endsWith('/404'),
