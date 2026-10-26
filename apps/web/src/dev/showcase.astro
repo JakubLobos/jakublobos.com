@@ -6,6 +6,7 @@ import SectionHeading from '../components/ui/SectionHeading.astro';
 import Highlight from '../components/ui/Highlight.astro';
 import Spinner from '../components/ui/Spinner.astro';
 import CheckIcon from '../components/ui/CheckIcon.astro';
+import LanguageSwitcher from '../components/site/LanguageSwitcher.astro';
 import PaintDrips from '../components/decor/PaintDrips.astro';
 import CookieIcon from '../components/decor/CookieIcon.astro';
 import { PAINT_ORDER } from '../lib/paints.ts';
@@ -192,6 +193,15 @@ const shadows = ['card', 'dialog', 'thumb'].map((n) => `--shadow-${n}`);
       </ChromeButton>
     </div>
 
+    <h2>Language switcher</h2>
+    <div class="row">
+      <LanguageSwitcher locale="en" path="/privacy" />
+      <LanguageSwitcher locale="pl" path="/privacy" />
+      <div class="small-switcher">
+        <LanguageSwitcher locale="en" path="/privacy" />
+      </div>
+    </div>
+
     <h2>Section headings</h2>
     <SectionHeading index="01" eyebrow="EXPERIENCE" title="Where I work" />
     <div class="gap"></div>
@@ -341,6 +351,9 @@ const shadows = ['card', 'dialog', 'thumb'].map((n) => `--shadow-${n}`);
     align-items: center;
     gap: var(--space-16);
     padding-bottom: var(--space-8);
+  }
+  .small-switcher {
+    --switcher-size: var(--text-label);
   }
   .icons {
     color: var(--color-ink);

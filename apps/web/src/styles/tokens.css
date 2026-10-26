@@ -198,4 +198,11 @@
   --icon-close: 14px;
   --title-max-narrow: 520px;
   --title-max-wide: 640px;
+
+  /* Navigation pills: desktop nav and language switcher (T-023). */
+  --nav-gap: clamp(4px, 1vw, 12px);
+  --nav-pill-y: var(--space-6);
+  --nav-pill-x: var(--space-12);
+  --nav-pill-x-compact: var(--space-10);
+  --leading-logo-mark: 1.55;
 }

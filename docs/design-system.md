@@ -186,18 +186,21 @@ Keyframes (`keyframes.css`): `type-in` (`0% translateY(.6em) rotate(4deg) opacit
 
 Button, icon and heading-measure geometry. Button geometry isn't decor, so it uses these tokens instead of local literals (§3 rule 1).
 
-| Token                                                   | Value                                     | Use                                      |
-| ------------------------------------------------------- | ----------------------------------------- | ---------------------------------------- |
-| `--text-button-lg` / `--text-button-sm`                 | aliases of `--text-field` / `--text-body` | button labels                            |
-| `--space-18`                                            | 18px                                      | small-button inline padding              |
-| `--control-min-h`                                       | 44px                                      | small/chrome button min height           |
-| `--control-submit-w` / `--control-submit-h`             | 210px / 52px                              | contact submit min size                  |
-| `--lift-sm-hover` / `--sink-sm-active`                  | -1px / 3px                                | small-button hover lift and press sink   |
-| `--press-busy` / `--sink-busy`                          | 2px / 4px                                 | busy ("sending") resting offset          |
-| `--icon-spinner`, `--icon-check`                        | 16px, 18px                                | status icons                             |
-| `--icon-menu-w` / `--icon-menu-w-short`, `--icon-close` | 16px / 10px, 14px                         | Menu bars, Close cross                   |
-| `--title-max-narrow` / `--title-max-wide`               | 520px / 640px                             | `SectionHeading` title measure           |
-| `--hl-end`                                              | 92%                                       | `Highlight` band end (with `--hl-start`) |
+| Token                                                    | Value                                     | Use                                      |
+| -------------------------------------------------------- | ----------------------------------------- | ---------------------------------------- |
+| `--text-button-lg` / `--text-button-sm`                  | aliases of `--text-field` / `--text-body` | button labels                            |
+| `--space-18`                                             | 18px                                      | small-button inline padding              |
+| `--control-min-h`                                        | 44px                                      | small/chrome button min height           |
+| `--control-submit-w` / `--control-submit-h`              | 210px / 52px                              | contact submit min size                  |
+| `--lift-sm-hover` / `--sink-sm-active`                   | -1px / 3px                                | small-button hover lift and press sink   |
+| `--press-busy` / `--sink-busy`                           | 2px / 4px                                 | busy ("sending") resting offset          |
+| `--icon-spinner`, `--icon-check`                         | 16px, 18px                                | status icons                             |
+| `--icon-menu-w` / `--icon-menu-w-short`, `--icon-close`  | 16px / 10px, 14px                         | Menu bars, Close cross                   |
+| `--title-max-narrow` / `--title-max-wide`                | 520px / 640px                             | `SectionHeading` title measure           |
+| `--hl-end`                                               | 92%                                       | `Highlight` band end (with `--hl-start`) |
+| `--nav-gap`                                              | `clamp(4px,1vw,12px)`                     | desktop nav item gap (T-023)             |
+| `--nav-pill-y` / `--nav-pill-x` / `--nav-pill-x-compact` | 6px / 12px / 10px                         | nav and language-switcher pill padding   |
+| `--leading-logo-mark`                                    | 1.55                                      | logo mark line height                    |
 
 ## 3. Rules for consuming tokens
 

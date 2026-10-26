@@ -1,15 +1,82 @@
 ---
-import type { Locale } from '../../i18n/locales.ts';
-import { common } from '../../i18n/messages/common.ts';
+import { profile } from '../../content/profile.ts';
+import { alternatePath, type Locale } from '../../i18n/locales.ts';
+import { footer } from '../../i18n/messages/footer.ts';
 
 interface Props {
   locale: Locale;
 }
 
 const { locale } = Astro.props;
+const m = footer(locale);
+// Evaluated at build time (the site is static).
+const year = new Date().getFullYear();
 ---
 
-<!-- STUB: T-023 -->
 <footer class="container">
-  <p>© 2026 {common(locale).siteName}</p>
+  <span>
+    © {year} {profile.name}
+  </span>
+  <ul>
+    <li>
+      <a href={alternatePath(locale, '/privacy')}>{m.privacy}</a>
+    </li>
+    <!-- data-cookie-settings: T-032 attaches the behaviour. -->
+    <li>
+      <button type="button" data-cookie-settings>
+        {m.cookieSettings}
+      </button>
+    </li>
+    <li>
+      <a href="#top">{m.backToTop}</a>
+    </li>
+  </ul>
 </footer>
+
+<style>
+  footer {
+    position: relative;
+    z-index: var(--z-content);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-12) var(--space-16);
+    padding-block: var(--space-24) var(--space-40);
+    font-size: var(--text-caption);
+    color: var(--color-text-muted);
+  }
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-12) var(--space-24);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  a,
+  button {
+    color: var(--color-text-muted);
+  }
+
+  a:hover,
+  button:hover {
+    color: var(--color-ink);
+  }
+
+  button {
+    padding: 0;
+    font: inherit;
+    background: none;
+    border: 0;
+    cursor: pointer;
+  }
+
+  /* narrow: leave room for the bottom paint drips. */
+  @media (width < 980px) {
+    footer {
+      padding-bottom: calc(var(--space-80) + var(--space-40));
+    }
+  }
+</style>

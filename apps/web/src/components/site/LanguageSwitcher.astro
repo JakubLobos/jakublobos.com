@@ -1,5 +1,8 @@
 ---
+// Plain links through the Worker's /set-language endpoint, so it works without JS (ADR-0007).
+// The size follows `--switcher-size` (12 px in the mobile menu); the default is the nav's caption size.
 import { alternatePath, LOCALES, type Locale } from '../../i18n/locales.ts';
+import { nav } from '../../i18n/messages/nav.ts';
 
 interface Props {
   locale: Locale;
@@ -8,15 +11,71 @@ interface Props {
 }
 
 const { locale, path } = Astro.props;
-const other = LOCALES.find((target) => target !== locale) ?? locale;
+const m = nav(locale);
 ---
 
-<!-- STUB: T-023 -->
-<a
-  href={`/set-language?lang=${other}&to=${alternatePath(other, path)}`}
-  lang={other}
-  hreflang={other}
-  rel="alternate"
->
-  {other.toUpperCase()}
-</a>
+<div class="switcher" role="group" aria-label={m.language}>
+  {LOCALES.map((target, index) => (
+    <>
+      {index > 0 && (
+        <span class="sep" aria-hidden="true">
+          /
+        </span>
+      )}
+      {target === locale ? (
+        <span class="item" lang={target} aria-current="true">
+          {target.toUpperCase()}
+        </span>
+      ) : (
+        <a
+          class="item"
+          href={`/set-language?lang=${target}&to=${alternatePath(target, path)}`}
+          lang={target}
+          hreflang={target}
+          rel="alternate"
+        >
+          {target.toUpperCase()}
+          <span class="visually-hidden"> – {m.languageName[target]}</span>
+        </a>
+      )}
+    </>
+  ))}
+</div>
+
+<style>
+  .switcher {
+    display: flex;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: var(--switcher-size, var(--text-caption));
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+
+  .item {
+    padding: var(--nav-pill-y) var(--nav-pill-x-compact);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-muted);
+  }
+
+  .item[aria-current='true'] {
+    color: var(--color-ink);
+    text-decoration: underline var(--border-thick) var(--color-ink);
+    text-underline-offset: var(--space-4);
+  }
+
+  a.item:hover {
+    color: var(--color-ink);
+    background: var(--color-hover);
+  }
+
+  .sep {
+    color: var(--color-line-strong);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .item {
+      transition: background var(--duration-hover) var(--ease-standard);
+    }
+  }
+</style>
