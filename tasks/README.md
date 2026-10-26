@@ -41,7 +41,7 @@ All owner decisions that affect implementation are answered (see [`docs/decision
 | [T-041](T-041-e2e-critical-journeys.md)            | E2E critical journeys                                                      | 6    | T-014, T-015, T-023, T-029, T-030, T-032, T-040 | L    | TODO                                                                                    |
 | [T-042](T-042-visual-fidelity-baselines.md)        | Visual fidelity pass + baselines                                           | 6    | all UI tasks, T-040                             | L    | TODO                                                                                    |
 | [T-043](T-043-performance-seo-a11y-audit.md)       | Performance, SEO, a11y audit + release checks                              | 6    | all UI tasks, T-032, T-035                      | M    | TODO                                                                                    |
-| [T-050](T-050-container-operations.md)             | API container, Railway + Cloudflare deployment, runbook                    | 6    | T-014, T-015, T-016, T-017                      | L    | READY                                                                                   |
+| [T-050](T-050-container-operations.md)             | API container, Railway + Cloudflare deployment, runbook                    | 6    | T-014, T-015, T-016, T-017                      | L    | IN_PROGRESS                                                                             |
 
 32 tasks.
 
