@@ -12,8 +12,10 @@ interface Props {
 }
 
 const { locale, seoKey, path } = Astro.props;
-const { title, description } = seo(locale)[seoKey];
+const { og, ...pages } = seo(locale);
+const { title, description } = pages[seoKey];
 const site = Astro.site ?? new URL(Astro.url.origin);
+const ogImage = new URL(`/og/og-${locale}.png`, site).href;
 const absolute = (target: Locale) => new URL(alternatePath(target, path), site).href;
 
 const canonical = absolute(locale);
@@ -53,7 +55,11 @@ const personJson = JSON.stringify(person).replaceAll('<', String.raw`\u003c`);
 {otherLocales.map((other) => (
   <meta property="og:locale:alternate" content={ogLocale(other)} />
 ))}
-<meta name="twitter:card" content="summary" />
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={og.alt} />
+<meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
 
