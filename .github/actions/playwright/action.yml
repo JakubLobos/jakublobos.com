@@ -1,0 +1,18 @@
+name: Install Playwright browsers
+description: Cached Playwright browsers plus their system dependencies. Run after the toolchain setup.
+
+inputs:
+  browsers:
+    description: Space-separated browser names
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        path: ~/.cache/ms-playwright
+        key: playwright-${{ runner.os }}-${{ inputs.browsers }}-${{ hashFiles('pnpm-lock.yaml') }}
+    # With a warm cache this only installs the apt packages the browsers need.
+    - run: pnpm exec playwright install --with-deps ${{ inputs.browsers }}
+      shell: bash

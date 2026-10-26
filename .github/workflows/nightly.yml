@@ -1,0 +1,49 @@
+name: Nightly
+
+on:
+  schedule:
+    - cron: '17 3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Firefox is not part of the per-push suite.
+          - name: firefox
+            browser: firefox
+            firefox: '1'
+            args: --project=firefox
+          # Retries are off so that a flaky spec fails instead of passing on its second attempt.
+          - name: stability
+            browser: chromium
+            firefox: ''
+            args: --project=chromium-desktop --repeat-each=5 --retries=0
+    name: e2e (${{ matrix.name }})
+    env:
+      E2E_FIREFOX: ${{ matrix.firefox }}
+      WRANGLER_SEND_METRICS: 'false'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+      - uses: ./.github/actions/playwright
+        with:
+          browsers: ${{ matrix.browser }}
+      - run: pnpm test:e2e ${{ matrix.args }}
+      - if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: playwright-report-${{ matrix.name }}
+          path: |
+            playwright-report
+            test-results
+          retention-days: 7

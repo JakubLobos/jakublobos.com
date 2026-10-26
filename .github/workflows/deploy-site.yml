@@ -1,0 +1,49 @@
+name: Deploy site
+
+# Only site inputs trigger a deploy; API-only changes (apps/server) never do. Railway deploys the API.
+on:
+  push:
+    branches: [main]
+    paths:
+      - apps/web/**
+      - packages/contracts/**
+      - pnpm-lock.yaml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    uses: ./.github/workflows/ci.yml
+
+  deploy:
+    needs: ci
+    # A manual dispatch from any other branch must not reach production.
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: production
+    # Serialised and never cancelled mid-deploy.
+    concurrency:
+      group: deploy-site
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+      # PUBLIC_* values are embedded in client code, so none of them is a secret.
+      - run: pnpm --filter @portfolio/web exec astro build
+        env:
+          PUBLIC_SITE_URL: https://jakublobos.com
+          PUBLIC_API_BASE_URL: https://api.jakublobos.com
+          PUBLIC_GA4_ID: ${{ vars.PUBLIC_GA4_ID }}
+          PUBLIC_POSTHOG_KEY: ${{ vars.PUBLIC_POSTHOG_KEY }}
+          PUBLIC_POSTHOG_HOST: ${{ vars.PUBLIC_POSTHOG_HOST }}
+          PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.PUBLIC_TURNSTILE_SITE_KEY }}
+      - run: pnpm --filter @portfolio/web exec wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          WRANGLER_SEND_METRICS: 'false'
