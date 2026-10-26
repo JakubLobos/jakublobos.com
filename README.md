@@ -63,6 +63,10 @@ cp .env.example .env
 
 Add required reviewers to the `production` environment for a manual approval step. The API is deployed by Railway, not by these workflows.
 
+### Deployment
+
+The API ships as a Docker image (`apps/server/Dockerfile`, build context = repository root; `railway.json` configures Railway) and the site as a Cloudflare Worker. Go-live checklist, environment variables, backups and restore, rollback and incident steps: [docs/operations.md](docs/operations.md). `pnpm --filter @portfolio/server backup` writes an online SQLite backup next to the database.
+
 ### Guestbook admin CLI
 
 Takedown path for messages automated moderation missed (`docs/guestbook-moderation.md` §8-9). It opens the existing database from `DATABASE_PATH` and never creates it or runs migrations; if the file or schema is missing it exits with an error.
@@ -74,7 +78,7 @@ pnpm --filter @portfolio/server guestbook delete <publicId> [--yes]
 pnpm --filter @portfolio/server guestbook purge-pending [--yes]
 ```
 
-`delete` and `purge-pending` ask for confirmation; without a terminal on stdin they abort unless `--yes` is given. Exit codes: 0 success, 1 usage error or aborted, 2 message not found. `list` and `export` print message text to stdout; `export --out` writes an owner-only file instead. Production usage on Railway is documented with the deployment (T-050).
+`delete` and `purge-pending` ask for confirmation; without a terminal on stdin they abort unless `--yes` is given. Exit codes: 0 success, 1 usage error or aborted, 2 message not found. `list` and `export` print message text to stdout; `export --out` writes an owner-only file instead. Production usage on Railway: [docs/operations.md](docs/operations.md#6-admin-cli-on-railway-archive-export-and-takedown).
 
 ## Repository map
 

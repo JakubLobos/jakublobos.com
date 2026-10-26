@@ -7,6 +7,7 @@
     "dev": "node --watch --env-file-if-exists=../../.env src/main.ts",
     "start": "node --env-file-if-exists=../../.env src/main.ts",
     "guestbook": "node --env-file-if-exists=../../.env src/cli/guestbook-admin.ts",
+    "backup": "node --env-file-if-exists=../../.env src/cli/backup.ts",
     "typecheck": "tsc -p tsconfig.json",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
