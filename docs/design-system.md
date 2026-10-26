@@ -207,7 +207,7 @@ Button, icon and heading-measure geometry. Button geometry isn't decor, so it us
 5. **Section headings** come only from `components/ui/SectionHeading.astro` (eyebrow index + title, alignment prop).
 6. **Motion is opt-in.** Wrap transitions and animations that move things in `@media (prefers-reduced-motion: no-preference) { … }`. Colour and opacity transitions under 200 ms may stay unconditional.
 7. **Focus:** never remove an outline without replacing it. `:focus-visible` uses `--focus-ring`. Text fields keep the design's underline-colour focus state _and_ get a ring when focused by keyboard (D-19).
-8. **Forced colours:** in `@media (forced-colors: active)`, hide the typing mirrors and drips and restore the native field text colour. Hard shadows disappear by default; add `border` fallbacks where meaning depends on shadow.
+8. **Forced colours:** in `@media (forced-colors: active)`, hide the typing mirrors, drips, and the hero mascot (its pupils, brows, and fills depend on colour) and restore the native field text colour. Hard shadows disappear by default; add `border` fallbacks where meaning depends on shadow.
 9. **Breakpoints:** only the three in §2.6. Prefer intrinsic layout (`clamp`, `auto-fit`, `flex-wrap`) over new breakpoints.
 10. **Changing a token is a shared-surface change.** Only T-020 creates `tokens.css`. Later tasks request changes in their completion report ([`agent-workflow.md`](agent-workflow.md#shared-surfaces)).
 
