@@ -1,18 +1,226 @@
 ---
 import type { Locale } from '../../i18n/locales.ts';
-import { seo } from '../../i18n/messages/seo.ts';
+import { PRIVACY_LAST_UPDATED, privacy } from '../../i18n/messages/privacy.ts';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
 
 interface Props {
   locale: Locale;
 }
 
 const { locale } = Astro.props;
+const m = privacy(locale);
+const updated = new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeZone: 'UTC' }).format(
+  new Date(PRIVACY_LAST_UPDATED),
+);
 ---
 
+<!-- DRAFT: the policy text requires owner and legal review (see i18n/messages/privacy.ts). -->
 <BaseLayout locale={locale} seoKey="privacy" path="/privacy">
   <main id="top" class="container">
-    <!-- STUB: T-033 -->
-    <h1>{seo(locale).privacy.title}</h1>
+    <article class="policy">
+      <header>
+        <SectionHeading as="h1" index="00" eyebrow={m.eyebrow} title={m.title} />
+        <p class="lead">{m.lead}</p>
+        <p class="updated">
+          {m.lastUpdated}: <time datetime={PRIVACY_LAST_UPDATED}>{updated}</time>
+        </p>
+      </header>
+      {m.sections.map((section) => (
+        <section aria-labelledby={`privacy-${section.id}`}>
+          <h2 id={`privacy-${section.id}`}>{section.heading}</h2>
+          {section.blocks.map((block) => {
+            switch (block.type) {
+              case 'p':
+                return <p>{block.text}</p>;
+              case 'h3':
+                return <h3>{block.text}</h3>;
+              case 'ul':
+                return (
+                  <ul>
+                    {block.items.map((item) => (
+                      <li>{item}</li>
+                    ))}
+                  </ul>
+                );
+              case 'dl':
+                return (
+                  <dl>
+                    {block.items.map((item) => (
+                      <div>
+                        <dt>{item.term}</dt>
+                        <dd>{item.href ? <a href={item.href}>{item.value}</a> : item.value}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                );
+              case 'table':
+                return (
+                  <>
+                    {/* eslint-disable-next-line astro/jsx-a11y/no-noninteractive-tabindex -- a scrollable region must be keyboard-focusable (axe: scrollable-region-focusable) */}
+                    <div class="table-scroll" role="region" aria-label={block.caption} tabindex="0">
+                      <table>
+                        <caption class="visually-hidden">{block.caption}</caption>
+                        <thead>
+                          <tr>
+                            {block.head.map((cell) => (
+                              <th scope="col">{cell}</th>
+                            ))}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {block.rows.map((row) => (
+                            <tr>
+                              {row.map((cell) => (
+                                <td>{cell}</td>
+                              ))}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </>
+                );
+            }
+          })}
+        </section>
+      ))}
+    </article>
   </main>
 </BaseLayout>
+
+<style>
+  .policy {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-section-gap);
+    padding-block: var(--space-exp-stage) var(--space-section-block);
+    font-size: var(--text-body);
+    line-height: var(--leading-body);
+    color: var(--color-text-body);
+  }
+
+  header,
+  section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+  }
+
+  header {
+    gap: var(--space-20);
+  }
+
+  /* A readable measure for running text; tables use the full container width. */
+  .policy :is(p, ul, dl, h2, h3) {
+    max-width: var(--policy-measure);
+    margin: 0;
+  }
+
+  .lead {
+    font-size: var(--text-lead);
+    line-height: var(--leading-lead);
+    color: var(--color-text-secondary);
+  }
+
+  .updated {
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    letter-spacing: var(--tracking-label);
+    color: var(--color-text-muted);
+  }
+
+  h2 {
+    font-family: var(--font-display);
+    font-weight: var(--weight-regular);
+    font-size: var(--text-h3);
+    line-height: var(--leading-h3);
+    color: var(--color-ink);
+  }
+
+  h3 {
+    margin-top: var(--space-8);
+    font-size: var(--text-title);
+    font-weight: var(--weight-medium);
+    line-height: var(--leading-title);
+    color: var(--color-ink);
+  }
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    padding-left: var(--space-18);
+  }
+
+  dl > div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4) var(--space-16);
+    padding-block: var(--space-8);
+    border-bottom: var(--border-hairline) solid var(--color-line);
+  }
+
+  dt {
+    flex: 0 0 var(--policy-term-w);
+    font-weight: var(--weight-medium);
+    color: var(--color-ink);
+  }
+
+  dd {
+    flex: 1 1 var(--policy-desc-basis);
+    margin: 0;
+  }
+
+  .policy a {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-underline-offset: var(--space-4);
+  }
+
+  .policy a:hover {
+    color: var(--color-primary-hover);
+  }
+
+  .table-scroll {
+    overflow-x: auto;
+    background: var(--color-surface);
+    border: var(--border-hairline) solid var(--color-line-strong);
+    border-radius: var(--radius-md);
+  }
+
+  table {
+    width: 100%;
+    min-width: var(--policy-table-min-w);
+    border-collapse: collapse;
+    font-size: var(--text-small);
+    line-height: var(--leading-small);
+  }
+
+  th,
+  td {
+    padding: var(--space-12) var(--space-14);
+    text-align: left;
+    vertical-align: top;
+    border-bottom: var(--border-hairline) solid var(--color-line);
+  }
+
+  th {
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-regular);
+    letter-spacing: var(--tracking-label);
+    color: var(--color-text-secondary);
+    background: var(--color-bg);
+  }
+
+  tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  @media (forced-colors: active) {
+    .policy a {
+      color: LinkText;
+    }
+  }
+</style>

@@ -221,6 +221,13 @@
   --nav-pill-x-compact: var(--space-10);
   --leading-logo-mark: 1.55;
 
+  /* Privacy and 404 pages (T-033). */
+  --page-chrome-h: 240px; /* header + footer allowance when a page centres its content in the viewport */
+  --policy-measure: 70ch;
+  --policy-term-w: 8rem;
+  --policy-desc-basis: 14rem;
+  --policy-table-min-w: 46rem; /* five columns stay legible; narrower screens scroll the table */
+
   /* Guestbook geometry (T-029, design-analysis §4.11). */
   --guestbook-visitor-min-h: 120px;
   --guestbook-visitor-max: 720px;

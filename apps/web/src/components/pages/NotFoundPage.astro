@@ -1,18 +1,74 @@
 ---
-import type { Locale } from '../../i18n/locales.ts';
-import { seo } from '../../i18n/messages/seo.ts';
+import { alternatePath, type Locale } from '../../i18n/locales.ts';
+import { notFound } from '../../i18n/messages/not-found.ts';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { navHref } from '../../lib/nav.ts';
+import Mascot from '../decor/Mascot.astro';
+import Button from '../ui/Button.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
 
 interface Props {
   locale: Locale;
 }
 
 const { locale } = Astro.props;
+const m = notFound(locale);
 ---
 
+<!--
+  Cloudflare serves this one file for every unknown URL, so every link here is root-relative.
+  The header's language switcher sends "/404" to /set-language, which is not on the Worker's
+  allowlist and falls back to the other locale's home page, the right target for a page that has
+  no translation of its own.
+-->
 <BaseLayout locale={locale} seoKey="notFound" path="/404">
   <main id="top" class="container">
-    <!-- STUB: T-033 -->
-    <h1>{seo(locale).notFound.title}</h1>
+    <section class="not-found" aria-labelledby="not-found-heading">
+      <Mascot />
+      <SectionHeading
+        id="not-found-heading"
+        as="h1"
+        align="center"
+        titleMaxWidth={640}
+        index="404"
+        eyebrow={m.eyebrow}
+        title={m.title}
+      />
+      <p>{m.text}</p>
+      <div class="actions">
+        <Button href={alternatePath(locale, '/')}>{m.home}</Button>
+        <Button variant="secondary" href={navHref(locale, '/404', 'projects')}>
+          {m.projects}
+        </Button>
+      </div>
+    </section>
   </main>
 </BaseLayout>
+
+<style>
+  .not-found {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-28);
+    min-height: calc(100svh - var(--page-chrome-h));
+    padding-block: var(--space-section-block);
+    text-align: center;
+  }
+
+  p {
+    max-width: var(--intro-max);
+    margin: 0;
+    font-size: var(--text-lead);
+    line-height: var(--leading-lead);
+    color: var(--color-text-secondary);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-16);
+  }
+</style>
