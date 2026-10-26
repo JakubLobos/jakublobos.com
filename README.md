@@ -21,7 +21,7 @@ A bilingual (EN `/`, PL `/pl`) personal portfolio for **jakublobos.com**, with a
 ## Prerequisites
 
 - Node.js **≥ 24.11** (`.nvmrc`: 24) and pnpm **≥ 10** (developed with 12.14)
-- For e2e: Playwright browsers (`pnpm exec playwright install --with-deps chromium webkit`) † T-040
+- For e2e: Playwright browsers (`pnpm exec playwright install --with-deps chromium webkit`)
 - No accounts or keys are needed for development or tests (fake providers, console mailer)
 
 ## Setup
@@ -39,12 +39,16 @@ cp .env.example .env
 | `pnpm verify`                                                    | format check · lint · typecheck · tests · build (the gate for every task)         |
 | `pnpm format` / `pnpm lint:fix`                                  | auto-fix                                                                          |
 | `pnpm preview`                                                   | production topology locally: site + Worker on :8787 (edge emulator), API on :3000 |
-| `pnpm test:e2e` † T-040                                          | Playwright + axe against that topology with fakes                                 |
+| `pnpm test:e2e`                                                  | Playwright + axe against that topology with fakes                                 |
 | `pnpm --filter @portfolio/server guestbook list\|export\|delete` | admin CLI: private archive and takedowns                                          |
 
 ### Local preview
 
 `pnpm preview` builds the site with `PUBLIC_API_BASE_URL=http://localhost:3000`, then runs the site and the API side by side. The site is served by the Node edge emulator (`apps/web/edge-emulator/`), which reproduces Cloudflare Workers static-assets routing (`run_worker_first` from `wrangler.jsonc`, `auto-trailing-slash`, nearest `404.html`, `_headers`) and runs the real Worker code. Real `wrangler dev` (`pnpm --filter @portfolio/web preview:edge:wrangler`) crashes on some Windows builds, so CI on Linux uses it as a parity check. `pnpm --filter @portfolio/web preview:edge` serves an existing `dist/` on :8787 without the API.
+
+### End-to-end tests
+
+`pnpm test:e2e` (also `test:e2e:ui`) needs the browsers once: `pnpm exec playwright install --with-deps chromium webkit`. Playwright's `webServer` builds the site and starts the API (:3000, `NODE_ENV=test`, fake providers, console mailer, temp DB under the OS temp dir) and the edge emulator (:8787). With `E2E_EDGE=wrangler` it uses real `wrangler dev` instead (CI on Linux). It never adopts a server already listening on those ports (the run fails with "port already used"), so stop `pnpm dev` or `pnpm preview` first; `E2E_REUSE=1` opts in to reusing them. Specs import `test` from `e2e/fixtures.ts`, which fails on console errors, CSP violations and requests to hosts other than the site and the API; `expectNoA11yViolations` runs axe (serious and critical fail). axe cannot resolve text contrast over the page grid, so `e2e/contrast.spec.ts` checks the token colour pairs instead. Firefox is opt-in: `E2E_FIREFOX=1 pnpm test:e2e --project=firefox`.
 
 ### Guestbook admin CLI
 
@@ -87,4 +91,4 @@ Task by task: implementation agent → independent review agent → orchestrator
 
 ## Design reference
 
-`docs/design/design.html` (the Claude Design bundle), its readable source `docs/design/extracted/design-source.html`, and reference screenshots in `docs/design/screenshots/` (regenerate with `node tools/design/capture-design.mjs` † T-040).
+`docs/design/design.html` (the Claude Design bundle), its readable source `docs/design/extracted/design-source.html`, and reference screenshots in `docs/design/screenshots/` (regenerate with `node tools/design/capture-design.mjs`).
