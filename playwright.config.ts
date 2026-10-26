@@ -92,8 +92,16 @@ export default defineConfig({
       url: SITE,
       reuseExistingServer: reuseServers,
       timeout: 240_000,
-      // An empty sitekey keeps the phone reveal on the fake verifier whatever the local .env says.
-      env: { PUBLIC_API_BASE_URL: API, PUBLIC_SITE_URL: SITE, PUBLIC_TURNSTILE_SITE_KEY: '' },
+      env: {
+        PUBLIC_API_BASE_URL: API,
+        PUBLIC_SITE_URL: SITE,
+        // An empty sitekey keeps the phone reveal on the fake verifier whatever the local .env says.
+        PUBLIC_TURNSTILE_SITE_KEY: '',
+        // Test IDs build the analytics chunks and CSP origins in; the fixtures stub every request.
+        PUBLIC_GA4_ID: 'G-E2ETEST000',
+        PUBLIC_POSTHOG_KEY: 'phc_e2e_test_key',
+        PUBLIC_POSTHOG_HOST: 'https://eu.i.posthog.com',
+      },
     },
   ],
 });

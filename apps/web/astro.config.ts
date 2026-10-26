@@ -25,6 +25,17 @@ const env = loadPublicEnv();
 const siteUrl = env.PUBLIC_SITE_URL ?? 'http://localhost:4321';
 const apiOrigin = env.PUBLIC_API_BASE_URL ? new URL(env.PUBLIC_API_BASE_URL).origin : null;
 
+// Analytics origins are allowed only when the matching ID is set, so a build without analytics
+// keeps the tight policy (ADR-0011; GA4 list per Google's tag CSP guide, no Ads features).
+const ga4 = Boolean(env.PUBLIC_GA4_ID);
+const posthogOrigin = env.PUBLIC_POSTHOG_KEY
+  ? new URL(env.PUBLIC_POSTHOG_HOST ?? 'https://eu.i.posthog.com').origin
+  : null;
+const sources = (...origins: (string | null)[]) =>
+  origins.filter((origin) => origin !== null).join(' ');
+const GA4_IMG = ['https://www.googletagmanager.com', 'https://*.google-analytics.com'];
+const GA4_CONNECT = [...GA4_IMG, 'https://*.analytics.google.com'];
+
 const provider = fontProviders.fontsource();
 // Polish needs latin-ext (ą ć ę ł ń ó ś ź ż).
 const subsets: ['latin', 'latin-ext'] = ['latin', 'latin-ext'];
@@ -50,15 +61,22 @@ export default defineConfig({
     csp: {
       directives: [
         "default-src 'self'",
-        "img-src 'self' data:",
+        `img-src ${sources("'self'", 'data:', ...(ga4 ? GA4_IMG : []))}`,
         "font-src 'self'",
-        `connect-src 'self'${apiOrigin ? ` ${apiOrigin}` : ''}`,
+        `connect-src ${sources("'self'", apiOrigin, ...(ga4 ? GA4_CONNECT : []), posthogOrigin)}`,
         "manifest-src 'self'",
         // Turnstile renders its challenge in an iframe (phone reveal, ADR-0015).
         'frame-src https://challenges.cloudflare.com',
       ],
-      // Turnstile's script is loaded on demand when the visitor asks for the phone number.
-      scriptDirective: { resources: ["'self'", 'https://challenges.cloudflare.com'] },
+      // Turnstile's script is loaded on demand when the visitor asks for the phone number; GA4's
+      // gtag.js loads after consent.
+      scriptDirective: {
+        resources: [
+          "'self'",
+          'https://challenges.cloudflare.com',
+          ...(ga4 ? ['https://www.googletagmanager.com'] : []),
+        ],
+      },
     },
   },
   fonts: [

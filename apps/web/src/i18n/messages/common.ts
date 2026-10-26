@@ -7,7 +7,6 @@ export const common = defineMessages({
     mainNavigation: 'Main',
     menu: 'Menu',
     socialLinks: 'Social links',
-    cookieNotice: 'Cookie notice',
     // Accessible names for page sections (landmarks and nav items).
     sections: {
       hero: 'Introduction',
@@ -25,7 +24,6 @@ export const common = defineMessages({
     mainNavigation: 'Główna',
     menu: 'Menu',
     socialLinks: 'Linki społecznościowe',
-    cookieNotice: 'Informacja o plikach cookie',
     sections: {
       hero: 'Wprowadzenie',
       marquee: 'Umiejętności i informacje o mnie',
