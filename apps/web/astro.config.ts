@@ -54,7 +54,11 @@ export default defineConfig({
         "font-src 'self'",
         `connect-src 'self'${apiOrigin ? ` ${apiOrigin}` : ''}`,
         "manifest-src 'self'",
+        // Turnstile renders its challenge in an iframe (phone reveal, ADR-0015).
+        'frame-src https://challenges.cloudflare.com',
       ],
+      // Turnstile's script is loaded on demand when the visitor asks for the phone number.
+      scriptDirective: { resources: ["'self'", 'https://challenges.cloudflare.com'] },
     },
   },
   fonts: [
