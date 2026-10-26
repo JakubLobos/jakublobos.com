@@ -1,5 +1,163 @@
 ---
+// Decorative only: the native scrollbar is hidden in base.css but keyboard, wheel and touch
+// scrolling still work, so nothing here is focusable or exposed to assistive technology.
 ---
 
-<!-- STUB: T-031 -->
-<div id="custom-scrollbar" aria-hidden="true"></div>
+<sketch-scrollbar aria-hidden="true" data-hidden>
+  <div class="line"></div>
+  <div class="cap cap-top"></div>
+  <div class="cap cap-bottom"></div>
+  <div class="thumb" data-thumb>
+    <span class="grip"></span>
+    <span class="grip"></span>
+    <span class="grip"></span>
+  </div>
+</sketch-scrollbar>
+
+<script>
+  import '../../scripts/custom-scrollbar.ts';
+</script>
+
+<style>
+  sketch-scrollbar {
+    --sb-width: 18px;
+    --sb-thumb-w: 16px;
+    --sb-cap-w: 12px;
+    --sb-grip-gap: 3px;
+    --sb-grip-1: 7px;
+    --sb-grip-2: 8px;
+    --sb-grip-3: 6px;
+
+    position: fixed;
+    top: var(--space-14);
+    right: var(--space-8);
+    bottom: var(--space-14);
+    width: var(--sb-width);
+    z-index: var(--z-scrollbar);
+    cursor: pointer;
+  }
+
+  /* Mirrors breakpoints.mobile in lib/breakpoints.ts. */
+  @media (width < 760px) {
+    sketch-scrollbar {
+      display: none;
+    }
+  }
+
+  sketch-scrollbar[data-hidden] {
+    visibility: hidden;
+  }
+
+  .line {
+    position: absolute;
+    inset-block: 0;
+    left: calc((var(--sb-width) - var(--border-thick)) / 2);
+    border-left: var(--border-thick) dashed var(--color-line-strong);
+  }
+
+  .cap {
+    position: absolute;
+    left: calc((var(--sb-width) - var(--sb-cap-w)) / 2);
+    width: var(--sb-cap-w);
+    height: var(--border-thick);
+    border-radius: var(--border-thick);
+    background: var(--color-ink);
+  }
+
+  .cap-top {
+    top: calc(-1 * var(--border-thick));
+    transform: rotate(-6deg);
+  }
+
+  .cap-bottom {
+    bottom: calc(-1 * var(--border-thick));
+    transform: rotate(5deg);
+  }
+
+  .thumb {
+    --thumb-h: 80px;
+    --thumb-y: 0px;
+    --thumb-r: 0deg;
+
+    position: absolute;
+    top: 0;
+    left: calc((var(--sb-width) - var(--sb-thumb-w)) / 2);
+    width: var(--sb-thumb-w);
+    height: var(--thumb-h);
+    transform: translateY(var(--thumb-y)) rotate(var(--thumb-r));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--sb-grip-gap);
+    background: var(--color-surface);
+    border: var(--border-thick) solid var(--color-ink);
+    border-radius: var(--radius-sketch);
+    box-shadow: var(--shadow-thumb);
+    cursor: grab;
+    touch-action: none;
+  }
+
+  .thumb:hover,
+  :global(sketch-scrollbar[data-dragging]) .thumb {
+    background: var(--color-highlight);
+  }
+
+  :global(sketch-scrollbar[data-dragging]) .thumb {
+    cursor: grabbing;
+  }
+
+  .grip {
+    height: var(--border-thick);
+    border-radius: var(--border-thick);
+    background: var(--color-ink);
+  }
+
+  .grip:nth-child(1) {
+    width: var(--sb-grip-1);
+    transform: rotate(-8deg);
+  }
+
+  .grip:nth-child(2) {
+    width: var(--sb-grip-2);
+    transform: rotate(4deg);
+  }
+
+  .grip:nth-child(3) {
+    width: var(--sb-grip-3);
+    transform: rotate(-5deg);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .thumb {
+      transition: background-color var(--duration-hover) var(--ease-standard);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .line {
+      border-left-color: CanvasText;
+    }
+
+    .cap,
+    .grip {
+      background: CanvasText;
+    }
+
+    .thumb {
+      background: Canvas;
+      border-color: CanvasText;
+    }
+
+    .thumb:hover,
+    :global(sketch-scrollbar[data-dragging]) .thumb {
+      background: Highlight;
+      border-color: HighlightText;
+    }
+
+    .thumb:hover .grip,
+    :global(sketch-scrollbar[data-dragging]) .grip {
+      background: HighlightText;
+    }
+  }
+</style>
