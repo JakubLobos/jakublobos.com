@@ -13,6 +13,8 @@ export interface ApiRequestInit {
   method?: 'GET' | 'POST';
   /** Serialised as JSON. */
   body?: unknown;
+  /** Overrides `REQUEST_TIMEOUT_MS`; an exceeded timeout is reported as `network`. */
+  timeoutMs?: number;
 }
 
 export const REQUEST_TIMEOUT_MS = 10_000;
@@ -62,11 +64,6 @@ export async function request<T>(
   init: ApiRequestInit,
   guard: Guard<T>,
 ): Promise<ApiResult<T>> {
-  const controller = new AbortController();
-  const timer = setTimeout(() => {
-    controller.abort();
-  }, REQUEST_TIMEOUT_MS);
-
   try {
     const hasBody = init.body !== undefined;
     const response = await fetch(`${apiBaseUrl()}${path}`, {
@@ -76,7 +73,7 @@ export async function request<T>(
         : { Accept: 'application/json' },
       body: hasBody ? JSON.stringify(init.body) : null,
       credentials: 'omit',
-      signal: controller.signal,
+      signal: AbortSignal.timeout(init.timeoutMs ?? REQUEST_TIMEOUT_MS),
     });
 
     if (response.ok) {
@@ -102,7 +99,5 @@ export async function request<T>(
   } catch {
     // fetch (or a body read) rejects on network failure and on our own timeout abort.
     return { ok: false, kind: 'network' };
-  } finally {
-    clearTimeout(timer);
   }
 }

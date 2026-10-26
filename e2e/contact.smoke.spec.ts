@@ -14,7 +14,7 @@ test.describe('@smoke contact', () => {
   test('sends a message and offers to send another', async ({ page }) => {
     await page.getByLabel('YOUR NAME').fill('Jane Doe');
     await page.getByLabel('EMAIL', { exact: true }).fill('jane@company.com');
-    await page.getByLabel('MESSAGE').fill('I would love to talk about a project.');
+    await page.getByLabel('MESSAGE', { exact: true }).fill('I would love to talk about a project.');
     await page.getByRole('button', { name: 'Send message' }).click();
 
     const sent = page.getByRole('button', { name: 'Message sent' });

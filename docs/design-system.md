@@ -138,6 +138,10 @@ Fluid spacing tokens:
 | `--project-index-col` / `--project-index-gap`                                               | `clamp(32px,6vw,48px)` / `clamp(12px,2.4vw,24px)` (project number column; T-027) |
 | `--project-main-basis` / `--project-meta-basis` / `--project-desc-max`                      | `340px` / `200px` / `560px` (project row)                                        |
 | `--skill-label-basis` / `--skill-items-basis`                                               | `180px` / `280px` (skills rows)                                                  |
+| `--guestbook-visitor-min-h` / `--guestbook-visitor-max` / `--guestbook-form-max`            | guestbook quote stage and form measure (T-029)                                   |
+| `--guestbook-modal-max` / `--guestbook-modal-copy-max`                                      | guestbook success modal                                                          |
+| `--swatch-hit` / `--swatch-size`                                                            | paint picker hit area and swatch                                                 |
+| `--contact-lead-max` / `--contact-details-basis`                                            | `380px` / `300px` (contact lead, details column; T-030)                          |
 | `--z-drips 1 · --z-content 2 · --z-aside 3 · --z-header 4 · --z-scrollbar 5 · --z-cookie 8` | stacking; dialogs use the native top layer                                       |
 
 ### 2.6 Breakpoints

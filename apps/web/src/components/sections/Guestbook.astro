@@ -1,15 +1,41 @@
 ---
 import type { Locale } from '../../i18n/locales.ts';
-import { common } from '../../i18n/messages/common.ts';
+import { guestbook } from '../../i18n/messages/guestbook.ts';
+import GuestbookForm from '../guestbook/GuestbookForm.astro';
+import GuestbookModal from '../guestbook/GuestbookModal.astro';
+import LastVisitorQuote from '../guestbook/LastVisitorQuote.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
 
 interface Props {
   locale: Locale;
 }
 
 const { locale } = Astro.props;
+const m = guestbook(locale);
+const modalId = 'guestbook-modal';
 ---
 
-<!-- STUB: T-029 -->
-<section id="guestbook" aria-labelledby="guestbook-heading">
-  <h2 id="guestbook-heading">{common(locale).sections.guestbook}</h2>
+<section id="guestbook" class="guestbook" aria-labelledby="guestbook-heading">
+  <SectionHeading
+    index="04"
+    eyebrow={m.eyebrow}
+    title={m.title}
+    id="guestbook-heading"
+    align="center"
+    titleMaxWidth={640}
+  />
+  <LastVisitorQuote locale={locale} />
+  <GuestbookForm locale={locale} {modalId} />
+  <GuestbookModal locale={locale} id={modalId} />
 </section>
+
+<style>
+  .guestbook {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-guestbook-gap);
+    padding-block: var(--space-section-block);
+    text-align: center;
+  }
+</style>

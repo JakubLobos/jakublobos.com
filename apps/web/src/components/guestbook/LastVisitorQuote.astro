@@ -1,0 +1,215 @@
+---
+// "The last visitor said": four states (loading, message, empty, error) stacked in one grid cell so
+// they share the reserved height and only fade (guestbook-moderation §10). The HTML ships in the
+// loading state; scripts/last-visitor.ts fetches the message and flips `data-state`. The message
+// text is written with `textContent` only.
+import type { Locale } from '../../i18n/locales.ts';
+import { guestbook } from '../../i18n/messages/guestbook.ts';
+import Highlight from '../ui/Highlight.astro';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const m = guestbook(locale);
+---
+
+<last-visitor class="visitor" data-state="loading">
+  <span class="label" id="guestbook-visitor-label">
+    {m.lastVisitor}
+  </span>
+  <!-- Named group: after "Try again" focus lands here, so a screen reader announces the block. -->
+  <div
+    class="stage"
+    role="group"
+    aria-labelledby="guestbook-visitor-label"
+    tabindex="-1"
+    aria-busy="true"
+    data-stage
+  >
+    <div class="panel" data-panel="loading">
+      <span class="band" aria-hidden="true"></span>
+      <span class="visually-hidden">{m.loading}</span>
+    </div>
+    <div class="panel" data-panel="message">
+      <p class="quote">
+        <Highlight pad="md">
+          <span data-quote-text></span>
+        </Highlight>
+      </p>
+    </div>
+    <div class="panel" data-panel="empty">
+      <p class="quote">
+        <Highlight pad="md" tint="yellow">
+          {m.empty}
+        </Highlight>
+      </p>
+    </div>
+    <div class="panel" data-panel="error">
+      <p class="error">{m.loadError}</p>
+      <button type="button" class="retry" data-retry>
+        {m.retry}
+      </button>
+    </div>
+    <div class="panel panel-static">
+      <noscript>
+        <p class="quote">
+          <Highlight pad="md" tint="yellow">
+            {m.empty}
+          </Highlight>
+        </p>
+      </noscript>
+    </div>
+  </div>
+</last-visitor>
+
+<script>
+  import '../../scripts/last-visitor.ts';
+</script>
+
+<style>
+  .visitor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-16);
+    max-width: var(--guestbook-visitor-max);
+    min-height: var(--guestbook-visitor-min-h);
+  }
+
+  .label {
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-label);
+    color: var(--color-text-muted);
+  }
+
+  /* One grid cell for all states: the tallest one sets the height, switching never reflows. */
+  .stage {
+    display: grid;
+    justify-items: center;
+    outline: none;
+  }
+
+  .panel {
+    grid-area: 1 / 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-8);
+    min-width: 0;
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  /* `data-state` is set by the script, so the lint rule can't see it in the markup. */
+  .visitor:global([data-state='loading']) [data-panel='loading'],
+  .visitor:global([data-state='message']) [data-panel='message'],
+  .visitor:global([data-state='empty']) [data-panel='empty'],
+  .visitor:global([data-state='error']) [data-panel='error'] {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  /* Without scripting nothing will ever load: the noscript empty state replaces the loading one.
+     The wrapper carries the scoped class because Astro doesn't scope <noscript> itself. */
+  .panel-static {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  @media (scripting: none) {
+    [data-panel='loading'] {
+      display: none;
+    }
+  }
+
+  .quote {
+    margin: 0;
+    font-size: var(--text-quote);
+    line-height: var(--leading-quote);
+    font-weight: var(--weight-medium);
+    text-wrap: balance;
+  }
+
+  .band {
+    --tint: var(--paint-yellow-tint);
+
+    display: block;
+    width: 12em;
+    max-width: 100%;
+    height: calc(1em * var(--leading-quote));
+    font-size: var(--text-quote);
+    background: linear-gradient(
+      transparent var(--hl-start),
+      var(--tint) var(--hl-start),
+      var(--tint) var(--hl-end),
+      transparent var(--hl-end)
+    );
+  }
+
+  /* Message and button share a line, so the error state is no taller than a one-line quote and the
+     reserved height (and the quote's vertical position) matches the design. */
+  [data-panel='error'] {
+    flex-flow: row wrap;
+    gap: 0 var(--space-8);
+    text-align: center;
+  }
+
+  .error {
+    margin: 0;
+    font-size: var(--text-body);
+    line-height: var(--leading-body);
+    color: var(--color-text-muted);
+  }
+
+  .retry {
+    min-height: var(--control-min-h);
+    padding: 0 var(--space-12);
+    font: inherit;
+    font-size: var(--text-body);
+    font-weight: var(--weight-medium);
+    color: var(--color-ink);
+    text-decoration: underline;
+    text-underline-offset: var(--space-4);
+    background: none;
+    border: 0;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+  }
+
+  .retry:hover {
+    color: var(--color-primary);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .panel {
+      transition:
+        opacity var(--duration-state) var(--ease-standard),
+        visibility var(--duration-state) var(--ease-standard);
+    }
+
+    .band {
+      animation: pulse calc(var(--duration-panel) * 4) var(--ease-standard) infinite alternate;
+    }
+  }
+
+  @keyframes pulse {
+    from {
+      opacity: 0.45;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .band {
+      background: none;
+      border-bottom: var(--border-thick) solid CanvasText;
+    }
+  }
+</style>

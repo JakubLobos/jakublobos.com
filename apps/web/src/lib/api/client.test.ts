@@ -29,7 +29,6 @@ afterEach(() => {
   fetchMock.mockReset();
   vi.unstubAllGlobals();
   vi.unstubAllEnvs();
-  vi.useRealTimers();
 });
 
 describe('request', () => {
@@ -115,21 +114,35 @@ describe('request', () => {
     expect(await request('/api/x', {}, isLatest)).toEqual({ ok: false, kind: 'network' });
   });
 
-  it('aborts after the timeout and reports network', async () => {
-    vi.useFakeTimers();
+  function hangUntilAborted(): void {
     fetchMock.mockImplementation(
       (_url, init) =>
         new Promise((_resolve, reject) => {
           init!.signal!.addEventListener('abort', () => {
-            reject(new DOMException('aborted', 'AbortError'));
+            reject(new DOMException('aborted', 'TimeoutError'));
           });
         }),
     );
+  }
 
-    const pending = request('/api/x', {}, isLatest);
-    await vi.advanceTimersByTimeAsync(REQUEST_TIMEOUT_MS);
+  // AbortSignal.timeout runs on the runtime's own timers, which fake timers don't control.
+  it('uses the default timeout when none is given', async () => {
+    const timeout = vi.spyOn(AbortSignal, 'timeout');
+    fetchMock.mockResolvedValue(json(200, { data: { message: null } }));
 
-    expect(await pending).toEqual({ ok: false, kind: 'network' });
+    await request('/api/x', {}, isLatest);
+
+    expect(timeout).toHaveBeenCalledWith(REQUEST_TIMEOUT_MS);
+    timeout.mockRestore();
+  });
+
+  it('aborts after a per-call timeout and reports network', async () => {
+    hangUntilAborted();
+
+    expect(await request('/api/x', { timeoutMs: 20 }, isLatest)).toEqual({
+      ok: false,
+      kind: 'network',
+    });
   });
 
   it('maps a non-JSON success body to unexpected', async () => {

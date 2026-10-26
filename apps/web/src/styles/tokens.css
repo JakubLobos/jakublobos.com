@@ -220,4 +220,13 @@
   --nav-pill-x: var(--space-12);
   --nav-pill-x-compact: var(--space-10);
   --leading-logo-mark: 1.55;
+
+  /* Guestbook geometry (T-029, design-analysis §4.11). */
+  --guestbook-visitor-min-h: 120px;
+  --guestbook-visitor-max: 720px;
+  --guestbook-form-max: 640px;
+  --swatch-hit: 40px;
+  --swatch-size: 24px;
+  --guestbook-modal-max: 460px;
+  --guestbook-modal-copy-max: 340px;
 }

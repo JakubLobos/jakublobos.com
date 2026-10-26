@@ -1,0 +1,108 @@
+---
+// Native radio group (D-20): arrow keys, one Tab stop and the checked state come from the browser.
+// The inputs are visually hidden; the label's 40px hit area carries the 24px swatch and its ring.
+import { DEFAULT_PAINT } from '@portfolio/contracts';
+import type { Locale } from '../../i18n/locales.ts';
+import { guestbook } from '../../i18n/messages/guestbook.ts';
+import { PAINT_ORDER } from '../../lib/paints.ts';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const m = guestbook(locale);
+---
+
+<fieldset class="paints">
+  <legend class="visually-hidden">{m.form.paintLegend}</legend>
+  {PAINT_ORDER.map((id) => (
+    <label class="option" data-paint={id}>
+      <input
+        class="visually-hidden"
+        type="radio"
+        name="paint"
+        value={id}
+        checked={id === DEFAULT_PAINT}
+      />
+      <span class="swatch" aria-hidden="true"></span>
+      <span class="visually-hidden">{m.paint[id]}</span>
+    </label>
+  ))}
+</fieldset>
+
+<style>
+  .paints {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4);
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .option {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: var(--swatch-hit);
+    height: var(--swatch-hit);
+    cursor: pointer;
+  }
+
+  .swatch {
+    width: var(--swatch-size);
+    height: var(--swatch-size);
+    background: var(--swatch-color);
+    border-radius: 50%;
+    transition: box-shadow var(--duration-hover) var(--ease-standard);
+  }
+
+  .option[data-paint='red'] {
+    --swatch-color: var(--paint-red);
+  }
+  .option[data-paint='coral'] {
+    --swatch-color: var(--paint-coral);
+  }
+  .option[data-paint='yellow'] {
+    --swatch-color: var(--paint-yellow);
+  }
+  .option[data-paint='purple'] {
+    --swatch-color: var(--paint-purple);
+  }
+  .option[data-paint='violet'] {
+    --swatch-color: var(--paint-violet);
+  }
+  .option[data-paint='blue'] {
+    --swatch-color: var(--paint-blue);
+  }
+
+  input:checked + .swatch {
+    box-shadow: var(--ring-swatch);
+  }
+
+  /* Sits outside the 5px selection ring so both stay readable. */
+  input:focus-visible + .swatch {
+    outline: var(--focus-ring);
+    outline-offset: var(--space-6);
+  }
+
+  @media (forced-colors: active) {
+    .swatch {
+      forced-color-adjust: none;
+    }
+
+    /* The ring from --ring-swatch uses page colours; system colours keep it visible here. */
+    input:checked + .swatch {
+      box-shadow:
+        0 0 0 3px Canvas,
+        0 0 0 5px CanvasText;
+    }
+
+    input:focus-visible + .swatch {
+      outline-color: Highlight;
+    }
+  }
+</style>
