@@ -86,7 +86,7 @@ Trust boundaries:
 
 [ADR-0012](decisions/0012-content-security-policy.md):
 
-- **Meta CSP** (Astro `security.csp`, per page, hashed): `default-src 'self'`; `script-src` hashes + `'self' https://www.googletagmanager.com https://challenges.cloudflare.com`; `frame-src https://challenges.cloudflare.com` (Turnstile); `style-src` hashes; `img-src 'self' data: https://www.googletagmanager.com https://*.google-analytics.com`; `connect-src 'self' <PUBLIC_API_BASE_URL> https://www.googletagmanager.com https://*.google-analytics.com https://*.google.com https://eu.i.posthog.com`; `font-src 'self'`; `manifest-src 'self'`.
+- **Meta CSP** (Astro `security.csp`, per page, hashed): `default-src 'self'`; `script-src` hashes + `'self' https://www.googletagmanager.com https://challenges.cloudflare.com`; `frame-src https://challenges.cloudflare.com` (Turnstile); `style-src` hashes; `img-src 'self' data: https://www.googletagmanager.com https://*.google-analytics.com`; `connect-src 'self' <PUBLIC_API_BASE_URL> https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com https://eu.i.posthog.com`; `font-src 'self'`; `manifest-src 'self'`. Analytics origins are added only when their `PUBLIC_*` ID is set. Keep **Google Signals off** in the GA4 property (its `*.google.com` requests are not allowed).
 - **Header CSP:** only the non-fetch directives (§4).
 - Code rules: no `style=`, no `define:vars`, no inline handlers, no inline analytics snippets, no `<ClientRouter />`.
 - Verification: e2e fails on any `securitypolicyviolation`.
