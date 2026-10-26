@@ -209,7 +209,7 @@ Button, icon and heading-measure geometry. Button geometry isn't decor, so it us
 
 1. **Components use semantic tokens only.** No raw hex, rgb, or font-family values outside `tokens.css`. Allowed literals: `0`, `1px` hairlines, `100%`, `auto`, and the **illustration geometry** of decor components (mascot shapes, cookie chips, drip heights). Keep that geometry in a local custom-property block at the top of the component's `<style>`.
    Reviewer check: `rg -n "#[0-9a-fA-F]{3,8}\b|rgba?\(" apps/web/src --glob '!**/styles/tokens.css'` must return only decor geometry exceptions.
-2. **Paint colours are only accessed by ID**: `var(--paint-<id>)` or `var(--paint-<id>-tint)`. To set one at runtime, use `el.style.setProperty('--tint', 'var(--paint-yellow-tint)')`.
+2. **Paint colours are only accessed by ID**: `var(--paint-<id>)`, `var(--paint-<id>-tint)`, or, for text, `var(--paint-<id>-text)` (accessible variants, D-27; never raw paint colours for text). To set one at runtime, use `el.style.setProperty('--tint', 'var(--paint-yellow-tint)')`.
 3. **No `style="…"` attributes and no `define:vars`.** Both produce inline styles that the CSP blocks ([ADR-0012](decisions/0012-content-security-policy.md)). Dynamic values go through CSSOM (`element.style.setProperty`) or data attributes plus CSS (`[data-state="active"]`).
 4. **One button implementation.** `components/ui/Button.astro` (variants `primary | secondary`, sizes `lg | sm`, renders `<a>` or `<button>`) plus `ChromeButton.astro` (Menu/Close). No ad-hoc button styles.
 5. **Section headings** come only from `components/ui/SectionHeading.astro` (eyebrow index + title, alignment prop).
