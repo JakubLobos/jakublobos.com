@@ -1,4 +1,5 @@
 import { expect, expectNoA11yViolations, gotoLocale, test, type Locale } from './fixtures.ts';
+import { API } from './ports.ts';
 
 // Animations (marquee, type-in) make contrast sampling flaky; motion has its own specs.
 test.use({ reducedMotion: 'reduce' });
@@ -61,13 +62,13 @@ test.describe('@smoke language negotiation', () => {
 
 test('@smoke the site origin is allowed to call the API (CORS)', async ({ page }) => {
   await page.goto('/');
-  const result = await page.evaluate(async () => {
+  const result = await page.evaluate(async (api) => {
     try {
-      const response = await fetch('http://localhost:3000/api/health');
+      const response = await fetch(`${api}/api/health`);
       return `HTTP ${String(response.status)}`;
     } catch (error) {
-      return `blocked: ${String(error)} (is http://localhost:8787 in CORS_ALLOWED_ORIGINS?)`;
+      return `blocked: ${String(error)} (is the site origin in CORS_ALLOWED_ORIGINS?)`;
     }
-  });
+  }, API);
   expect(result).toBe('HTTP 200');
 });

@@ -2,9 +2,7 @@ import { defineConfig, devices } from '@playwright/test';
 import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-
-const SITE = 'http://localhost:8787';
-const API = 'http://localhost:3000';
+import { API, API_PORT, SITE, SITE_PORT } from './e2e/ports.ts';
 
 // Playwright loads this file in the runner and in every worker; the first load creates the
 // temp DB directory and workers inherit it through the environment.
@@ -27,7 +25,10 @@ const dbPath = join(dbDir, 'e2e.db');
 const reuseServers = process.env.E2E_REUSE === '1';
 
 // CI on Linux runs the same suite against real `wrangler dev`; it crashes on some Windows builds.
-const edgeScript = process.env.E2E_EDGE === 'wrangler' ? 'preview:edge:wrangler' : 'preview:edge';
+const edgeServer =
+  process.env.E2E_EDGE === 'wrangler'
+    ? `wrangler dev --port ${SITE_PORT}`
+    : `node edge-emulator/server.ts --port ${SITE_PORT}`;
 
 export default defineConfig({
   testDir: 'e2e',
@@ -74,7 +75,7 @@ export default defineConfig({
       timeout: 30_000,
       env: {
         NODE_ENV: 'test',
-        PORT: '3000',
+        PORT: API_PORT,
         LOG_LEVEL: 'warn',
         MODERATION_PROVIDER: 'fake',
         SUITABILITY_PROVIDER: 'fake',
@@ -87,7 +88,7 @@ export default defineConfig({
       },
     },
     {
-      command: `pnpm --filter @portfolio/web exec astro build && pnpm --filter @portfolio/web ${edgeScript}`,
+      command: `pnpm --filter @portfolio/web exec astro build && pnpm --filter @portfolio/web exec ${edgeServer}`,
       url: SITE,
       reuseExistingServer: reuseServers,
       timeout: 240_000,

@@ -1,10 +1,8 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test as base, type Page, type Response } from '@playwright/test';
+import { API, SITE } from './ports.ts';
 
-const FIRST_PARTY_ORIGINS: ReadonlySet<string> = new Set([
-  'http://localhost:8787',
-  'http://localhost:3000',
-]);
+const FIRST_PARTY_ORIGINS: ReadonlySet<string> = new Set([SITE, API]);
 
 // Third-party hosts the site may legitimately load after consent (GA4, PostHog, Turnstile).
 // They are fulfilled locally so no spec ever reaches the real network.
