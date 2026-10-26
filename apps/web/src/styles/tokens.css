@@ -129,6 +129,8 @@
   /* Layout */
   --content-max: 1000px;
   --intro-max: 560px;
+  --contact-lead-max: 380px;
+  --contact-details-basis: 300px;
   --divider-w: 40px;
   --gutter-wide: clamp(56px, 6vw, 72px);
   --gutter-narrow: clamp(20px, 5vw, 40px);

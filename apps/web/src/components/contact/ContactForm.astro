@@ -1,0 +1,182 @@
+---
+// Without JavaScript the form is replaced by a "email me instead" note (scripting: none); until
+// the script upgrades <contact-form> the form is `inert`, so it never submits natively.
+import { CONTACT_EMAIL_MAX, CONTACT_MESSAGE_MAX, CONTACT_NAME_MAX } from '@portfolio/contracts';
+import { alternatePath, type Locale } from '../../i18n/locales.ts';
+import { contactMessages } from '../../i18n/messages/contact.ts';
+import Button from '../ui/Button.astro';
+import CheckIcon from '../ui/CheckIcon.astro';
+import Spinner from '../ui/Spinner.astro';
+import FormField from './FormField.astro';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const m = contactMessages(locale).form;
+---
+
+<contact-form data-locale={locale}>
+  <form class="form" novalidate inert aria-label={m.label}>
+    <FormField
+      name="name"
+      label={m.name.label}
+      placeholder={m.name.placeholder}
+      maxlength={CONTACT_NAME_MAX}
+      autocomplete="name"
+    />
+    <FormField
+      name="email"
+      label={m.email.label}
+      placeholder={m.email.placeholder}
+      maxlength={CONTACT_EMAIL_MAX}
+      autocomplete="email"
+      inputmode="email"
+    />
+    <FormField
+      name="message"
+      label={m.message.label}
+      placeholder={m.message.placeholder}
+      maxlength={CONTACT_MESSAGE_MAX}
+      as="textarea"
+      rows={3}
+      counter
+    />
+
+    <!-- Honeypot: humans never see or reach it; bots fill every input. -->
+    <div class="trap visually-hidden" aria-hidden="true">
+      <label>
+        {m.trap}
+        <input type="text" name="website" tabindex="-1" autocomplete="off" />
+      </label>
+    </div>
+
+    <div class="actions">
+      <Button type="submit" minWidth="form" data-submit>
+        <span class="state" data-when="idle">
+          {m.submit}
+        </span>
+        <span class="state" data-when="sending" hidden>
+          <Spinner />
+          {m.sending}
+        </span>
+        <span class="state" data-when="sent" hidden>
+          <CheckIcon />
+          {m.sent}
+        </span>
+      </Button>
+      <span class="status" aria-live="polite" data-status></span>
+      <button type="button" class="again" data-again hidden>
+        {m.sendAnother}
+      </button>
+    </div>
+
+    <p class="notice">
+      {m.notice} <a href={alternatePath(locale, '/privacy')}>{m.privacy}</a>
+    </p>
+    <p class="nojs">{m.noScript}</p>
+  </form>
+</contact-form>
+
+<script>
+  import '../../scripts/contact-form.ts';
+</script>
+
+<style>
+  contact-form {
+    display: block;
+  }
+
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-28);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-16) var(--space-20);
+    padding-top: var(--space-4);
+  }
+
+  /* The button's three faces: the script flips `hidden` on two of them. */
+  .state {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-10);
+  }
+
+  .state[hidden] {
+    display: none;
+  }
+
+  .status {
+    font-size: var(--text-caption);
+    line-height: var(--leading-status);
+    color: var(--color-text-muted);
+  }
+
+  /* Set by the script; see the note in ContactDetails. */
+  .status:global([data-tone='error']) {
+    color: var(--color-danger);
+  }
+
+  .again {
+    padding: var(--space-2) 0;
+    font: inherit;
+    font-size: var(--text-caption);
+    color: var(--color-ink);
+    background: transparent;
+    border: 0;
+    border-bottom: var(--border-hairline) solid var(--color-ink);
+    cursor: pointer;
+    transition:
+      color var(--duration-hover) var(--ease-standard),
+      border-color var(--duration-hover) var(--ease-standard);
+  }
+
+  .again:hover {
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+  }
+
+  .notice,
+  .nojs {
+    margin: 0;
+    font-size: var(--text-caption);
+    line-height: var(--leading-caption);
+    color: var(--color-text-muted);
+  }
+
+  .notice a {
+    color: inherit;
+    text-decoration: underline;
+  }
+
+  .notice a:hover {
+    color: var(--color-primary);
+  }
+
+  .nojs {
+    display: none;
+  }
+
+  @media (scripting: none) {
+    .form > :global(:not(.nojs)) {
+      display: none;
+    }
+
+    .nojs {
+      display: block;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .notice a {
+      color: LinkText;
+    }
+  }
+</style>

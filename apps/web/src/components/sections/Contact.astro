@@ -1,15 +1,53 @@
 ---
 import type { Locale } from '../../i18n/locales.ts';
-import { common } from '../../i18n/messages/common.ts';
+import { contactMessages } from '../../i18n/messages/contact.ts';
+import ContactDetails from '../contact/ContactDetails.astro';
+import ContactForm from '../contact/ContactForm.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
 
 interface Props {
   locale: Locale;
 }
 
 const { locale } = Astro.props;
+const messages = contactMessages(locale);
 ---
 
-<!-- STUB: T-030 -->
-<section id="contact" aria-labelledby="contact-heading">
-  <h2 id="contact-heading">{common(locale).sections.contact}</h2>
+<section id="contact" class="contact" aria-labelledby="contact-heading">
+  <div class="intro">
+    <SectionHeading
+      index="05"
+      eyebrow={messages.eyebrow}
+      title={messages.title}
+      id="contact-heading"
+    />
+    <p class="lead">{messages.lead}</p>
+    <ContactDetails locale={locale} />
+  </div>
+  <ContactForm locale={locale} />
 </section>
+
+<style>
+  .contact {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--contact-details-basis)), 1fr));
+    gap: var(--space-contact-gap);
+    align-items: start;
+    padding: var(--space-section-block) 0 var(--space-contact-end);
+  }
+
+  .intro {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-20);
+  }
+
+  .lead {
+    max-width: var(--contact-lead-max);
+    margin: 0;
+    font-size: var(--text-body);
+    line-height: var(--leading-body);
+    color: var(--color-text-secondary);
+    text-wrap: pretty;
+  }
+</style>

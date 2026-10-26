@@ -1,0 +1,73 @@
+---
+// One label + typing field + error line. The script finds the pieces by their `data-*` hooks;
+// the error line is always in the DOM (empty) so a later text change is announced.
+import TypingField from '../ui/TypingField.astro';
+
+interface Props {
+  name: string;
+  label: string;
+  placeholder: string;
+  maxlength: number;
+  as?: 'input' | 'textarea';
+  autocomplete?: string;
+  inputmode?: 'text' | 'email';
+  rows?: number;
+  /** Shows an `n/max` counter beside the label. */
+  counter?: boolean;
+}
+
+const { name, label, counter = false, ...field } = Astro.props;
+
+const id = `contact-${name}`;
+const errorId = `${id}-error`;
+const countId = `${id}-count`;
+---
+
+<div class="field" data-field={name}>
+  <div class="head">
+    <label for={id}>{label}</label>
+    {counter && (
+      <span class="count" id={countId} data-count>
+        0/{field.maxlength}
+      </span>
+    )}
+  </div>
+  <TypingField
+    {...field}
+    id={id}
+    name={name}
+    autoGrow={field.as === 'textarea'}
+    required
+    describedBy={counter ? `${errorId} ${countId}` : errorId}
+  />
+  <p class="error" id={errorId} role="alert" data-error></p>
+</div>
+
+<style>
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .head {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-12);
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-label);
+    color: var(--color-text-muted);
+  }
+
+  .error {
+    margin: 0;
+    font-size: var(--text-caption);
+    line-height: var(--leading-caption);
+    color: var(--color-danger);
+  }
+
+  .error:empty {
+    display: none;
+  }
+</style>
