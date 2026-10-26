@@ -63,6 +63,8 @@ The paint palette appears in the drips, marquee, timeline, guestbook, and blush.
 
 Paint **IDs** are part of the API contract (`packages/contracts`). The **colours** are presentation and live only in `tokens.css`. The web app maps ID → token (`var(--paint-${id})`) and never sends colours over the wire.
 
+Accessible text variants (D-27): `--paint-red-text #bd4c5a`, `--paint-violet-text #7456f0`, `--paint-blue-text #2876b5` (≥ 4.5:1 on `--color-bg` and `--color-surface`). Use them whenever a paint colour carries text.
+
 ### 2.3 Typography
 
 | Token            | Value                                      |

@@ -46,6 +46,10 @@
   --paint-violet-tint: rgb(123 92 255 / 0.32);
   --paint-blue: #2e88d0;
   --paint-blue-tint: rgb(46 136 208 / 0.32);
+  /* Accessible text variants (D-27): 4.5:1 on --color-bg. Raw paints are for fills and decor. */
+  --paint-red-text: #bd4c5a;
+  --paint-violet-text: #7456f0;
+  --paint-blue-text: #2876b5;
 
   /* Typography: sizes in rem (px / 16) */
   --text-display: clamp(2.5rem, 6vw, 4.25rem);
