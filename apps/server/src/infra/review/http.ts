@@ -15,6 +15,8 @@ export type JsonPostResult =
 export interface JsonPostRequest {
   readonly url: string;
   readonly apiKey: string;
+  /** Send the key in this header instead of `Authorization: Bearer` (Gemini: `x-goog-api-key`). */
+  readonly keyHeader?: string;
   readonly body: unknown;
   readonly timeoutMs: number;
 }
@@ -71,7 +73,9 @@ export async function postJson(
     const response = await fetchFn(request.url, {
       method: 'POST',
       headers: {
-        authorization: `Bearer ${request.apiKey}`,
+        ...(request.keyHeader === undefined
+          ? { authorization: `Bearer ${request.apiKey}` }
+          : { [request.keyHeader]: request.apiKey }),
         'content-type': 'application/json',
       },
       body: JSON.stringify(request.body),

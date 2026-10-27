@@ -104,18 +104,18 @@ const en: PrivacyCopy = {
               'Shown publicly until a newer message replaces it, then kept in a private archive of at most 100 messages until newer ones push it out. A message not yet reviewed is deleted after 24 hours at most. Deleted on request. Copies stay in backups until they rotate out [OWNER: confirm backup retention].',
             ],
             [
-              'Guestbook text sent to OpenAI moderation',
+              'Guestbook text sent to Google (Gemini API) for a safety check',
               'Safety review',
               'Legitimate interest',
-              'OpenAI (US). Not retained for abuse monitoring and not used for training.',
-              'None',
+              'Google (Gemini API). The site is operated from the EEA, where Google applies its paid-service data terms to this free service as well: the text is not used to improve Google products. Outside the EEA, the UK and Switzerland, the free tier lets Google use the text to improve its products and lets human reviewers read it.',
+              'Per Google [OWNER: confirm retention]',
             ],
             [
-              'Guestbook text sent to OpenAI for a suitability review',
+              'Guestbook text sent to Google (Gemini API) for a suitability review',
               'Check that the message fits a professional portfolio',
               'Legitimate interest',
-              'OpenAI (US). Stored for abuse monitoring for up to 30 days; not used for training.',
-              'Up to 30 days at OpenAI',
+              'Google (Gemini API). The same terms as for the safety check apply.',
+              'Per Google [OWNER: confirm retention]',
             ],
             [
               'Contact form: name, email, message',
@@ -190,7 +190,7 @@ const en: PrivacyCopy = {
         },
         {
           type: 'p',
-          text: 'Whether a guestbook message is published is decided automatically by simple text rules and the OpenAI checks described below. This has no legal effect on you. If you disagree, write to the address above.',
+          text: 'Whether a guestbook message is published is decided automatically by simple text rules and the Google (Gemini API) checks described below. This has no legal effect on you. If you disagree, write to the address above.',
         },
       ],
     },
@@ -213,10 +213,10 @@ const en: PrivacyCopy = {
           // OWNER-PLACEHOLDER (region)
           text: 'Hosts the API and its database, which holds the guestbook, and handles the technical data of each API request (IP address, browser user agent, requested URL, time). Region: [OWNER: Railway region].',
         },
-        { type: 'h3', text: 'OpenAI' },
+        { type: 'h3', text: 'Google (Gemini API)' },
         {
           type: 'p',
-          text: 'Guestbook text is sent to OpenAI (United States) for two automated checks: a moderation check, which OpenAI does not retain, and a suitability review that is kept for up to 30 days for abuse monitoring. OpenAI does not use it for training. Your IP address is not sent.',
+          text: "Guestbook text is sent to Google (Gemini API) for two automated checks: a safety check and a suitability review. This site uses the free tier. Under Google's terms for free services, Google may use the text you submit to improve its products and machine-learning technologies, and human reviewers may read it; Google separates the data from the account and the API key before review and advises against sending personal information. For customers in the EEA, the United Kingdom and Switzerland, including this site, which is operated from Poland, Google's terms apply the paid-service data terms to the free tier as well, under which the text is not used to improve Google's products. Please do not put personal information in a guestbook message. Your IP address is not sent. [OWNER: confirm Google's retention period.]",
         },
         { type: 'h3', text: 'Resend' },
         {
@@ -364,18 +364,18 @@ const pl: PrivacyCopy = {
               'Widoczny publicznie, dopóki nie zastąpi go nowszy wpis, następnie przechowywany w prywatnym archiwum liczącym najwyżej 100 wpisów, dopóki nie wypchną go nowsze. Wpis, który nie został jeszcze sprawdzony, jest usuwany najpóźniej po 24 godzinach. Usuwany na żądanie. Wpis pozostaje w kopiach zapasowych do czasu ich rotacji [WŁAŚCICIEL: potwierdź okres przechowywania kopii].',
             ],
             [
-              'Treść wpisu wysyłana do moderacji OpenAI',
+              'Treść wpisu wysyłana do Google (Gemini API) w celu kontroli bezpieczeństwa',
               'Kontrola bezpieczeństwa',
               'Prawnie uzasadniony interes',
-              'OpenAI (USA). Bez przechowywania na potrzeby monitorowania nadużyć, nie służy do trenowania modeli.',
-              'Brak',
+              'Google (Gemini API). Serwis jest prowadzony z Europejskiego Obszaru Gospodarczego, gdzie Google stosuje do tej bezpłatnej usługi także warunki danych usług płatnych: treść nie służy do ulepszania produktów Google. Poza EOG, Wielką Brytanią i Szwajcarią bezpłatny poziom pozwala Google wykorzystywać treść do ulepszania swoich produktów, a recenzentom na jej czytanie.',
+              'Wg zasad Google [WŁAŚCICIEL: potwierdź okres przechowywania]',
             ],
             [
-              'Treść wpisu wysyłana do OpenAI w celu oceny przydatności',
+              'Treść wpisu wysyłana do Google (Gemini API) w celu oceny przydatności',
               'Sprawdzenie, czy wpis pasuje do profesjonalnego portfolio',
               'Prawnie uzasadniony interes',
-              'OpenAI (USA). Przechowywana do 30 dni na potrzeby monitorowania nadużyć, nie służy do trenowania modeli.',
-              'Do 30 dni u OpenAI',
+              'Google (Gemini API). Obowiązują te same warunki co przy kontroli bezpieczeństwa.',
+              'Wg zasad Google [WŁAŚCICIEL: potwierdź okres przechowywania]',
             ],
             [
               'Formularz kontaktowy: imię, e-mail, wiadomość',
@@ -450,7 +450,7 @@ const pl: PrivacyCopy = {
         },
         {
           type: 'p',
-          text: 'O publikacji wpisu w księdze gości decydują automatycznie proste reguły tekstowe oraz opisane niżej kontrole OpenAI. Nie ma to wobec Ciebie skutków prawnych. Jeśli się z tym nie zgadzasz, napisz na adres podany wyżej.',
+          text: 'O publikacji wpisu w księdze gości decydują automatycznie proste reguły tekstowe oraz opisane niżej kontrole Google (Gemini API). Nie ma to wobec Ciebie skutków prawnych. Jeśli się z tym nie zgadzasz, napisz na adres podany wyżej.',
         },
       ],
     },
@@ -473,10 +473,10 @@ const pl: PrivacyCopy = {
           // OWNER-PLACEHOLDER (region)
           text: 'Hostuje API oraz jego bazę danych z księgą gości i przetwarza dane techniczne każdego żądania do API (adres IP, user agent przeglądarki, żądany adres URL, czas). Region: [WŁAŚCICIEL: region Railway].',
         },
-        { type: 'h3', text: 'OpenAI' },
+        { type: 'h3', text: 'Google (Gemini API)' },
         {
           type: 'p',
-          text: 'Treść wpisu w księdze gości trafia do OpenAI (Stany Zjednoczone) w ramach dwóch automatycznych kontroli: moderacji, której OpenAI nie przechowuje, oraz oceny przydatności, przechowywanej do 30 dni w celu monitorowania nadużyć. OpenAI nie używa tych danych do trenowania modeli. Twój adres IP nie jest wysyłany.',
+          text: 'Treść wpisu w księdze gości trafia do Google (Gemini API) w ramach dwóch automatycznych kontroli: kontroli bezpieczeństwa i oceny przydatności. Ta strona korzysta z bezpłatnego poziomu. Zgodnie z warunkami Google dla usług bezpłatnych Google może wykorzystywać przesłaną przez Ciebie treść do ulepszania swoich produktów i technologii uczenia maszynowego, a recenzenci mogą ją czytać; Google oddziela te dane od konta i klucza API przed recenzją i odradza wysyłanie danych osobowych. Wobec klientów z EOG, Wielkiej Brytanii i Szwajcarii, w tym tej strony prowadzonej z Polski, warunki Google stosują do bezpłatnego poziomu także warunki danych usług płatnych, według których treść nie służy do ulepszania produktów Google. Nie wpisuj w księdze gości danych osobowych. Twój adres IP nie jest wysyłany. [WŁAŚCICIEL: potwierdź okres przechowywania u Google.]',
         },
         { type: 'h3', text: 'Resend' },
         {

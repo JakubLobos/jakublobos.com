@@ -69,9 +69,11 @@ const envSchema = z.object({
   CLIENT_IP_SOURCE: withDefault(z.enum(['socket', 'x-real-ip']), 'socket'),
   DATABASE_PATH: withDefault(z.string().trim().min(1), './data/portfolio.db'),
 
-  MODERATION_PROVIDER: withDefault(z.enum(['openai', 'fake']), 'fake'),
-  SUITABILITY_PROVIDER: withDefault(z.enum(['openai', 'fake']), 'fake'),
+  MODERATION_PROVIDER: withDefault(z.enum(['openai', 'gemini', 'fake']), 'fake'),
+  SUITABILITY_PROVIDER: withDefault(z.enum(['openai', 'gemini', 'fake']), 'fake'),
   OPENAI_API_KEY: optionalText,
+  GEMINI_API_KEY: optionalText,
+  GEMINI_MODEL: withDefault(z.string().trim().min(1), 'gemini-3.5-flash-lite'),
   OPENAI_MODERATION_MODEL: withDefault(z.string().trim().min(1), 'omni-moderation-latest'),
   OPENAI_SUITABILITY_MODEL: withDefault(z.string().trim().min(1), 'gpt-5-nano'),
   MODERATION_TIMEOUT_MS: withDefault(intString.pipe(z.int().min(1)), '5000'),
@@ -122,6 +124,7 @@ export interface Config {
     readonly timeoutMs: number;
   };
   readonly openaiApiKey: string | undefined;
+  readonly geminiApiKey: string | undefined;
   readonly mail: {
     readonly mailer: Env['MAILER'];
     readonly resendApiKey: string | undefined;
@@ -147,6 +150,9 @@ function crossFieldProblems(env: Env): string[] {
   if (env.MODERATION_PROVIDER === 'openai' || env.SUITABILITY_PROVIDER === 'openai') {
     requireSet('OPENAI_API_KEY', env.OPENAI_API_KEY);
   }
+  if (env.MODERATION_PROVIDER === 'gemini' || env.SUITABILITY_PROVIDER === 'gemini') {
+    requireSet('GEMINI_API_KEY', env.GEMINI_API_KEY);
+  }
   if (env.MAILER === 'resend') {
     requireSet('RESEND_API_KEY', env.RESEND_API_KEY);
     requireSet('MAIL_FROM', env.MAIL_FROM);
@@ -161,7 +167,6 @@ function crossFieldProblems(env: Env): string[] {
     if (env.SUITABILITY_PROVIDER === 'fake') problems.push('SUITABILITY_PROVIDER');
     if (env.MAILER === 'console') problems.push('MAILER');
     if (env.HUMAN_VERIFIER === 'fake') problems.push('HUMAN_VERIFIER');
-    requireSet('OPENAI_API_KEY', env.OPENAI_API_KEY);
     requireSet('RESEND_API_KEY', env.RESEND_API_KEY);
     requireSet('MAIL_FROM', env.MAIL_FROM);
     requireSet('CONTACT_RECIPIENT_EMAIL', env.CONTACT_RECIPIENT_EMAIL);
@@ -203,16 +208,23 @@ export function loadConfig(env: Readonly<Record<string, string | undefined>>): C
     databasePath: values.DATABASE_PATH,
     moderation: Object.freeze({
       provider: values.MODERATION_PROVIDER,
-      model: values.OPENAI_MODERATION_MODEL,
+      model:
+        values.MODERATION_PROVIDER === 'gemini'
+          ? values.GEMINI_MODEL
+          : values.OPENAI_MODERATION_MODEL,
       timeoutMs: values.MODERATION_TIMEOUT_MS,
       scoreThreshold: values.MODERATION_SCORE_THRESHOLD,
     }),
     suitability: Object.freeze({
       provider: values.SUITABILITY_PROVIDER,
-      model: values.OPENAI_SUITABILITY_MODEL,
+      model:
+        values.SUITABILITY_PROVIDER === 'gemini'
+          ? values.GEMINI_MODEL
+          : values.OPENAI_SUITABILITY_MODEL,
       timeoutMs: values.SUITABILITY_TIMEOUT_MS,
     }),
     openaiApiKey: values.OPENAI_API_KEY,
+    geminiApiKey: values.GEMINI_API_KEY,
     mail: Object.freeze({
       mailer: values.MAILER,
       resendApiKey: values.RESEND_API_KEY,

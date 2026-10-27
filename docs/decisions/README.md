@@ -19,5 +19,6 @@ Format: lightweight MADR (context → decision → alternatives → consequences
 | [0013](0013-testing-toolchain.md)                      | Vitest + supertest + Playwright + axe (+ wrangler dev for e2e)          | Accepted                  |
 | [0014](0014-hosting-cloudflare-workers-and-railway.md) | Hosting: Cloudflare Workers static assets + Railway API                 | Accepted (D-14)           |
 | [0015](0015-phone-number-protection.md)                | Phone number behind a Turnstile-verified reveal; never in the repo      | Accepted (D-24, D-25)     |
+| [0016](0016-gemini-free-tier-review-providers.md)      | Gemini free-tier review providers alongside OpenAI                      | Accepted                  |
 
 Template: [`_template.md`](_template.md).

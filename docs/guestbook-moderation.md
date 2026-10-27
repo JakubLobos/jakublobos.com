@@ -166,6 +166,17 @@ The pipeline is pure orchestration over ports, with a single call site that retu
 - Logged: verdict, reason, latency, model, prompt version. **Never** the text.
 - **Fake** (`fake-suitability.reviewer.ts`): text containing `[unsuitable]` → reject (`off_topic_or_weird`), `[sfail]` → transient, otherwise approve. Refused in production.
 
+### 6.2a Gemini moderation (`infra/moderation/gemini-moderation.provider.ts`, ADR-0016)
+
+- Selected with `MODERATION_PROVIDER=gemini`. `POST https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent`, key in the `x-goog-api-key` header (never the URL), `safetySettings` for the four harm categories at `BLOCK_NONE`, `maxOutputTokens: 1`. Same timeout, status mapping and logging rules as §6.1.
+- The prompt-level `promptFeedback.safetyRatings` become scores: NEGLIGIBLE 0, LOW 0.25, MEDIUM 0.6, HIGH 0.9 (per category, lower-cased without the `HARM_CATEGORY_` prefix). The 0.2 policy therefore rejects LOW and above.
+- `promptFeedback.blockReason` present: `flagged: true` plus a `prompt_blocked` category with score 1. No ratings and no block reason, or an unknown probability bucket: `invalid_response` (transient).
+
+### 6.2b Gemini suitability (`infra/suitability/gemini-suitability.reviewer.ts`, ADR-0016)
+
+- Selected with `SUITABILITY_PROVIDER=gemini`. Same endpoint and key header. The §6.2 prompt is the `systemInstruction`; the note is the user content. `generationConfig`: `temperature: 0`, `maxOutputTokens: 256`, `responseMimeType: application/json`, and a `responseSchema` with the same verdict and reason enums.
+- Outcomes: valid verdict JSON is `ok`; `promptFeedback.blockReason` or a `SAFETY`-class `finishReason` is `ok` with `reject`/`other`; `MAX_TOKENS` is `incomplete`; anything unparseable is `invalid_response`; HTTP errors map as in §6.1. Approve with a rejection reason is rewritten to reject.
+
 ### 6.3 Fake moderation (`fake-moderation.provider.ts`)
 
 `[flag]` → flagged; `[slow]` → resolves after 6 s; `[fail]` → transient; otherwise clean. Refused in production.
