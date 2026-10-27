@@ -3,7 +3,7 @@ import type { Locale } from '@portfolio/contracts';
 // No phone number here: it is revealed only by the API after a bot check (ADR-0015).
 export const profile = {
   name: 'Jakub Łobos',
-  role: { en: 'Frontend Developer', pl: 'Frontend Developer' } satisfies Record<Locale, string>,
+  role: { en: 'Software Engineer', pl: 'Software Engineer' } satisfies Record<Locale, string>,
   email: 'jakubloboskontakt@gmail.com',
   github: { handle: 'JakubLobos', url: 'https://github.com/JakubLobos' },
   linkedin: { handle: 'JakubLobos', url: 'https://linkedin.com/in/JakubLobos' },

@@ -20,7 +20,7 @@ export const marqueeTech = [
 /** Band B. The PL lines are drafts pending owner review. */
 const rawFacts = {
   en: [
-    'Frontend Developer',
+    'Software Engineer',
     'Kraków, Poland',
     'Building for people',
     'Sole frontend dev at two teams',
@@ -29,7 +29,7 @@ const rawFacts = {
     'Polish & English',
   ],
   pl: [
-    'Frontend Developer',
+    'Software Engineer',
     'Kraków, Polska',
     'Tworzę dla ludzi',
     'Jedyny frontendowiec w dwóch zespołach',

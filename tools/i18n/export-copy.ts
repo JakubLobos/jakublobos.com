@@ -48,7 +48,7 @@ const SKIP_KEYS = new Set(['id', 'href', 'type']);
 
 /** PL equal to EN is expected for these: proper nouns, product and technology names. */
 const WHITELIST = new Set([
-  'Frontend Developer',
+  'Software Engineer',
   'Cookies',
   'Workflow',
   'Email',
@@ -73,8 +73,7 @@ const WHITELIST = new Set([
 ]);
 
 /** Email addresses, storage names and job titles that contain a company name. */
-const WHITELIST_PATTERN =
-  /^[^\s@]+@[^\s@]+$|\((?:cookies?|local storage)\)$|^(?:Junior )?Frontend Developer · /;
+const WHITELIST_PATTERN = /^[^\s@]+@[^\s@]+$|\((?:cookies?|local storage)\)$|^Software Engineer · /;
 
 // ---- flattening ------------------------------------------------------------------------
 
