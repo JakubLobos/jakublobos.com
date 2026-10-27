@@ -141,7 +141,11 @@ class ContactFormElement extends HTMLElement {
       submit.type = next === 'sent' ? 'button' : 'submit';
 
       again.hidden = next !== 'sent';
-      setStatus(next === 'sending' ? copy.form.statusSending : '');
+      // A failure message stays through the retry: swapping it for "Sending…" would reflow the row,
+      // and the outcome rewrites it (clear, then set) so a repeated failure is announced again.
+      if (next !== 'sending' || status.dataset.tone !== 'error') {
+        setStatus(next === 'sending' ? copy.form.statusSending : '');
+      }
     };
 
     const apply = (outcome: SubmitOutcome, email: string) => {

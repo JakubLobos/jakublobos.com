@@ -303,7 +303,6 @@ function bind(
   }
 
   async function submitMessage(): Promise<void> {
-    clearError();
     const outcome = await controller.submit({
       raw: body.value,
       paint: selectedPaint(),
@@ -311,9 +310,13 @@ function bind(
       website: honeypot.value,
     });
 
+    if (outcome.kind === 'ignored') return;
+    // The old message stays put while the request runs, so the layout below it never jumps. It is
+    // replaced here in one step; re-writing identical text re-fires the alert, so a repeated
+    // failure is announced again.
+    clearError();
+
     switch (outcome.kind) {
-      case 'ignored':
-        break;
       case 'empty':
         body.focus();
         break;
