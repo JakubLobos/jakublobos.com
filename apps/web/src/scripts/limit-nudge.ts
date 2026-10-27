@@ -1,5 +1,5 @@
 import { wouldOverflow } from '../lib/input-limit.ts';
-import { prefersReducedMotion, tokenTiming } from './motion.ts';
+import { prefersReducedMotion, tokenDuration } from './motion.ts';
 
 // Kept out of the form scripts so they stay about validation and submission.
 
@@ -58,7 +58,7 @@ export function bindLimitNudge(
       running = counter.animate(
         prefersReducedMotion() ? FLASH_ONLY : SHAKE,
         // Linear, because an eased curve would squeeze the swings into the first few milliseconds.
-        { ...tokenTiming(counter, '--duration-panel', '--ease-standard'), easing: 'linear' },
+        { duration: tokenDuration(counter, '--duration-panel'), easing: 'linear' },
       );
     },
     { signal },

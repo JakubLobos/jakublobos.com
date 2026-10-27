@@ -1,22 +1,29 @@
 // Shared glue for Web Animations, which cannot read CSS custom properties or the user's
 // reduced-motion setting on their own.
 
+import { parseCssTime } from '../lib/css-time.ts';
+
 const FALLBACK_MS = 150;
 
 /** Web Animations take no `var()`, so the motion tokens are read from the computed style. */
+export function tokenDuration(
+  element: Element,
+  durationVar: string,
+  fallbackMs = FALLBACK_MS,
+): number {
+  const ms = parseCssTime(getComputedStyle(element).getPropertyValue(durationVar));
+  return ms !== null && ms > 0 ? ms : fallbackMs;
+}
+
 export function tokenTiming(
   element: Element,
   durationVar: string,
   easingVar: string,
   fill: FillMode = 'none',
 ): KeyframeAnimationOptions {
-  const style = getComputedStyle(element);
-  const raw = style.getPropertyValue(durationVar).trim();
-  // The production CSS minifier rewrites `350ms` to `.35s`, and custom properties keep the text.
-  const ms = parseFloat(raw) * (raw.endsWith('ms') ? 1 : 1000);
   return {
-    duration: ms > 0 ? ms : FALLBACK_MS,
-    easing: style.getPropertyValue(easingVar).trim() || 'ease',
+    duration: tokenDuration(element, durationVar),
+    easing: getComputedStyle(element).getPropertyValue(easingVar).trim() || 'ease',
     fill,
   };
 }
