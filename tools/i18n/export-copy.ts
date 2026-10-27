@@ -6,6 +6,7 @@
 // module's EN and PL key sets differ. AC-2: lists PL strings equal to their EN counterpart and
 // marks which of them are whitelisted proper nouns / technology names.
 import { mkdirSync, readdirSync, writeFileSync } from 'node:fs';
+import { registerHooks } from 'node:module';
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { experience } from '../../apps/web/src/content/experience.ts';
@@ -24,10 +25,20 @@ import { hero } from '../../apps/web/src/i18n/messages/hero.ts';
 import { marquee } from '../../apps/web/src/i18n/messages/marquee.ts';
 import { nav } from '../../apps/web/src/i18n/messages/nav.ts';
 import { notFound } from '../../apps/web/src/i18n/messages/not-found.ts';
+import { outsideMessages } from '../../apps/web/src/i18n/messages/outside.ts';
 import { privacy } from '../../apps/web/src/i18n/messages/privacy.ts';
 import { projectsMessages } from '../../apps/web/src/i18n/messages/projects.ts';
 import { seo } from '../../apps/web/src/i18n/messages/seo.ts';
 import { skillsMessages } from '../../apps/web/src/i18n/messages/skills.ts';
+
+// content/outside.ts imports photo files, which Node cannot load; only its alt texts are read here.
+registerHooks({
+  load(url, context, nextLoad) {
+    if (!url.endsWith('.jpg')) return nextLoad(url, context);
+    return { format: 'module', source: 'export default {};', shortCircuit: true };
+  },
+});
+const { outsidePhotos } = await import('../../apps/web/src/content/outside.ts');
 
 type Locale = 'en' | 'pl';
 interface Pair {
@@ -145,6 +156,7 @@ add('Navigation', 'i18n/messages/nav.ts', fromMessages('nav', nav));
 add('Hero', 'i18n/messages/hero.ts', fromMessages('hero', hero));
 add('Marquee labels', 'i18n/messages/marquee.ts', fromMessages('marquee', marquee));
 add('Projects labels', 'i18n/messages/projects.ts', fromMessages('projects', projectsMessages));
+add('Outside labels', 'i18n/messages/outside.ts', fromMessages('outside', outsideMessages));
 add('Skills labels', 'i18n/messages/skills.ts', fromMessages('skills', skillsMessages));
 add(
   'Experience labels',
@@ -180,6 +192,15 @@ add(
       { title: project.title.pl, desc: project.desc.pl },
     ).map((pair) => ({ ...pair, key: `${project.n}.${pair.key}` })),
   ),
+);
+add(
+  'Content: outside photos',
+  'content/outside.ts',
+  outsidePhotos.map((photo) => ({
+    key: `${photo.id}.alt`,
+    en: photo.alt.en,
+    pl: plain(photo.alt.pl),
+  })),
 );
 add(
   'Content: skill groups',

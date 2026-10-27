@@ -1,0 +1,247 @@
+---
+import { Picture } from 'astro:assets';
+import { outsidePhotos } from '../../content/outside.ts';
+import type { Locale } from '../../i18n/locales.ts';
+import { outsideMessages } from '../../i18n/messages/outside.ts';
+import SectionHeading from '../ui/SectionHeading.astro';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const messages = outsideMessages(locale);
+---
+
+<section id="outside" class="outside" aria-labelledby="outside-heading">
+  <div class="copy">
+    <SectionHeading
+      index="04"
+      eyebrow={messages.eyebrow}
+      title={messages.title}
+      titleMaxWidth={520}
+      id="outside-heading"
+    />
+    <p class="body">{messages.body}</p>
+  </div>
+  <ul class="photos" aria-label={messages.photosLabel}>
+    {outsidePhotos.map((photo) => (
+      <li class="photo">
+        <figure class="frame">
+          <Picture
+            src={photo.src}
+            alt={photo.alt[locale]}
+            formats={['avif', 'webp']}
+            fallbackFormat="jpg"
+            widths={[240, 360, 560]}
+            sizes="(min-width: 760px) 280px, 60vw"
+            loading="lazy"
+            decoding="async"
+          />
+        </figure>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .outside {
+    --photo-pad: var(--space-8);
+    --tape-w: calc(var(--space-64) + var(--space-8));
+    --tape-h: var(--space-20);
+    --tape-paint: var(--paint-yellow-tint);
+    display: grid;
+    gap: var(--space-section-gap);
+    padding-block: var(--space-section-block);
+    background: var(--color-bg);
+    /* Paints the solid background to the viewport edges so the grid and drips are hidden behind
+       the section; the clip keeps the shadow from spilling above and below it. */
+    box-shadow: 0 0 0 100vmax var(--color-bg);
+    clip-path: inset(0 -100vmax);
+  }
+
+  .copy {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-section-gap);
+    align-self: start;
+  }
+
+  .body {
+    max-width: var(--intro-max);
+    margin: 0;
+    font-size: var(--text-body);
+    line-height: var(--leading-body);
+    color: var(--color-text-secondary);
+    text-wrap: pretty;
+  }
+
+  /* The collage box has a fixed aspect ratio, so the absolutely placed photos reserve their
+     space up front and nothing shifts while the images load. */
+  .photos {
+    position: relative;
+    aspect-ratio: 1 / 1.2;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .photo {
+    position: absolute;
+    width: var(--photo-w);
+    transform: rotate(var(--tilt));
+    transition: transform var(--duration-state) var(--ease-out);
+  }
+
+  .frame {
+    position: relative;
+    margin: 0;
+    padding: var(--photo-pad);
+    background: var(--color-surface);
+    border: var(--border-thick) solid var(--color-ink);
+    box-shadow: var(--shadow-thumb);
+  }
+
+  .frame :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    outline: var(--border-hairline) solid var(--color-line-strong);
+  }
+
+  /* Paper tape: translucent strips with torn ends. Each photo sets its own placement below so
+     the strips do not look stamped. */
+  .frame::before,
+  .frame::after {
+    content: '';
+    position: absolute;
+    width: var(--tape-w);
+    height: var(--tape-h);
+    background: var(--tape-paint);
+    /* A faint paper sheen over the tint. */
+    background-image: linear-gradient(
+      100deg,
+      color-mix(in srgb, var(--color-surface) 45%, transparent),
+      transparent 40%,
+      color-mix(in srgb, var(--color-surface) 30%, transparent) 70%,
+      transparent
+    );
+    clip-path: polygon(
+      0 0,
+      100% 0,
+      97% 25%,
+      100% 50%,
+      97% 75%,
+      100% 100%,
+      0 100%,
+      3% 75%,
+      0 50%,
+      3% 25%
+    );
+    opacity: 0.85;
+  }
+
+  .frame::after {
+    display: none;
+  }
+
+  /* Photo 1 (landscape): one strip across the top edge. */
+  .photo:nth-child(1) {
+    --photo-w: 62%;
+    --tilt: -3deg;
+    top: 0;
+    left: 0;
+    z-index: 1;
+  }
+
+  .photo:nth-child(1) .frame::before {
+    top: calc(var(--space-10) * -1);
+    left: 50%;
+    translate: -50% 0;
+    rotate: -4deg;
+  }
+
+  /* Photo 2 (portrait): a strip on each top corner, tilted the other way. */
+  .photo:nth-child(2) {
+    --photo-w: 44%;
+    --tilt: 2.5deg;
+    --tape-paint: var(--paint-blue-tint);
+    top: 12%;
+    right: 0;
+    z-index: 2;
+  }
+
+  .photo:nth-child(2) .frame::before,
+  .photo:nth-child(2) .frame::after {
+    display: block;
+    top: 0;
+    width: calc(var(--tape-w) * 0.75);
+  }
+
+  .photo:nth-child(2) .frame::before {
+    left: 0;
+    translate: -35% -35%;
+    rotate: -40deg;
+  }
+
+  .photo:nth-child(2) .frame::after {
+    right: 0;
+    translate: 35% -35%;
+    rotate: 38deg;
+  }
+
+  /* Photo 3 (landscape): a single strip folded over the top-right corner. */
+  .photo:nth-child(3) {
+    --photo-w: 58%;
+    --tilt: -1.5deg;
+    --tape-paint: var(--paint-coral-tint);
+    bottom: 0;
+    left: 10%;
+    z-index: 3;
+  }
+
+  .photo:nth-child(3) .frame::before {
+    top: 0;
+    right: 0;
+    translate: 30% -40%;
+    rotate: 36deg;
+  }
+
+  @media (hover: hover) {
+    .photo:hover {
+      z-index: 4;
+      transform: rotate(calc(var(--tilt) * 0.3)) translateY(var(--lift-hover));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .photo {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    /* The frame keeps its border; a tinted strip would only become an opaque block. */
+    .frame::before,
+    .frame::after {
+      display: none;
+    }
+
+    .frame :global(img) {
+      outline-color: CanvasText;
+    }
+  }
+
+  @media (width >= 760px) {
+    .outside {
+      --photo-pad: var(--space-12);
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      column-gap: var(--space-exp-cols);
+      align-items: center;
+    }
+
+    .photos {
+      aspect-ratio: 1 / 1.1;
+    }
+  }
+</style>
