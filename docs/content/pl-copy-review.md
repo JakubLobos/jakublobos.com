@@ -10,7 +10,7 @@ date and the word "approved" once the owner has gone through every row (T-034, A
 > `{name}` marks a value filled in at runtime. Address form is informal "Ty"; quotes are „…”;
 > a guestbook entry is a "wpis".
 
-Strings: 333 across 20 areas.
+Strings: 335 across 20 areas.
 
 ## Owner sign-off
 
@@ -65,7 +65,7 @@ Source: `apps/web/src/i18n/messages/hero.ts`
 
 | Key | EN | PL | Owner correction |
 | --- | -- | -- | ---------------- |
-| `title` | I’m a Frontend Developer! | Jestem Frontend Developerem! |   |
+| `title` | I’m a Software Engineer! | Jestem Software Engineerem! |   |
 | `build.before` | I’m making web-apps mostly in | Tworzę aplikacje webowe głównie w |   |
 | `build.first` | react | react |   |
 | `build.join` | & | i |   |
@@ -111,7 +111,7 @@ Source: `apps/web/src/i18n/messages/experience.ts`
 | Key | EN | PL | Owner correction |
 | --- | -- | -- | ---------------- |
 | `eyebrow` | EXPERIENCE | DOŚWIADCZENIE |   |
-| `title` | Where I work | Gdzie pracuję |   |
+| `title` | My journey | Moja droga |   |
 | `timeline` | Experience timeline | Oś czasu doświadczenia |   |
 | `kind.experience` | EXPERIENCE | DOŚWIADCZENIE |   |
 | `kind.education` | EDUCATION | WYKSZTAŁCENIE |   |
@@ -260,11 +260,11 @@ Source: `apps/web/src/i18n/messages/seo.ts`
 
 | Key | EN | PL | Owner correction |
 | --- | -- | -- | ---------------- |
-| `og.subtitle` | Frontend Developer · React & TypeScript | Frontend Developer · React i TypeScript |   |
+| `og.subtitle` | Software Engineer · React & TypeScript | Software Engineer · React i TypeScript |   |
 | `og.domain` | jakublobos.com | jakublobos.com |   |
-| `og.alt` | Jakub Łobos, Frontend Developer: a hand-drawn mascot under the headline “I’m a Frontend Developer!” | Jakub Łobos, Frontend Developer: ręcznie rysowana maskotka pod hasłem „Jestem Frontend Developerem!” |   |
-| `home.title` | Jakub Łobos — Frontend Developer Portfolio | Jakub Łobos — portfolio Frontend Developera |   |
-| `home.description` | Portfolio of Jakub Łobos, a frontend developer building web apps with React and TypeScript and designing them in Figma. | Portfolio Jakuba Łobosa, frontend developera tworzącego aplikacje webowe w React i TypeScript oraz projektującego je w Figmie. |   |
+| `og.alt` | Jakub Łobos, Software Engineer: a hand-drawn mascot under the headline “I’m a Software Engineer!” | Jakub Łobos, Software Engineer: ręcznie rysowana maskotka pod hasłem „Jestem Software Engineerem!” |   |
+| `home.title` | Jakub Łobos — Software Engineer Portfolio | Jakub Łobos — portfolio Software Engineera |   |
+| `home.description` | Portfolio of Jakub Łobos, a software engineer building web apps with React and TypeScript and designing them in Figma. | Portfolio Jakuba Łobosa — Software Engineera, który tworzy aplikacje webowe w React i TypeScript i projektuje je w Figmie. |   |
 | `privacy.title` | Privacy policy — Jakub Łobos | Polityka prywatności — Jakub Łobos |   |
 | `privacy.description` | How jakublobos.com handles your data: the guestbook, the contact form, cookies and analytics. | Jak jakublobos.com przetwarza Twoje dane: księga gości, formularz kontaktowy, pliki cookie i analityka. |   |
 | `notFound.title` | Page not found — Jakub Łobos | Nie znaleziono strony — Jakub Łobos |   |
@@ -413,20 +413,22 @@ Source: `apps/web/src/content/experience.ts`
 
 | Key | EN | PL | Owner correction |
 | --- | -- | -- | ---------------- |
-| `peryskop.date` | 2023 — Present | 2023 — obecnie |   |
-| `peryskop.title` | Frontend Developer · Fundacja Peryskop | Frontend Developer · Fundacja Peryskop |   |
-| `peryskop.sub` | Free online psychological support platform · fundacjaperyskop.org | Bezpłatna internetowa platforma wsparcia psychologicznego · fundacjaperyskop.org |   |
-| `peryskop.bullets[0]` | Joined as the sole developer and grew the application from a form-handling tool into a platform supporting the delivery of psychological help. | Dołączyłem jako jedyny programista i rozwinąłem aplikację z narzędzia do obsługi formularzy w platformę wspierającą udzielanie pomocy psychologicznej. |   |
-| `peryskop.bullets[1]` | Developed volunteer availability management, authorization and access control, forms and the landing page. | Zaimplementowałem zarządzanie dostępnością wolontariuszy, autoryzację i kontrolę dostępu, formularze oraz stronę docelową. |   |
-| `peryskop.bullets[2]` | Design interfaces for non-technical users: identify pain points in their daily work and simplify key tasks | Projektuję interfejsy dla osób nietechnicznych: wyszukuję bolączki w ich codziennej pracy i upraszczam kluczowe zadania. |   |
-| `peryskop.bullets[3]` | Act as a bridge between the organization and the technical team; select developer candidates, conduct code reviews, and mentor less experienced frontend developers | Łączę organizację z zespołem technicznym; wybieram kandydatów na programistów, prowadzę code review i mentoruję mniej doświadczonych programistów frontendu. |   |
-| `vitresoft.date` | 2023 — Present | 2023 — obecnie |   |
-| `vitresoft.title` | Junior Frontend Developer · Vitresoft | Junior Frontend Developer · Vitresoft |   |
-| `vitresoft.sub` | One of Poland’s largest game server hosting providers · craftserve.com | Jeden z największych polskich dostawców hostingu serwerów gier · craftserve.com |   |
-| `vitresoft.bullets[0]` | Co-building, since the pre-launch stage, a new hosting management platform that replaced a Pterodactyl-based solution; now responsible for its ongoing development as the sole frontend developer. | Współtworzę od etapu przed startem nową platformę do zarządzania hostingiem, która zastąpiła rozwiązanie oparte na Pterodactylu; obecnie odpowiadam za jej rozwój jako jedyny programista frontendu. |   |
-| `vitresoft.bullets[1]` | Design interfaces and own UI/UX decisions; design and run A/B tests aimed at improving user experience and sales. | Projektuję interfejsy i odpowiadam za decyzje UI/UX; projektuję i prowadzę testy A/B, które poprawiają doświadczenie użytkowników i sprzedaż. |   |
-| `vitresoft.bullets[2]` | Work with AI agents: delegate tasks, review generated code and verify changes on staging before merging. | Pracuję z agentami AI: deleguję zadania, sprawdzam wygenerowany kod i weryfikuję zmiany na stagingu przed scaleniem. |   |
-| `vitresoft.bullets[3]` | Mentor interns and support the growth of their programming skills. | Mentoruję stażystów i wspieram rozwój ich umiejętności programistycznych. |   |
+| `vitresoft.date` | Sep 2023 — Present | wrz 2023 — obecnie |   |
+| `vitresoft.title` | Software Engineer · Vitresoft | Software Engineer · Vitresoft |   |
+| `vitresoft.sub` | One of Poland’s largest game server hosting providers · craftserve.com · intern Jul — Aug 2023 | Jeden z największych polskich dostawców hostingu serwerów gier · craftserve.com · praktyki lip — sie 2023 |   |
+| `vitresoft.bullets[0]` | Co-built, from the pre-launch stage, a game server management platform that replaced the company’s legacy [Pterodactyl](https://pterodactyl.io/)-based solution; now develop it largely single-handedly as the sole frontend developer. | Współtworzyłem od etapu przed startem platformę do zarządzania serwerami gier, która zastąpiła dawne firmowe rozwiązanie oparte na [Pterodactylu](https://pterodactyl.io/); dziś rozwijam ją w większości samodzielnie, jako jedyny programista frontendu. |   |
+| `vitresoft.bullets[1]` | Design interfaces and own UI/UX decisions; design and run A/B tests aimed at improving user experience and sales. | Projektuję interfejsy i odpowiadam za decyzje UI/UX; projektuję i prowadzę testy A/B, które mają poprawiać doświadczenie użytkowników i sprzedaż. |   |
+| `vitresoft.bullets[2]` | Work with AI agents: delegate tasks, review generated code and verify changes. | Pracuję z agentami AI: deleguję zadania, sprawdzam wygenerowany kod i weryfikuję zmiany. |   |
+| `vitresoft.bullets[3]` | Built the in-browser server console, a WebFTP client, purchase and sign-up flows, a gRPC-based server process view and authorization management, plus internal libraries (UI components, csrvfs for file handling). | Zbudowałem przeglądarkową konsolę serwera, klienta WebFTP, formularze zakupu i zakładania konta, podgląd procesów serwera oparty na gRPC i zarządzanie autoryzacją, a także wewnętrzne biblioteki (komponenty UI, csrvfs do obsługi plików). |   |
+| `vitresoft.bullets[4]` | Shipped web apps for live events with Poland’s biggest gaming creators under tight deadlines; mentored interns. | Pod ścisłymi terminami tworzyłem aplikacje webowe na eventy z największymi polskimi twórcami gamingowymi; mentorowałem stażystów. |   |
+| `peryskop.date` | Feb 2023 — Present | lut 2023 — obecnie |   |
+| `peryskop.title` | Software Engineer · Fundacja Peryskop | Software Engineer · Fundacja Peryskop |   |
+| `peryskop.sub` | Non-profit · free online psychological support platform · fundacjaperyskop.org | Organizacja non-profit · bezpłatna platforma wsparcia psychologicznego online · fundacjaperyskop.org |   |
+| `peryskop.bullets[0]` | Joined as the first developer on the team and saw the project through its whole evolution: from a form-handling tool to a psychological support platform that now helps people in crisis. | Byłem pierwszym programistą w zespole i przeszedłem z projektem całą drogę: od narzędzia do obsługi formularzy do platformy wsparcia psychologicznego, która dziś pomaga osobom w kryzysie. |   |
+| `peryskop.bullets[1]` | Focus mainly on the frontend and UI/UX design, and step into the backend when needed. | Zajmuję się głównie frontendem oraz UI/UX designem, a w razie potrzeby wspieram też backend. |   |
+| `peryskop.bullets[2]` | Design interfaces for non-technical users: identify pain points in their daily work and simplify key tasks. | Projektuję interfejsy dla osób nietechnicznych: wyszukuję bolączki w ich codziennej pracy i upraszczam kluczowe zadania. |   |
+| `peryskop.bullets[3]` | Act as a bridge between the organization and the technical team: select developer candidates, run code reviews and mentor less experienced frontend developers. | Łączę organizację z zespołem technicznym: wybieram kandydatów na programistów, prowadzę code review i mentoruję mniej doświadczonych programistów frontendu. |   |
+| `peryskop.bullets[4]` | Built key parts of the frontend: a WebSocket-based chat, admin panels, integrations with dedicated form systems, articles with an article editor, and permissions. | Zaimplementowałem kluczowe elementy frontendu: czat oparty na WebSocketach, panele administracyjne, integracje z dedykowanymi systemami formularzy, artykuły wraz z edytorem oraz uprawnienia. |   |
 | `wsb-nlu.date` | Oct 2023 — Feb 2027 | paź 2023 — lut 2027 |   |
 | `wsb-nlu.title` | Bachelor of Engineering (Inż.) in Computer Science | Inżynier (inż.) informatyki |   |
 | `wsb-nlu.sub` | WSB-NLU, Nowy Sącz, Poland · part-time (weekend) studies · expected Feb 2027 | WSB-NLU, Nowy Sącz, Polska · studia zaoczne (weekendowe) · planowane ukończenie: luty 2027 |   |
@@ -478,7 +480,7 @@ Source: `apps/web/src/content/marquee.ts`
 | `tech[9]` | WebSocket | WebSocket |   |
 | `tech[10]` | Storybook | Storybook |   |
 | `tech[11]` | A/B Testing | A/B Testing |   |
-| `facts[0]` | Frontend Developer | Frontend Developer |   |
+| `facts[0]` | Software Engineer | Software Engineer |   |
 | `facts[1]` | Kraków, Poland | Kraków, Polska |   |
 | `facts[2]` | Building for people | Tworzę dla ludzi |   |
 | `facts[3]` | Sole frontend dev at two teams | Jedyny frontendowiec w dwóch zespołach |   |
@@ -492,6 +494,6 @@ Source: `apps/web/src/content/profile.ts`
 
 | Key | EN | PL | Owner correction |
 | --- | -- | -- | ---------------- |
-| `role` | Frontend Developer | Frontend Developer |   |
+| `role` | Software Engineer | Software Engineer |   |
 | `languages` | Polish (native), English (B2) | polski (ojczysty), angielski (B2) |   |
 

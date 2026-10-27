@@ -1,5 +1,6 @@
 ---
 import { experience } from '../../content/experience.ts';
+import { parseInlineLinks } from '../../lib/inline-link.ts';
 import type { Locale } from '../../i18n/locales.ts';
 import { experience as messages } from '../../i18n/messages/experience.ts';
 import SectionHeading from '../ui/SectionHeading.astro';
@@ -58,7 +59,17 @@ const entries = experience.map((entry) => ({
               {entry.bullets.length > 0 && (
                 <ul>
                   {entry.bullets.map((bullet) => (
-                    <li>{bullet}</li>
+                    <li>
+                      {parseInlineLinks(bullet).map((part) =>
+                        part.kind === 'link' ? (
+                          <a href={part.href} target="_blank" rel="noopener noreferrer">
+                            {part.label}
+                          </a>
+                        ) : (
+                          part.text
+                        ),
+                      )}
+                    </li>
                   ))}
                 </ul>
               )}
@@ -176,6 +187,12 @@ const entries = experience.map((entry) => ({
     color: var(--color-text-body);
   }
 
+  li a {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-underline-offset: var(--space-4);
+  }
+
   .rail {
     display: none;
   }
@@ -194,6 +211,21 @@ const entries = experience.map((entry) => ({
     top: 0;
     height: 100vh;
     justify-content: center;
+  }
+
+  /*
+   * In a short viewport the tallest panel plus the heading fills the stage, so centring pushes the
+   * heading under the fixed header. Anchor the stage below the header instead and tighten the gap.
+   * --header-clear approximates the header's two-line logo height (it has no token of its own).
+   */
+  @media (height < 820px) {
+    :global([data-mode='sticky']) .stage {
+      --header-clear: 80px;
+
+      justify-content: flex-start;
+      gap: var(--space-24);
+      padding-block: var(--header-clear) 0;
+    }
   }
 
   :global([data-mode='sticky']) .body {

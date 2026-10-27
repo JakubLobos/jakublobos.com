@@ -4,7 +4,7 @@ import { defineMessages } from '../t.ts';
 // (Polish "w figmie").
 export const hero = defineMessages({
   en: {
-    title: 'I’m a Frontend Developer!',
+    title: 'I’m a Software Engineer!',
     build: {
       before: 'I’m making web-apps mostly in',
       first: 'react',
@@ -16,7 +16,7 @@ export const hero = defineMessages({
     resume: 'Get my resume',
   },
   pl: {
-    title: 'Jestem Frontend Developerem!',
+    title: 'Jestem Software Engineerem!',
     build: {
       before: 'Tworzę aplikacje webowe głównie w',
       first: 'react',

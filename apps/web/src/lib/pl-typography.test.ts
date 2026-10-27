@@ -11,7 +11,7 @@ describe('polishTypography', () => {
   });
 
   it('does not touch letters inside words, other single letters, or a trailing letter', () => {
-    expect(polishTypography('Frontend Developer')).toBe('Frontend Developer');
+    expect(polishTypography('Software Engineer')).toBe('Software Engineer');
     expect(polishTypography('Plan B zawsze')).toBe('Plan B zawsze');
     expect(polishTypography('Tak, to a')).toBe('Tak, to a');
   });

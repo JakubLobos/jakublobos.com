@@ -17,38 +17,9 @@ export interface ExperienceEntry {
   copy: Record<Locale, LocalizedEntry>;
 }
 
-// EN is verbatim from the design. PL is a draft for owner review (D-02).
+// Owner-edited copy (EN and PL). PL is still flagged for owner review (D-02).
+// A bullet may hold one inline link written as [label](https://…), see lib/inline-link.ts.
 const entries: readonly ExperienceEntry[] = [
-  {
-    id: 'peryskop',
-    kind: 'experience',
-    paint: 'violet',
-    org: 'Fundacja Peryskop',
-    copy: {
-      en: {
-        date: '2023 — Present',
-        title: 'Frontend Developer · Fundacja Peryskop',
-        sub: 'Free online psychological support platform · fundacjaperyskop.org',
-        bullets: [
-          'Joined as the sole developer and grew the application from a form-handling tool into a platform supporting the delivery of psychological help.',
-          'Developed volunteer availability management, authorization and access control, forms and the landing page.',
-          'Design interfaces for non-technical users: identify pain points in their daily work and simplify key tasks',
-          'Act as a bridge between the organization and the technical team; select developer candidates, conduct code reviews, and mentor less experienced frontend developers',
-        ],
-      },
-      pl: {
-        date: '2023 — obecnie',
-        title: 'Frontend Developer · Fundacja Peryskop',
-        sub: 'Bezpłatna internetowa platforma wsparcia psychologicznego · fundacjaperyskop.org',
-        bullets: [
-          'Dołączyłem jako jedyny programista i rozwinąłem aplikację z narzędzia do obsługi formularzy w platformę wspierającą udzielanie pomocy psychologicznej.',
-          'Zaimplementowałem zarządzanie dostępnością wolontariuszy, autoryzację i kontrolę dostępu, formularze oraz stronę docelową.',
-          'Projektuję interfejsy dla osób nietechnicznych: wyszukuję bolączki w ich codziennej pracy i upraszczam kluczowe zadania.',
-          'Łączę organizację z zespołem technicznym; wybieram kandydatów na programistów, prowadzę code review i mentoruję mniej doświadczonych programistów frontendu.',
-        ],
-      },
-    },
-  },
   {
     id: 'vitresoft',
     kind: 'experience',
@@ -56,25 +27,59 @@ const entries: readonly ExperienceEntry[] = [
     org: 'Vitresoft',
     copy: {
       en: {
-        date: '2023 — Present',
-        title: 'Junior Frontend Developer · Vitresoft',
-        sub: 'One of Poland’s largest game server hosting providers · craftserve.com',
+        date: 'Sep 2023 — Present',
+        title: 'Software Engineer · Vitresoft',
+        sub: 'One of Poland’s largest game server hosting providers · craftserve.com · intern Jul — Aug 2023',
         bullets: [
-          'Co-building, since the pre-launch stage, a new hosting management platform that replaced a Pterodactyl-based solution; now responsible for its ongoing development as the sole frontend developer.',
+          'Co-built, from the pre-launch stage, a game server management platform that replaced the company’s legacy [Pterodactyl](https://pterodactyl.io/)-based solution; now develop it largely single-handedly as the sole frontend developer.',
           'Design interfaces and own UI/UX decisions; design and run A/B tests aimed at improving user experience and sales.',
-          'Work with AI agents: delegate tasks, review generated code and verify changes on staging before merging.',
-          'Mentor interns and support the growth of their programming skills.',
+          'Work with AI agents: delegate tasks, review generated code and verify changes.',
+          'Built the in-browser server console, a WebFTP client, purchase and sign-up flows, a gRPC-based server process view and authorization management, plus internal libraries (UI components, csrvfs for file handling).',
+          'Shipped web apps for live events with Poland’s biggest gaming creators under tight deadlines; mentored interns.',
         ],
       },
       pl: {
-        date: '2023 — obecnie',
-        title: 'Junior Frontend Developer · Vitresoft',
-        sub: 'Jeden z największych polskich dostawców hostingu serwerów gier · craftserve.com',
+        date: 'wrz 2023 — obecnie',
+        title: 'Software Engineer · Vitresoft',
+        sub: 'Jeden z największych polskich dostawców hostingu serwerów gier · craftserve.com · praktyki lip — sie 2023',
         bullets: [
-          'Współtworzę od etapu przed startem nową platformę do zarządzania hostingiem, która zastąpiła rozwiązanie oparte na Pterodactylu; obecnie odpowiadam za jej rozwój jako jedyny programista frontendu.',
-          'Projektuję interfejsy i odpowiadam za decyzje UI/UX; projektuję i prowadzę testy A/B, które poprawiają doświadczenie użytkowników i sprzedaż.',
-          'Pracuję z agentami AI: deleguję zadania, sprawdzam wygenerowany kod i weryfikuję zmiany na stagingu przed scaleniem.',
-          'Mentoruję stażystów i wspieram rozwój ich umiejętności programistycznych.',
+          'Współtworzyłem od etapu przed startem platformę do zarządzania serwerami gier, która zastąpiła dawne firmowe rozwiązanie oparte na [Pterodactylu](https://pterodactyl.io/); dziś rozwijam ją w większości samodzielnie, jako jedyny programista frontendu.',
+          'Projektuję interfejsy i odpowiadam za decyzje UI/UX; projektuję i prowadzę testy A/B, które mają poprawiać doświadczenie użytkowników i sprzedaż.',
+          'Pracuję z agentami AI: deleguję zadania, sprawdzam wygenerowany kod i weryfikuję zmiany.',
+          'Zbudowałem przeglądarkową konsolę serwera, klienta WebFTP, formularze zakupu i zakładania konta, podgląd procesów serwera oparty na gRPC i zarządzanie autoryzacją, a także wewnętrzne biblioteki (komponenty UI, csrvfs do obsługi plików).',
+          'Pod ścisłymi terminami tworzyłem aplikacje webowe na eventy z największymi polskimi twórcami gamingowymi; mentorowałem stażystów.',
+        ],
+      },
+    },
+  },
+  {
+    id: 'peryskop',
+    kind: 'experience',
+    paint: 'violet',
+    org: 'Fundacja Peryskop',
+    copy: {
+      en: {
+        date: 'Feb 2023 — Present',
+        title: 'Software Engineer · Fundacja Peryskop',
+        sub: 'Non-profit · free online psychological support platform · fundacjaperyskop.org',
+        bullets: [
+          'Joined as the first developer on the team and saw the project through its whole evolution: from a form-handling tool to a psychological support platform that now helps people in crisis.',
+          'Focus mainly on the frontend and UI/UX design, and step into the backend when needed.',
+          'Design interfaces for non-technical users: identify pain points in their daily work and simplify key tasks.',
+          'Act as a bridge between the organization and the technical team: select developer candidates, run code reviews and mentor less experienced frontend developers.',
+          'Built key parts of the frontend: a WebSocket-based chat, admin panels, integrations with dedicated form systems, articles with an article editor, and permissions.',
+        ],
+      },
+      pl: {
+        date: 'lut 2023 — obecnie',
+        title: 'Software Engineer · Fundacja Peryskop',
+        sub: 'Organizacja non-profit · bezpłatna platforma wsparcia psychologicznego online · fundacjaperyskop.org',
+        bullets: [
+          'Byłem pierwszym programistą w zespole i przeszedłem z projektem całą drogę: od narzędzia do obsługi formularzy do platformy wsparcia psychologicznego, która dziś pomaga osobom w kryzysie.',
+          'Zajmuję się głównie frontendem oraz UI/UX designem, a w razie potrzeby wspieram też backend.',
+          'Projektuję interfejsy dla osób nietechnicznych: wyszukuję bolączki w ich codziennej pracy i upraszczam kluczowe zadania.',
+          'Łączę organizację z zespołem technicznym: wybieram kandydatów na programistów, prowadzę code review i mentoruję mniej doświadczonych programistów frontendu.',
+          'Zaimplementowałem kluczowe elementy frontendu: czat oparty na WebSocketach, panele administracyjne, integracje z dedykowanymi systemami formularzy, artykuły wraz z edytorem oraz uprawnienia.',
         ],
       },
     },

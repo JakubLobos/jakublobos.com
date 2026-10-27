@@ -4,14 +4,14 @@ export const seo = defineMessages({
   en: {
     // Share image (T-035): the text rendered into og-en.png and its alt text.
     og: {
-      subtitle: 'Frontend Developer · React & TypeScript',
+      subtitle: 'Software Engineer · React & TypeScript',
       domain: 'jakublobos.com',
-      alt: 'Jakub Łobos, Frontend Developer: a hand-drawn mascot under the headline “I’m a Frontend Developer!”',
+      alt: 'Jakub Łobos, Software Engineer: a hand-drawn mascot under the headline “I’m a Software Engineer!”',
     },
     home: {
-      title: 'Jakub Łobos — Frontend Developer Portfolio',
+      title: 'Jakub Łobos — Software Engineer Portfolio',
       description:
-        'Portfolio of Jakub Łobos, a frontend developer building web apps with React and TypeScript and designing them in Figma.',
+        'Portfolio of Jakub Łobos, a software engineer building web apps with React and TypeScript and designing them in Figma.',
     },
     privacy: {
       title: 'Privacy policy — Jakub Łobos',
@@ -25,14 +25,14 @@ export const seo = defineMessages({
   },
   pl: {
     og: {
-      subtitle: 'Frontend Developer · React i TypeScript',
+      subtitle: 'Software Engineer · React i TypeScript',
       domain: 'jakublobos.com',
-      alt: 'Jakub Łobos, Frontend Developer: ręcznie rysowana maskotka pod hasłem „Jestem Frontend Developerem!”',
+      alt: 'Jakub Łobos, Software Engineer: ręcznie rysowana maskotka pod hasłem „Jestem Software Engineerem!”',
     },
     home: {
-      title: 'Jakub Łobos — portfolio Frontend Developera',
+      title: 'Jakub Łobos — portfolio Software Engineera',
       description:
-        'Portfolio Jakuba Łobosa, frontend developera tworzącego aplikacje webowe w React i TypeScript oraz projektującego je w Figmie.',
+        'Portfolio Jakuba Łobosa — Software Engineera, który tworzy aplikacje webowe w React i TypeScript i projektuje je w Figmie.',
     },
     privacy: {
       title: 'Polityka prywatności — Jakub Łobos',

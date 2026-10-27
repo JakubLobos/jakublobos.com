@@ -5,13 +5,13 @@ export const experience = defineMessages({
   en: {
     // Already upper-cased: SectionHeading renders it as given.
     eyebrow: 'EXPERIENCE',
-    title: 'Where I work',
+    title: 'My journey',
     timeline: 'Experience timeline',
     kind: { experience: 'EXPERIENCE', education: 'EDUCATION' },
   },
   pl: {
     eyebrow: 'DOŚWIADCZENIE',
-    title: 'Gdzie pracuję',
+    title: 'Moja droga',
     timeline: 'Oś czasu doświadczenia',
     kind: { experience: 'DOŚWIADCZENIE', education: 'WYKSZTAŁCENIE' },
   },
