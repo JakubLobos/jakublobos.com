@@ -16,7 +16,8 @@ const SPACED_DASH = / (?=[–—] )/gu;
 /**
  * Applies Polish typographic conventions to a string: non-breaking spaces after single-letter
  * words, between a number and its unit, and after the abbreviations "art.", "ust.", "lit.",
- * "min.", "maks." and "nr", and before a spaced en or em dash. Idempotent and safe to run on strings with `{placeholders}`.
+ * "min.", "maks." and "nr", and before a spaced en or em dash. Idempotent and safe to run on
+ * strings with `{placeholders}`.
  */
 export function polishTypography(text: string): string {
   return (

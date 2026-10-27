@@ -28,7 +28,10 @@ const messages = outsideMessages(locale);
     {outsidePhotos.map((photo) => (
       <li class="photo">
         <figure class="frame">
-          {/* Widest photo (62% slot) renders 225px from 760px up, and about 51vw (max 425px) below it; srcset covers 2x of both. */}
+          {/*
+            Widest photo (62% slot) renders 225px from 760px up, and about 51vw (max 425px) below it;
+            the srcset covers 2x of both.
+          */}
           <Picture
             src={photo.src}
             alt={photo.alt[locale]}
