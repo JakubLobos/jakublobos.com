@@ -10,7 +10,7 @@ date and the word "approved" once the owner has gone through every row (T-034, A
 > `{name}` marks a value filled in at runtime. Address form is informal "Ty"; quotes are „…”;
 > a guestbook entry is a "wpis".
 
-Strings: 366 across 20 areas.
+Strings: 373 across 22 areas.
 
 ## Owner sign-off
 
@@ -103,6 +103,17 @@ Source: `apps/web/src/i18n/messages/projects.ts`
 | `link.frontend` | Frontend code | Kod frontendu |   |
 | `link.ui` | UI library | Biblioteka UI |   |
 | `link.source` | Source code | Kod źródłowy |   |
+
+## Outside labels
+
+Source: `apps/web/src/i18n/messages/outside.ts`
+
+| Key | EN | PL | Owner correction |
+| --- | -- | -- | ---------------- |
+| `eyebrow` | OUTSIDE OF WORK | POZA PRACĄ |   |
+| `title` | Exploring the world | Odkrywam świat |   |
+| `body` | Outside of work, I love exploring new places, meeting people, and discovering different cultures. From the landscapes of Iceland to the streets of Japan, and the sunny shores of Madeira, Cyprus, and Tenerife, every destination has something unique to offer. | Poza pracą uwielbiam odkrywać nowe miejsca, poznawać ludzi i różne kultury. Od krajobrazów Islandii, przez ulice Japonii, po słoneczne wybrzeża Madery, Cypru i Teneryfy – każde miejsce ma w sobie coś wyjątkowego. |   |
+| `photosLabel` | Travel photos | Zdjęcia z podróży |   |
 
 ## Skills labels
 
@@ -484,6 +495,16 @@ Source: `apps/web/src/content/projects.ts`
 | `04.paragraphs[1]` | I also designed the application’s UI. To support the mobile app, I created a shared UI component library built on Tamagui, used by both the web app and the React Native app. | Zaprojektowałem także interfejs aplikacji. Na potrzeby aplikacji mobilnej stworzyłem współdzieloną bibliotekę komponentów UI opartą na Tamagui, wykorzystywaną zarówno w aplikacji webowej, jak i w aplikacji napisanej w React Native. |   |
 | `05.title` | This Portfolio | To portfolio |   |
 | `05.paragraphs[0]` | You’re looking at it right now. | Właśnie tu jesteś! |   |
+
+## Content: outside photos
+
+Source: `apps/web/src/content/outside.ts`
+
+| Key | EN | PL | Owner correction |
+| --- | -- | -- | ---------------- |
+| `photo-1.alt` | Travel photo (placeholder) | Zdjęcie z podróży (zastępcze) |   |
+| `photo-2.alt` | Travel photo (placeholder) | Zdjęcie z podróży (zastępcze) |   |
+| `photo-3.alt` | Travel photo (placeholder) | Zdjęcie z podróży (zastępcze) |   |
 
 ## Content: skill groups
 
