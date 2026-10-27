@@ -44,9 +44,9 @@ const messages = {
             describedBy="guestbook-error guestbook-notice"
           />
         </div>
-        <span class="counter" aria-live="off" data-counter>
+        <label class="counter" for="guestbook-body" aria-live="off" data-counter>
           0/{GUESTBOOK_MESSAGE_MAX_LENGTH}
-        </span>
+        </label>
       </div>
       <p class="error" id="guestbook-error" role="alert" data-error></p>
       <div class="visually-hidden" aria-hidden="true">
@@ -102,6 +102,8 @@ const messages = {
   }
 
   .row {
+    --line: var(--color-focus);
+    position: relative;
     display: flex;
     align-items: center;
     gap: var(--space-12);
@@ -111,12 +113,46 @@ const messages = {
     transition: border-color var(--duration-hover) var(--ease-standard);
   }
 
-  .row:focus-within {
-    border-bottom-color: var(--color-focus);
+  /* D-31: focus fills the line left to right; the keyboard ring wraps the whole row (field and
+     counter), so the field itself draws none (TypingField, bare variant). */
+  .row::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 calc(-1 * var(--border-thick));
+    height: var(--border-thick);
+    background: var(--line);
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  .row:focus-within::after {
+    transform: scaleX(1);
   }
 
   .row:has(:global([aria-invalid='true'])) {
+    --line: var(--color-danger);
     border-bottom-color: var(--color-danger);
+  }
+
+  :global(:root:not([data-modality='pointer'])) .row:has(:global(.control:focus-visible)) {
+    outline: var(--focus-ring);
+    outline-offset: var(--focus-ring-offset);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .row::after {
+      transition: transform var(--duration-state) var(--ease-out);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .row {
+      --line: Highlight;
+    }
+
+    :global(:root:not([data-modality='pointer'])) .row:has(:global(.control:focus-visible)) {
+      outline-color: Highlight;
+    }
   }
 
   .field {
@@ -130,6 +166,7 @@ const messages = {
     font-size: var(--text-label);
     /* The design's --faint fails contrast (2.2:1); muted is the approved replacement (D-01). */
     color: var(--color-text-muted);
+    cursor: text;
   }
 
   .error {

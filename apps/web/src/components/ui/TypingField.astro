@@ -7,8 +7,8 @@
 // - Invalid state is the `aria-invalid="true"` attribute on the control (`invalid` sets it at render
 //   time; scripts toggle it with setAttribute). The control keeps its own `input`/`blur`/`change`
 //   events; there are no custom events.
-// - `variant="underline"` draws the 2px bottom line (contact fields). `variant="bare"` draws none,
-//   for rows that own their line (guestbook).
+// - `variant="underline"` draws the 2px bottom line (contact fields). `variant="bare"` draws neither
+//   the line nor the keyboard focus ring; the consuming row owns both (guestbook).
 // - Query the element as `typing-field`; `reset()` clears the value and the mirror and fires `input`.
 // - Inputs are always `type="text"`: `type="email"` trims `value`, so the mirror would drift from the
 //   raw text. Email fields use `inputmode="email"` + `autocomplete="email"` and validate in script.
@@ -135,13 +135,40 @@ const control = {
     overflow: hidden;
   }
 
-  /* Focus keeps the design's line colour; the keyboard ring comes from base.css (:focus-visible). */
   .control[aria-invalid='true'] {
     border-bottom-color: var(--color-danger);
   }
 
-  .control:focus {
-    border-bottom-color: var(--color-focus);
+  /* Focus fills the line left to right in --color-focus (D-31). The keyboard ring comes from
+     base.css (:focus-visible); bare rows own both the line and the ring. */
+  typing-field[data-variant='underline']::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0;
+    height: var(--border-thick);
+    background: var(--color-focus);
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  typing-field[data-variant='underline']:has(.control[aria-invalid='true'])::after {
+    background: var(--color-danger);
+  }
+
+  typing-field[data-variant='underline']:focus-within::after {
+    transform: scaleX(1);
+  }
+
+  /* D-31: no ring on pointer focus (scripts/input-modality.ts); bare rows draw theirs themselves. */
+  :global(:root[data-modality='pointer']) .control:focus-visible,
+  typing-field[data-variant='bare'] .control:focus-visible {
+    outline: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    typing-field[data-variant='underline']::after {
+      transition: transform var(--duration-state) var(--ease-out);
+    }
   }
 
   /* Safari dims disabled fields by default; the design keeps them at full strength. */
@@ -208,6 +235,10 @@ const control = {
   }
 
   @media (forced-colors: active) {
+    typing-field[data-variant='underline']::after {
+      background: Highlight;
+    }
+
     /* Colour alone can't carry the error state here. */
     .control[aria-invalid='true'] {
       border-bottom-style: double;

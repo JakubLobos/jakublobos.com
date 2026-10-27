@@ -198,7 +198,7 @@ Source: `apps/web/src/i18n/messages/contact.ts`
 | `form.rateLimited` | Too many messages. Please try again later. | Zbyt wiele wiadomości. Spróbuj ponownie później. |   |
 | `form.notice` | Your details are only used to reply to your message. | Twoje dane posłużą wyłącznie do odpowiedzi na wiadomość. |   |
 | `form.privacy` | Privacy policy | Polityka prywatności |   |
-| `errors.name.too_short` | Please tell me your name. | Podaj, proszę, swoje imię. |   |
+| `errors.name.too_short` | Please tell me your name. | Proszę podać swoje imię. |   |
 | `errors.name.too_long` | That name is a bit long (max. 60 characters). | To imię jest za długie (maks. 60 znaków). |   |
 | `errors.name.invalid_characters` | Please use plain text only. | Użyj, proszę, zwykłego tekstu. |   |
 | `errors.email.required` | I need your email to reply. | Potrzebuję Twojego adresu e-mail, żeby odpowiedzieć. |   |
