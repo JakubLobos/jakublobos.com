@@ -32,7 +32,7 @@ test.describe('@nojs', () => {
         .first(),
     ).toBeVisible();
     await expect(
-      page.locator('p, span', { hasText: 'Use the contact form or email.' }).first(),
+      page.locator('p, span', { hasText: /^Email me instead\.$/ }).first(),
     ).toBeVisible();
     await expect(page.getByRole('button', { name: 'Show number' })).toBeHidden();
   });
