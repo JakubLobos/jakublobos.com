@@ -61,6 +61,9 @@ const titleId = `${id}-title`;
   }
 
   .modal {
+    /* Explicit, so the dialog keeps its place while the exit plays after it is no longer `:modal`. */
+    position: fixed;
+    inset: 0;
     width: 100%;
     max-width: none;
     height: 100%;
@@ -71,6 +74,8 @@ const titleId = `${id}-title`;
     background: transparent;
     border: 0;
     overflow-y: auto;
+    /* The card's entrance and nudge move it sideways; that must never show a scrollbar. */
+    overflow-x: hidden;
     overscroll-behavior: contain;
   }
 
@@ -196,5 +201,56 @@ const titleId = `${id}-title`;
   .card :global(.btn) {
     margin-top: var(--space-8);
     padding-inline: var(--space-28);
+  }
+
+  /* The card is set down on the desk: the base rules are the exit (quick fade and drop), the
+     `:modal` rules the entrance. Transitioning `display` and `overlay` keeps the dialog rendered in
+     the top layer while the exit plays; where `overlay` is unsupported the exit is instant. */
+  @media (prefers-reduced-motion: no-preference) {
+    .modal {
+      transition:
+        display var(--duration-state) allow-discrete,
+        overlay var(--duration-state) allow-discrete;
+    }
+
+    .modal::backdrop {
+      opacity: 0;
+      transition:
+        opacity var(--duration-state) var(--ease-standard),
+        display var(--duration-state) allow-discrete,
+        overlay var(--duration-state) allow-discrete;
+    }
+
+    .modal:modal::backdrop {
+      opacity: 1;
+      transition-duration: var(--duration-panel);
+    }
+
+    .card {
+      opacity: 0;
+      transform: translateY(var(--space-16));
+      transition:
+        opacity var(--duration-state) var(--ease-standard),
+        transform var(--duration-state) var(--ease-standard);
+    }
+
+    .modal:modal .card {
+      opacity: 1;
+      transform: none;
+      transition:
+        opacity var(--duration-page) var(--ease-standard),
+        transform var(--duration-panel) var(--ease-spring);
+    }
+
+    @starting-style {
+      .modal:modal::backdrop {
+        opacity: 0;
+      }
+
+      .modal:modal .card {
+        opacity: 0;
+        transform: translateY(var(--space-16)) rotate(-1.5deg) scale(0.96);
+      }
+    }
   }
 </style>

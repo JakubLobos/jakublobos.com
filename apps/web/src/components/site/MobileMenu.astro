@@ -188,4 +188,67 @@ const n = nav(locale);
     padding: var(--space-12);
     border-radius: var(--radius-sm);
   }
+
+  /* The sheet unrolls from the top edge. `display` and `overlay` are transitioned (discretely) so the
+     dialog stays rendered in the top layer while the exit plays; where `overlay` is unsupported
+     the exit is simply instant. Under reduced motion nothing here applies. */
+  @media (prefers-reduced-motion: no-preference) {
+    dialog {
+      --sheet-duration: calc(var(--duration-panel) * 0.65);
+
+      clip-path: inset(0 0 100% 0);
+      pointer-events: none;
+      transition:
+        clip-path var(--sheet-duration) var(--ease-standard),
+        display var(--sheet-duration) allow-discrete,
+        overlay var(--sheet-duration) allow-discrete;
+    }
+
+    dialog:modal {
+      --sheet-duration: var(--duration-panel);
+
+      clip-path: inset(0);
+      pointer-events: auto;
+    }
+
+    @starting-style {
+      dialog:modal {
+        clip-path: inset(0 0 100% 0);
+      }
+    }
+
+    /* Entrance only: on close the links stay put under the retracting sheet. */
+    dialog:modal li,
+    dialog:modal .bottom {
+      animation: menu-in var(--duration-type) var(--ease-type) backwards;
+      animation-delay: calc(var(--duration-press) * (1 + var(--step, 0) * 0.4));
+    }
+
+    dialog:modal li:nth-child(2) {
+      --step: 1;
+    }
+
+    dialog:modal li:nth-child(3) {
+      --step: 2;
+    }
+
+    dialog:modal li:nth-child(4) {
+      --step: 3;
+    }
+
+    dialog:modal li:nth-child(5) {
+      --step: 4;
+    }
+
+    dialog:modal .bottom {
+      --step: 5;
+    }
+  }
+
+  @keyframes menu-in {
+    from {
+      opacity: 0;
+      transform: translateY(0.6em) rotate(2deg);
+    }
+  }
 </style>

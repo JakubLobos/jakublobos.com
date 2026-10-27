@@ -23,6 +23,36 @@ import {
   type StoredSubmission,
 } from '../lib/guestbook-status.ts';
 
+// Web Animations take no `var()`, so these mirror --duration-hover and --ease-type (tokens.css).
+const INK_TIMING: KeyframeAnimationOptions = {
+  duration: 150,
+  easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)',
+  fill: 'both',
+};
+const INK_OUT: Keyframe[] = [{ opacity: 1 }, { opacity: 0, transform: 'translateY(-0.3em)' }];
+const INK_IN: Keyframe[] = [{ opacity: 0, transform: 'translateY(0.3em)' }, { opacity: 1 }];
+
+// One-shot accents on the card when the review ends (approved settles, the others get a nudge).
+const ACCENT_TIMING: KeyframeAnimationOptions = { duration: 450, easing: 'ease-out' };
+const SETTLE: Keyframe[] = [
+  { transform: 'scale(1) rotate(0)' },
+  { transform: 'scale(1.03) rotate(-0.8deg)', offset: 0.35 },
+  { transform: 'scale(0.99) rotate(0.3deg)', offset: 0.7 },
+  { transform: 'scale(1) rotate(0)' },
+];
+const NUDGE: Keyframe[] = [
+  { transform: 'translateX(0)' },
+  { transform: 'translateX(-6px)', offset: 0.2 },
+  { transform: 'translateX(5px)', offset: 0.45 },
+  { transform: 'translateX(-3px)', offset: 0.7 },
+  { transform: 'translateX(0)' },
+];
+const ACCENTS: Partial<Record<string, Keyframe[]>> = {
+  approved: SETTLE,
+  rejected: NUDGE,
+  superseded: NUDGE,
+};
+
 interface Resettable extends HTMLElement {
   reset: () => void;
 }
@@ -211,14 +241,60 @@ function bind(
     if (!busy && submitHadFocus) submit.focus();
   }
 
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  const statusTexts = [parts.eyebrow, parts.title, parts.copy];
+  let inking: Animation[] = [];
+
+  signal.addEventListener(
+    'abort',
+    () => {
+      for (const animation of inking) animation.cancel();
+    },
+    { once: true },
+  );
+
+  /**
+   * Old texts lift away, the new ones are written, then settle in. A newer render cancels the
+   * running animations, which rejects `finished` and leaves the text to that render.
+   */
+  async function reink(write: () => void): Promise<void> {
+    const out = statusTexts.map((element) => element.animate(INK_OUT, INK_TIMING));
+    inking = out;
+    try {
+      await Promise.all(out.map((animation) => animation.finished));
+    } catch {
+      return;
+    }
+    // Held open by `fill`; released in the same task as the write, so no frame shows the old text.
+    for (const animation of out) animation.cancel();
+    write();
+    inking = statusTexts.map((element) => element.animate(INK_IN, INK_TIMING));
+  }
+
   /** Shows one review state in the dialog; `null` is "still checking". */
   function render(view: StatusView | null): void {
     const copy = copyFor(statusMessages, view);
-    parts.card.dataset.state = view?.state ?? 'checking';
-    parts.eyebrow.textContent = copy.eyebrow;
-    parts.title.textContent = copy.title;
-    parts.copy.textContent = copy.body;
+    const state = view?.state ?? 'checking';
+    // Only a change while the dialog is on screen is worth animating; opening it is not one.
+    const animated = dialog.open && parts.card.dataset.state !== state && !reducedMotion.matches;
+    for (const animation of inking) animation.cancel();
+    inking = [];
+
+    parts.card.dataset.state = state;
+    // The live region never waits for the animation.
     parts.live.textContent = `${copy.title} ${copy.body}`;
+    const write = (): void => {
+      parts.eyebrow.textContent = copy.eyebrow;
+      parts.title.textContent = copy.title;
+      parts.copy.textContent = copy.body;
+    };
+    if (!animated) {
+      write();
+      return;
+    }
+    void reink(write);
+    const accent = ACCENTS[state];
+    if (accent) parts.card.animate(accent, ACCENT_TIMING);
   }
 
   let watching: AbortController | null = null;
