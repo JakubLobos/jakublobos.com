@@ -83,7 +83,7 @@ async function settleAnalyticsStartup(page: Page): Promise<void> {
   await page.waitForLoadState('networkidle');
 }
 
-test.describe('consent: before a choice', () => {
+test.describe('@consent consent: before a choice', () => {
   test('shows the banner without taking focus and sends nothing to analytics', async ({ page }) => {
     const traffic = watchTraffic(page);
     await gotoLocale(page, 'en');
@@ -124,7 +124,7 @@ test.describe('consent: before a choice', () => {
   });
 });
 
-test.describe('consent: "Only essential"', () => {
+test.describe('@consent consent: "Only essential"', () => {
   test('counts cookielessly: no Google, no stored identifiers', async ({ page }) => {
     const traffic = watchTraffic(page);
     await gotoLocale(page, 'en');
@@ -157,7 +157,7 @@ test.describe('consent: "Only essential"', () => {
   });
 });
 
-test.describe('consent: "Accept"', () => {
+test.describe('@consent consent: "Accept"', () => {
   test('loads gtag.js and opts PostHog in', async ({ page }) => {
     const traffic = watchTraffic(page);
     await gotoLocale(page, 'en');
@@ -175,7 +175,7 @@ test.describe('consent: "Accept"', () => {
   });
 });
 
-test.describe('consent: revisiting the choice', () => {
+test.describe('@consent consent: revisiting the choice', () => {
   test('"Cookie settings" reopens the banner, and withdrawing clears Google cookies', async ({
     page,
     context,

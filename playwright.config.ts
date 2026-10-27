@@ -84,7 +84,9 @@ export default defineConfig({
         CONTACT_PHONE: '+48000000000',
         DATABASE_PATH: dbPath,
         CORS_ALLOWED_ORIGINS: SITE,
-        CLIENT_IP_SOURCE: 'socket',
+        // Specs send a distinct X-Real-IP per request (e2e/fixtures.ts) so per-client limits never
+        // couple tests together; the global caps still apply.
+        CLIENT_IP_SOURCE: 'x-real-ip',
       },
     },
     {
