@@ -22,6 +22,7 @@ import {
   type StatusView,
   type StoredSubmission,
 } from '../lib/guestbook-status.ts';
+import { createStatusMotion } from './guestbook-status-motion.ts';
 
 interface Resettable extends HTMLElement {
   reset: () => void;
@@ -211,14 +212,33 @@ function bind(
     if (!busy && submitHadFocus) submit.focus();
   }
 
+  const motion = createStatusMotion({
+    card: parts.card,
+    texts: [parts.eyebrow, parts.title, parts.copy],
+    signal,
+  });
+
   /** Shows one review state in the dialog; `null` is "still checking". */
   function render(view: StatusView | null): void {
     const copy = copyFor(statusMessages, view);
-    parts.card.dataset.state = view?.state ?? 'checking';
-    parts.eyebrow.textContent = copy.eyebrow;
-    parts.title.textContent = copy.title;
-    parts.copy.textContent = copy.body;
+    const state = view?.state ?? 'checking';
+    // Only a change while the dialog is on screen is worth animating; opening it is not one.
+    const animated = dialog.open && parts.card.dataset.state !== state;
+
+    parts.card.dataset.state = state;
+    // The live region never waits for the animation.
     parts.live.textContent = `${copy.title} ${copy.body}`;
+    const write = (): void => {
+      parts.eyebrow.textContent = copy.eyebrow;
+      parts.title.textContent = copy.title;
+      parts.copy.textContent = copy.body;
+    };
+    if (animated) {
+      motion.swap(state, write);
+    } else {
+      motion.cancel();
+      write();
+    }
   }
 
   let watching: AbortController | null = null;
