@@ -29,7 +29,7 @@ A single orchestrated sequence, CSS only, total ≤ ~1.4 s, with the first eleme
 
 ## Allowed files
 
-`apps/web/src/components/sections/Hero.astro`, `apps/web/src/components/decor/Mascot.astro` (only if the mascot needs a hook for the sticker motion; its pupil-follow and blink must keep working: animate a wrapper, not the elements those scripts transform), `apps/web/src/styles/tokens.css`, `apps/web/src/styles/keyframes.css`, `docs/design-system.md` (§2.8 only), `tasks/T-060-hero-entrance.md` (commit this spec), `tasks/reports/T-060/**`.
+`apps/web/src/components/sections/Hero.astro`, `apps/web/src/components/decor/Mascot.astro` (only if the mascot needs a hook for the sticker motion; its pupil-follow and blink must keep working: animate a wrapper, not the elements those scripts transform), `apps/web/src/styles/tokens.css`, `apps/web/src/styles/keyframes.css`, `apps/web/src/styles/motion/hero.css` (hero keyframes, added in round 3), `docs/design-system.md` (§2.8 only), `tasks/T-060-hero-entrance.md` (commit this spec), `tasks/reports/T-060/**`.
 
 ## Acceptance criteria
 

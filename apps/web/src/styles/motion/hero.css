@@ -1,0 +1,48 @@
+/* Hero entrance keyframes; Hero.astro applies them under prefers-reduced-motion: no-preference. */
+
+@keyframes hero-stick {
+  from {
+    transform: translateY(-8px) scale(1.12) rotate(-8deg);
+  }
+}
+
+/* Negative insets keep the clip box larger than the doodle display glyphs, whose swashes
+   overflow the 1.1 line box. */
+@keyframes hero-ink {
+  from {
+    clip-path: inset(-0.3em 100% -0.3em -0.3em);
+    transform: translateY(0.2em);
+  }
+  to {
+    clip-path: inset(-0.3em);
+  }
+}
+
+@keyframes hero-settle {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@keyframes hero-swipe {
+  from {
+    background-size: 0% 100%;
+  }
+  to {
+    background-size: 100% 100%;
+  }
+}
+
+@keyframes hero-draw {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes hero-place {
+  from {
+    opacity: 0;
+    transform: translateY(-14px) rotate(-2deg);
+  }
+}
