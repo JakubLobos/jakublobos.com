@@ -6,7 +6,7 @@ export const seo = defineMessages({
     og: {
       subtitle: 'Software Engineer · React & TypeScript',
       domain: 'jakublobos.com',
-      alt: 'Jakub Łobos, Software Engineer: a hand-drawn mascot under the headline “I’m a Software Engineer!”',
+      alt: 'Jakub Łobos, Software Engineer: a hand-drawn mascot under the headline “Engineering with the user relationship in mind”',
     },
     home: {
       title: 'Jakub Łobos — Software Engineer Portfolio',
@@ -27,7 +27,7 @@ export const seo = defineMessages({
     og: {
       subtitle: 'Software Engineer · React i TypeScript',
       domain: 'jakublobos.com',
-      alt: 'Jakub Łobos, Software Engineer: ręcznie rysowana maskotka pod hasłem „Jestem Software Engineerem!”',
+      alt: 'Jakub Łobos, Software Engineer: ręcznie rysowana maskotka pod hasłem „Inżynieria z myślą o relacji z użytkownikiem”',
     },
     home: {
       title: 'Jakub Łobos — portfolio Software Engineera',
