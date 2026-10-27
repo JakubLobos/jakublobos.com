@@ -183,9 +183,14 @@
   --duration-blink: 180ms;
   --duration-spin: 700ms;
   --duration-marquee: 45s;
+  --duration-enter: 450ms;
+  --duration-ink: 800ms;
+  --stagger-enter: 90ms;
   --ease-standard: ease;
   --ease-spring: cubic-bezier(0.3, 1.6, 0.5, 1);
   --ease-type: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-ink: cubic-bezier(0.45, 0, 0.55, 1);
 
   /* Controls: buttons, icons and heading measure (T-022). Aliases reuse existing sizes. */
   --text-button-lg: var(--text-field);
