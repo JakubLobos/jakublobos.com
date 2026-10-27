@@ -1,0 +1,187 @@
+---
+// The guestbook form. It needs JavaScript (NFR-13): the controls ship disabled and
+// scripts/guestbook-form.ts enables them, so without scripting the layout is intact but nothing can
+// submit to a URL that doesn't accept form posts. Localized runtime strings travel in
+// `data-messages`; the script validates them before use.
+import { GUESTBOOK_MESSAGE_MAX_LENGTH } from '@portfolio/contracts';
+import { alternatePath, type Locale } from '../../i18n/locales.ts';
+import { guestbook } from '../../i18n/messages/guestbook.ts';
+import Button from '../ui/Button.astro';
+import Spinner from '../ui/Spinner.astro';
+import TypingField from '../ui/TypingField.astro';
+import PaintPicker from './PaintPicker.astro';
+
+interface Props {
+  locale: Locale;
+  /** Id of the `<dialog>` that confirms a submission. */
+  modalId: string;
+}
+
+const { locale, modalId } = Astro.props;
+const m = guestbook(locale);
+const messages = {
+  fieldErrors: m.fieldErrors,
+  rateLimited: m.submitErrors.rateLimited,
+  retry: m.submitErrors.retry,
+  charsLeft: m.form.charsLeft,
+  limitReached: m.form.limitReached,
+};
+---
+
+<guestbook-form data-locale={locale} data-modal={modalId} data-messages={JSON.stringify(messages)}>
+  <form class="form" novalidate>
+    <fieldset class="controls" disabled data-controls>
+      <div class="row">
+        <div class="field">
+          <TypingField
+            variant="bare"
+            id="guestbook-body"
+            name="body"
+            maxlength={GUESTBOOK_MESSAGE_MAX_LENGTH}
+            placeholder={m.form.placeholder}
+            ariaLabel={m.form.label}
+            autocomplete="off"
+            describedBy="guestbook-error guestbook-notice"
+          />
+        </div>
+        <span class="counter" aria-live="off" data-counter>
+          0/{GUESTBOOK_MESSAGE_MAX_LENGTH}
+        </span>
+      </div>
+      <p class="error" id="guestbook-error" role="alert" data-error></p>
+      <div class="visually-hidden" aria-hidden="true">
+        <label for="guestbook-website">{m.form.honeypot}</label>
+        <input id="guestbook-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+      </div>
+      <div class="actions">
+        <PaintPicker locale={locale} />
+        <Button type="submit" data-submit>
+          <span class="idle-label">{m.form.submit}</span>
+          <span class="busy-label">
+            <Spinner />
+            {m.form.sending}
+          </span>
+        </Button>
+      </div>
+    </fieldset>
+    <p class="notice" id="guestbook-notice">
+      {m.form.notice} <a href={alternatePath(locale, '/privacy')}>{m.form.privacy}</a>
+    </p>
+    <noscript>
+      <p class="notice">{m.form.needsScript}</p>
+    </noscript>
+    <p class="visually-hidden" role="status" data-announce></p>
+  </form>
+</guestbook-form>
+
+<script>
+  import '../../scripts/guestbook-form.ts';
+</script>
+
+<style>
+  guestbook-form {
+    display: block;
+    width: 100%;
+    max-width: var(--guestbook-form-max);
+  }
+
+  .form,
+  .controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-24);
+    width: 100%;
+    min-width: 0;
+  }
+
+  .controls {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+    width: 100%;
+    padding: var(--space-4) 0;
+    border-bottom: var(--border-thick) solid var(--color-ink);
+    transition: border-color var(--duration-hover) var(--ease-standard);
+  }
+
+  .row:focus-within {
+    border-bottom-color: var(--color-focus);
+  }
+
+  .row:has(:global([aria-invalid='true'])) {
+    border-bottom-color: var(--color-danger);
+  }
+
+  .field {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .counter {
+    flex: none;
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    /* The design's --faint fails contrast (2.2:1); muted is the approved replacement (D-01). */
+    color: var(--color-text-muted);
+  }
+
+  .error {
+    align-self: flex-start;
+    margin: calc(-1 * var(--space-12)) 0 0;
+    font-size: var(--text-small);
+    line-height: var(--leading-caption);
+    color: var(--color-danger);
+  }
+
+  .error:empty {
+    display: none;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-20);
+    width: 100%;
+  }
+
+  .busy-label {
+    display: none;
+    align-items: center;
+    gap: var(--space-10);
+  }
+
+  :global([data-submit][data-busy]) .idle-label {
+    display: none;
+  }
+
+  :global([data-submit][data-busy]) .busy-label {
+    display: inline-flex;
+  }
+
+  .notice {
+    margin: 0;
+    font-size: var(--text-caption);
+    line-height: var(--leading-caption);
+    text-align: center;
+    color: var(--color-text-muted);
+  }
+
+  .notice a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: var(--space-2);
+  }
+
+  .notice a:hover {
+    color: var(--color-primary);
+  }
+</style>

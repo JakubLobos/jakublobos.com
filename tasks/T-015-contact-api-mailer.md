@@ -28,7 +28,7 @@ Deliver contact-form submissions to the owner's inbox through a `Mailer` port, i
 - `domain/contact/contact.service.ts`:
   - validate and normalize (contracts rules) → honeypot → global caps (20/h, 60/day) → build mail → `send`
   - subject: `Portfolio contact: {name}`, with CR/LF and controls stripped, ≤ 80 chars
-  - body: name, email, message, ISO time, page locale
+  - body: name, email, message, page locale (no per-attempt timestamp: the payload must be identical across idempotent retries; the email Date header records the time; review R1-01)
   - returns `{ kind: 'sent' } | { kind: 'invalid', fields } | { kind: 'unavailable', retryAfterSeconds? }`
 - `infra/mail/resend.mailer.ts`:
   - `POST https://api.resend.com/emails` with `Authorization: Bearer RESEND_API_KEY`, `Idempotency-Key: <clientRequestId>`, and JSON body `{ from: MAIL_FROM, to: [CONTACT_RECIPIENT_EMAIL], reply_to: replyTo, subject, text }`
@@ -61,7 +61,7 @@ None new.
 
 ```
 pnpm verify
-pnpm --filter @portfolio/server test -- src/domain/contact src/infra/mail src/http/routes/contact
+pnpm --filter @portfolio/server exec vitest run src/domain/contact src/infra/mail src/http/routes/contact
 ```
 
 ## Definition of done

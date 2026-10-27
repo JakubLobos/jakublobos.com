@@ -1,0 +1,174 @@
+---
+// The one button implementation (design-system §3.4). Labels and icons come in through the slot.
+// `busy` is the "sending" look (native disabled + aria-busy); `disabled` is the "sent" look
+// (aria-disabled only, so it stays focusable as in the design). Neither applies to links;
+// `download` and `mimeType` (the link's `type` hint) apply to links only.
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends Omit<HTMLAttributes<'button'>, 'type' | 'disabled' | 'class'> {
+  variant?: 'primary' | 'secondary';
+  size?: 'lg' | 'sm';
+  href?: string;
+  download?: boolean | string;
+  mimeType?: string;
+  type?: 'button' | 'submit' | 'reset';
+  disabled?: boolean;
+  busy?: boolean;
+  fullWidth?: boolean;
+  minWidth?: 'form';
+  class?: string;
+}
+
+const {
+  variant = 'primary',
+  size = 'lg',
+  href,
+  download,
+  mimeType,
+  type = 'button',
+  disabled = false,
+  busy = false,
+  fullWidth = false,
+  minWidth,
+  class: className,
+  ...rest
+} = Astro.props;
+
+const classes = ['btn', className];
+const data = { 'data-variant': variant, 'data-size': size, 'data-min-width': minWidth };
+---
+
+{href ? (
+  <a
+    href={href}
+    download={download}
+    type={mimeType}
+    class:list={classes}
+    data-full={fullWidth || undefined}
+    {...data}
+    {...rest}
+  >
+    <slot />
+  </a>
+) : (
+  <button
+    type={type}
+    class:list={classes}
+    disabled={busy}
+    aria-busy={busy || undefined}
+    aria-disabled={disabled || undefined}
+    data-full={fullWidth || undefined}
+    data-busy={busy || undefined}
+    data-done={disabled || undefined}
+    {...data}
+    {...rest}
+  >
+    <slot />
+  </button>
+)}
+
+<style>
+  .btn {
+    --btn-edge: var(--color-primary-edge);
+    --btn-rest: var(--press-rest);
+    --btn-hover: var(--press-hover);
+    --btn-active: var(--press-active);
+    --btn-lift: var(--lift-hover);
+    --btn-sink: var(--sink-active);
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-10);
+    padding: var(--space-12) var(--space-24);
+    font-family: var(--font-ui);
+    font-weight: var(--weight-medium);
+    font-size: var(--text-button-lg);
+    color: var(--color-on-primary);
+    background: var(--color-primary);
+    border: var(--border-thick) solid var(--btn-edge);
+    border-radius: var(--radius-md);
+    box-shadow: 0 var(--btn-rest) 0 var(--btn-edge);
+    cursor: pointer;
+    transition: background var(--duration-press) var(--ease-standard);
+  }
+
+  .btn[data-variant='secondary'] {
+    --btn-edge: var(--color-ink);
+    color: var(--color-ink);
+    background: var(--color-surface);
+  }
+
+  .btn[data-size='sm'] {
+    --btn-rest: var(--press-sm-rest);
+    --btn-hover: var(--press-sm-hover);
+    --btn-active: var(--press-active);
+    --btn-lift: var(--lift-sm-hover);
+    --btn-sink: var(--sink-sm-active);
+    min-height: var(--control-min-h);
+    padding: var(--space-10) var(--space-18);
+    font-size: var(--text-button-sm);
+    white-space: nowrap;
+  }
+
+  .btn[data-min-width='form'] {
+    min-width: var(--control-submit-w);
+    min-height: var(--control-submit-h);
+  }
+
+  .btn[data-full] {
+    width: 100%;
+  }
+
+  .btn:hover {
+    color: var(--color-on-primary);
+    background: var(--color-primary-hover);
+  }
+
+  .btn[data-variant='secondary']:hover {
+    color: var(--color-on-highlight);
+    background: var(--color-highlight);
+  }
+
+  /* Sending: pressed in, lighter blue, no hover or press response. */
+  .btn[data-busy] {
+    --btn-rest: var(--press-busy);
+    background: var(--color-primary-hover);
+    transform: translateY(var(--sink-busy));
+    cursor: progress;
+  }
+
+  /* Sent: yellow with ink edge, inert but still focusable. */
+  .btn[data-done] {
+    --btn-edge: var(--color-ink);
+    color: var(--color-on-highlight);
+    background: var(--color-highlight);
+    cursor: default;
+  }
+
+  /* Press movement is opt-in; under reduced motion only the colour changes. */
+  @media (prefers-reduced-motion: no-preference) {
+    .btn {
+      transition:
+        transform var(--duration-press) var(--ease-standard),
+        box-shadow var(--duration-press) var(--ease-standard),
+        background var(--duration-press) var(--ease-standard);
+    }
+
+    .btn:not([data-busy], [data-done]):hover {
+      transform: translateY(var(--btn-lift));
+      box-shadow: 0 var(--btn-hover) 0 var(--btn-edge);
+    }
+
+    .btn:not([data-busy], [data-done]):active {
+      transform: translateY(var(--btn-sink));
+      box-shadow: 0 var(--btn-active) 0 var(--btn-edge);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .btn {
+      border-color: ButtonText;
+    }
+  }
+</style>

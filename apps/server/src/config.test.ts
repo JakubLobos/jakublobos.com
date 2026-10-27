@@ -133,6 +133,13 @@ describe('loadConfig (production)', () => {
     expect(variablesOf(env)).toEqual([name]);
   });
 
+  it.each([
+    ['localhost', { TURNSTILE_ALLOWED_HOSTNAMES: 'jakublobos.com,localhost' }],
+    ['unset (defaults to localhost)', { TURNSTILE_ALLOWED_HOSTNAMES: '' }],
+  ])('rejects TURNSTILE_ALLOWED_HOSTNAMES that is %s', (_name, override) => {
+    expect(variablesOf({ ...productionEnv, ...override })).toEqual(['TURNSTILE_ALLOWED_HOSTNAMES']);
+  });
+
   it('rejects non-https CORS origins', () => {
     expect(
       variablesOf({

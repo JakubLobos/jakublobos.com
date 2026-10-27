@@ -1,0 +1,10 @@
+{
+  "id": "modr-fixture",
+  "results": [
+    {
+      "flagged": false,
+      "categories": {},
+      "category_scores": {}
+    }
+  ]
+}

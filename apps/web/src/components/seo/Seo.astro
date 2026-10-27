@@ -1,0 +1,67 @@
+---
+import { profile } from '../../content/profile.ts';
+import { alternatePath, LOCALES, ogLocale, type Locale } from '../../i18n/locales.ts';
+import { common } from '../../i18n/messages/common.ts';
+import { seo, type SeoKey } from '../../i18n/messages/seo.ts';
+
+interface Props {
+  locale: Locale;
+  seoKey: SeoKey;
+  /** Locale-neutral page path, e.g. '/' or '/privacy'. */
+  path: string;
+}
+
+const { locale, seoKey, path } = Astro.props;
+const { og, ...pages } = seo(locale);
+const { title, description } = pages[seoKey];
+const site = Astro.site ?? new URL(Astro.url.origin);
+const ogImage = new URL(`/og/og-${locale}.png`, site).href;
+const absolute = (target: Locale) => new URL(alternatePath(target, path), site).href;
+
+const canonical = absolute(locale);
+const alternates = LOCALES.map((target) => ({ hreflang: target, href: absolute(target) }));
+const otherLocales = LOCALES.filter((target) => target !== locale);
+// Structured data deliberately omits email and phone; they stay visible links only.
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: profile.name,
+  jobTitle: profile.role[locale],
+  url: new URL(alternatePath(locale, '/'), site).href,
+  sameAs: [profile.github.url, profile.linkedin.url],
+  knowsLanguage: profile.languageCodes,
+};
+// Astro can't interpolate into <script>, so set:html is the only way to emit JSON-LD. The input is
+// our own constants, and escaping `<` keeps a stray "</script>" from ever closing the tag.
+const personJson = JSON.stringify(person).replaceAll('<', String.raw`\u003c`);
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+{seoKey === 'notFound' && <meta name="robots" content="noindex" />}
+<link rel="canonical" href={canonical} />
+{alternates.map((alt) => (
+  <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
+))}
+<link rel="alternate" hreflang="x-default" href={absolute('en')} />
+<meta name="theme-color" content="#f7f7f6" />
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content={common(locale).siteName} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:locale" content={ogLocale(locale)} />
+{otherLocales.map((other) => (
+  <meta property="og:locale:alternate" content={ogLocale(other)} />
+))}
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={og.alt} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+
+{/* eslint-disable-next-line astro/no-set-html-directive -- trusted constants, `<` escaped above */}
+<script is:inline type="application/ld+json" set:html={personJson} />

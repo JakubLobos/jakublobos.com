@@ -1,0 +1,216 @@
+---
+// A real <input>/<textarea> (forms work without JS) plus a decorative, aria-hidden mirror that
+// animates newly typed characters. There is no label here: pair it with <label for={id}> (or pass
+// `ariaLabel`), and put the counter and error text in your own markup, referenced by `describedBy`.
+//
+// Contract for consumers:
+// - Invalid state is the `aria-invalid="true"` attribute on the control (`invalid` sets it at render
+//   time; scripts toggle it with setAttribute). The control keeps its own `input`/`blur`/`change`
+//   events; there are no custom events.
+// - `variant="underline"` draws the 2px bottom line (contact fields). `variant="bare"` draws none,
+//   for rows that own their line (guestbook).
+// - Query the element as `typing-field`; `reset()` clears the value and the mirror and fires `input`.
+// - Inputs are always `type="text"`: `type="email"` trims `value`, so the mirror would drift from the
+//   raw text. Email fields use `inputmode="email"` + `autocomplete="email"` and validate in script.
+interface Props {
+  as?: 'input' | 'textarea';
+  id: string;
+  name: string;
+  maxlength: number;
+  placeholder: string;
+  variant?: 'underline' | 'bare';
+  autocomplete?: string;
+  inputmode?: 'text' | 'email';
+  rows?: number;
+  /** Textarea only: height follows the content. */
+  autoGrow?: boolean;
+  required?: boolean;
+  disabled?: boolean;
+  invalid?: boolean;
+  /** Space-separated ids of the error and counter elements. */
+  describedBy?: string;
+  ariaLabel?: string;
+}
+
+const {
+  as: tag = 'input',
+  id,
+  name,
+  maxlength,
+  placeholder,
+  variant = 'underline',
+  autocomplete,
+  inputmode,
+  rows = 3,
+  autoGrow = false,
+  required = false,
+  disabled = false,
+  invalid = false,
+  describedBy,
+  ariaLabel,
+} = Astro.props;
+
+const multiline = tag === 'textarea';
+const control = {
+  id,
+  name,
+  maxlength,
+  placeholder,
+  autocomplete,
+  required,
+  disabled,
+  class: 'control',
+  'aria-label': ariaLabel,
+  'aria-describedby': describedBy,
+  'aria-invalid': invalid ? ('true' as const) : undefined,
+};
+---
+
+<typing-field
+  data-variant={variant}
+  data-multiline={multiline || undefined}
+  data-auto-grow={(multiline && autoGrow) || undefined}
+>
+  <div class="mirror" data-mirror aria-hidden="true"></div>
+  {multiline ? (
+    <textarea rows={rows} {...control} />
+  ) : (
+    <input type="text" inputmode={inputmode} {...control} />
+  )}
+</typing-field>
+
+<script>
+  import '../../scripts/typing-field.ts';
+</script>
+
+<style>
+  typing-field {
+    --mirror-bottom: var(--border-thick);
+    position: relative;
+    display: block;
+  }
+
+  typing-field[data-variant='bare'] {
+    --mirror-bottom: 0;
+  }
+
+  /* Identical metrics are what keeps the mirror's glyphs on top of the control's. */
+  .control,
+  .mirror {
+    padding: var(--space-10) 0;
+    font-family: var(--font-body);
+    font-size: var(--text-field);
+    font-weight: var(--weight-regular);
+    line-height: var(--leading-field);
+    font-kerning: none;
+    font-variant-ligatures: none;
+    letter-spacing: normal;
+    word-spacing: normal;
+    text-align: start;
+    text-transform: none;
+  }
+
+  .control {
+    position: relative;
+    display: block;
+    width: 100%;
+    margin: 0;
+    color: var(--color-ink);
+    caret-color: var(--color-ink);
+    background: transparent;
+    border: 0;
+    border-bottom: var(--border-thick) solid var(--color-ink);
+    border-radius: 0;
+    resize: none;
+    /* A visible scrollbar would narrow the control and desync wrapping from the mirror. */
+    scrollbar-width: none;
+    transition: border-color var(--duration-hover) var(--ease-standard);
+  }
+
+  typing-field[data-variant='bare'] .control {
+    border-bottom-width: 0;
+  }
+
+  typing-field[data-auto-grow] .control {
+    overflow: hidden;
+  }
+
+  /* Focus keeps the design's line colour; the keyboard ring comes from base.css (:focus-visible). */
+  .control[aria-invalid='true'] {
+    border-bottom-color: var(--color-danger);
+  }
+
+  .control:focus {
+    border-bottom-color: var(--color-focus);
+  }
+
+  /* Safari dims disabled fields by default; the design keeps them at full strength. */
+  .control:disabled {
+    opacity: 1;
+    -webkit-text-fill-color: currentColor;
+  }
+
+  .mirror {
+    position: absolute;
+    inset: 0 0 var(--mirror-bottom);
+    display: none;
+    overflow: hidden;
+    color: var(--color-ink);
+    white-space: pre;
+    pointer-events: none;
+  }
+
+  typing-field[data-multiline] .mirror {
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+  }
+
+  .mirror :global([data-word]) {
+    white-space: nowrap;
+  }
+
+  .mirror :global([data-glyph]) {
+    display: inline-block;
+  }
+
+  /* A textarea wraps over-long words per character; an atomic word box moves to a fresh line first
+     and then wraps inside itself, which is the same behaviour. Known limit: the box spans the full
+     width, so text after an over-long token starts on a new line and later lines can reflow
+     differently from the textarea (cosmetic; the value is unaffected). */
+  typing-field[data-multiline] .mirror :global([data-word]) {
+    display: inline-block;
+    max-width: 100%;
+    white-space: normal;
+  }
+
+  /* The mirror is only on while it can animate and be seen. Everything else (no JS, reduced
+     motion, forced colours) falls back to the control's own text. */
+  @media (prefers-reduced-motion: no-preference) and (forced-colors: none) {
+    typing-field:defined .mirror {
+      display: block;
+    }
+
+    typing-field:defined .control {
+      color: transparent;
+    }
+
+    typing-field:defined .control:-webkit-autofill {
+      -webkit-text-fill-color: transparent;
+    }
+
+    typing-field:defined .control:disabled {
+      -webkit-text-fill-color: transparent;
+    }
+
+    .mirror :global([data-glyph][data-fresh]) {
+      animation: type-in var(--duration-type) var(--ease-type) both;
+    }
+  }
+
+  @media (forced-colors: active) {
+    /* Colour alone can't carry the error state here. */
+    .control[aria-invalid='true'] {
+      border-bottom-style: double;
+    }
+  }
+</style>

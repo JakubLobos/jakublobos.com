@@ -42,6 +42,10 @@ Every invariant in `guestbook-moderation.md` §1 must be proven with tests.
 - Wiring in `main.ts`: providers (T-013), pipeline, worker (start after listen; stop on shutdown), service, route module.
 - `test/helpers/build-test-app.ts`: in-memory DB, fakes, `FakeClock`, a manual scheduler. Reusable by other tasks.
 
+### Orchestrator note (2026-10-25): T-010 review R2-03
+
+Validate guestbook bodies only through `checkGuestbookBody(raw)` from `@portfolio/contracts`. Don't compose `normalizeGuestbookBody` + `validateGuestbookBody`: they miss trimmed/collapsed U+FEFF cases.
+
 ## Out of scope
 
 Admin CLI (T-017), frontend (T-029).

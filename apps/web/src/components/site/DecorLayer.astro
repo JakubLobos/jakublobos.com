@@ -1,0 +1,13 @@
+---
+import PaintDrips from '../decor/PaintDrips.astro';
+---
+
+<!-- Deliberately not positioned: the bottom drips anchor to the page wrapper, the top ones to the viewport. -->
+<div id="decor-layer" aria-hidden="true">
+  <PaintDrips variant="top" />
+  <PaintDrips variant="bottom" />
+</div>
+
+<script>
+  import '../../scripts/drips-parallax.ts';
+</script>

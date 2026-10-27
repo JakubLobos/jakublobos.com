@@ -1,0 +1,126 @@
+---
+// "In review" confirmation, a native modal <dialog> (focus trap, inert page and Escape come from the
+// browser). scripts/guestbook-form.ts opens it, writes the echoed text with `textContent` and sets
+// its tint; it closes on "Got it", Escape or a click outside the card.
+import type { Locale } from '../../i18n/locales.ts';
+import { guestbook } from '../../i18n/messages/guestbook.ts';
+import PaintDrips from '../decor/PaintDrips.astro';
+import Button from '../ui/Button.astro';
+import Highlight from '../ui/Highlight.astro';
+
+interface Props {
+  locale: Locale;
+  id: string;
+}
+
+const { locale, id } = Astro.props;
+const m = guestbook(locale);
+const titleId = `${id}-title`;
+---
+
+<dialog {id} class="modal" aria-labelledby={titleId} data-guestbook-modal>
+  <div class="card">
+    <PaintDrips variant="modal" />
+    <span class="eyebrow">{m.modal.eyebrow}</span>
+    <h3 id={titleId} class="title">
+      {m.modal.title}
+    </h3>
+    <p class="echo">
+      <Highlight>
+        <span data-echo-text></span>
+      </Highlight>
+    </p>
+    <p class="copy">{m.modal.body}</p>
+    <Button type="button" data-modal-close>
+      {m.modal.close}
+    </Button>
+  </div>
+</dialog>
+
+<style>
+  /* No scroll while the dialog is open; the page scrollbar is hidden site-wide, so nothing shifts. */
+  :global(html:has([data-guestbook-modal][open])) {
+    overflow: hidden;
+  }
+
+  .modal {
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    max-height: none;
+    margin: 0;
+    padding: var(--space-24);
+    color: var(--color-ink);
+    background: transparent;
+    border: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .modal:modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal::backdrop {
+    background: var(--color-overlay);
+  }
+
+  .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-20);
+    width: 100%;
+    max-width: var(--guestbook-modal-max);
+    margin: auto;
+    padding: var(--space-40) var(--space-32) var(--space-32);
+    text-align: center;
+    background: var(--color-surface);
+    border: var(--border-thick) solid var(--color-ink);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-dialog);
+    overflow: hidden;
+  }
+
+  .eyebrow {
+    /* Clears the drips hanging from the top edge. */
+    margin-top: var(--space-28);
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-label);
+    color: var(--color-text-muted);
+  }
+
+  .title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: var(--weight-regular);
+    font-size: var(--text-dialog-title);
+    line-height: var(--leading-heading);
+  }
+
+  .echo {
+    margin: 0;
+    font-size: var(--text-modal-quote);
+    line-height: var(--leading-modal-quote);
+    font-weight: var(--weight-medium);
+    overflow-wrap: anywhere;
+    text-wrap: balance;
+  }
+
+  .copy {
+    max-width: var(--guestbook-modal-copy-max);
+    margin: 0;
+    font-size: var(--text-small);
+    line-height: var(--leading-small);
+    color: var(--color-text-secondary);
+  }
+
+  .card :global(.btn) {
+    margin-top: var(--space-8);
+    padding-inline: var(--space-28);
+  }
+</style>

@@ -1,0 +1,83 @@
+---
+import type { Locale } from '../../i18n/locales.ts';
+import { hero } from '../../i18n/messages/hero.ts';
+import { profile } from '../../content/profile.ts';
+import Mascot from '../decor/Mascot.astro';
+import Button from '../ui/Button.astro';
+import Highlight from '../ui/Highlight.astro';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = hero(locale);
+---
+
+<section id="hero" class="hero" aria-labelledby="hero-heading">
+  <Mascot />
+  <h1 id="hero-heading" class="title">
+    {t.title}
+  </h1>
+  <p class="intro">
+    {t.build.before} <span class="tech">{t.build.first}</span> {t.build.join}{' '}
+    <span class="tech">{t.build.second}</span>
+    <br />
+    {t.design.before} <Highlight>{t.design.tool}</Highlight>
+  </p>
+  <div class="divider" aria-hidden="true"></div>
+  <div class="actions">
+    <Button href="#contact">{t.contact}</Button>
+    <Button variant="secondary" href={profile.resume[locale]} download mimeType="application/pdf">
+      {t.resume}
+    </Button>
+  </div>
+</section>
+
+<style>
+  .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-28);
+    min-height: calc(100svh - 240px);
+    padding: var(--space-40) 0 var(--space-32);
+    text-align: center;
+  }
+
+  .title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: var(--weight-regular);
+    font-size: var(--text-display);
+    line-height: var(--leading-display);
+    text-wrap: balance;
+  }
+
+  .intro {
+    max-width: var(--intro-max);
+    margin: 0;
+    font-size: var(--text-lead);
+    line-height: var(--leading-lead);
+  }
+
+  .tech {
+    color: var(--color-tech);
+    font-weight: var(--weight-medium);
+  }
+
+  .divider {
+    width: var(--divider-w);
+    height: var(--border-hairline);
+    background: var(--color-line-strong);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-16);
+    padding-top: var(--space-8);
+  }
+</style>

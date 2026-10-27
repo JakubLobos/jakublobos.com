@@ -28,7 +28,7 @@ Build the two rotated, counter-scrolling bands exactly as designed, accessible a
   - list duplicated ×4 for a seamless loop
   - both bands `aria-hidden="true"`, with a visually hidden `<p>` summarizing their content
 - CSS animation using `marquee-ltr`/`marquee-rtl` keyframes, 45 s linear infinite, `animation-play-state` controlled by hover and `data-paused`. No animation under reduced motion.
-- `scripts/marquee.ts` (custom element): click or tap toggles `data-paused` on that band; a visually hidden, focusable `<button aria-pressed>` "Pause animation" / "Play animation" that becomes visible on focus controls both bands (D-11 default).
+- `scripts/marquee.ts` (custom element): click or tap toggles `data-paused` on that band; a visually hidden, focusable `<button aria-pressed>` with a constant label "Pause animation" (`aria-pressed="true"` while paused; review R1-01) that becomes visible on focus controls both bands (D-11 default).
 
 ## Allowed files
 

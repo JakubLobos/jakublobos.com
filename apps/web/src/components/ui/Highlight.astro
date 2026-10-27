@@ -1,0 +1,60 @@
+---
+import type { PaintId } from '@portfolio/contracts';
+
+// Marker highlight. `tint` is the default marker colour or a paint ID. Runtime changes (the
+// guestbook quote) override with `el.style.setProperty('--tint', 'var(--paint-<id>-tint)')`.
+interface Props {
+  tint?: 'marker' | PaintId;
+  pad?: 'sm' | 'md';
+}
+
+const { tint = 'marker', pad = 'sm' } = Astro.props;
+---
+
+<span class="hl" data-tint={tint} data-pad={pad}>
+  <slot />
+</span>
+
+<style>
+  .hl {
+    --tint: var(--color-marker);
+    padding-inline: var(--space-4);
+    background: linear-gradient(
+      transparent var(--hl-start),
+      var(--tint) var(--hl-start),
+      var(--tint) var(--hl-end),
+      transparent var(--hl-end)
+    );
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+
+  .hl[data-pad='md'] {
+    padding-inline: var(--space-6);
+  }
+
+  .hl[data-tint='red'] {
+    --tint: var(--paint-red-tint);
+  }
+  .hl[data-tint='coral'] {
+    --tint: var(--paint-coral-tint);
+  }
+  .hl[data-tint='yellow'] {
+    --tint: var(--paint-yellow-tint);
+  }
+  .hl[data-tint='purple'] {
+    --tint: var(--paint-purple-tint);
+  }
+  .hl[data-tint='violet'] {
+    --tint: var(--paint-violet-tint);
+  }
+  .hl[data-tint='blue'] {
+    --tint: var(--paint-blue-tint);
+  }
+
+  @media (forced-colors: active) {
+    .hl {
+      background: none;
+    }
+  }
+</style>

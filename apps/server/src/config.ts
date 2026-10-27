@@ -170,6 +170,10 @@ function crossFieldProblems(env: Env): string[] {
     if (!env.CORS_ALLOWED_ORIGINS.every((origin) => origin.startsWith('https://'))) {
       problems.push('CORS_ALLOWED_ORIGINS');
     }
+    // The unset default is `localhost`, so this also forces production to name its own host.
+    if (env.TURNSTILE_ALLOWED_HOSTNAMES.includes('localhost')) {
+      problems.push('TURNSTILE_ALLOWED_HOSTNAMES');
+    }
   }
   return [...new Set(problems)];
 }

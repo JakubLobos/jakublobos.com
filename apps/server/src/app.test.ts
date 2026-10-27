@@ -1,3 +1,4 @@
+import { Router } from 'express';
 import request from 'supertest';
 import { describe, expect, it } from 'vitest';
 import { createHealthRoutes } from './http/routes/health.routes.ts';
@@ -142,6 +143,18 @@ describe('error envelopes', () => {
     expect(res.status).toBe(500);
     expect(res.body.error.code).toBe('INTERNAL');
     expect(JSON.stringify(res.body)).not.toMatch(/kaboom|\.ts|at /);
+  });
+
+  it('treats a provider error that merely carries a 4xx status as a 500 at error level', async () => {
+    const router = Router();
+    router.get('/provider', () => {
+      throw Object.assign(new Error('upstream auth failed'), { status: 401 });
+    });
+    const { app, logs } = buildTestApp({ routes: [{ mountPath: '/api', router }] });
+    const res = await request(app).get('/api/provider');
+    expect(res.status).toBe(500);
+    expect(res.body.error.code).toBe('INTERNAL');
+    expect(logs()).toContain('"level":50');
   });
 });
 

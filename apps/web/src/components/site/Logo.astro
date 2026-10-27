@@ -1,0 +1,44 @@
+---
+import { profile } from '../../content/profile.ts';
+import type { Locale } from '../../i18n/locales.ts';
+import { navHref } from '../../lib/nav.ts';
+
+interface Props {
+  locale: Locale;
+  /** Locale-neutral page path: the logo links to the top of the home page. */
+  path: string;
+}
+
+const { locale, path } = Astro.props;
+const [firstName = '', lastName = ''] = profile.name.split(' ');
+---
+
+<a class="logo" href={navHref(locale, path)}>
+  <span class="braces" aria-hidden="true">
+    {'{}'}
+  </span>
+  <span>
+    {firstName}
+    <br />
+    {lastName}.
+  </span>
+</a>
+
+<style>
+  .logo {
+    display: grid;
+    grid-template-columns: auto auto;
+    column-gap: var(--space-8);
+    font-weight: var(--weight-semibold);
+    font-size: var(--text-logo);
+    line-height: var(--leading-logo);
+    letter-spacing: var(--tracking-logo);
+    text-transform: uppercase;
+  }
+
+  .braces {
+    font-family: var(--font-mono);
+    font-size: var(--text-body);
+    line-height: var(--leading-logo-mark);
+  }
+</style>

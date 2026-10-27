@@ -39,6 +39,10 @@ Build the "Let's build something" section, with the contact details list and a f
 - `lib/api/contact.ts`: `sendContactMessage()` with a type guard.
 - `messages/contact.ts`: all copy (EN design text verbatim + PL drafts).
 
+### Orchestrator note (2026-10-25): T-022 button states
+
+`Button` renders `busy` as native `disabled` + `aria-busy` (the design's "sending" look) and `disabled` as `aria-disabled` only (the design's "sent" look; still focusable, so it does **not** block activation). Keep the sent button `type="button"` and guard your own submit handler. At runtime toggle `data-busy` / `data-done`, `disabled`, `aria-busy`, and `aria-disabled` (see `components/ui/Button.astro`).
+
 ## Allowed files
 
 `apps/web/src/components/sections/Contact.astro`, `apps/web/src/components/contact/**`, `apps/web/src/scripts/contact-form.ts`, `apps/web/src/lib/api/contact.ts` (+ test), `apps/web/src/lib/api/phone.ts` (+ test), `apps/web/src/scripts/phone-reveal.ts`, `apps/web/astro.config.ts` (CSP: Turnstile `script-src` + `frame-src` only, via Change Request), `apps/web/src/lib/contact-*.ts` (pure helpers + tests), `apps/web/src/i18n/messages/contact.ts`, `e2e/contact.smoke.spec.ts` (only if T-040 is merged).

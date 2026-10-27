@@ -4,8 +4,6 @@
  * Astro Fonts API from astro.config.ts, so they are intentionally not declared here.
  */
 :root {
-  color-scheme: light;
-
   /* Colour: semantic roles */
   --color-bg: #f7f7f6;
   --color-surface: #fbfbfa;
@@ -48,6 +46,10 @@
   --paint-violet-tint: rgb(123 92 255 / 0.32);
   --paint-blue: #2e88d0;
   --paint-blue-tint: rgb(46 136 208 / 0.32);
+  /* Accessible text variants (D-27): 4.5:1 on --color-bg. Raw paints are for fills and decor. */
+  --paint-red-text: #bd4c5a;
+  --paint-violet-text: #7456f0;
+  --paint-blue-text: #2876b5;
 
   /* Typography: sizes in rem (px / 16) */
   --text-display: clamp(2.5rem, 6vw, 4.25rem);
@@ -81,6 +83,8 @@
   --leading-small: 1.7;
   --text-caption: 0.8125rem;
   --leading-caption: 1.5;
+  --leading-cookie: 1.65;
+  --leading-status: 1.6;
   --text-label: 0.75rem;
 
   --weight-regular: 400;
@@ -124,6 +128,10 @@
 
   /* Layout */
   --content-max: 1000px;
+  --intro-max: 560px;
+  --contact-lead-max: 380px;
+  --contact-details-basis: 300px;
+  --divider-w: 40px;
   --gutter-wide: clamp(56px, 6vw, 72px);
   --gutter-narrow: clamp(20px, 5vw, 40px);
   --header-pad: clamp(14px, 2.4vw, 24px) clamp(20px, 4vw, 56px) clamp(12px, 2vw, 20px);
@@ -132,12 +140,14 @@
   --grid-cell-h: 106px;
   --drips-left: clamp(160px, 19vw, 300px);
   --hl-start: 55%;
+  --hl-end: 92%;
   --z-drips: 1;
   --z-content: 2;
   --z-aside: 3;
   --z-header: 4;
   --z-scrollbar: 5;
   --z-cookie: 8;
+  --z-skip: 10;
 
   /* Shape, borders, shadows */
   --radius-sm: 6px;
@@ -175,4 +185,55 @@
   --ease-standard: ease;
   --ease-spring: cubic-bezier(0.3, 1.6, 0.5, 1);
   --ease-type: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  /* Controls: buttons, icons and heading measure (T-022). Aliases reuse existing sizes. */
+  --text-button-lg: var(--text-field);
+  --text-button-sm: var(--text-body);
+  --space-18: 18px;
+  --control-min-h: 44px;
+  --control-submit-w: 210px;
+  --control-submit-h: 52px;
+  --lift-sm-hover: -1px;
+  --sink-sm-active: 3px;
+  --press-busy: 2px;
+  --sink-busy: 4px;
+  --icon-spinner: 16px;
+  --icon-check: 18px;
+  --icon-menu-w: 16px;
+  --icon-menu-w-short: 10px;
+  --icon-close: 14px;
+  --title-max-narrow: 520px;
+  --title-max-wide: 640px;
+
+  /* Projects and Skills row geometry (T-027) */
+  --project-index-col: clamp(32px, 6vw, 48px);
+  --project-index-gap: clamp(12px, 2.4vw, 24px);
+  --project-main-basis: 340px;
+  --project-meta-basis: 200px;
+  --project-desc-max: 560px;
+  --skill-label-basis: 180px;
+  --skill-items-basis: 280px;
+
+  /* Navigation pills: desktop nav and language switcher (T-023). */
+  --nav-gap: clamp(4px, 1vw, 12px);
+  --nav-pill-y: var(--space-6);
+  --nav-pill-x: var(--space-12);
+  --nav-pill-x-compact: var(--space-10);
+  --leading-logo-mark: 1.55;
+
+  /* Privacy and 404 pages (T-033). */
+  --page-chrome-h: 240px; /* header + footer allowance when a page centres its content in the viewport */
+  --policy-measure: 70ch;
+  --policy-term-w: 8rem;
+  --policy-desc-basis: 14rem;
+  --policy-table-min-w: 46rem; /* five columns stay legible; narrower screens scroll the table */
+
+  /* Guestbook geometry (T-029, design-analysis §4.11). */
+  --guestbook-visitor-min-h: 120px;
+  --guestbook-visitor-max: 720px;
+  --guestbook-form-max: 640px;
+  --swatch-hit: 40px;
+  --swatch-size: 24px;
+  --guestbook-modal-max: 460px;
+  --guestbook-modal-copy-max: 340px;
 }

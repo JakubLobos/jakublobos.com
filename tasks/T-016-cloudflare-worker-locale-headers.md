@@ -74,7 +74,7 @@ Actual Cloudflare deployment and DNS (T-050/T-051), the switcher UI (T-023), API
 
 ## Dependencies (exact)
 
-web dev: `wrangler@4.152.0`, `@cloudflare/workers-types@5.20261025.1`.
+web dev: `wrangler@4.152.0`, `@cloudflare/workers-types@5.20261023.1` (round 2 amendment, CR-1).
 
 ## Acceptance criteria
 
@@ -88,7 +88,7 @@ web dev: `wrangler@4.152.0`, `@cloudflare/workers-types@5.20261025.1`.
 
 ```
 pnpm verify
-pnpm --filter @portfolio/web test -- worker
+pnpm --filter @portfolio/web exec vitest run worker
 pnpm --filter @portfolio/web build && pnpm --filter @portfolio/web preview:edge
 ```
 

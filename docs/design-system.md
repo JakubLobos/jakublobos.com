@@ -63,6 +63,8 @@ The paint palette appears in the drips, marquee, timeline, guestbook, and blush.
 
 Paint **IDs** are part of the API contract (`packages/contracts`). The **colours** are presentation and live only in `tokens.css`. The web app maps ID → token (`var(--paint-${id})`) and never sends colours over the wire.
 
+Accessible text variants (D-27): `--paint-red-text #bd4c5a`, `--paint-violet-text #7456f0`, `--paint-blue-text #2876b5` (≥ 4.5:1 on `--color-bg` and `--color-surface`). Use them whenever a paint colour carries text.
+
 ### 2.3 Typography
 
 | Token            | Value                                      |
@@ -122,16 +124,25 @@ Fluid spacing tokens:
 
 ### 2.5 Layout
 
-| Token                                                                                       | Value                                                              |
-| ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
-| `--content-max`                                                                             | `1000px`                                                           |
-| `--gutter-wide` / `--gutter-narrow`                                                         | `clamp(56px,6vw,72px)` / `clamp(20px,5vw,40px)`                    |
-| `--header-pad`                                                                              | `clamp(14px,2.4vw,24px) clamp(20px,4vw,56px) clamp(12px,2vw,20px)` |
-| `--scroll-offset`                                                                           | `88px` (scroll-padding-top)                                        |
-| `--grid-cell-w` / `--grid-cell-h`                                                           | `235px` / `106px`                                                  |
-| `--drips-left`                                                                              | `clamp(160px,19vw,300px)`                                          |
-| `--hl-start`                                                                                | `55%` (marker highlight start)                                     |
-| `--z-drips 1 · --z-content 2 · --z-aside 3 · --z-header 4 · --z-scrollbar 5 · --z-cookie 8` | stacking; dialogs use the native top layer                         |
+| Token                                                                                       | Value                                                                            |
+| ------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| `--content-max`                                                                             | `1000px`                                                                         |
+| `--gutter-wide` / `--gutter-narrow`                                                         | `clamp(56px,6vw,72px)` / `clamp(20px,5vw,40px)`                                  |
+| `--header-pad`                                                                              | `clamp(14px,2.4vw,24px) clamp(20px,4vw,56px) clamp(12px,2vw,20px)`               |
+| `--scroll-offset`                                                                           | `88px` (scroll-padding-top)                                                      |
+| `--grid-cell-w` / `--grid-cell-h`                                                           | `235px` / `106px`                                                                |
+| `--drips-left`                                                                              | `clamp(160px,19vw,300px)`                                                        |
+| `--hl-start`                                                                                | `55%` (marker highlight start)                                                   |
+| `--intro-max` / `--divider-w`                                                               | `560px` / `40px` (hero intro measure, divider rule; T-024)                       |
+| `--z-skip`                                                                                  | `10` (skip link above `.page`; T-021)                                            |
+| `--project-index-col` / `--project-index-gap`                                               | `clamp(32px,6vw,48px)` / `clamp(12px,2.4vw,24px)` (project number column; T-027) |
+| `--project-main-basis` / `--project-meta-basis` / `--project-desc-max`                      | `340px` / `200px` / `560px` (project row)                                        |
+| `--skill-label-basis` / `--skill-items-basis`                                               | `180px` / `280px` (skills rows)                                                  |
+| `--guestbook-visitor-min-h` / `--guestbook-visitor-max` / `--guestbook-form-max`            | guestbook quote stage and form measure (T-029)                                   |
+| `--guestbook-modal-max` / `--guestbook-modal-copy-max`                                      | guestbook success modal                                                          |
+| `--swatch-hit` / `--swatch-size`                                                            | paint picker hit area and swatch                                                 |
+| `--contact-lead-max` / `--contact-details-basis`                                            | `380px` / `300px` (contact lead, details column; T-030)                          |
+| `--z-drips 1 · --z-content 2 · --z-aside 3 · --z-header 4 · --z-scrollbar 5 · --z-cookie 8` | stacking; dialogs use the native top layer                                       |
 
 ### 2.6 Breakpoints
 
@@ -180,17 +191,37 @@ CSS custom properties can't be used inside media queries, so breakpoints are con
 
 Keyframes (`keyframes.css`): `type-in` (`0% translateY(.6em) rotate(4deg) opacity 0 → 60% translateY(-.08em) opacity 1 → 100% none`), `spin`, `marquee-ltr`, `marquee-rtl`.
 
+### 2.9 Controls (T-022)
+
+Button, icon and heading-measure geometry. Button geometry isn't decor, so it uses these tokens instead of local literals (§3 rule 1).
+
+| Token                                                    | Value                                     | Use                                      |
+| -------------------------------------------------------- | ----------------------------------------- | ---------------------------------------- |
+| `--text-button-lg` / `--text-button-sm`                  | aliases of `--text-field` / `--text-body` | button labels                            |
+| `--space-18`                                             | 18px                                      | small-button inline padding              |
+| `--control-min-h`                                        | 44px                                      | small/chrome button min height           |
+| `--control-submit-w` / `--control-submit-h`              | 210px / 52px                              | contact submit min size                  |
+| `--lift-sm-hover` / `--sink-sm-active`                   | -1px / 3px                                | small-button hover lift and press sink   |
+| `--press-busy` / `--sink-busy`                           | 2px / 4px                                 | busy ("sending") resting offset          |
+| `--icon-spinner`, `--icon-check`                         | 16px, 18px                                | status icons                             |
+| `--icon-menu-w` / `--icon-menu-w-short`, `--icon-close`  | 16px / 10px, 14px                         | Menu bars, Close cross                   |
+| `--title-max-narrow` / `--title-max-wide`                | 520px / 640px                             | `SectionHeading` title measure           |
+| `--hl-end`                                               | 92%                                       | `Highlight` band end (with `--hl-start`) |
+| `--nav-gap`                                              | `clamp(4px,1vw,12px)`                     | desktop nav item gap (T-023)             |
+| `--nav-pill-y` / `--nav-pill-x` / `--nav-pill-x-compact` | 6px / 12px / 10px                         | nav and language-switcher pill padding   |
+| `--leading-logo-mark`                                    | 1.55                                      | logo mark line height                    |
+
 ## 3. Rules for consuming tokens
 
 1. **Components use semantic tokens only.** No raw hex, rgb, or font-family values outside `tokens.css`. Allowed literals: `0`, `1px` hairlines, `100%`, `auto`, and the **illustration geometry** of decor components (mascot shapes, cookie chips, drip heights). Keep that geometry in a local custom-property block at the top of the component's `<style>`.
    Reviewer check: `rg -n "#[0-9a-fA-F]{3,8}\b|rgba?\(" apps/web/src --glob '!**/styles/tokens.css'` must return only decor geometry exceptions.
-2. **Paint colours are only accessed by ID**: `var(--paint-<id>)` or `var(--paint-<id>-tint)`. To set one at runtime, use `el.style.setProperty('--tint', 'var(--paint-yellow-tint)')`.
+2. **Paint colours are only accessed by ID**: `var(--paint-<id>)`, `var(--paint-<id>-tint)`, or, for text, `var(--paint-<id>-text)` (accessible variants, D-27; never raw paint colours for text). To set one at runtime, use `el.style.setProperty('--tint', 'var(--paint-yellow-tint)')`.
 3. **No `style="…"` attributes and no `define:vars`.** Both produce inline styles that the CSP blocks ([ADR-0012](decisions/0012-content-security-policy.md)). Dynamic values go through CSSOM (`element.style.setProperty`) or data attributes plus CSS (`[data-state="active"]`).
 4. **One button implementation.** `components/ui/Button.astro` (variants `primary | secondary`, sizes `lg | sm`, renders `<a>` or `<button>`) plus `ChromeButton.astro` (Menu/Close). No ad-hoc button styles.
 5. **Section headings** come only from `components/ui/SectionHeading.astro` (eyebrow index + title, alignment prop).
 6. **Motion is opt-in.** Wrap transitions and animations that move things in `@media (prefers-reduced-motion: no-preference) { … }`. Colour and opacity transitions under 200 ms may stay unconditional.
 7. **Focus:** never remove an outline without replacing it. `:focus-visible` uses `--focus-ring`. Text fields keep the design's underline-colour focus state _and_ get a ring when focused by keyboard (D-19).
-8. **Forced colours:** in `@media (forced-colors: active)`, hide the typing mirrors and drips and restore the native field text colour. Hard shadows disappear by default; add `border` fallbacks where meaning depends on shadow.
+8. **Forced colours:** in `@media (forced-colors: active)`, hide the typing mirrors, drips, and the hero mascot (its pupils, brows, and fills depend on colour) and restore the native field text colour. Hard shadows disappear by default; add `border` fallbacks where meaning depends on shadow.
 9. **Breakpoints:** only the three in §2.6. Prefer intrinsic layout (`clamp`, `auto-fit`, `flex-wrap`) over new breakpoints.
 10. **Changing a token is a shared-surface change.** Only T-020 creates `tokens.css`. Later tasks request changes in their completion report ([`agent-workflow.md`](agent-workflow.md#shared-surfaces)).
 

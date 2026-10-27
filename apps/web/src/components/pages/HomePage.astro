@@ -1,0 +1,29 @@
+---
+import type { Locale } from '../../i18n/locales.ts';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Contact from '../sections/Contact.astro';
+import Experience from '../sections/Experience.astro';
+import Guestbook from '../sections/Guestbook.astro';
+import Hero from '../sections/Hero.astro';
+import MarqueeBands from '../sections/MarqueeBands.astro';
+import Projects from '../sections/Projects.astro';
+import Skills from '../sections/Skills.astro';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+---
+
+<BaseLayout locale={locale} seoKey="home" path="/">
+  <main id="top" class="container">
+    <Hero locale={locale} />
+    <MarqueeBands locale={locale} />
+    <Experience locale={locale} />
+    <Projects locale={locale} />
+    <Skills locale={locale} />
+    <Guestbook locale={locale} />
+    <Contact locale={locale} />
+  </main>
+</BaseLayout>

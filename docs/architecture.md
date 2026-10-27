@@ -36,7 +36,7 @@ portfolio/
 │  └─ server/                 @portfolio/server  Express API (Railway)
 ├─ packages/
 │  └─ contracts/              @portfolio/contracts  shared API types, constants, zod schemas, validation rules
-├─ e2e/                       Playwright end-to-end + accessibility tests (wrangler dev + API server)
+├─ e2e/                       Playwright end-to-end + accessibility tests (Node edge emulator + API server; real wrangler dev in CI)
 ├─ tools/                     dev-only scripts (design capture, OG images, budgets, i18n export)
 ├─ docs/  tasks/  .claude/agents/  AGENTS.md  CLAUDE.md
 └─ eslint.config.js · .prettierrc.json · tsconfig.base.json · pnpm-workspace.yaml · .env.example
@@ -223,7 +223,7 @@ Specified in [`guestbook-moderation.md`](guestbook-moderation.md): newest-wins q
 | SEO                                          | hreflang en / pl / x-default (→ `/`), self-canonical, `og:locale` + alternate, sitemap with i18n alternates, localized OG images (T-035).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | **Negotiation** (Worker, `apps/web/worker/`) | **`GET /`**: cookie `lang=pl` → 302 `/pl`; cookie `lang=en` → serve `index.html` from `env.ASSETS`. Otherwise parse `Accept-Language` (q-values; primary subtag; tie → header order): best `pl` → 302 `/pl`, else English. Always `Vary: Accept-Language, Cookie`, `Cache-Control: private, no-cache`, plus security headers. **`GET /set-language?lang=en\|pl&to=/path`**: set `lang` (1 year, `Path=/`, `SameSite=Lax`, `Secure`, `HttpOnly`) → 302 to `to` if it's in the allowlist (`/`, `/pl`, `/privacy`, `/pl/privacy`), else to the locale home. Invalid `lang` → 400 plain text. Redirects are always **302**. Only `/` is negotiated; all other URLs are explicit. |
 | Switcher                                     | `LanguageSwitcher.astro`: plain links to `/set-language?lang=pl&to=/pl` (equivalent path per page). Works without JS. `robots.txt` disallows `/set-language`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| Limitations                                  | Google discourages auto-redirects; Googlebot sends no `Accept-Language` and gets English; hreflang and the sitemap expose `/pl`. Under `astro dev` there is no Worker; negotiation is exercised by unit tests and by `wrangler dev` in e2e and preview.                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| Limitations                                  | Google discourages auto-redirects; Googlebot sends no `Accept-Language` and gets English; hreflang and the sitemap expose `/pl`. Under `astro dev` there is no Worker; negotiation is exercised by unit tests and by the Node edge emulator (which runs the real Worker code) in e2e and preview, and by real `wrangler dev` in CI on Linux.                                                                                                                                                                                                                                                                                                                                 |
 
 ## 7. Configuration
 
@@ -260,18 +260,19 @@ See `docs/operations.md` (created by T-050).
 
 ## 10. Approved dependencies
 
-| Package                                                         | Where             | Why                                               |
-| --------------------------------------------------------------- | ----------------- | ------------------------------------------------- |
-| `astro` 7.4.x, `@astrojs/check`, `@astrojs/sitemap`             | web               | framework, `.astro` type-check, sitemap           |
-| `wrangler` 4.152.x, `@cloudflare/workers-types` 5.20261023.1    | web (dev)         | Worker build, deploy, `wrangler dev` (CI parity)  |
-| `posthog-js` 1.438.x                                            | web               | PostHog (lazy chunk, consent-aware)               |
-| `express` 5.3.x, `helmet` 8.3.x, `cors` 2.8.x (+ `@types/cors`) | server            | HTTP, headers, CORS allowlist                     |
-| `express-rate-limit` 8.7.x                                      | server            | rate limiting (`ipKeyGenerator`)                  |
-| `pino`, `pino-http` (`pino-pretty` dev)                         | server            | structured logs with redaction                    |
-| `better-sqlite3` 13.0.x                                         | server            | SQLite                                            |
-| `zod` 4.6.x                                                     | contracts, server | validation at trust boundaries                    |
-| `vitest` 5.0.x, `@vitest/coverage-v8`, `supertest`              | all / server      | tests                                             |
-| `@playwright/test`, `@axe-core/playwright`                      | root (dev)        | e2e, accessibility, design capture, OG generation |
-| `typescript` 6.0.3                                              | all (dev)         | pinned below 7 (ADR-0009)                         |
+| Package                                                                                                       | Where             | Why                                                                                                                      |
+| ------------------------------------------------------------------------------------------------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `astro` 7.4.x, `@astrojs/check`, `@astrojs/sitemap`                                                           | web               | framework, `.astro` type-check, sitemap                                                                                  |
+| `wrangler` 4.152.x, `@cloudflare/workers-types` 5.20261023.1                                                  | web (dev)         | Worker build, deploy, `wrangler dev` (CI parity)                                                                         |
+| `posthog-js` 1.438.x                                                                                          | web               | PostHog (lazy chunk, consent-aware)                                                                                      |
+| `express` 5.3.x, `helmet` 8.3.x, `cors` 2.8.x (+ `@types/cors`)                                               | server            | HTTP, headers, CORS allowlist                                                                                            |
+| `express-rate-limit` 8.7.x                                                                                    | server            | rate limiting (`ipKeyGenerator`)                                                                                         |
+| `pino`, `pino-http` (`pino-pretty` dev)                                                                       | server            | structured logs with redaction                                                                                           |
+| `better-sqlite3` 13.0.x                                                                                       | server            | SQLite                                                                                                                   |
+| `zod` 4.6.x                                                                                                   | contracts, server | validation at trust boundaries                                                                                           |
+| `vitest` 5.0.x, `@vitest/coverage-v8`, `supertest`                                                            | all / server      | tests                                                                                                                    |
+| `@playwright/test`, `@axe-core/playwright`                                                                    | root (dev)        | e2e, accessibility, design capture, OG generation                                                                        |
+| `typescript` 6.0.3                                                                                            | all (dev)         | pinned below 7 (ADR-0009)                                                                                                |
+| `eslint` 10.13.x, `typescript-eslint` + `@typescript-eslint/parser` 8.72.x, `eslint-plugin-astro`, `prettier` | root (dev)        | lint and format; the parser is declared at the root so `eslint-plugin-astro` never resolves a copy from outside the repo |
 
 Deliberately not used: React/Preact, Tailwind, ORMs, OpenAI or Resend SDKs (single `fetch` calls), nodemailer (SMTP blocked on Railway Hobby), dotenv, Redis, CAPTCHA (escalation path only), GA via Tag Manager container.

@@ -10,6 +10,7 @@ body {
 }
 
 html {
+  color-scheme: light;
   scroll-padding-top: var(--scroll-offset);
   scrollbar-width: none;
 }

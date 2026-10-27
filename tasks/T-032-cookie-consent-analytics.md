@@ -56,6 +56,11 @@ Analytics must never slow the critical path or leak data before consent.
 - CSP: add the GA4 and PostHog origins to `astro.config.ts` `security.csp` (`security.md` §5) via a **Change Request** to the T-021 shared surface, or directly if the orchestrator pre-approves. Verify in the browser that no further origins are needed. If PostHog still fetches from `eu-assets.i.posthog.com`, add only that host and record why.
 - `messages/cookies.ts`.
 
+### Orchestrator note (2026-10-25): hooks from T-023
+
+- The footer renders `button[data-cookie-settings]`; wire it to reopen the consent dialog.
+- The mobile menu sets `html[data-menu-open]` while open; hide the cookie banner under it.
+
 ## Allowed files
 
 `apps/web/src/lib/consent.ts`, `apps/web/src/lib/analytics/**` (+ tests), `apps/web/src/components/site/CookieBanner.astro`, `apps/web/src/scripts/{cookie-consent,analytics}.ts`, `apps/web/src/i18n/messages/cookies.ts`, `apps/web/package.json`, `pnpm-lock.yaml`, `apps/web/astro.config.ts` (CSP directives only, via CR), `e2e/consent.spec.ts` (if T-040 has merged).

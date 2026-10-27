@@ -1,0 +1,14 @@
+# T-015 review, round 2
+
+- **Reviewer:** orchestrator (Opus), re-review of round 1 findings
+- **Verdict:** APPROVED
+
+| Finding                            | Status                                                                                                                                                                                                                                                                                                                       |
+| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| R1-01 MAJOR idempotent retry → 503 | Fixed at the root: the mail payload is deterministic per submission (no `Sent:` timestamp), so a retry with the same `clientRequestId` replays the same Resend request. 409 `invalid_idempotent_request` → success; `concurrent_idempotent_requests` → transient 503 at `warn`. Task text updated (no ISO time in the body). |
+| R1-02 MINOR 60/day cap untested    | Fixed: test added.                                                                                                                                                                                                                                                                                                           |
+| R1-03 NIT field codes              | Fixed (uses `ContactFieldErrors` from contracts).                                                                                                                                                                                                                                                                            |
+| R1-04 NIT redundant tests          | Removed.                                                                                                                                                                                                                                                                                                                     |
+| R1-05 NIT copy loop                | Removed.                                                                                                                                                                                                                                                                                                                     |
+
+Known, accepted: a replayed submission still consumes one unit of the global caps (the service can't tell a replay from a new send without storage). Gate C: `pnpm verify` on the squash-merged tree.

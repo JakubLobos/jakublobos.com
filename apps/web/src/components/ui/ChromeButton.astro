@@ -1,0 +1,90 @@
+---
+// Menu / Close button of the header and mobile menu. The visible label comes in through the slot;
+// `ariaLabel` is the localized accessible name ("Open menu" / "Close menu").
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends Omit<HTMLAttributes<'button'>, 'type' | 'class'> {
+  icon: 'menu' | 'close';
+  ariaLabel: string;
+  class?: string;
+}
+
+const { icon, ariaLabel, class: className, ...rest } = Astro.props;
+---
+
+<button type="button" class:list={['chrome', className]} aria-label={ariaLabel} {...rest}>
+  <span class="icon" data-icon={icon} aria-hidden="true">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    {icon === 'menu' && <span class="bar" />}
+  </span>
+  <slot />
+</button>
+
+<style>
+  .chrome {
+    display: flex;
+    align-items: center;
+    gap: var(--space-10);
+    min-height: var(--control-min-h);
+    padding: 0 var(--space-16);
+    font-family: var(--font-ui);
+    font-weight: var(--weight-medium);
+    font-size: var(--text-ui);
+    color: var(--color-ink);
+    background: var(--color-surface);
+    border: var(--border-thick) solid var(--color-ink);
+    border-radius: var(--radius-md);
+    box-shadow: 0 var(--press-sm-rest) 0 var(--color-ink);
+    cursor: pointer;
+  }
+
+  .icon {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .bar {
+    width: var(--icon-menu-w);
+    height: var(--border-thick);
+    background: currentColor;
+    border-radius: 1px;
+  }
+
+  .icon[data-icon='menu'] .bar:last-child {
+    width: var(--icon-menu-w-short);
+  }
+
+  .icon[data-icon='close'] {
+    display: block;
+    width: var(--icon-close);
+    height: var(--icon-close);
+  }
+
+  .icon[data-icon='close'] .bar {
+    position: absolute;
+    top: calc((var(--icon-close) - var(--border-thick)) / 2);
+    left: 0;
+    width: var(--icon-close);
+    transform: rotate(45deg);
+  }
+
+  .icon[data-icon='close'] .bar:nth-child(2) {
+    transform: rotate(-45deg);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .chrome {
+      transition:
+        transform var(--duration-press) var(--ease-standard),
+        box-shadow var(--duration-press) var(--ease-standard);
+    }
+
+    .chrome:active {
+      transform: translateY(var(--sink-sm-active));
+      box-shadow: 0 var(--press-active) 0 var(--color-ink);
+    }
+  }
+</style>

@@ -6,16 +6,26 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro check && astro build",
-    "typecheck": "astro check",
-    "test": "vitest run"
+    "typecheck": "astro check && tsc -p worker/tsconfig.json",
+    "test": "vitest run",
+    "build:preview": "node -e \"require('node:child_process').execSync('pnpm run build', { stdio: 'inherit', env: { ...process.env, PUBLIC_API_BASE_URL: 'http://localhost:3000' } })\"",
+    "preview:edge": "node edge-emulator/server.ts --port 8787",
+    "preview:edge:wrangler": "wrangler dev --port 8787",
+    "preview:topology": "node edge-emulator/server.ts --port 8787",
+    "deploy": "wrangler deploy"
   },
   "dependencies": {
     "@astrojs/check": "0.9.12",
+    "@astrojs/sitemap": "3.7.4",
     "@portfolio/contracts": "workspace:*",
-    "astro": "7.4.2"
+    "astro": "7.4.2",
+    "posthog-js": "1.438.21"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "5.20261023.1",
+    "@types/node": "24.19.2",
     "typescript": "6.0.3",
-    "vitest": "5.0.5"
+    "vitest": "5.0.5",
+    "wrangler": "4.152.0"
   }
 }

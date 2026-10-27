@@ -1,0 +1,149 @@
+---
+// The phone number is never in this markup or the bundle: the PHONE row only holds the reveal
+// control, and the number arrives from the API after a bot check (ADR-0015).
+import { profile } from '../../content/profile.ts';
+import type { Locale } from '../../i18n/locales.ts';
+import { contactMessages } from '../../i18n/messages/contact.ts';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const m = contactMessages(locale);
+
+// Empty (e.g. local development) switches the reveal to its fake flow.
+const configuredKey: unknown = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+const siteKey = typeof configuredKey === 'string' ? configuredKey : '';
+---
+
+<dl class="details">
+  <dt>{m.details.email}</dt>
+  <dd>
+    <a href={`mailto:${profile.email}`}>{profile.email}</a>
+  </dd>
+
+  <dt>{m.details.phone}</dt>
+  <dd>
+    <phone-reveal data-locale={locale} data-site-key={siteKey}>
+      <button type="button" class="reveal" data-reveal>
+        {m.phone.show}
+      </button>
+      <span class="nojs">{m.phone.noScript}</span>
+      <span class="result" data-result></span>
+      <span class="failed" data-failed aria-live="polite"></span>
+      <span class="visually-hidden" data-announce aria-live="polite"></span>
+      <div class="widget" data-widget></div>
+    </phone-reveal>
+  </dd>
+
+  <dt>{m.details.github}</dt>
+  <dd>
+    <a href={profile.github.url}>@{profile.github.handle}</a>
+  </dd>
+
+  <dt>{m.details.linkedin}</dt>
+  <dd>
+    <a href={profile.linkedin.url}>@{profile.linkedin.handle}</a>
+  </dd>
+
+  <dt>{m.details.languages}</dt>
+  <dd>{profile.languages[locale]}</dd>
+</dl>
+
+<script>
+  import '../../scripts/phone-reveal.ts';
+</script>
+
+<style>
+  .details {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--space-12) var(--space-24);
+    align-items: baseline;
+    margin: 0;
+    padding-top: var(--space-12);
+    font-size: var(--text-body);
+  }
+
+  dt {
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    color: var(--color-text-muted);
+  }
+
+  dd {
+    min-width: 0;
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+
+  phone-reveal {
+    display: block;
+  }
+
+  /* Reads as one of the other <dd> links (design-analysis 4.12). */
+  .reveal {
+    padding: 0;
+    font: inherit;
+    color: var(--color-ink);
+    text-align: start;
+    background: none;
+    border: 0;
+    cursor: pointer;
+  }
+
+  @media (forced-colors: active) {
+    .reveal {
+      color: LinkText;
+    }
+  }
+
+  .reveal:hover {
+    color: var(--color-primary);
+  }
+
+  /* Set by the script, which the unused-selector lint can't see (hence :global on the attribute). */
+  .reveal:global([aria-busy='true']) {
+    cursor: progress;
+  }
+
+  .reveal:global([aria-busy='true']):hover {
+    color: var(--color-ink);
+  }
+
+  .failed,
+  .nojs {
+    font-size: var(--text-caption);
+    line-height: var(--leading-caption);
+    color: var(--color-text-muted);
+  }
+
+  .failed {
+    display: block;
+  }
+
+  .failed:empty,
+  .widget:empty {
+    display: none;
+  }
+
+  .widget {
+    margin-top: var(--space-10);
+  }
+
+  .nojs {
+    display: none;
+  }
+
+  /* Without scripting the reveal can't work, so say where to go instead of showing a dead button. */
+  @media (scripting: none) {
+    .reveal {
+      display: none;
+    }
+
+    .nojs {
+      display: inline;
+    }
+  }
+</style>

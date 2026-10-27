@@ -1,0 +1,208 @@
+---
+import { marqueeFacts, marqueeTech } from '../../content/marquee.ts';
+import type { Locale } from '../../i18n/locales.ts';
+import { common } from '../../i18n/messages/common.ts';
+import { marquee } from '../../i18n/messages/marquee.ts';
+import Button from '../ui/Button.astro';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const m = marquee(locale);
+const facts = marqueeFacts[locale];
+
+// Paint IDs in cycle order (design-system §3 rule 2). Words skip yellow: it is unreadable as text.
+const wordTones = ['red', 'coral', 'purple', 'violet', 'blue'] as const;
+const dotTones = ['red', 'coral', 'yellow', 'purple', 'violet', 'blue'] as const;
+
+// One half is the list twice, coloured over the whole half as in the design. The track renders
+// the half twice, so translating by exactly -50% lands on an identical frame.
+function half(words: readonly string[], tones: readonly string[]) {
+  return [...words, ...words].map((text, i) => ({ text, tone: tones[i % tones.length] }));
+}
+
+const bands = [
+  { id: 'a', items: half(marqueeTech, wordTones) },
+  { id: 'b', items: half(facts, dotTones) },
+];
+
+const summary = `${m.techLabel}: ${marqueeTech.join(', ')}. ${m.factsLabel}: ${facts.join('; ')}.`;
+---
+
+<marquee-bands>
+  <section class="marquee full-bleed" aria-label={common(locale).sections.marquee}>
+    <p class="visually-hidden">{summary}</p>
+    {bands.map((band) => (
+      <div class="band" data-band={band.id} aria-hidden="true">
+        <div class="track">
+          {[0, 1].map(() =>
+            band.items.map((item) => (
+              <span class="item" data-tone={item.tone}>
+                <span class="text">{item.text}</span>
+                <span class="dot" />
+              </span>
+            )),
+          )}
+        </div>
+      </div>
+    ))}
+    <div class="control" data-marquee-control hidden>
+      <Button variant="secondary" size="sm" aria-pressed="false" data-marquee-toggle>
+        {m.pause}
+      </Button>
+    </div>
+  </section>
+</marquee-bands>
+
+<script>
+  import '../../scripts/marquee.ts';
+</script>
+
+<style>
+  marquee-bands {
+    display: block;
+  }
+
+  .marquee {
+    /* Decor geometry of the crossing bands (design-system §3 rule 1). */
+    --band-width: 115vw;
+    --band-pad: 11px;
+    --band-tilt-a: -4deg;
+    --band-tilt-b: 3deg;
+    --band-dot: 7px;
+    --band-section-h: clamp(160px, 17vw, 220px);
+
+    position: relative;
+    display: grid;
+    place-items: center;
+    height: var(--band-section-h);
+    overflow: hidden;
+  }
+
+  .band {
+    grid-area: 1 / 1;
+    width: var(--band-width);
+    padding-block: var(--band-pad);
+    overflow: hidden;
+    color: var(--color-ink);
+    background: var(--color-bg);
+    border-block: var(--border-thick) solid var(--color-ink);
+    transform: rotate(var(--band-tilt-a));
+  }
+
+  .band[data-band='b'] {
+    transform: rotate(var(--band-tilt-b));
+  }
+
+  .track {
+    display: flex;
+    width: max-content;
+    will-change: transform;
+  }
+
+  .item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-20);
+    padding-right: var(--space-20);
+    font-size: var(--text-marquee);
+    font-weight: var(--weight-medium);
+    line-height: var(--leading-marquee);
+    white-space: nowrap;
+  }
+
+  .item[data-tone='red'] {
+    --tone: var(--paint-red);
+  }
+
+  .item[data-tone='coral'] {
+    --tone: var(--paint-coral);
+  }
+
+  .item[data-tone='yellow'] {
+    --tone: var(--paint-yellow);
+  }
+
+  .item[data-tone='purple'] {
+    --tone: var(--paint-purple);
+  }
+
+  .item[data-tone='violet'] {
+    --tone: var(--paint-violet);
+  }
+
+  .item[data-tone='blue'] {
+    --tone: var(--paint-blue);
+  }
+
+  .dot {
+    flex: none;
+    width: var(--band-dot);
+    height: var(--band-dot);
+    background: var(--color-ink);
+    border-radius: 50%;
+  }
+
+  /* Band A colours the word, band B the dot. */
+  .band[data-band='a'] .text {
+    color: var(--tone);
+  }
+
+  .band[data-band='b'] .dot {
+    background: var(--tone);
+  }
+
+  .control {
+    position: absolute;
+    inset-block-end: var(--space-8);
+    left: 50%;
+    z-index: var(--z-content);
+    translate: -50% 0;
+  }
+
+  /* Visually hidden until a keyboard user reaches it. */
+  .control:not(:focus-within) {
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  /* Forced colours would otherwise erase the dots. */
+  @media (forced-colors: active) {
+    .band[data-band] .dot {
+      forced-color-adjust: none;
+      background: CanvasText;
+    }
+  }
+
+  /* Bands are static under reduced motion, so there is nothing to pause. */
+  @media (prefers-reduced-motion: reduce) {
+    .control {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .track {
+      animation: marquee-rtl var(--duration-marquee) linear infinite;
+    }
+
+    .band[data-band='a'] .track {
+      animation-name: marquee-ltr;
+    }
+
+    .band:global([data-paused]) .track {
+      animation-play-state: paused;
+    }
+
+    /* Hover only where it exists: on touch it would stick after a tap and fight the toggle. */
+    @media (hover: hover) {
+      .band:hover .track {
+        animation-play-state: paused;
+      }
+    }
+  }
+</style>

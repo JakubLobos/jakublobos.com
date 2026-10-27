@@ -6,11 +6,16 @@
   "scripts": {
     "dev": "node --watch --env-file-if-exists=../../.env src/main.ts",
     "start": "node --env-file-if-exists=../../.env src/main.ts",
+    "guestbook": "node --env-file-if-exists=../../.env src/cli/guestbook-admin.ts",
+    "backup": "node --env-file-if-exists=../../.env src/cli/backup.ts",
     "typecheck": "tsc -p tsconfig.json",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "preview:topology": "node --env-file-if-exists=../../.env -e \"process.env.CORS_ALLOWED_ORIGINS='http://localhost:8787'; import('./src/main.ts')\""
   },
   "dependencies": {
     "@portfolio/contracts": "workspace:*",
+    "better-sqlite3": "13.0.3",
     "cors": "2.8.6",
     "express": "5.3.0",
     "express-rate-limit": "8.7.1",
@@ -20,6 +25,7 @@
     "zod": "4.6.7"
   },
   "devDependencies": {
+    "@types/better-sqlite3": "9.6.0",
     "@types/cors": "2.8.19",
     "@types/express": "5.0.6",
     "@types/node": "24.19.2",

@@ -1,0 +1,71 @@
+---
+import type { Locale } from '../../i18n/locales.ts';
+import { common } from '../../i18n/messages/common.ts';
+import { NAV_SECTIONS, navHref } from '../../lib/nav.ts';
+
+interface Props {
+  locale: Locale;
+  /** Locale-neutral page path; off the home page the links lead back to its sections. */
+  path: string;
+}
+
+const { locale, path } = Astro.props;
+const m = common(locale);
+---
+
+<scroll-spy>
+  <nav aria-label={m.mainNavigation}>
+    <ul>
+      {NAV_SECTIONS.map((id) => (
+        <li>
+          <a href={navHref(locale, path, id)}>{m.sections[id]}</a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+</scroll-spy>
+
+<script>
+  import '../../scripts/scroll-spy.ts';
+</script>
+
+<style>
+  scroll-spy {
+    display: contents;
+  }
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: var(--space-8) var(--nav-gap);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--text-body);
+  }
+
+  a {
+    display: block;
+    padding: var(--nav-pill-y) var(--nav-pill-x);
+    border-radius: var(--radius-sm);
+  }
+
+  a:hover,
+  a:global([aria-current='location']) {
+    color: var(--color-ink);
+    background: var(--color-hover);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    a {
+      transition: background var(--duration-hover) var(--ease-standard);
+    }
+  }
+
+  @media (forced-colors: active) {
+    a:global([aria-current='location']) {
+      text-decoration: underline;
+    }
+  }
+</style>

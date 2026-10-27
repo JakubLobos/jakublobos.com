@@ -1,0 +1,191 @@
+---
+import { profile } from '../../content/profile.ts';
+import type { Locale } from '../../i18n/locales.ts';
+import { common } from '../../i18n/messages/common.ts';
+import { nav } from '../../i18n/messages/nav.ts';
+import { NAV_SECTIONS, navHref, SOCIAL_LINKS } from '../../lib/nav.ts';
+import PaintDrips from '../decor/PaintDrips.astro';
+import Button from '../ui/Button.astro';
+import ChromeButton from '../ui/ChromeButton.astro';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import Logo from './Logo.astro';
+
+interface Props {
+  locale: Locale;
+  /** Locale-neutral page path, for the nav links and the language switcher. */
+  path: string;
+}
+
+const { locale, path } = Astro.props;
+const m = common(locale);
+const n = nav(locale);
+---
+
+<mobile-menu>
+  <dialog id="mobile-menu" aria-label={m.menu}>
+    <PaintDrips variant="menu" />
+    <div class="top">
+      <Logo locale={locale} {path} />
+      <ChromeButton icon="close" ariaLabel={n.closeMenu} data-menu-close>
+        {n.close}
+      </ChromeButton>
+    </div>
+    <nav class="links" aria-label={n.mobileNavigation}>
+      <ol>
+        {NAV_SECTIONS.map((id, index) => (
+          <li>
+            <a href={navHref(locale, path, id)}>
+              <span class="number" aria-hidden="true">
+                {String(index + 1).padStart(2, '0')}
+              </span>
+              <span class="label">{m.sections[id]}</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+    <div class="bottom">
+      <div class="reach">
+        <Button href={`mailto:${profile.email}`}>{n.reachMe}</Button>
+      </div>
+      <div class="row">
+        <ul class="socials">
+          {SOCIAL_LINKS.map(({ id, href }) => (
+            <li>
+              <a {href}>{n.social[id]}</a>
+            </li>
+          ))}
+        </ul>
+        <LanguageSwitcher locale={locale} {path} />
+      </div>
+    </div>
+  </dialog>
+</mobile-menu>
+
+<script>
+  import '../../scripts/mobile-menu.ts';
+</script>
+
+<style>
+  /* Body scroll lock; the page scrollbar is hidden site-wide, so nothing shifts. */
+  :global(html[data-menu-open]) {
+    overflow: hidden;
+  }
+
+  mobile-menu {
+    display: contents;
+  }
+
+  dialog {
+    /* Full-screen sheet over the page, with the page's grid background. */
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    max-height: none;
+    margin: 0;
+    padding: var(--space-14) var(--space-20) var(--space-28);
+    color: var(--color-ink);
+    border: 0;
+    background-color: var(--color-bg);
+    background-image:
+      linear-gradient(var(--color-grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--color-grid) 1px, transparent 1px);
+    background-size: var(--grid-cell-w) var(--grid-cell-h);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  dialog:modal {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .top {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-16);
+  }
+
+  .links {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--space-48) 0;
+  }
+
+  ol {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .links a {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-16);
+    padding: var(--space-10) 0;
+    border-bottom: var(--border-hairline) solid var(--color-line);
+  }
+
+  .number {
+    width: var(--space-22);
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    color: var(--color-text-muted);
+  }
+
+  .label {
+    font-family: var(--font-display);
+    font-size: var(--text-menu);
+    line-height: var(--leading-heading);
+  }
+
+  .bottom {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-20);
+  }
+
+  .reach {
+    align-self: flex-start;
+  }
+
+  .row {
+    --switcher-size: var(--text-label);
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-8) var(--space-16);
+  }
+
+  .socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-8) var(--space-4);
+    /* Aligns the link text with the page gutter. */
+    margin: 0 0 0 calc(-1 * var(--space-12));
+    padding: 0;
+    list-style: none;
+    font-size: var(--text-label);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+  }
+
+  .socials a {
+    display: block;
+    padding: var(--space-12);
+    border-radius: var(--radius-sm);
+  }
+</style>

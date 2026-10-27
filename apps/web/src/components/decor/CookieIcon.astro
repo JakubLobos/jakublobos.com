@@ -1,0 +1,59 @@
+---
+---
+
+<span class="cookie" aria-hidden="true">
+  <span class="chip"></span>
+  <span class="chip"></span>
+  <span class="chip"></span>
+  <span class="chip"></span>
+</span>
+
+<style>
+  /* Illustration geometry (design-system §3.1). */
+  .cookie {
+    --cookie-size: 40px;
+    --bite: radial-gradient(circle 9px at 88% 14%, transparent 98%, black 100%);
+
+    position: relative;
+    flex: none;
+    width: var(--cookie-size);
+    height: var(--cookie-size);
+    background: var(--color-cookie);
+    border: var(--border-thick) solid var(--color-ink);
+    border-radius: 50%;
+    box-shadow: 0 3px 0 var(--color-ink);
+    -webkit-mask: var(--bite);
+    mask: var(--bite);
+  }
+
+  .chip {
+    position: absolute;
+    background: var(--color-cookie-chip);
+    border-radius: 50%;
+  }
+
+  .chip:nth-child(1) {
+    top: 10px;
+    left: 9px;
+    width: 6px;
+    height: 6px;
+  }
+  .chip:nth-child(2) {
+    top: 20px;
+    left: 20px;
+    width: 5px;
+    height: 5px;
+  }
+  .chip:nth-child(3) {
+    top: 23px;
+    left: 10px;
+    width: 4px;
+    height: 4px;
+  }
+  .chip:nth-child(4) {
+    top: 9px;
+    left: 24px;
+    width: 3px;
+    height: 3px;
+  }
+</style>

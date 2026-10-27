@@ -31,6 +31,7 @@ export default defineConfig([
     '**/playwright-report/**',
     '**/test-results/**',
     'docs/design/**',
+    '.claude/worktrees/**',
   ]),
 
   js.configs.recommended,

@@ -36,7 +36,7 @@ Requirements: FR-25…FR-27, FR-40…FR-48, NFR-05…NFR-07. Decisions: [ADR-000
 
 ```sql
 CREATE TABLE guestbook_messages (
-  id                INTEGER PRIMARY KEY,
+  id                INTEGER PRIMARY KEY AUTOINCREMENT, -- never reuse ids: a stale approve(id) must not hit a newer row (I-1)
   public_id         TEXT    NOT NULL UNIQUE,
   client_request_id TEXT    NOT NULL UNIQUE,
   body              TEXT    NOT NULL CHECK (length(body) BETWEEN 1 AND 120),
@@ -99,7 +99,7 @@ The HTTP response never waits for review. The modal appears instantly ("IN REVIE
   - `approve` → `repo.approve(id, now)` (`UPDATE … WHERE id=? AND status='pending'`; 0 rows ⇒ superseded or expired meanwhile ⇒ log and ignore).
   - `reject` → `repo.deletePending(id)` + `recentRejections.add(hash)`.
   - `transient` → `repo.recordFailure(id, code, now + backoff(attempts, retryAfter))`.
-- Backoff: 30 s, 2 min, 10 min, 30 min, 1 h, then every 2 h until the 24 h expiry. Provider `Retry-After` is respected (`max`).
+- Backoff: 30 s, 2 min, 10 min, 30 min, 1 h, then every 2 h until the 24 h expiry. Provider `Retry-After` is respected (`max`), capped at 2 h so a bogus header can't park the newest message until it expires.
 - Shutdown: stop the timer and await the in-flight pipeline (bounded by provider timeouts).
 
 ## 6. Review pipeline (`domain/guestbook/review-pipeline.ts`)

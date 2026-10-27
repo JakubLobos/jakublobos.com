@@ -32,4 +32,4 @@ The brief: English at `/` and Polish at `/pl`. `/` detects the browser language 
 
 - The `lang` cookie is a functional cookie set at the visitor's explicit request, so it's consent-exempt and disclosed in the privacy policy.
 - `/` and `/set-language` cost Worker invocations, far below the free limit. Everything else is a free static asset.
-- Local and e2e environments run the real Worker with `wrangler dev`.
+- Local preview and e2e run the real Worker code in the Node edge emulator (`apps/web/edge-emulator/`; workerd crashes on the owner's Windows build); CI on Linux also runs the e2e smoke suite against real `wrangler dev`.

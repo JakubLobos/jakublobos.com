@@ -64,7 +64,7 @@ Review pipeline, worker, routes (T-013/T-014); CLI parsing (T-017).
 
 ```
 pnpm verify
-pnpm --filter @portfolio/server test -- src/infra/db
+pnpm --filter @portfolio/server exec vitest run src/infra/db
 ```
 
 ## Definition of done
