@@ -10,7 +10,7 @@ date and the word "approved" once the owner has gone through every row (T-034, A
 > `{name}` marks a value filled in at runtime. Address form is informal "Ty"; quotes are „…”;
 > a guestbook entry is a "wpis".
 
-Strings: 357 across 20 areas.
+Strings: 366 across 20 areas.
 
 ## Owner sign-off
 
@@ -144,7 +144,7 @@ Source: `apps/web/src/i18n/messages/guestbook.ts`
 | `form.submit` | Leave a mark | Zostaw ślad |   |
 | `form.sending` | Sending… | Wysyłanie… |   |
 | `form.honeypot` | Leave empty | Zostaw puste |   |
-| `form.notice` | Your message is reviewed before it appears. Please don’t include personal details. | Wiadomość jest sprawdzana, zanim pojawi się na stronie. Nie podawaj danych osobowych. |   |
+| `form.notice` | Your message is reviewed automatically by AI before it appears. Please don’t include personal details. | Twój wpis jest automatycznie sprawdzany przez AI, zanim się pojawi. Nie podawaj danych osobowych. |   |
 | `form.privacy` | Privacy | Prywatność |   |
 | `form.needsScript` | Leaving a mark needs JavaScript. | Zostawienie śladu wymaga JavaScriptu. |   |
 | `form.charsLeft` | {n} characters left | Zostało znaków: {n} |   |
@@ -365,21 +365,26 @@ Source: `apps/web/src/i18n/messages/privacy.ts`
 | `sections[1].blocks[1].rows[8][2]` | Strictly necessary | Niezbędne |   |
 | `sections[1].blocks[1].rows[8][3]` | Your browser | Twoja przeglądarka |   |
 | `sections[1].blocks[1].rows[8][4]` | Until you change it | Do czasu zmiany wyboru |   |
-| `sections[1].blocks[1].rows[9][0]` | Google Analytics 4 cookies and identifiers | Cookies i identyfikatory Google Analytics 4 |   |
-| `sections[1].blocks[1].rows[9][1]` | Visit statistics | Statystyki odwiedzin |   |
-| `sections[1].blocks[1].rows[9][2]` | Consent (“Accept”) | Zgoda („Akceptuję”) |   |
-| `sections[1].blocks[1].rows[9][3]` | Google (US) | Google (USA) |   |
-| `sections[1].blocks[1].rows[9][4]` | Per the GA4 property settings, set to the shortest period available [OWNER: confirm] | Zgodnie z ustawieniami usługi GA4, ustawionymi na najkrótszy dostępny okres [WŁAŚCICIEL: potwierdź] |   |
-| `sections[1].blocks[1].rows[10][0]` | PostHog, with consent | PostHog, za zgodą |   |
-| `sections[1].blocks[1].rows[10][1]` | Product analytics | Analityka produktowa |   |
+| `sections[1].blocks[1].rows[9][0]` | “jl-contact-draft” (session storage) | „jl-contact-draft” (pamięć sesji) |   |
+| `sections[1].blocks[1].rows[9][1]` | Keep an unsent contact-form draft in this tab | Zachowanie niewysłanej wersji roboczej wiadomości z formularza kontaktowego w tej karcie |   |
+| `sections[1].blocks[1].rows[9][2]` | Strictly necessary (you asked for it) | Niezbędne (o to prosisz) |   |
+| `sections[1].blocks[1].rows[9][3]` | Your browser only; it is never sent | Tylko Twoja przeglądarka; nigdy nie jest wysyłany |   |
+| `sections[1].blocks[1].rows[9][4]` | Until you close the tab or send the message | Do zamknięcia karty lub wysłania wiadomości |   |
+| `sections[1].blocks[1].rows[10][0]` | Google Analytics 4 cookies and identifiers | Cookies i identyfikatory Google Analytics 4 |   |
+| `sections[1].blocks[1].rows[10][1]` | Visit statistics | Statystyki odwiedzin |   |
 | `sections[1].blocks[1].rows[10][2]` | Consent (“Accept”) | Zgoda („Akceptuję”) |   |
-| `sections[1].blocks[1].rows[10][3]` | PostHog EU cloud | Chmura PostHog w UE |   |
-| `sections[1].blocks[1].rows[10][4]` | Per the PostHog project settings | Zgodnie z ustawieniami projektu PostHog |   |
-| `sections[1].blocks[1].rows[11][0]` | PostHog cookieless counting, after “Only essential” | Bezcookiesowe zliczanie PostHog po wyborze „Tylko niezbędne” |   |
-| `sections[1].blocks[1].rows[11][1]` | Count visits in aggregate without storing anything on your device | Zliczanie odwiedzin zbiorczo, bez zapisywania czegokolwiek na Twoim urządzeniu |   |
-| `sections[1].blocks[1].rows[11][2]` | Legitimate interest | Prawnie uzasadniony interes |   |
-| `sections[1].blocks[1].rows[11][3]` | PostHog EU cloud (server-side hash) | Chmura PostHog w UE (skrót liczony po stronie serwera) |   |
+| `sections[1].blocks[1].rows[10][3]` | Google (US) | Google (USA) |   |
+| `sections[1].blocks[1].rows[10][4]` | Per the GA4 property settings, set to the shortest period available [OWNER: confirm] | Zgodnie z ustawieniami usługi GA4, ustawionymi na najkrótszy dostępny okres [WŁAŚCICIEL: potwierdź] |   |
+| `sections[1].blocks[1].rows[11][0]` | PostHog, with consent | PostHog, za zgodą |   |
+| `sections[1].blocks[1].rows[11][1]` | Product analytics | Analityka produktowa |   |
+| `sections[1].blocks[1].rows[11][2]` | Consent (“Accept”) | Zgoda („Akceptuję”) |   |
+| `sections[1].blocks[1].rows[11][3]` | PostHog EU cloud | Chmura PostHog w UE |   |
 | `sections[1].blocks[1].rows[11][4]` | Per the PostHog project settings | Zgodnie z ustawieniami projektu PostHog |   |
+| `sections[1].blocks[1].rows[12][0]` | PostHog cookieless counting, after “Only essential” | Bezcookiesowe zliczanie PostHog po wyborze „Tylko niezbędne” |   |
+| `sections[1].blocks[1].rows[12][1]` | Count visits in aggregate without storing anything on your device | Zliczanie odwiedzin zbiorczo, bez zapisywania czegokolwiek na Twoim urządzeniu |   |
+| `sections[1].blocks[1].rows[12][2]` | Legitimate interest | Prawnie uzasadniony interes |   |
+| `sections[1].blocks[1].rows[12][3]` | PostHog EU cloud (server-side hash) | Chmura PostHog w UE (skrót liczony po stronie serwera) |   |
+| `sections[1].blocks[1].rows[12][4]` | Per the PostHog project settings | Zgodnie z ustawieniami projektu PostHog |   |
 | `sections[1].blocks[2].text` | The guestbook has no accounts and the site stores no identifier with your message, so a message can only be found by its text. Please do not put personal data in it; the form rejects emails and phone numbers. | Księga gości nie ma kont, a strona nie zapisuje przy Twoim wpisie żadnego identyfikatora, więc wpis można odnaleźć tylko po jego treści. Proszę, nie wpisuj danych osobowych; formularz odrzuca adresy e-mail i numery telefonu. |   |
 | `sections[1].blocks[3].text` | Whether a guestbook message is published is decided automatically by simple text rules and the Google (Gemini API) checks described below. This has no legal effect on you. If you disagree, write to the address above. | O publikacji wpisu w księdze gości decydują automatycznie proste reguły tekstowe oraz opisane niżej kontrole Google (Gemini API). Nie ma to wobec Ciebie skutków prawnych. Jeśli się z tym nie zgadzasz, napisz na adres podany wyżej. |   |
 | `sections[2].heading` | Who else handles data | Kto jeszcze przetwarza dane |   |
@@ -397,7 +402,7 @@ Source: `apps/web/src/i18n/messages/privacy.ts`
 | `sections[2].blocks[11].text` | PostHog (EU) | PostHog (UE) |   |
 | `sections[2].blocks[12].text` | If you press “Accept”, PostHog records your visit with its cookies. If you press “Only essential”, it only counts visits in aggregate using a server-side hash, with no cookies or other storage on your device. Until you choose, it does nothing. | Jeśli klikniesz „Akceptuję”, PostHog rejestruje Twoją wizytę z użyciem swoich cookies. Jeśli klikniesz „Tylko niezbędne”, jedynie zlicza wizyty zbiorczo za pomocą skrótu liczonego po stronie serwera, bez cookies i bez zapisu na Twoim urządzeniu. Do czasu dokonania wyboru nic nie robi. |   |
 | `sections[3].heading` | Cookies and local storage | Cookies i pamięć lokalna |   |
-| `sections[3].blocks[0].text` | Only the first two entries are used without your consent. Choose “Only essential” and nothing else is stored. You can change your choice at any time with “Cookie settings” in the footer; withdrawing consent stops Google Analytics, removes its cookies, and switches PostHog to cookieless counting. | Bez Twojej zgody używane są tylko dwa pierwsze wpisy. Jeśli wybierzesz „Tylko niezbędne”, nic więcej nie jest zapisywane. Wybór możesz zmienić w dowolnej chwili przez „Ustawienia cookies” w stopce; wycofanie zgody zatrzymuje Google Analytics, usuwa jego cookies i przełącza PostHog na zliczanie bez cookies. |   |
+| `sections[3].blocks[0].text` | Only the first three entries are used without your consent. Choose “Only essential” and nothing else is stored. You can change your choice at any time with “Cookie settings” in the footer; withdrawing consent stops Google Analytics, removes its cookies, and switches PostHog to cookieless counting. | Bez Twojej zgody używane są tylko trzy pierwsze wpisy. Jeśli wybierzesz „Tylko niezbędne”, nic więcej nie jest zapisywane. Wybór możesz zmienić w dowolnej chwili przez „Ustawienia cookies” w stopce; wycofanie zgody zatrzymuje Google Analytics, usuwa jego cookies i przełącza PostHog na zliczanie bez cookies. |   |
 | `sections[3].blocks[1].caption` | Cookies and browser storage | Cookies i pamięć przeglądarki |   |
 | `sections[3].blocks[1].head[0]` | Name | Nazwa |   |
 | `sections[3].blocks[1].head[1]` | Purpose | Cel |   |
@@ -411,14 +416,18 @@ Source: `apps/web/src/i18n/messages/privacy.ts`
 | `sections[3].blocks[1].rows[1][1]` | Your cookie choice | Twój wybór dotyczący cookies |   |
 | `sections[3].blocks[1].rows[1][2]` | You answer the cookie banner | Odpowiadasz na komunikat o cookies |   |
 | `sections[3].blocks[1].rows[1][3]` | Until you change it | Do czasu zmiany wyboru |   |
-| `sections[3].blocks[1].rows[2][0]` | _ga, _ga_* (cookies) | _ga, _ga_* (cookies) |   |
-| `sections[3].blocks[1].rows[2][1]` | Google Analytics | Google Analytics |   |
-| `sections[3].blocks[1].rows[2][2]` | You press “Accept” | Klikasz „Akceptuję” |   |
-| `sections[3].blocks[1].rows[2][3]` | Per GA4 settings | Zgodnie z ustawieniami GA4 |   |
-| `sections[3].blocks[1].rows[3][0]` | PostHog keys (cookies and local storage) | Klucze PostHog (cookies i local storage) |   |
-| `sections[3].blocks[1].rows[3][1]` | PostHog analytics | Analityka PostHog |   |
+| `sections[3].blocks[1].rows[2][0]` | jl-contact-draft (session storage) | jl-contact-draft (pamięć sesji) |   |
+| `sections[3].blocks[1].rows[2][1]` | Your unsent contact-form draft | Twoja niewysłana wersja robocza wiadomości |   |
+| `sections[3].blocks[1].rows[2][2]` | You type in the contact form | Piszesz w formularzu kontaktowym |   |
+| `sections[3].blocks[1].rows[2][3]` | Until you close the tab or send the message | Do zamknięcia karty lub wysłania wiadomości |   |
+| `sections[3].blocks[1].rows[3][0]` | _ga, _ga_* (cookies) | _ga, _ga_* (cookies) |   |
+| `sections[3].blocks[1].rows[3][1]` | Google Analytics | Google Analytics |   |
 | `sections[3].blocks[1].rows[3][2]` | You press “Accept” | Klikasz „Akceptuję” |   |
-| `sections[3].blocks[1].rows[3][3]` | Per PostHog settings | Zgodnie z ustawieniami PostHog |   |
+| `sections[3].blocks[1].rows[3][3]` | Per GA4 settings | Zgodnie z ustawieniami GA4 |   |
+| `sections[3].blocks[1].rows[4][0]` | PostHog keys (cookies and local storage) | Klucze PostHog (cookies i local storage) |   |
+| `sections[3].blocks[1].rows[4][1]` | PostHog analytics | Analityka PostHog |   |
+| `sections[3].blocks[1].rows[4][2]` | You press “Accept” | Klikasz „Akceptuję” |   |
+| `sections[3].blocks[1].rows[4][3]` | Per PostHog settings | Zgodnie z ustawieniami PostHog |   |
 | `sections[4].heading` | Your rights | Twoje prawa |   |
 | `sections[4].blocks[0].text` | Under the GDPR you may ask me to: | Na podstawie RODO możesz zażądać ode mnie: |   |
 | `sections[4].blocks[1].items[0]` | tell you whether I process your data and give you a copy (access), | informacji, czy przetwarzam Twoje dane, i kopii tych danych (dostęp), |   |

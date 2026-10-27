@@ -21,6 +21,7 @@ import {
   type SubmitOutcome,
 } from '../lib/contact-form.ts';
 import { burstFrom } from './confetti.ts';
+import { clearDraft, loadDraft, saveDraft } from './contact-draft.ts';
 
 type Control = HTMLInputElement | HTMLTextAreaElement;
 type Phase = 'idle' | 'sending' | 'sent';
@@ -151,6 +152,7 @@ class ContactFormElement extends HTMLElement {
       switch (outcome.kind) {
         case 'sent':
           setPhase('sent');
+          clearDraft();
           setStatus(fillTemplate(copy.form.statusSent, { email }));
           // The disabled button dropped focus; keep keyboard users next to "Send another".
           submit.focus();
@@ -228,6 +230,7 @@ class ContactFormElement extends HTMLElement {
         // An edited field is no longer what the server rejected.
         serverErrors = { ...serverErrors, [name]: undefined };
         updateCount(name);
+        saveDraft(values());
         renderErrors();
       },
       opts,
@@ -266,6 +269,17 @@ class ContactFormElement extends HTMLElement {
       opts,
     );
     again.addEventListener('click', reset, opts);
+
+    // Only empty fields take the draft, so autofill and early typing win. The input event syncs the
+    // typing mirror and counter; touched and tried stay false, so nothing validates yet.
+    const draft = loadDraft();
+    for (const name of CONTACT_FIELDS) {
+      const { control } = fields[name];
+      if (draft?.[name] && !control.value) {
+        control.value = draft[name];
+        control.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+    }
 
     // Restored values (back/forward, autofill) can already be in the fields.
     updateCount('message');
