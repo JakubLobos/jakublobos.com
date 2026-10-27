@@ -23,17 +23,10 @@ import {
   type StoredSubmission,
 } from '../lib/guestbook-status.ts';
 
-// Web Animations take no `var()`, so these mirror --duration-hover and --ease-type (tokens.css).
-const INK_TIMING: KeyframeAnimationOptions = {
-  duration: 150,
-  easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)',
-  fill: 'both',
-};
 const INK_OUT: Keyframe[] = [{ opacity: 1 }, { opacity: 0, transform: 'translateY(-0.3em)' }];
 const INK_IN: Keyframe[] = [{ opacity: 0, transform: 'translateY(0.3em)' }, { opacity: 1 }];
 
 // One-shot accents on the card when the review ends (approved settles, the others get a nudge).
-const ACCENT_TIMING: KeyframeAnimationOptions = { duration: 450, easing: 'ease-out' };
 const SETTLE: Keyframe[] = [
   { transform: 'scale(1) rotate(0)' },
   { transform: 'scale(1.03) rotate(-0.8deg)', offset: 0.35 },
@@ -47,11 +40,29 @@ const NUDGE: Keyframe[] = [
   { transform: 'translateX(-3px)', offset: 0.7 },
   { transform: 'translateX(0)' },
 ];
-const ACCENTS: Partial<Record<string, Keyframe[]>> = {
+const ACCENTS: Partial<Record<StatusView['state'], Keyframe[]>> = {
   approved: SETTLE,
   rejected: NUDGE,
   superseded: NUDGE,
 };
+
+const FALLBACK_MS = 150;
+
+/** Web Animations take no `var()`, so the motion tokens are read from the computed style. */
+function tokenTiming(
+  element: Element,
+  duration: string,
+  easing: string,
+  fill: FillMode,
+): KeyframeAnimationOptions {
+  const style = getComputedStyle(element);
+  const ms = parseFloat(style.getPropertyValue(duration));
+  return {
+    duration: ms > 0 ? ms : FALLBACK_MS,
+    easing: style.getPropertyValue(easing).trim() || 'ease',
+    fill,
+  };
+}
 
 interface Resettable extends HTMLElement {
   reset: () => void;
@@ -258,7 +269,8 @@ function bind(
    * running animations, which rejects `finished` and leaves the text to that render.
    */
   async function reink(write: () => void): Promise<void> {
-    const out = statusTexts.map((element) => element.animate(INK_OUT, INK_TIMING));
+    const timing = tokenTiming(parts.card, '--duration-hover', '--ease-type', 'both');
+    const out = statusTexts.map((element) => element.animate(INK_OUT, timing));
     inking = out;
     try {
       await Promise.all(out.map((animation) => animation.finished));
@@ -268,7 +280,7 @@ function bind(
     // Held open by `fill`; released in the same task as the write, so no frame shows the old text.
     for (const animation of out) animation.cancel();
     write();
-    inking = statusTexts.map((element) => element.animate(INK_IN, INK_TIMING));
+    inking = statusTexts.map((element) => element.animate(INK_IN, timing));
   }
 
   /** Shows one review state in the dialog; `null` is "still checking". */
@@ -293,8 +305,13 @@ function bind(
       return;
     }
     void reink(write);
-    const accent = ACCENTS[state];
-    if (accent) parts.card.animate(accent, ACCENT_TIMING);
+    const accent = view ? ACCENTS[view.state] : undefined;
+    if (accent) {
+      parts.card.animate(
+        accent,
+        tokenTiming(parts.card, '--duration-panel', '--ease-standard', 'none'),
+      );
+    }
   }
 
   let watching: AbortController | null = null;
