@@ -8,6 +8,15 @@ export const GUESTBOOK_MESSAGE_MAX_LENGTH = 120; // UTF-16 code units (= HTML ma
 export const GUESTBOOK_RETENTION_LIMIT = 100; // total rows (pending + approved)
 export const GUESTBOOK_MAX_PENDING = 1; // newest wins (D-05)
 
+export const SUBMISSION_STATUSES = ['pending', 'approved', 'rejected', 'superseded'] as const;
+/** Deliberately coarse (ADR-0017): enough to be kind to the visitor, too little to probe the filters. */
+export const SUBMISSION_REASONS = [
+  'inappropriate',
+  'off_topic',
+  'impersonation',
+  'personal_data',
+] as const;
+
 export const CONTACT_NAME_MIN = 2;
 export const CONTACT_NAME_MAX = 60;
 export const CONTACT_EMAIL_MAX = 120;

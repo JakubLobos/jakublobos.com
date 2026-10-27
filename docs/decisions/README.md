@@ -20,5 +20,6 @@ Format: lightweight MADR (context → decision → alternatives → consequences
 | [0014](0014-hosting-cloudflare-workers-and-railway.md) | Hosting: Cloudflare Workers static assets + Railway API                 | Accepted (D-14)           |
 | [0015](0015-phone-number-protection.md)                | Phone number behind a Turnstile-verified reveal; never in the repo      | Accepted (D-24, D-25)     |
 | [0016](0016-gemini-free-tier-review-providers.md)      | Gemini free-tier review providers alongside OpenAI                      | Accepted                  |
+| [0017](0017-guestbook-submission-status.md)            | Live guestbook submission status with general reasons                   | Accepted (D-29)           |
 
 Template: [`_template.md`](_template.md).

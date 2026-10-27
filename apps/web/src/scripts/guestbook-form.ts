@@ -1,6 +1,6 @@
 import { DEFAULT_PAINT, GUESTBOOK_MESSAGE_MAX_LENGTH, type PaintId } from '@portfolio/contracts';
 import { isLocale, type Locale } from '../i18n/locales.ts';
-import { submitGuestbookMessage } from '../lib/api/guestbook.ts';
+import { getSubmissionStatus, submitGuestbookMessage } from '../lib/api/guestbook.ts';
 import {
   ANNOUNCE_AT,
   createSubmitController,
@@ -9,6 +9,19 @@ import {
   type FormMessages,
 } from '../lib/guestbook-form.ts';
 import { isPaintId, tintValue } from '../lib/guestbook-paint.ts';
+import {
+  APPROVED_EVENT,
+  copyFor,
+  parseStatusMessages,
+  parseStoredSubmission,
+  pollDelay,
+  serializeSubmission,
+  STORAGE_KEY,
+  toStatusStep,
+  type StatusMessages,
+  type StatusView,
+  type StoredSubmission,
+} from '../lib/guestbook-status.ts';
 
 interface Resettable extends HTMLElement {
   reset: () => void;
@@ -39,6 +52,12 @@ interface Parts {
   dialog: HTMLDialogElement;
   echo: HTMLElement;
   modalClose: HTMLButtonElement;
+  card: HTMLElement;
+  eyebrow: HTMLElement;
+  title: HTMLElement;
+  copy: HTMLElement;
+  live: HTMLElement;
+  progress: HTMLElement;
 }
 
 function collect(root: HTMLElement, dialog: HTMLElement | null): Parts | null {
@@ -54,9 +73,16 @@ function collect(root: HTMLElement, dialog: HTMLElement | null): Parts | null {
   const modal = dialog instanceof HTMLDialogElement ? dialog : null;
   const echo = modal && find(modal, '[data-echo-text]', HTMLElement);
   const modalClose = modal && find(modal, '[data-modal-close]', HTMLButtonElement);
+  const card = modal && find(modal, '[data-card]', HTMLElement);
+  const eyebrow = modal && find(modal, '[data-status-eyebrow]', HTMLElement);
+  const title = modal && find(modal, '[data-status-title]', HTMLElement);
+  const copy = modal && find(modal, '[data-status-copy]', HTMLElement);
+  const live = modal && find(modal, '[data-status-live]', HTMLElement);
+  const progress = modal && find(modal, '[data-progress]', HTMLElement);
   if (
     !(form && controls && isResettable(field) && body && counter && error && announce) ||
-    !(honeypot && submit && modal && echo && modalClose)
+    !(honeypot && submit && modal && echo && modalClose) ||
+    !(card && eyebrow && title && copy && live && progress)
   ) {
     return null;
   }
@@ -73,10 +99,69 @@ function collect(root: HTMLElement, dialog: HTMLElement | null): Parts | null {
     dialog: modal,
     echo,
     modalClose,
+    card,
+    eyebrow,
+    title,
+    copy,
+    live,
+    progress,
   };
 }
 
-function bind(parts: Parts, messages: FormMessages, locale: Locale, signal: AbortSignal): void {
+function readStored(): StoredSubmission | null {
+  try {
+    return parseStoredSubmission(sessionStorage.getItem(STORAGE_KEY), Date.now());
+  } catch {
+    return null;
+  }
+}
+
+function writeStored(stored: StoredSubmission | null): void {
+  try {
+    if (stored === null) sessionStorage.removeItem(STORAGE_KEY);
+    else sessionStorage.setItem(STORAGE_KEY, serializeSubmission(stored));
+  } catch {
+    // Private mode or blocked storage: the dialog still works, only the reload-resume is lost.
+  }
+}
+
+function sleep(ms: number, signal: AbortSignal): Promise<void> {
+  return new Promise((resolve) => {
+    const timer = setTimeout(resolve, ms);
+    signal.addEventListener(
+      'abort',
+      () => {
+        clearTimeout(timer);
+        resolve();
+      },
+      { once: true },
+    );
+  });
+}
+
+/** Resolves at once when the tab is visible, otherwise when it becomes visible (or on abort). */
+function untilVisible(signal: AbortSignal): Promise<void> {
+  if (!document.hidden) return Promise.resolve();
+  return new Promise((resolve) => {
+    const done = (): void => {
+      document.removeEventListener('visibilitychange', onChange);
+      resolve();
+    };
+    const onChange = (): void => {
+      if (!document.hidden) done();
+    };
+    document.addEventListener('visibilitychange', onChange);
+    signal.addEventListener('abort', done, { once: true });
+  });
+}
+
+function bind(
+  parts: Parts,
+  messages: FormMessages,
+  statusMessages: StatusMessages,
+  locale: Locale,
+  signal: AbortSignal,
+): void {
   const { form, controls, field, body, counter, error, announce, honeypot, submit, dialog } = parts;
   let previousLength = 0;
   let submitHadFocus = false;
@@ -126,6 +211,66 @@ function bind(parts: Parts, messages: FormMessages, locale: Locale, signal: Abor
     if (!busy && submitHadFocus) submit.focus();
   }
 
+  /** Shows one review state in the dialog; `null` is "still checking". */
+  function render(view: StatusView | null): void {
+    const copy = copyFor(statusMessages, view);
+    parts.card.dataset.state = view?.state ?? 'checking';
+    parts.eyebrow.textContent = copy.eyebrow;
+    parts.title.textContent = copy.title;
+    parts.copy.textContent = copy.body;
+    parts.live.textContent = `${copy.title} ${copy.body}`;
+  }
+
+  let watching: AbortController | null = null;
+
+  /**
+   * Polls the status endpoint until a terminal answer, a 404 or the time budget ends. It keeps
+   * going when the dialog is closed, so an approval still refreshes the quote behind it.
+   */
+  async function watch(stored: StoredSubmission): Promise<void> {
+    watching?.abort();
+    const abort = new AbortController();
+    watching = abort;
+    const stop = abort.signal;
+    // A function, so the compiler does not narrow it across the awaits below.
+    const stopped = (): boolean => stop.aborted;
+    signal.addEventListener(
+      'abort',
+      () => {
+        abort.abort();
+      },
+      { once: true },
+    );
+
+    let elapsed = 0;
+    let attempt = 0;
+    let final: StatusView = { state: 'slow' };
+    for (;;) {
+      const wait = pollDelay(attempt, elapsed);
+      if (wait === null) break;
+      await sleep(wait, stop);
+      await untilVisible(stop);
+      if (stopped()) return;
+      elapsed += wait;
+      const startedAt = performance.now();
+      const result = await getSubmissionStatus(stored.token);
+      if (stopped()) return;
+      elapsed += performance.now() - startedAt;
+      attempt += 1;
+      const step = toStatusStep(result);
+      if (step.kind === 'done') {
+        final = step.view;
+        break;
+      }
+    }
+
+    // An older watch that was replaced returned above, so only the newest reaches this point.
+    writeStored(null);
+    watching = null;
+    render(final);
+    if (final.state === 'approved') document.dispatchEvent(new CustomEvent(APPROVED_EVENT));
+  }
+
   const controller = createSubmitController({
     send: submitGuestbookMessage,
     newId: () => crypto.randomUUID(),
@@ -165,8 +310,22 @@ function bind(parts: Parts, messages: FormMessages, locale: Locale, signal: Abor
         parts.echo.textContent = outcome.body;
         // The marker highlight wraps the text span (ui/Highlight.astro reads `--tint`).
         parts.echo.parentElement?.style.setProperty('--tint', tintValue(outcome.paint));
+        parts.progress.style.setProperty('--tint', tintValue(outcome.paint));
+        render(null);
+        // Written again once the dialog is visible, so the polite region announces the first state.
+        parts.live.textContent = '';
         dialog.showModal();
         parts.modalClose.focus();
+        parts.live.textContent = `${statusMessages.checking.title} ${statusMessages.checking.body}`;
+        {
+          const stored = {
+            token: outcome.clientRequestId,
+            sentAt: Date.now(),
+            tint: outcome.paint,
+          };
+          writeStored(stored);
+          void watch(stored);
+        }
         break;
     }
   }
@@ -224,6 +383,10 @@ function bind(parts: Parts, messages: FormMessages, locale: Locale, signal: Abor
     opts,
   );
 
+  // A reload mid-review keeps watching quietly (the text is not kept, so the dialog stays closed).
+  const resumed = readStored();
+  if (resumed !== null) void watch(resumed);
+
   syncCounter();
   // The controls ship disabled; only a working script enables them (NFR-13).
   controls.disabled = false;
@@ -242,8 +405,9 @@ class GuestbookFormElement extends HTMLElement {
       const messages = parseFormMessages(this.dataset.messages);
       const { locale, modal } = this.dataset;
       const parts = collect(this, modal ? document.getElementById(modal) : null);
-      if (!messages || !isLocale(locale) || !parts) return;
-      bind(parts, messages, locale, abort.signal);
+      const statusMessages = parseStatusMessages(parts?.dialog.dataset.messages);
+      if (!messages || !statusMessages || !isLocale(locale) || !parts) return;
+      bind(parts, messages, statusMessages, locale, abort.signal);
     });
   }
 

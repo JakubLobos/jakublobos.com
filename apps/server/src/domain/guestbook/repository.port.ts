@@ -1,4 +1,4 @@
-import type { Locale, PaintId } from '@portfolio/contracts';
+import type { Locale, PaintId, SubmissionReason } from '@portfolio/contracts';
 
 // Every timestamp in this port is epoch milliseconds (the `Clock` unit).
 
@@ -53,6 +53,10 @@ export interface ArchiveExportRow {
   readonly approvedAt: number;
 }
 
+export type SubmissionStatusResult =
+  | { readonly status: 'pending' | 'approved' | 'superseded' }
+  | { readonly status: 'rejected'; readonly reason: SubmissionReason };
+
 export interface GuestbookRepository {
   /** One IMMEDIATE transaction: dedupe, supersede the pending row, evict oldest approved, insert. */
   insertPendingNewestWins(message: NewPendingMessage): InsertResult;
@@ -62,8 +66,17 @@ export interface GuestbookRepository {
   /** Pending to approved only. False when the row was superseded, expired, or already approved. */
   approve(id: number, now: number): boolean;
   deletePending(id: number): boolean;
+  /**
+   * Review said no: records a text-free `rejected` outcome for the row's token, then deletes it
+   * (one transaction). False when the row was superseded or expired meanwhile.
+   */
+  rejectPending(id: number, reason: SubmissionReason, now: number): boolean;
+  /** A silently dropped submission: a text-free `rejected` outcome, nothing else is stored. */
+  recordRejection(clientRequestId: string, reason: SubmissionReason, now: number): void;
+  /** `null` when the token is unknown or its outcome has been pruned. */
+  findSubmissionStatus(clientRequestId: string): SubmissionStatusResult | null;
   recordFailure(id: number, code: string, nextAttemptAt: number): void;
-  /** Deletes pending rows created before the cutoff; returns how many. */
+  /** Deletes pending rows (and submission outcomes) created before the cutoff; returns pending count. */
   deleteExpiredPending(createdBefore: number): number;
 
   listArchive(options: { status?: GuestbookStatus; limit: number }): ArchiveRow[];

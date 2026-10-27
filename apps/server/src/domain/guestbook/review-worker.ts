@@ -1,6 +1,7 @@
 import { TtlCache } from '../shared/ttl-cache.ts';
 import type { Clock } from '../shared/clock.ts';
 import { nextAttemptDelay } from './backoff.ts';
+import { generalReason } from './rejection-reason.ts';
 import type { ReviewPipeline } from './review-pipeline.ts';
 import type { GuestbookRepository } from './repository.port.ts';
 
@@ -107,7 +108,7 @@ export function createReviewWorker(deps: ReviewWorkerDeps): ReviewWorker {
           { event: 'rejected', layer: decision.layer, reason: decision.reason },
           'guestbook message rejected',
         );
-        if (!repo.deletePending(row.id)) {
+        if (!repo.rejectPending(row.id, generalReason(decision), clock.now())) {
           logger.info({ event: 'stale_result', outcome: 'reject' }, 'guestbook result discarded');
         }
         return;

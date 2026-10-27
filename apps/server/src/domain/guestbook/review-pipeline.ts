@@ -1,5 +1,5 @@
 import { checkGuestbookBody, type Locale } from '@portfolio/contracts';
-import { findBlockedTerm } from './blocked-terms.ts';
+import { findBlockedTerm, isMemeTerm } from './blocked-terms.ts';
 import type { ModerationProvider } from './moderation.port.ts';
 import { decideModeration } from './moderation-policy.ts';
 import { checkQuality } from './quality-rules.ts';
@@ -35,7 +35,10 @@ function localRuleHit(body: string): string | null {
   if (feedback.length > 0) return feedback.join(',');
   const quality = checkQuality(body);
   if (!quality.ok) return quality.rule;
-  return findBlockedTerm(body) === null ? null : 'blocked_term';
+  const term = findBlockedTerm(body);
+  if (term === null) return null;
+  // The distinction only exists so the visitor-facing reason can differ (rejection-reason.ts).
+  return isMemeTerm(term) ? 'blocked_term_meme' : 'blocked_term';
 }
 
 function transient(outcome: {

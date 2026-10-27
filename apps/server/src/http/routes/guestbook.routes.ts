@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { z } from 'zod';
 import type { FieldErrorCode, GuestbookMessageDto } from '@portfolio/contracts';
 import { GuestbookSubmitRequestSchema } from '@portfolio/contracts/schemas';
 import type { GuestbookService } from '../../domain/guestbook/guestbook.service.ts';
@@ -35,6 +36,11 @@ export function createGuestbookRoutes(deps: GuestbookRoutesDeps): RouteModule {
     limit: 60,
     clientIpSource: deps.clientIpSource,
   });
+  const statusLimiter = createClientLimiter({
+    windowMs: MINUTE_MS,
+    limit: 30,
+    clientIpSource: deps.clientIpSource,
+  });
   const writeLimiters = [
     createClientLimiter({
       windowMs: 10 * MINUTE_MS,
@@ -60,6 +66,23 @@ export function createGuestbookRoutes(deps: GuestbookRoutesDeps): RouteModule {
     // Always revalidate; Express derives the ETag from the body and answers 304 itself.
     res.setHeader('Cache-Control', 'no-cache');
     ok(res, { message });
+  });
+
+  // The token is the visitor's own random UUID, so unlike a sequential id it cannot be guessed.
+  // The answer is coarse and text-free (ADR-0017); its own limiter keeps polling cheap to bound.
+  router.get('/guestbook/submissions/:clientRequestId', statusLimiter, (req, res) => {
+    const token = z.uuid().safeParse(req.params.clientRequestId);
+    res.setHeader('Cache-Control', 'no-store');
+    if (!token.success) {
+      fail(res, { status: 400, code: 'VALIDATION_FAILED', message: 'Invalid submission id' });
+      return;
+    }
+    const result = deps.service.submissionStatus(token.data);
+    if (result === null) {
+      fail(res, { status: 404, code: 'NOT_FOUND', message: 'Unknown submission' });
+      return;
+    }
+    ok(res, result.status === 'rejected' ? result : { status: result.status });
   });
 
   router.post('/guestbook', ...writeLimiters, ...jsonBody('8kb'), (req, res) => {

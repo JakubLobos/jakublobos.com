@@ -64,6 +64,7 @@ describe('createSubmitController', () => {
       kind: 'sent',
       body: 'Hello there',
       paint: 'violet',
+      clientRequestId: 'id-1',
     });
     expect(send).toHaveBeenCalledExactlyOnceWith({
       body: 'Hello there',

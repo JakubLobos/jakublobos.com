@@ -1,6 +1,6 @@
 # ADR-0005: Layered guestbook review: local rules → OpenAI moderation → LLM suitability check
 
-- **Status:** Accepted (owner decisions D-06, 2026-10-25) · **Related:** FR-41…FR-43, T5, `guestbook-moderation.md` §6–§8
+- **Status:** Accepted (owner decisions D-06, 2026-10-25); the uniform "in review" modal is amended by [ADR-0017](0017-guestbook-submission-status.md) · **Related:** FR-41…FR-43, T5, `guestbook-moderation.md` §6–§8
 
 ## Context
 

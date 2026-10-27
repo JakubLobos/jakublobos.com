@@ -8,6 +8,8 @@ import {
   GUESTBOOK_MESSAGE_MAX_LENGTH,
   LOCALES,
   PAINT_IDS,
+  SUBMISSION_REASONS,
+  SUBMISSION_STATUSES,
 } from './constants.ts';
 
 // Request schemas check shape and types only. The raw cap (4x the limit) merely
@@ -41,6 +43,13 @@ export const GuestbookMessageDtoSchema = z.object({
 
 export const GuestbookLatestResponseSchema = z.object({
   data: z.object({ message: GuestbookMessageDtoSchema.nullable() }),
+});
+
+export const GuestbookSubmissionStatusResponseSchema = z.object({
+  data: z.object({
+    status: z.enum(SUBMISSION_STATUSES),
+    reason: z.enum(SUBMISSION_REASONS).optional(),
+  }),
 });
 
 export const ContactRequestSchema = z.object({
