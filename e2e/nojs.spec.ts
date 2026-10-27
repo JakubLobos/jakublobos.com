@@ -5,8 +5,11 @@ import { expect, test } from '@playwright/test';
 test.use({ javaScriptEnabled: false, locale: 'en-US' });
 
 test.describe('@nojs', () => {
-  test.beforeEach((_fixtures, testInfo) => {
-    test.skip(testInfo.project.name !== 'chromium-desktop', 'static HTML: one engine is enough');
+  test.beforeEach(({ browserName }, testInfo) => {
+    test.skip(
+      testInfo.project.name !== 'chromium-desktop',
+      `${browserName} project: static HTML, one engine is enough`,
+    );
   });
 
   test('all sections are visible and the dead controls say what to do instead', async ({
