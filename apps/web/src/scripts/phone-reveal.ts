@@ -151,7 +151,6 @@ class PhoneRevealElement extends HTMLElement {
       button.textContent = next ? copy.verifying : copy.show;
       if (next) {
         button.setAttribute('aria-busy', 'true');
-        failed.textContent = '';
       } else {
         button.removeAttribute('aria-busy');
       }
@@ -164,6 +163,7 @@ class PhoneRevealElement extends HTMLElement {
       link.textContent = display;
       result.replaceChildren(link);
       button.remove();
+      failed.textContent = '';
       announce.textContent = copy.revealed;
       link.focus();
     };
@@ -177,6 +177,7 @@ class PhoneRevealElement extends HTMLElement {
         show(response.data);
       } catch {
         setBusy(false);
+        // The old message stays while verifying, so nothing shifts below it.
         failed.textContent = copy.failed;
       }
     };
