@@ -85,3 +85,14 @@ Add EN + PL: `links` (list label: `Links` / `Linki`) and `link.{website,frontend
   - Assert `scrollWidth <= clientWidth` on `<html>`, link `href`/`target`/`rel`, and run axe on `#projects`.
 - Grep `e2e/` for old project titles; don't run `pnpm test:e2e`.
 - PR via `"C:\Program Files\GitHub CLI\gh.exe"`; conventional commit with `[T-070]`.
+
+## Addendum (2026-10-28)
+
+Owner request: add the stack items now listed in Projects to the Skills ("My toolbox") section. Add only, never remove or rename. Only `apps/web/src/content/skills.ts` changed, with items appended to the existing groups (no new groups):
+
+- Frameworks: Node.js, Tamagui, MUI, styled-components, react-email
+- Data & state: gRPC, Formik, Yup, Superstruct, i18next, Chart.js, ts-money
+- Testing: Playwright
+- Workflow: monorepo, PostHog
+
+Skipped as already covered: Redux (Redux Toolkit), posthog-js (PostHog), UI/UX design (UI/UX), AI-assisted coding (AI), A/B testing (already present). Screenshots: `tasks/reports/T-070/screenshots/skills-en-390.png` and `skills-en-1440.png`.
