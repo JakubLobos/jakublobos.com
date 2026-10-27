@@ -30,11 +30,27 @@ const t = hero(locale);
   <div class="divider" aria-hidden="true"></div>
   <div class="actions">
     <Button href="#contact">{t.contact}</Button>
-    <Button variant="secondary" href={profile.resume[locale]} download mimeType="application/pdf">
+    <Button
+      variant="secondary"
+      href={profile.resume[locale]}
+      download
+      mimeType="application/pdf"
+      data-confetti
+    >
       {t.resume}
     </Button>
   </div>
 </section>
+
+<script>
+  import { burstFrom } from '../../scripts/confetti.ts';
+
+  for (const trigger of document.querySelectorAll<HTMLElement>('#hero [data-confetti]')) {
+    trigger.addEventListener('click', () => {
+      burstFrom(trigger);
+    });
+  }
+</script>
 
 <style>
   .hero {

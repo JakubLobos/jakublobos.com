@@ -20,6 +20,7 @@ import {
   type PendingRequest,
   type SubmitOutcome,
 } from '../lib/contact-form.ts';
+import { burstFrom } from './confetti.ts';
 
 type Control = HTMLInputElement | HTMLTextAreaElement;
 type Phase = 'idle' | 'sending' | 'sent';
@@ -150,6 +151,7 @@ class ContactFormElement extends HTMLElement {
           setStatus(fillTemplate(copy.form.statusSent, { email }));
           // The disabled button dropped focus; keep keyboard users next to "Send another".
           submit.focus();
+          burstFrom(submit);
           return;
         case 'fields': {
           serverErrors = outcome.fields;
