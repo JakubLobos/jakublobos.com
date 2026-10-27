@@ -11,7 +11,9 @@ export function tokenTiming(
   fill: FillMode = 'none',
 ): KeyframeAnimationOptions {
   const style = getComputedStyle(element);
-  const ms = parseFloat(style.getPropertyValue(durationVar));
+  const raw = style.getPropertyValue(durationVar).trim();
+  // The production CSS minifier rewrites `350ms` to `.35s`, and custom properties keep the text.
+  const ms = parseFloat(raw) * (raw.endsWith('ms') ? 1 : 1000);
   return {
     duration: ms > 0 ? ms : FALLBACK_MS,
     easing: style.getPropertyValue(easingVar).trim() || 'ease',

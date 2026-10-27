@@ -23,6 +23,7 @@ import {
   type StoredSubmission,
 } from '../lib/guestbook-status.ts';
 import { createStatusMotion } from './guestbook-status-motion.ts';
+import { bindLimitNudge } from './limit-nudge.ts';
 
 interface Resettable extends HTMLElement {
   reset: () => void;
@@ -350,6 +351,7 @@ function bind(
 
   const opts = { signal };
 
+  bindLimitNudge(body, counter, signal);
   body.addEventListener(
     'input',
     () => {

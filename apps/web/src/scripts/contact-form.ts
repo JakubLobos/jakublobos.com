@@ -21,6 +21,7 @@ import {
   type SubmitOutcome,
 } from '../lib/contact-form.ts';
 import { burstFrom } from './confetti.ts';
+import { bindLimitNudge } from './limit-nudge.ts';
 
 type Control = HTMLInputElement | HTMLTextAreaElement;
 type Phase = 'idle' | 'sending' | 'sent';
@@ -266,6 +267,9 @@ class ContactFormElement extends HTMLElement {
       opts,
     );
     again.addEventListener('click', reset, opts);
+    for (const { control, count } of Object.values(fields)) {
+      if (count) bindLimitNudge(control, count, opts.signal);
+    }
 
     // Restored values (back/forward, autofill) can already be in the fields.
     updateCount('message');
