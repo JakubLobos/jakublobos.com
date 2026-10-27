@@ -14,6 +14,13 @@ COPY packages/contracts/package.json packages/contracts/
 # The pnpm version comes from the root `packageManager` field so it cannot drift.
 RUN npm install --global "pnpm@$(node -p "require('./package.json').packageManager.split('@')[1]")" \
  && pnpm install --frozen-lockfile --prod --filter "@portfolio/server..."
+# better-sqlite3 ships prebuilt binaries for every platform plus the SQLite sources (~27 MB);
+# the image needs only this platform's binary, which keeps it under the 250 MB budget.
+RUN cd node_modules/.pnpm/better-sqlite3@*/node_modules/better-sqlite3 \
+ && keep="$(node -p 'process.platform + "-" + process.arch').node" \
+ && find prebuilds -type f ! -name "$keep" -delete \
+ && test -f "prebuilds/$keep" \
+ && rm -rf deps src
 
 FROM node:24-slim
 ENV NODE_ENV=production \
