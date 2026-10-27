@@ -19,7 +19,7 @@ export const contactMessages = defineMessages({
       verifying: 'Verifying…',
       failed: 'Couldn’t verify. Try again.',
       revealed: 'Phone number shown.',
-      noScript: 'Use the contact form or email.',
+      noScript: 'Email me instead.',
     },
     form: {
       label: 'Contact form',
@@ -73,7 +73,7 @@ export const contactMessages = defineMessages({
       verifying: 'Weryfikuję…',
       failed: 'Nie udało się zweryfikować. Spróbuj ponownie.',
       revealed: 'Numer telefonu został wyświetlony.',
-      noScript: 'Skorzystaj z formularza lub napisz e-mail.',
+      noScript: 'Napisz do mnie e-mailem.',
     },
     form: {
       label: 'Formularz kontaktowy',
@@ -98,7 +98,7 @@ export const contactMessages = defineMessages({
       name: {
         too_short: 'Podaj, proszę, swoje imię.',
         too_long: 'To imię jest za długie (maks. 60 znaków).',
-        invalid_characters: 'Użyj, proszę, samego tekstu.',
+        invalid_characters: 'Użyj, proszę, zwykłego tekstu.',
       },
       email: {
         required: 'Potrzebuję Twojego adresu e-mail, żeby odpowiedzieć.',

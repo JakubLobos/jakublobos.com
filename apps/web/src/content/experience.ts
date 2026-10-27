@@ -1,4 +1,5 @@
 import type { Locale, PaintId } from '@portfolio/contracts';
+import { polishDeep } from '../lib/pl-typography.ts';
 
 interface LocalizedEntry {
   date: string;
@@ -17,7 +18,7 @@ export interface ExperienceEntry {
 }
 
 // EN is verbatim from the design. PL is a draft for owner review (D-02).
-export const experience: readonly ExperienceEntry[] = [
+const entries: readonly ExperienceEntry[] = [
   {
     id: 'peryskop',
     kind: 'experience',
@@ -41,7 +42,7 @@ export const experience: readonly ExperienceEntry[] = [
         sub: 'Bezpłatna internetowa platforma wsparcia psychologicznego · fundacjaperyskop.org',
         bullets: [
           'Dołączyłem jako jedyny programista i rozwinąłem aplikację z narzędzia do obsługi formularzy w platformę wspierającą udzielanie pomocy psychologicznej.',
-          'Stworzyłem zarządzanie dostępnością wolontariuszy, autoryzację i kontrolę dostępu, formularze oraz stronę docelową.',
+          'Zaimplementowałem zarządzanie dostępnością wolontariuszy, autoryzację i kontrolę dostępu, formularze oraz stronę docelową.',
           'Projektuję interfejsy dla osób nietechnicznych: wyszukuję bolączki w ich codziennej pracy i upraszczam kluczowe zadania.',
           'Łączę organizację z zespołem technicznym; wybieram kandydatów na programistów, prowadzę code review i mentoruję mniej doświadczonych programistów frontendu.',
         ],
@@ -73,7 +74,7 @@ export const experience: readonly ExperienceEntry[] = [
           'Współtworzę od etapu przed startem nową platformę do zarządzania hostingiem, która zastąpiła rozwiązanie oparte na Pterodactylu; obecnie odpowiadam za jej rozwój jako jedyny programista frontendu.',
           'Projektuję interfejsy i odpowiadam za decyzje UI/UX; projektuję i prowadzę testy A/B, które poprawiają doświadczenie użytkowników i sprzedaż.',
           'Pracuję z agentami AI: deleguję zadania, sprawdzam wygenerowany kod i weryfikuję zmiany na stagingu przed scaleniem.',
-          'Mentoruję praktykantów i wspieram rozwój ich umiejętności programistycznych.',
+          'Mentoruję stażystów i wspieram rozwój ich umiejętności programistycznych.',
         ],
       },
     },
@@ -99,3 +100,8 @@ export const experience: readonly ExperienceEntry[] = [
     },
   },
 ];
+
+export const experience: readonly ExperienceEntry[] = entries.map((entry) => ({
+  ...entry,
+  copy: { ...entry.copy, pl: polishDeep(entry.copy.pl) },
+}));
