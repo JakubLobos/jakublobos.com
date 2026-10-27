@@ -1,5 +1,12 @@
 import AxeBuilder from '@axe-core/playwright';
-import { expect, test as base, type Page, type Response } from '@playwright/test';
+import {
+  expect,
+  test as base,
+  type APIRequestContext,
+  type Page,
+  type Response,
+  type Route,
+} from '@playwright/test';
 import { API, SITE } from './ports.ts';
 
 const FIRST_PARTY_ORIGINS: ReadonlySet<string> = new Set([SITE, API]);
@@ -77,6 +84,16 @@ export const test = base.extend<Options>({
       }
     });
 
+    // The API rate-limits per client (3 writes / 10 min) and the whole suite shares one address.
+    // The e2e server trusts X-Real-IP, so every API request claims a fresh documentation-range
+    // address. Registered after the guard above, it runs first and falls back to it.
+    await context.route(`${API}/**`, async (route) => {
+      const octet = () => String(1 + Math.floor(Math.random() * 254));
+      await route.fallback({
+        headers: { ...route.request().headers(), 'x-real-ip': `198.51.${octet()}.${octet()}` },
+      });
+    });
+
     await use(page);
 
     expect(problems, 'browser-level problems (console, CSP, network)').toEqual([]);
@@ -126,4 +143,41 @@ export async function expectNoA11yViolations(page: Page, options: A11yOptions = 
       targets: violation.nodes.map((node) => node.target.join(' ')),
     }));
   expect(blocking, `serious/critical axe violations on ${page.url()}`).toEqual([]);
+}
+
+/** Answers an API call from the page with a fixed JSON body (CORS headers included). */
+export async function fulfillJson(route: Route, status: number, body: unknown): Promise<void> {
+  await route.fulfill({
+    status,
+    contentType: 'application/json',
+    headers: { 'access-control-allow-origin': SITE },
+    body: JSON.stringify(body),
+  });
+}
+
+/**
+ * Real submissions go through the shared server's global caps (20 messages/hour each), so only
+ * one project sends them; the others exercise the same UI with a stubbed answer.
+ */
+export function sendsForReal(projectName: string): boolean {
+  return projectName === 'chromium-desktop';
+}
+
+/**
+ * A letters-only, pronounceable token. The moderation rules reject long digit runs (contact info)
+ * and 7+ consonants in a row (keyboard mash), so digits map to consonant+vowel syllables.
+ */
+export function uniqueWord(): string {
+  const random = String(Math.floor(Math.random() * 100)).padStart(2, '0');
+  const digits = `${String(Date.now()).slice(-8)}${random}`;
+  const syllables = ['ba', 'ce', 'di', 'fo', 'gu', 'ha', 'je', 'ki', 'lo', 'mu'];
+  return Array.from(digits, (digit) => syllables[Number(digit)]).join('');
+}
+
+/** The newest published guestbook body straight from the API, for `expect.poll`. */
+export async function latestGuestbookBody(request: APIRequestContext): Promise<string | null> {
+  const response = await request.get(`${API}/api/guestbook/latest`);
+  const json = (await response.json()) as { data?: { message?: { body?: unknown } | null } };
+  const body = json.data?.message?.body;
+  return typeof body === 'string' ? body : null;
 }
