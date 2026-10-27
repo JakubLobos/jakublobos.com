@@ -81,6 +81,7 @@ const WHITELIST = new Set([
   'react',
   'typescript',
   'Google Analytics',
+  'Item Shop Builder',
 ]);
 
 /** Email addresses, storage names and job titles that contain a company name. */
@@ -188,8 +189,8 @@ add(
   projects.flatMap((project) =>
     pairUp(
       `projects/${project.n}`,
-      { title: project.title.en, desc: project.desc.en },
-      { title: project.title.pl, desc: project.desc.pl },
+      { title: project.title.en, paragraphs: project.paragraphs.en },
+      { title: project.title.pl, paragraphs: project.paragraphs.pl },
     ).map((pair) => ({ ...pair, key: `${project.n}.${pair.key}` })),
   ),
 );
