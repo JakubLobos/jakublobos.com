@@ -65,6 +65,11 @@ textarea::placeholder {
   outline-offset: var(--focus-ring-offset);
 }
 
+/* D-31: a pointer-focused text field shows only its underline (see input-modality.ts). */
+:root[data-modality='pointer'] :is(input, textarea):focus-visible {
+  outline: none;
+}
+
 @media (forced-colors: active) {
   :focus-visible {
     outline-color: Highlight;

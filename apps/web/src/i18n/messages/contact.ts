@@ -96,7 +96,7 @@ export const contactMessages = defineMessages({
     },
     errors: {
       name: {
-        too_short: 'Podaj, proszę, swoje imię.',
+        too_short: 'Proszę podać swoje imię.',
         too_long: 'To imię jest za długie (maks. 60 znaków).',
         invalid_characters: 'Użyj, proszę, zwykłego tekstu.',
       },
