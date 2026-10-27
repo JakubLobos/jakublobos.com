@@ -22,6 +22,7 @@ import {
 } from '../lib/contact-form.ts';
 import { burstFrom } from './confetti.ts';
 import { clearDraft, loadDraft, saveDraft } from './contact-draft.ts';
+import { bindLimitNudge } from './limit-nudge.ts';
 
 type Control = HTMLInputElement | HTMLTextAreaElement;
 type Phase = 'idle' | 'sending' | 'sent';
@@ -269,6 +270,9 @@ class ContactFormElement extends HTMLElement {
       opts,
     );
     again.addEventListener('click', reset, opts);
+    for (const { control, count } of Object.values(fields)) {
+      if (count) bindLimitNudge(control, count, opts.signal);
+    }
 
     // Only empty fields take the draft, so autofill and early typing win. The input event syncs the
     // typing mirror and counter; touched and tried stay false, so nothing validates yet.

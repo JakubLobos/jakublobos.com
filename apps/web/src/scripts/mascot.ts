@@ -1,4 +1,5 @@
 import { blinkDelay, pupilOffset } from '../lib/pupil.ts';
+import { tokenDuration } from './motion.ts';
 
 // Used only if `--duration-blink` is missing or unparsable.
 const BLINK_FALLBACK_MS = 180;
@@ -114,11 +115,10 @@ class HeroMascot extends HTMLElement {
   }
 
   #blink(): void {
-    const duration = parseFloat(getComputedStyle(this).getPropertyValue('--duration-blink'));
     // The individual `scale` property leaves each eye's tilt (`transform: rotate`) intact.
     for (const { eye } of this.#eyes) {
       eye.animate([{ scale: '1 1' }, { scale: '1 0.1' }, { scale: '1 1' }], {
-        duration: duration > 0 ? duration : BLINK_FALLBACK_MS,
+        duration: tokenDuration(this, '--duration-blink', BLINK_FALLBACK_MS),
         easing: 'ease-in-out',
       });
     }
