@@ -15,7 +15,9 @@ const t = hero(locale);
 ---
 
 <section id="hero" class="hero" aria-labelledby="hero-heading">
-  <Mascot />
+  <div class="sticker">
+    <Mascot />
+  </div>
   <h1 id="hero-heading" class="title">
     {t.title}
   </h1>
@@ -79,5 +81,88 @@ const t = hero(locale);
     justify-content: center;
     gap: var(--space-16);
     padding-top: var(--space-8);
+  }
+
+  /* Entrance: the hero is stuck, inked and drawn onto the page like a sheet of paper. Backwards
+     fill leaves no animated value behind, so the buttons and mascot keep their own hover
+     transforms. The h1 never starts at opacity 0 because it is the LCP candidate. */
+  @media (prefers-reduced-motion: no-preference) {
+    .sticker {
+      animation: hero-stick var(--duration-enter) var(--ease-spring) backwards;
+    }
+
+    .title {
+      animation: hero-ink var(--duration-ink) var(--ease-out) backwards;
+    }
+
+    .intro {
+      animation: hero-settle var(--duration-enter) var(--ease-out) calc(var(--stagger-enter) * 3)
+        backwards;
+    }
+
+    .intro :global(.hl) {
+      background-repeat: no-repeat;
+      animation: hero-swipe var(--duration-enter) var(--ease-out) calc(var(--stagger-enter) * 7)
+        backwards;
+    }
+
+    .divider {
+      animation: hero-draw var(--duration-enter) var(--ease-out) calc(var(--stagger-enter) * 6)
+        backwards;
+    }
+
+    .actions > :global(*) {
+      animation: hero-place var(--duration-enter) var(--ease-spring) calc(var(--stagger-enter) * 8)
+        backwards;
+    }
+
+    .actions > :global(:nth-child(2)) {
+      animation-delay: calc(var(--stagger-enter) * 9);
+    }
+  }
+
+  @keyframes hero-stick {
+    from {
+      transform: translateY(-8px) scale(1.12) rotate(-8deg);
+    }
+  }
+
+  @keyframes hero-ink {
+    from {
+      clip-path: inset(0 100% 0 0);
+      transform: translateY(0.2em);
+    }
+    to {
+      clip-path: inset(0);
+    }
+  }
+
+  @keyframes hero-settle {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+  }
+
+  @keyframes hero-swipe {
+    from {
+      background-size: 0% 100%;
+    }
+    to {
+      background-size: 100% 100%;
+    }
+  }
+
+  @keyframes hero-draw {
+    from {
+      transform: scaleX(0);
+    }
+  }
+
+  @keyframes hero-place {
+    from {
+      opacity: 0;
+      transform: translateY(-14px) rotate(-2deg);
+    }
   }
 </style>

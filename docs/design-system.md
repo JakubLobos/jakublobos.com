@@ -185,11 +185,15 @@ CSS custom properties can't be used inside media queries, so breakpoints are con
 | `--duration-blink`   | 180ms                       | mascot blink                       |
 | `--duration-spin`    | 700ms                       | spinner                            |
 | `--duration-marquee` | 45s                         | bands                              |
+| `--duration-enter`   | 450ms                       | hero entrance steps (T-060)        |
+| `--duration-ink`     | 700ms                       | hero headline ink reveal           |
+| `--stagger-enter`    | 90ms                        | hero entrance step offset          |
 | `--ease-standard`    | `ease`                      | default                            |
 | `--ease-spring`      | `cubic-bezier(.3,1.6,.5,1)` | mascot hover                       |
 | `--ease-type`        | `cubic-bezier(.2,.8,.2,1)`  | type-in                            |
+| `--ease-out`         | `cubic-bezier(.2,.7,.2,1)`  | hero entrance                      |
 
-Keyframes (`keyframes.css`): `type-in` (`0% translateY(.6em) rotate(4deg) opacity 0 → 60% translateY(-.08em) opacity 1 → 100% none`), `spin`, `marquee-ltr`, `marquee-rtl`.
+Keyframes (`keyframes.css`): `type-in` (`0% translateY(.6em) rotate(4deg) opacity 0 → 60% translateY(-.08em) opacity 1 → 100% none`), `spin`, `marquee-ltr`, `marquee-rtl`. The hero entrance (D-30) keeps its `hero-*` keyframes in `Hero.astro`: stick, ink, settle, swipe, draw, place.
 
 ### 2.9 Controls (T-022)
 
