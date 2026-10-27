@@ -12,11 +12,18 @@ body {
 html {
   color-scheme: light;
   scroll-padding-top: var(--scroll-offset);
-  scrollbar-width: none;
 }
 
-html::-webkit-scrollbar {
-  display: none;
+/* The native scrollbar yields only where the sketch scrollbar exists (breakpoints.mobile in
+   lib/breakpoints.ts) and its element is defined, so phones and no-JS keep a scroll affordance. */
+@media (width >= 760px) {
+  html:has(sketch-scrollbar:defined) {
+    scrollbar-width: none;
+  }
+
+  html:has(sketch-scrollbar:defined)::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {

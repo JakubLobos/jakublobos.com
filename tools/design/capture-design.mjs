@@ -1,9 +1,11 @@
 // Renders docs/design/design.html (the Claude Design bundle) and captures the reference
-// screenshots in docs/design/screenshots/. Used during planning; T-042 extends it into a
-// design-vs-implementation comparison tool.
+// screenshots in docs/design/screenshots/. T-042 extends it with --compare, which captures the
+// built site (pnpm preview, http://localhost:8787) in the same states and writes side-by-side
+// PNGs (design left, implementation right) to e2e/visual/compare/.
 //
 // Usage (after T-040 installs @playwright/test and its browsers):
 //   node tools/design/capture-design.mjs [--design docs/design/design.html] [--out docs/design/screenshots]
+//   node tools/design/capture-design.mjs --compare [--site http://localhost:8787] [--only hero,menu]
 // Callbacks passed to page.evaluate() run in the browser, hence the browser globals.
 import { chromium } from '@playwright/test';
 import { mkdirSync } from 'node:fs';
@@ -15,11 +17,14 @@ const { values } = parseArgs({
   options: {
     design: { type: 'string', default: 'docs/design/design.html' },
     out: { type: 'string', default: 'docs/design/screenshots' },
+    compare: { type: 'boolean', default: false },
+    site: { type: 'string', default: 'http://localhost:8787' },
+    only: { type: 'string', default: '' },
   },
 });
 
 const designUrl = pathToFileURL(resolve(values.design)).href;
-const outDir = resolve(values.out);
+const outDir = resolve(values.compare ? 'e2e/visual/compare' : values.out);
 mkdirSync(outDir, { recursive: true });
 
 const VIEWPORTS = [
@@ -31,6 +36,27 @@ const VIEWPORTS = [
 
 const browser = await chromium.launch();
 const errors = [];
+
+if (values.compare) {
+  const { runCompare } = await import('./compare.mjs');
+  await runCompare({
+    browser,
+    designUrl,
+    siteUrl: values.site,
+    outDir,
+    viewports: VIEWPORTS,
+    only: values.only === '' ? [] : values.only.split(','),
+    errors,
+  });
+  await browser.close();
+  if (errors.length > 0) {
+    console.error(errors.join('\n'));
+    process.exitCode = 1;
+  } else {
+    console.log(`Side-by-side images written to ${outDir}`);
+  }
+  process.exit();
+}
 
 async function open({ width, height }, { reducedMotion = false, consentStored = true } = {}) {
   const context = await browser.newContext({

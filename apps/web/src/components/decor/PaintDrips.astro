@@ -42,6 +42,14 @@ const ids = variant === 'bottom' ? [...PAINT_ORDER].reverse() : PAINT_ORDER;
     will-change: transform;
   }
 
+  /* Without the parallax the fixed strip would hang over every section; it scrolls away with the
+     hero instead, as the prototype's strip does once it has travelled out of view. */
+  @media (prefers-reduced-motion: reduce) {
+    .drips[data-variant='top'] {
+      position: absolute;
+    }
+  }
+
   .drips[data-variant='menu'] {
     position: absolute;
     top: 0;
