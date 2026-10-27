@@ -49,7 +49,8 @@ describe('GeminiSuitabilityReviewer', () => {
       systemInstruction: { parts: [{ text: DEVELOPER_INSTRUCTIONS }] },
       generationConfig: {
         temperature: 0,
-        maxOutputTokens: 256,
+        maxOutputTokens: 512,
+        thinkingConfig: { thinkingLevel: 'minimal' },
         responseMimeType: 'application/json',
         responseSchema: { type: 'object', required: ['verdict', 'reason'] },
       },

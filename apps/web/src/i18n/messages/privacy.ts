@@ -107,15 +107,15 @@ const en: PrivacyCopy = {
               'Guestbook text sent to Google (Gemini API) for a safety check',
               'Safety review',
               'Legitimate interest',
-              'Google (Gemini API). The site is operated from the EEA, where Google applies its paid-service data terms to this free service as well: the text is not used to improve Google products. Outside the EEA, the UK and Switzerland, the free tier lets Google use the text to improve its products and lets human reviewers read it.',
-              'Per Google [OWNER: confirm retention]',
+              "Google (Gemini API). Processed under Google's data terms for the paid service; not used to improve Google products.",
+              'Logged by Google for a limited period for abuse monitoring [OWNER: confirm period]',
             ],
             [
               'Guestbook text sent to Google (Gemini API) for a suitability review',
               'Check that the message fits a professional portfolio',
               'Legitimate interest',
-              'Google (Gemini API). The same terms as for the safety check apply.',
-              'Per Google [OWNER: confirm retention]',
+              'Google (Gemini API). Same terms as the safety check.',
+              'Logged by Google for a limited period for abuse monitoring [OWNER: confirm period]',
             ],
             [
               'Contact form: name, email, message',
@@ -216,7 +216,7 @@ const en: PrivacyCopy = {
         { type: 'h3', text: 'Google (Gemini API)' },
         {
           type: 'p',
-          text: "Guestbook text is sent to Google (Gemini API) for two automated checks: a safety check and a suitability review. This site uses the free tier. Under Google's terms for free services, Google may use the text you submit to improve its products and machine-learning technologies, and human reviewers may read it; Google separates the data from the account and the API key before review and advises against sending personal information. For customers in the EEA, the United Kingdom and Switzerland, including this site, which is operated from Poland, Google's terms apply the paid-service data terms to the free tier as well, under which the text is not used to improve Google's products. Please do not put personal information in a guestbook message. Your IP address is not sent. [OWNER: confirm Google's retention period.]",
+          text: 'Guestbook text is sent to Google (Gemini API) for two automated checks: a safety check and a suitability review. Because this site is operated from Poland (EEA), Google processes the text under its data terms for the paid service and does not use it to improve its products. Google logs requests for a limited period for abuse monitoring [OWNER: confirm period]. The free quota is used, so no fee is charged. Please do not include personal data in a message. Your IP address is not sent.',
         },
         { type: 'h3', text: 'Resend' },
         {
@@ -367,15 +367,15 @@ const pl: PrivacyCopy = {
               'Treść wpisu wysyłana do Google (Gemini API) w celu kontroli bezpieczeństwa',
               'Kontrola bezpieczeństwa',
               'Prawnie uzasadniony interes',
-              'Google (Gemini API). Serwis jest prowadzony z Europejskiego Obszaru Gospodarczego, gdzie Google stosuje do tej bezpłatnej usługi także warunki danych usług płatnych: treść nie służy do ulepszania produktów Google. Poza EOG, Wielką Brytanią i Szwajcarią bezpłatny poziom pozwala Google wykorzystywać treść do ulepszania swoich produktów, a recenzentom na jej czytanie.',
-              'Wg zasad Google [WŁAŚCICIEL: potwierdź okres przechowywania]',
+              'Google (Gemini API). Przetwarzane na warunkach danych Google dla usługi płatnej; nie służy do ulepszania produktów Google.',
+              'Logowane przez Google przez ograniczony czas w celu wykrywania nadużyć [WŁAŚCICIEL: potwierdź okres]',
             ],
             [
               'Treść wpisu wysyłana do Google (Gemini API) w celu oceny przydatności',
               'Sprawdzenie, czy wpis pasuje do profesjonalnego portfolio',
               'Prawnie uzasadniony interes',
-              'Google (Gemini API). Obowiązują te same warunki co przy kontroli bezpieczeństwa.',
-              'Wg zasad Google [WŁAŚCICIEL: potwierdź okres przechowywania]',
+              'Google (Gemini API). Te same warunki co przy kontroli bezpieczeństwa.',
+              'Logowane przez Google przez ograniczony czas w celu wykrywania nadużyć [WŁAŚCICIEL: potwierdź okres]',
             ],
             [
               'Formularz kontaktowy: imię, e-mail, wiadomość',
@@ -476,7 +476,7 @@ const pl: PrivacyCopy = {
         { type: 'h3', text: 'Google (Gemini API)' },
         {
           type: 'p',
-          text: 'Treść wpisu w księdze gości trafia do Google (Gemini API) w ramach dwóch automatycznych kontroli: kontroli bezpieczeństwa i oceny przydatności. Ta strona korzysta z bezpłatnego poziomu. Zgodnie z warunkami Google dla usług bezpłatnych Google może wykorzystywać przesłaną przez Ciebie treść do ulepszania swoich produktów i technologii uczenia maszynowego, a recenzenci mogą ją czytać; Google oddziela te dane od konta i klucza API przed recenzją i odradza wysyłanie danych osobowych. Wobec klientów z EOG, Wielkiej Brytanii i Szwajcarii, w tym tej strony prowadzonej z Polski, warunki Google stosują do bezpłatnego poziomu także warunki danych usług płatnych, według których treść nie służy do ulepszania produktów Google. Nie wpisuj w księdze gości danych osobowych. Twój adres IP nie jest wysyłany. [WŁAŚCICIEL: potwierdź okres przechowywania u Google.]',
+          text: 'Treść wpisu w księdze gości trafia do Google (Gemini API) w ramach dwóch automatycznych kontroli: kontroli bezpieczeństwa i oceny przydatności. Ponieważ ta strona jest prowadzona z Polski (EOG), Google przetwarza treść na warunkach danych dla usługi płatnej i nie używa jej do ulepszania swoich produktów. Google loguje zapytania przez ograniczony czas w celu wykrywania nadużyć [WŁAŚCICIEL: potwierdź okres]. Wykorzystywany jest bezpłatny limit, więc nie ponosimy opłat. Nie podawaj w wpisie danych osobowych. Twój adres IP nie jest wysyłany.',
         },
         { type: 'h3', text: 'Resend' },
         {

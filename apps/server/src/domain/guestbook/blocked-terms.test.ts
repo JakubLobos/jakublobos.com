@@ -17,6 +17,8 @@ describe('findBlockedTerm', () => {
     ['zero-width space inside the word', 'sh\u200Bit', 'shit'],
     ['punctuation around the word', '(casino!)', 'casino'],
     ['spam keyword', 'buy crypto now', 'crypto'],
+    ['meme token', 'SKIBIDI toilet', 'skibidi'],
+    ['meme number', 'nice 6767 lol', '6767'],
   ])('catches %s', (_label, text, term) => {
     expect(findBlockedTerm(text)).toBe(term);
   });
@@ -40,11 +42,12 @@ describe('findBlockedTerm', () => {
   it('lets clean text through', () => {
     expect(findBlockedTerm('Great portfolio, love the colours!')).toBeNull();
     expect(findBlockedTerm('')).toBeNull();
+    expect(findBlockedTerm('Version 67 shipped in 2067')).toBeNull();
   });
 
   it('keeps every list entry plain lowercase ASCII, so it can match after folding', () => {
     for (const terms of Object.values(BLOCKED_TERM_GROUPS)) {
-      for (const term of terms) expect(term).toMatch(/^[a-z]+$/);
+      for (const term of terms) expect(term).toMatch(/^[a-z0-9]+$/);
     }
   });
 });

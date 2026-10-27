@@ -27,15 +27,15 @@ function setup(handler: FetchHandler) {
   return { provider, calls: stub.calls, logs };
 }
 
-const ratings = (probability: string, harassment = probability) => ({
-  promptFeedback: {
-    safetyRatings: [
-      { category: 'HARM_CATEGORY_HARASSMENT', probability: harassment },
-      { category: 'HARM_CATEGORY_HATE_SPEECH', probability },
-      { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', probability },
-      { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', probability },
-    ],
-  },
+const CLEAN = { harassment: 0, hate: 0, sexual: 0, dangerous: 0, self_harm: 0, spam: 0 };
+const classified = (scores: Record<string, number>, extra: object = {}) => ({
+  candidates: [
+    {
+      finishReason: 'STOP',
+      content: { parts: [{ text: JSON.stringify({ ...CLEAN, ...scores }) }] },
+    },
+  ],
+  ...extra,
 });
 
 afterEach(() => {
@@ -43,8 +43,8 @@ afterEach(() => {
 });
 
 describe('GeminiModerationProvider', () => {
-  it('sends the key only in a header, with BLOCK_NONE safety settings', async () => {
-    const { provider, calls } = setup(() => jsonResponse(ratings('NEGLIGIBLE')));
+  it('sends a header-keyed classification request with minimal thinking', async () => {
+    const { provider, calls } = setup(() => jsonResponse(classified({})));
     await provider.moderate(VISITOR_TEXT);
     expect(calls).toHaveLength(1);
     expect(calls[0]?.url).toBe(
@@ -54,47 +54,77 @@ describe('GeminiModerationProvider', () => {
     expect(calls[0]?.headers['x-goog-api-key']).toBe(SECRET_KEY);
     expect(calls[0]?.headers.authorization).toBeUndefined();
     expect(calls[0]?.body).toMatchObject({
-      contents: [{ role: 'user', parts: [{ text: VISITOR_TEXT }] }],
+      generationConfig: {
+        temperature: 0,
+        maxOutputTokens: 512,
+        thinkingConfig: { thinkingLevel: 'minimal' },
+        responseMimeType: 'application/json',
+        responseSchema: { type: 'object' },
+      },
       safetySettings: expect.arrayContaining([
         { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' },
       ]) as unknown,
     });
+    expect(JSON.stringify(calls[0]?.body)).toContain('<visitor_note>');
   });
 
-  it('maps probabilities to scores and hands them to the 0.2 policy', async () => {
-    const decide = async (body: unknown) => {
-      const { provider } = setup(() => jsonResponse(body));
-      const outcome = await provider.moderate(VISITOR_TEXT);
-      if (outcome.kind !== 'ok') throw new Error('should be ok');
-      return { outcome, decision: decideModeration(outcome, 0.2).decision };
-    };
-    const clean = await decide(ratings('NEGLIGIBLE'));
-    expect(clean.outcome).toMatchObject({ flagged: false, scores: { harassment: 0 } });
-    expect(clean.decision).toBe('approve');
-
-    const low = await decide(ratings('NEGLIGIBLE', 'LOW'));
-    expect(low.outcome).toMatchObject({ scores: { harassment: 0.25, hate_speech: 0 } });
-    expect(low.decision).toBe('reject');
-
-    const high = await decide(ratings('HIGH'));
-    expect(high.outcome).toMatchObject({ scores: { sexually_explicit: 0.9 } });
-    expect((await decide(ratings('MEDIUM'))).outcome).toMatchObject({
-      scores: { dangerous_content: 0.6 },
-    });
-    expect(high.decision).toBe('reject');
-  });
-
-  it('flags a prompt blockReason and rejects it', async () => {
-    const { provider } = setup(() => jsonResponse({ promptFeedback: { blockReason: 'SAFETY' } }));
+  const decide = async (body: unknown) => {
+    const { provider } = setup(() => jsonResponse(body));
     const outcome = await provider.moderate(VISITOR_TEXT);
-    expect(outcome).toMatchObject({ kind: 'ok', flagged: true });
     if (outcome.kind !== 'ok') throw new Error('should be ok');
-    expect(decideModeration(outcome, 0.2).decision).toBe('reject');
+    return { outcome, decision: decideModeration(outcome, 0.2).decision };
+  };
+
+  it('approves a clean classification and rejects a high score', async () => {
+    const clean = await decide(classified({}));
+    expect(clean).toMatchObject({ decision: 'approve', outcome: { flagged: false } });
+    const rude = await decide(classified({ harassment: 0.8 }));
+    expect(rude.decision).toBe('reject');
+  });
+
+  it('flags a prompt blockReason or a safety finishReason even without a verdict', async () => {
+    for (const body of [
+      { promptFeedback: { blockReason: 'SAFETY' } },
+      { candidates: [{ finishReason: 'PROHIBITED_CONTENT' }] },
+    ]) {
+      const { outcome, decision } = await decide(body);
+      expect(outcome).toMatchObject({ flagged: true });
+      expect(decision).toBe('reject');
+    }
+  });
+
+  it('merges safety ratings by max; LOW stays under the threshold, MEDIUM crosses it', async () => {
+    const rate = (probability: string) =>
+      classified(
+        { harassment: 0.05 },
+        {
+          promptFeedback: {
+            safetyRatings: [{ category: 'HARM_CATEGORY_HARASSMENT', probability }],
+          },
+        },
+      );
+    const low = await decide(rate('LOW'));
+    expect(low.outcome).toMatchObject({ scores: { harassment: 0.1 } });
+    expect(low.decision).toBe('approve');
+    const medium = await decide(rate('MEDIUM'));
+    expect(medium.outcome).toMatchObject({ scores: { harassment: 0.6 } });
+    expect(medium.decision).toBe('reject');
+
+    const fromCandidate = await decide({
+      candidates: [
+        {
+          content: { parts: [{ text: JSON.stringify(CLEAN) }] },
+          safetyRatings: [{ category: 'HARM_CATEGORY_HATE_SPEECH', probability: 'HIGH' }],
+        },
+      ],
+    });
+    expect(fromCandidate.outcome).toMatchObject({ scores: { hate: 0.9 } });
   });
 
   it.each([
-    ['no ratings', {}],
-    ['unknown probability', ratings('HARM_PROBABILITY_UNSPECIFIED')],
+    ['no candidates', {}],
+    ['non-JSON text', { candidates: [{ content: { parts: [{ text: 'hello' }] } }] }],
+    ['score out of range', classified({ hate: 7 })],
     ['wrong shape', { promptFeedback: 'x' }],
   ])('maps %s to invalid_response', async (_name, body) => {
     const { provider } = setup(() => jsonResponse(body));

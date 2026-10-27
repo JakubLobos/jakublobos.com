@@ -11,11 +11,15 @@ import {
 } from '../../domain/guestbook/suitability.port.ts';
 import type { Clock } from '../../domain/shared/clock.ts';
 import { postJson, toTransient, type FetchFn } from '../review/http.ts';
-import { GEMINI_BASE_URL } from '../moderation/gemini-moderation.provider.ts';
+import {
+  GEMINI_BASE_URL,
+  GEMINI_MAX_OUTPUT_TOKENS,
+  GEMINI_THINKING_CONFIG,
+} from '../moderation/gemini-moderation.provider.ts';
 import { buildUserMessage, DEVELOPER_INSTRUCTIONS, PROMPT_VERSION } from './prompt.ts';
 
 // Thinking tokens may count against this cap; the verdict itself is about 20 tokens.
-const MAX_OUTPUT_TOKENS = 256;
+const MAX_OUTPUT_TOKENS = GEMINI_MAX_OUTPUT_TOKENS;
 
 const verdictSchema = z.strictObject({
   verdict: z.enum(SUITABILITY_VERDICTS),
@@ -63,6 +67,7 @@ export function buildRequestBody(text: string, locale: Locale | null): object {
     generationConfig: {
       temperature: 0,
       maxOutputTokens: MAX_OUTPUT_TOKENS,
+      thinkingConfig: GEMINI_THINKING_CONFIG,
       responseMimeType: 'application/json',
       responseSchema: RESPONSE_SCHEMA,
     },
