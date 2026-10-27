@@ -161,6 +161,13 @@ const en: PrivacyCopy = {
               'Until you change it',
             ],
             [
+              '“jl-contact-draft” (session storage)',
+              'Keep an unsent contact-form draft in this tab',
+              'Strictly necessary (you asked for it)',
+              'Your browser only; it is never sent',
+              'Until you close the tab or send the message',
+            ],
+            [
               'Google Analytics 4 cookies and identifiers',
               'Visit statistics',
               'Consent (“Accept”)',
@@ -241,7 +248,7 @@ const en: PrivacyCopy = {
       blocks: [
         {
           type: 'p',
-          text: 'Only the first two entries are used without your consent. Choose “Only essential” and nothing else is stored. You can change your choice at any time with “Cookie settings” in the footer; withdrawing consent stops Google Analytics, removes its cookies, and switches PostHog to cookieless counting.',
+          text: 'Only the first three entries are used without your consent. Choose “Only essential” and nothing else is stored. You can change your choice at any time with “Cookie settings” in the footer; withdrawing consent stops Google Analytics, removes its cookies, and switches PostHog to cookieless counting.',
         },
         {
           type: 'table',
@@ -259,6 +266,12 @@ const en: PrivacyCopy = {
               'Your cookie choice',
               'You answer the cookie banner',
               'Until you change it',
+            ],
+            [
+              'jl-contact-draft (session storage)',
+              'Your unsent contact-form draft',
+              'You type in the contact form',
+              'Until you close the tab or send the message',
             ],
             ['_ga, _ga_* (cookies)', 'Google Analytics', 'You press “Accept”', 'Per GA4 settings'],
             [
@@ -421,6 +434,13 @@ const pl: PrivacyCopy = {
               'Do czasu zmiany wyboru',
             ],
             [
+              '„jl-contact-draft” (pamięć sesji)',
+              'Zachowanie niewysłanej wersji roboczej wiadomości z formularza kontaktowego w tej karcie',
+              'Niezbędne (o to prosisz)',
+              'Tylko Twoja przeglądarka; nigdy nie jest wysyłany',
+              'Do zamknięcia karty lub wysłania wiadomości',
+            ],
+            [
               'Cookies i identyfikatory Google Analytics 4',
               'Statystyki odwiedzin',
               'Zgoda („Akceptuję”)',
@@ -501,7 +521,7 @@ const pl: PrivacyCopy = {
       blocks: [
         {
           type: 'p',
-          text: 'Bez Twojej zgody używane są tylko dwa pierwsze wpisy. Jeśli wybierzesz „Tylko niezbędne”, nic więcej nie jest zapisywane. Wybór możesz zmienić w dowolnej chwili przez „Ustawienia cookies” w stopce; wycofanie zgody zatrzymuje Google Analytics, usuwa jego cookies i przełącza PostHog na zliczanie bez cookies.',
+          text: 'Bez Twojej zgody używane są tylko trzy pierwsze wpisy. Jeśli wybierzesz „Tylko niezbędne”, nic więcej nie jest zapisywane. Wybór możesz zmienić w dowolnej chwili przez „Ustawienia cookies” w stopce; wycofanie zgody zatrzymuje Google Analytics, usuwa jego cookies i przełącza PostHog na zliczanie bez cookies.',
         },
         {
           type: 'table',
@@ -514,6 +534,12 @@ const pl: PrivacyCopy = {
               'Twój wybór dotyczący cookies',
               'Odpowiadasz na komunikat o cookies',
               'Do czasu zmiany wyboru',
+            ],
+            [
+              'jl-contact-draft (pamięć sesji)',
+              'Twoja niewysłana wersja robocza wiadomości',
+              'Piszesz w formularzu kontaktowym',
+              'Do zamknięcia karty lub wysłania wiadomości',
             ],
             [
               '_ga, _ga_* (cookies)',
