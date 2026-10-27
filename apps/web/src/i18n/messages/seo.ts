@@ -6,7 +6,7 @@ export const seo = defineMessages({
     og: {
       subtitle: 'Software Engineer · React & TypeScript',
       domain: 'jakublobos.com',
-      alt: 'Jakub Łobos, Software Engineer: a hand-drawn mascot under the headline “Engineering with the user relationship in mind”',
+      alt: 'Jakub Łobos, Software Engineer: a hand-drawn mascot under the headline “Engineering centered around the user”',
     },
     home: {
       title: 'Jakub Łobos — Software Engineer Portfolio',

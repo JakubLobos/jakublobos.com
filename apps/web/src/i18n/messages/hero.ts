@@ -4,7 +4,7 @@ import { defineMessages } from '../t.ts';
 // (Polish "w figmie").
 export const hero = defineMessages({
   en: {
-    title: 'Engineering with the user relationship in mind',
+    title: 'Engineering centered around the user',
     build: {
       before: 'I’m making web-apps mostly in',
       first: 'react',
