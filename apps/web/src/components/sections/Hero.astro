@@ -28,11 +28,27 @@ const t = hero(locale);
   <div class="divider" aria-hidden="true"></div>
   <div class="actions">
     <Button href="#contact">{t.contact}</Button>
-    <Button variant="secondary" href={profile.resume[locale]} download mimeType="application/pdf">
+    <Button
+      variant="secondary"
+      href={profile.resume[locale]}
+      download
+      mimeType="application/pdf"
+      data-confetti
+    >
       {t.resume}
     </Button>
   </div>
 </section>
+
+<script>
+  import { burstFrom } from '../../scripts/confetti.ts';
+
+  document.addEventListener('click', (event) => {
+    const trigger =
+      event.target instanceof Element ? event.target.closest('[data-confetti]') : null;
+    if (trigger) burstFrom(trigger);
+  });
+</script>
 
 <style>
   .hero {
