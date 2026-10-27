@@ -183,14 +183,10 @@ function bind(
     }
   }
 
-  function showError(text: string, invalid: boolean): void {
+  function setError(text = '', invalid = false): void {
     error.textContent = text;
     if (invalid) body.setAttribute('aria-invalid', 'true');
-  }
-
-  function clearError(): void {
-    error.textContent = '';
-    body.removeAttribute('aria-invalid');
+    else body.removeAttribute('aria-invalid');
   }
 
   /** The Button primitive's "sending" look: native disabled, aria-busy and `data-busy`. */
@@ -303,6 +299,7 @@ function bind(
   }
 
   async function submitMessage(): Promise<void> {
+    // The message is written only when the outcome arrives, so nothing below it moves meanwhile.
     const outcome = await controller.submit({
       raw: body.value,
       paint: selectedPaint(),
@@ -310,24 +307,22 @@ function bind(
       website: honeypot.value,
     });
 
-    if (outcome.kind === 'ignored') return;
-    // The old message stays put while the request runs, so the layout below it never jumps. It is
-    // replaced here in one step; re-writing identical text re-fires the alert, so a repeated
-    // failure is announced again.
-    clearError();
-
     switch (outcome.kind) {
+      case 'ignored':
+        break;
       case 'empty':
+        setError();
         body.focus();
         break;
       case 'field-error':
-        showError(messages.fieldErrors[outcome.code], true);
+        setError(messages.fieldErrors[outcome.code], true);
         body.focus();
         break;
       case 'failed':
-        showError(outcome.reason === 'rate_limited' ? messages.rateLimited : messages.retry, false);
+        setError(outcome.reason === 'rate_limited' ? messages.rateLimited : messages.retry);
         break;
       case 'sent':
+        setError();
         // Fires `input`, which also resyncs the counter.
         field.reset();
         parts.echo.textContent = outcome.body;
@@ -359,7 +354,7 @@ function bind(
     'input',
     () => {
       syncCounter();
-      clearError();
+      setError();
     },
     opts,
   );

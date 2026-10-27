@@ -177,8 +177,7 @@ class PhoneRevealElement extends HTMLElement {
         show(response.data);
       } catch {
         setBusy(false);
-        // The old message stays while verifying, so nothing shifts; re-writing it (a new text node)
-        // makes the polite region announce a repeated failure again.
+        // The old message stays while verifying, so nothing shifts below it.
         failed.textContent = copy.failed;
       }
     };
