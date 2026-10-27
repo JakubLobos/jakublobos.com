@@ -8,4 +8,5 @@ Fixed. `hero-ink` now clips with negative insets (`inset(-0.3em 100% -0.3em -0.3
 
 - Frames at 390 px were forced deterministically by injecting `animation-play-state: paused` with a negative `animation-delay` (-200 ms, -400 ms, -3 s) before first paint. Screenshots are in the session scratchpad `...\scratchpad\t060\r2-390-{200,400,after}.png` (not committed). The glyph tops and bottoms are intact at every point, and the -3 s frame matches the settled state.
 - Observation: the h1 box spans the full container while the text is centred, so the left-to-right reveal is visually near-complete early (the right-hand inset sweeps mostly empty margin). Left unchanged; say if you want the reveal timing tuned.
+- Round 2b (pacing): `hero-ink` now uses a new `--ease-ink` (`cubic-bezier(.45,0,.55,1)`) and `--duration-ink` is 800ms; the intro delay moved from 3 to 4 staggers so it still follows the headline. Frames at 390 and 1440 px (`r2b-*.png` in the scratchpad `t060` folder) show the sweep crossing the visible text at about 250 and 450 ms.
 - `pnpm verify`: green after this change (`Budgets OK.`).
