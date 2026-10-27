@@ -7,8 +7,8 @@
 // - Invalid state is the `aria-invalid="true"` attribute on the control (`invalid` sets it at render
 //   time; scripts toggle it with setAttribute). The control keeps its own `input`/`blur`/`change`
 //   events; there are no custom events.
-// - `variant="underline"` draws the 2px bottom line (contact fields). `variant="bare"` draws none,
-//   for rows that own their line (guestbook).
+// - `variant="underline"` draws the 2px bottom line (contact fields). `variant="bare"` draws neither
+//   the line nor the keyboard focus ring; the consuming row owns both (guestbook).
 // - Query the element as `typing-field`; `reset()` clears the value and the mirror and fires `input`.
 // - Inputs are always `type="text"`: `type="email"` trims `value`, so the mirror would drift from the
 //   raw text. Email fields use `inputmode="email"` + `autocomplete="email"` and validate in script.
@@ -159,6 +159,8 @@ const control = {
     transform: scaleX(1);
   }
 
+  /* D-31: no ring on pointer focus (scripts/input-modality.ts); bare rows draw theirs themselves. */
+  :global(:root[data-modality='pointer']) .control:focus-visible,
   typing-field[data-variant='bare'] .control:focus-visible {
     outline: none;
   }

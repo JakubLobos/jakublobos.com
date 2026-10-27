@@ -1,9 +1,18 @@
 // CSS cannot tell a click from Tab on a text field (browsers always match :focus-visible there), so
-// record the last input kind on <html>. Absent means unknown, and unknown keeps the focus ring.
+// decide at focus time, like the focus-visible polyfill: typing later must not flip it. No attribute
+// means unknown, and unknown keeps the focus ring.
 const root = document.documentElement;
-const record = (modality: 'pointer' | 'keyboard') => () => {
-  root.dataset.modality = modality;
-};
+let last: 'pointer' | 'keyboard' | undefined;
 
-document.addEventListener('pointerdown', record('pointer'), { capture: true, passive: true });
-document.addEventListener('keydown', record('keyboard'), { capture: true, passive: true });
+document.addEventListener('pointerdown', () => (last = 'pointer'), {
+  capture: true,
+  passive: true,
+});
+document.addEventListener('keydown', () => (last = 'keyboard'), { capture: true, passive: true });
+document.addEventListener(
+  'focusin',
+  () => {
+    if (last) root.dataset.modality = last;
+  },
+  true,
+);
