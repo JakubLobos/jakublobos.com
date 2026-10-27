@@ -32,7 +32,7 @@ const { locale, seoKey, path } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <Seo locale={locale} seoKey={seoKey} path={path} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <Font cssVariable="--font-display" preload={[{ subset: 'latin' }]} />
+    <Font cssVariable="--font-display" preload />
     <Font cssVariable="--font-body" />
     <Font cssVariable="--font-ui" />
     <Font cssVariable="--font-mono" />

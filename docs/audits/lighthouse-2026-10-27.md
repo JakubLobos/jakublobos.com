@@ -24,7 +24,22 @@ The Node edge emulator serves HTTP/1.1 with no compression, which Cloudflare nev
 
 Best Practices 96 on the raw runs was the missing `/favicon.ico` (404 console error); fixed (see below).
 
-## AC-2 status: mobile Performance misses 95 (88)
+## Round 2: display-font subset (AC-2 met)
+
+The display font "Rubik Doodle Shadow" was subset (`pnpm fonts:subset`, `tools/fonts/subset-display.mjs`) to printable Basic Latin, the Polish letters, `„ " " ' ' – — … ·` and NBSP, served through Astro's local font provider as two `unicode-range` faces (latin 210 KB to 150 KB, latin-ext 119 KB to 23 KB). Glyph outlines are untouched. Every display-font text on the six built pages was checked in a browser and contains only characters in the set; no user input is rendered in the display font. Lighthouse 13.5.0, edge-like topology, final build:
+
+| Run           | Performance | Accessibility | Best Practices | SEO | FCP   | LCP   | TBT   | CLS   |
+| ------------- | ----------- | ------------- | -------------- | --- | ----- | ----- | ----- | ----- |
+| `/` mobile    | **95**      | 100           | 100            | 100 | 1.7 s | 2.6 s | 70 ms | 0.077 |
+| `/` desktop   | 100         | 100           | 100            | 100 | 0.4 s | 0.5 s | 0 ms  | 0.001 |
+| `/pl` mobile  | **95**      | 100           | 100            | 100 | 1.7 s | 2.6 s | 70 ms | 0.077 |
+| `/pl` desktop | 100         | 100           | 100            | 100 | 0.4 s | 0.5 s | 0 ms  | 0.001 |
+
+Astro preloads every variant of a local font, so the pages now preload two small display faces; the font-count budget in `check-budgets.mjs` was raised from 1 to 2 accordingly.
+
+The sections below are the round 1 findings, kept for the record (the 88 scores were before the subset).
+
+## Round 1: why mobile Performance was 88
 
 Accessibility, Best Practices and SEO are 100 everywhere; desktop Performance is 100. Mobile Performance is 88 on both locales.
 

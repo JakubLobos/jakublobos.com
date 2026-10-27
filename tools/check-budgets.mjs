@@ -9,7 +9,8 @@ import { parseArgs } from 'node:util';
 import { gzipSync } from 'node:zlib';
 
 const KB = 1024;
-const BUDGET = { js: 35 * KB, css: 25 * KB, lazy: 80 * KB, preloadedFonts: 1 };
+// Two: the display font ships as latin + latin-ext subsets and Astro preloads every variant of a local font.
+const BUDGET = { js: 35 * KB, css: 25 * KB, lazy: 80 * KB, preloadedFonts: 2 };
 const PAGES = ['index.html', 'pl.html'];
 // Client code must never ship the validation library (docs/architecture.md section 3).
 const ZOD_SIGNATURES = [/\bzod\b/i, /ZodError/, /\$ZodType/, /contracts\/schemas/];

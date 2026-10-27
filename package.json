@@ -23,6 +23,7 @@
     "test": "pnpm --recursive test",
     "check:budgets": "node tools/check-budgets.mjs",
     "check:release": "node tools/check-release-assets.mjs",
+    "fonts:subset": "node tools/fonts/subset-display.mjs",
     "og:generate": "node tools/og/render-og.ts",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
@@ -41,6 +42,7 @@
     "globals": "17.13.0",
     "prettier": "3.9.10",
     "prettier-plugin-astro": "1.1.2",
+    "subset-font": "2.9.0",
     "typescript": "6.0.3",
     "typescript-eslint": "8.72.0"
   }
