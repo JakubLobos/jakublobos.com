@@ -6,34 +6,28 @@ import { PAINT_ORDER, PAINTS } from '../lib/paints.ts';
 const THROTTLE_MS = 400;
 // canvas-confetti ticks are frames: ~120 of them is about two seconds.
 const BURST = { particleCount: 70, angle: 90, spread: 70, startVelocity: 38, ticks: 120 };
+const FALLBACK_Z_INDEX = 6;
 
 const lastBurst = new WeakMap<Element, number>();
 let loading: Promise<CreateTypes> | null = null;
 
-/** The library and its canvas load on the first burst, so the page's initial JS stays untouched. */
+/** The library loads on the first burst, so the page's initial JS stays untouched. */
 function load(): Promise<CreateTypes> {
-  loading ??= import('canvas-confetti').then(({ default: confetti }) => {
-    const canvas = document.createElement('canvas');
-    canvas.className = 'confetti-canvas';
-    canvas.setAttribute('aria-hidden', 'true');
-    document.body.append(canvas);
-    // The CSP has no `worker-src blob:`, so the worker renderer is off.
-    return confetti.create(canvas, {
-      resize: true,
-      useWorker: false,
-      disableForReducedMotion: true,
-    });
-  });
+  // Without a canvas the library makes its own and removes it when the animation ends.
+  // The CSP has no `worker-src blob:`, so the worker renderer is off.
+  loading ??= import('canvas-confetti').then(({ default: confetti }) =>
+    confetti.create(undefined, { resize: true, useWorker: false }),
+  );
   return loading;
 }
 
-function paintColors(): string[] {
-  const style = getComputedStyle(document.documentElement);
+function paintColors(style: CSSStyleDeclaration): string[] {
   return PAINT_ORDER.map((id) => style.getPropertyValue(PAINTS[id].swatchVar).trim());
 }
 
 /** Fires a paint-coloured burst from the bottom edge of `element`. */
 export function burstFrom(element: Element): void {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const now = performance.now();
   if (now - (lastBurst.get(element) ?? -Infinity) < THROTTLE_MS) return;
   lastBurst.set(element, now);
@@ -43,9 +37,11 @@ export function burstFrom(element: Element): void {
     window.innerWidth,
     window.innerHeight,
   );
-  const colors = paintColors();
+  const style = getComputedStyle(document.documentElement);
+  const zIndex = Number.parseInt(style.getPropertyValue('--z-confetti'), 10) || FALLBACK_Z_INDEX;
+  const colors = paintColors(style);
   load()
-    .then((fire) => fire({ ...BURST, origin, colors }))
+    .then((fire) => fire({ ...BURST, origin, colors, zIndex }))
     // Confetti is decorative: a failed chunk load is dropped (and retried next time), not surfaced.
     .catch(() => {
       loading = null;

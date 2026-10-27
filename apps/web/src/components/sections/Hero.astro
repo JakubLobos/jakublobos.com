@@ -43,11 +43,11 @@ const t = hero(locale);
 <script>
   import { burstFrom } from '../../scripts/confetti.ts';
 
-  document.addEventListener('click', (event) => {
-    const trigger =
-      event.target instanceof Element ? event.target.closest('[data-confetti]') : null;
-    if (trigger) burstFrom(trigger);
-  });
+  for (const trigger of document.querySelectorAll<HTMLElement>('#hero [data-confetti]')) {
+    trigger.addEventListener('click', () => {
+      burstFrom(trigger);
+    });
+  }
 </script>
 
 <style>
