@@ -213,6 +213,21 @@ const entries = experience.map((entry) => ({
     justify-content: center;
   }
 
+  /*
+   * In a short viewport the tallest panel plus the heading fills the stage, so centring pushes the
+   * heading under the fixed header. Anchor the stage below the header instead and tighten the gap.
+   * --header-clear approximates the header's two-line logo height (it has no token of its own).
+   */
+  @media (height < 820px) {
+    :global([data-mode='sticky']) .stage {
+      --header-clear: 80px;
+
+      justify-content: flex-start;
+      gap: var(--space-24);
+      padding-block: var(--header-clear) 0;
+    }
+  }
+
   :global([data-mode='sticky']) .body {
     grid-template-columns: minmax(0, var(--rail-col)) minmax(0, 1fr);
   }
