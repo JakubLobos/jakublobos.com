@@ -152,7 +152,7 @@ CSS custom properties can't be used inside media queries, so breakpoints are con
 | ------------------ | ----------------------------------- | ----------------------------------------------------------------------- |
 | mobile             | `(width < 760px)`                   | burger menu, no custom scrollbar, small drips, full-width cookie banner |
 | narrow             | `(width < 980px)`                   | no social aside, narrow gutters, footer clears drips                    |
-| compact-experience | `(width < 820px), (height < 860px)` | stacked experience list                                                 |
+| compact-experience | `(width < 820px), (height < 760px)` | stacked experience list                                                 |
 
 ### 2.7 Shape, borders, shadows
 

@@ -3,7 +3,7 @@
 export const breakpoints = {
   mobile: '(width < 760px)',
   narrow: '(width < 980px)',
-  compactExperience: '(width < 820px), (height < 860px)',
+  compactExperience: '(width < 820px), (height < 760px)',
 } as const;
 
 export type BreakpointName = keyof typeof breakpoints;

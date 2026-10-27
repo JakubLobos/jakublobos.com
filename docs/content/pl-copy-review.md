@@ -10,7 +10,7 @@ date and the word "approved" once the owner has gone through every row (T-034, A
 > `{name}` marks a value filled in at runtime. Address form is informal "Ty"; quotes are „…”;
 > a guestbook entry is a "wpis".
 
-Strings: 337 across 20 areas.
+Strings: 335 across 20 areas.
 
 ## Owner sign-off
 
@@ -419,10 +419,8 @@ Source: `apps/web/src/content/experience.ts`
 | `vitresoft.bullets[0]` | Co-built, from the pre-launch stage, a game server management platform that replaced the company’s legacy [Pterodactyl](https://pterodactyl.io/)-based solution; now develop it largely single-handedly as the sole frontend developer. | Współtworzyłem od etapu przed startem platformę do zarządzania serwerami gier, która zastąpiła dawne firmowe rozwiązanie oparte na [Pterodactylu](https://pterodactyl.io/); dziś rozwijam ją w większości samodzielnie, jako jedyny programista frontendu. |   |
 | `vitresoft.bullets[1]` | Design interfaces and own UI/UX decisions; design and run A/B tests aimed at improving user experience and sales. | Projektuję interfejsy i odpowiadam za decyzje UI/UX; projektuję i prowadzę testy A/B, które mają poprawiać doświadczenie użytkowników i sprzedaż. |   |
 | `vitresoft.bullets[2]` | Work with AI agents: delegate tasks, review generated code and verify changes. | Pracuję z agentami AI: deleguję zadania, sprawdzam wygenerowany kod i weryfikuję zmiany. |   |
-| `vitresoft.bullets[3]` | Built web apps for live events with Poland’s biggest gaming creators under tight deadlines. | Tworzyłem aplikacje webowe na eventy z największymi polskimi twórcami gamingowymi, pod ścisłymi terminami. |   |
-| `vitresoft.bullets[4]` | Developed and maintained the in-browser server console, a dedicated WebFTP client and internal libraries (UI components, csrvfs for file handling). | Rozwijałem i utrzymywałem przeglądarkową konsolę serwera, dedykowanego klienta WebFTP oraz wewnętrzne biblioteki (komponenty UI, csrvfs do obsługi plików). |   |
-| `vitresoft.bullets[5]` | Designed and built purchase and sign-up forms, a gRPC-based server process view and authorization management; also handled performance optimization. | Projektowałem i budowałem formularze zakupu i zakładania konta, podgląd procesów serwera oparty na gRPC oraz zarządzanie autoryzacją; dbałem też o optymalizację. |   |
-| `vitresoft.bullets[6]` | Mentored interns and supported the growth of their programming skills. | Mentorowałem stażystów i wspierałem rozwój ich umiejętności programistycznych. |   |
+| `vitresoft.bullets[3]` | Built the in-browser server console, a WebFTP client, purchase and sign-up flows, a gRPC-based server process view and authorization management, plus internal libraries (UI components, csrvfs for file handling). | Zbudowałem przeglądarkową konsolę serwera, klienta WebFTP, formularze zakupu i zakładania konta, podgląd procesów serwera oparty na gRPC i zarządzanie autoryzacją, a także wewnętrzne biblioteki (komponenty UI, csrvfs do obsługi plików). |   |
+| `vitresoft.bullets[4]` | Shipped web apps for live events with Poland’s biggest gaming creators under tight deadlines; mentored interns. | Pod ścisłymi terminami tworzyłem aplikacje webowe na eventy z największymi polskimi twórcami gamingowymi; mentorowałem stażystów. |   |
 | `peryskop.date` | Feb 2023 — Present | lut 2023 — obecnie |   |
 | `peryskop.title` | Software Engineer · Fundacja Peryskop | Software Engineer · Fundacja Peryskop |   |
 | `peryskop.sub` | Non-profit · free online psychological support platform · fundacjaperyskop.org | Organizacja non-profit · bezpłatna platforma wsparcia psychologicznego online · fundacjaperyskop.org |   |
