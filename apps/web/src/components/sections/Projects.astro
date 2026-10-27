@@ -29,10 +29,24 @@ const messages = projectsMessages(locale);
         <div class="body">
           <div class="main">
             <h3 class="title">{project.title[locale]}</h3>
-            <p class="desc">{project.desc[locale]}</p>
+            {project.paragraphs[locale].map((paragraph) => (
+              <p class="desc">{paragraph}</p>
+            ))}
+            {project.links && (
+              <ul class="links" aria-label={messages.links}>
+                {project.links.map((link) => (
+                  <li>
+                    <a href={link.href} target="_blank" rel="noopener noreferrer">
+                      {messages.link[link.kind]}
+                      <span aria-hidden="true"> ↗</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
           <div class="meta">
-            <p class="org">{project.org}</p>
+            {project.org && <p class="org">{project.org}</p>}
             <ul class="tags" aria-label={messages.technologies}>
               {project.tags.map((tag) => (
                 <li>{tag}</li>
@@ -92,7 +106,7 @@ const messages = projectsMessages(locale);
     display: flex;
     flex: 1 1 var(--project-main-basis);
     flex-direction: column;
-    gap: var(--space-8);
+    gap: var(--space-12);
     min-width: 0;
   }
 
@@ -110,6 +124,22 @@ const messages = projectsMessages(locale);
     line-height: var(--leading-body);
     color: var(--color-text-secondary);
     text-wrap: pretty;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4) var(--space-16);
+    margin: 0;
+    padding: 0;
+    font-size: var(--text-caption);
+    list-style: none;
+  }
+
+  .links a {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-underline-offset: var(--space-4);
   }
 
   .meta {

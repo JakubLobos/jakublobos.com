@@ -10,7 +10,7 @@ date and the word "approved" once the owner has gone through every row (T-034, A
 > `{name}` marks a value filled in at runtime. Address form is informal "Ty"; quotes are „…”;
 > a guestbook entry is a "wpis".
 
-Strings: 335 across 20 areas.
+Strings: 357 across 20 areas.
 
 ## Owner sign-off
 
@@ -20,7 +20,11 @@ Strings: 335 across 20 areas.
 
 ## PL equal to EN
 
-40 whitelisted (proper nouns, technology names), 0 to check.
+40 whitelisted (proper nouns, technology names), 1 to check.
+
+| Area | Key | Text |
+| ---- | --- | ---- |
+| Privacy policy | `sections[2].blocks[5].text` | Google (Gemini API) |
 
 ## Common
 
@@ -94,6 +98,11 @@ Source: `apps/web/src/i18n/messages/projects.ts`
 | `eyebrow` | PROJECTS | PROJEKTY |   |
 | `title` | I’m specializing in making web-apps | Specjalizuję się w tworzeniu aplikacji webowych |   |
 | `technologies` | Technologies | Technologie |   |
+| `links` | Links | Linki |   |
+| `link.website` | Website | Strona |   |
+| `link.frontend` | Frontend code | Kod frontendu |   |
+| `link.ui` | UI library | Biblioteka UI |   |
+| `link.source` | Source code | Kod źródłowy |   |
 
 ## Skills labels
 
@@ -155,10 +164,25 @@ Source: `apps/web/src/i18n/messages/guestbook.ts`
 | `fieldErrors.contact_info_not_allowed` | Please don’t include emails or phone numbers. | Nie podawaj adresów e-mail ani numerów telefonu. |   |
 | `submitErrors.rateLimited` | You’ve left a few marks already. Try again in a few minutes. | Zostawiono już kilka wpisów. Spróbuj ponownie za kilka minut. |   |
 | `submitErrors.retry` | Couldn’t send that right now. Please try again in a moment. | Nie udało się teraz wysłać wiadomości. Spróbuj ponownie za chwilę. |   |
-| `modal.eyebrow` | IN REVIEW | W TRAKCIE SPRAWDZANIA |   |
-| `modal.title` | Thanks for your mark! | Dzięki za ślad! |   |
-| `modal.body` | Your message is waiting for a quick review. Once approved, it will greet the next visitor. | Twoja wiadomość czeka na szybkie sprawdzenie. Po zatwierdzeniu przywita kolejnego gościa. |   |
 | `modal.close` | Got it | Rozumiem |   |
+| `status.checking.eyebrow` | CHECKING | SPRAWDZAM |   |
+| `status.checking.title` | Checking your note… | Sprawdzam Twój wpis… |   |
+| `status.checking.body` | This usually takes a few seconds. | Zwykle zajmuje to kilka sekund. |   |
+| `status.approved.eyebrow` | LIVE | JUŻ NA STRONIE |   |
+| `status.approved.title` | Your note is live! | Twój wpis jest już na stronie! |   |
+| `status.approved.body` | It now greets the next visitor. | Wita teraz kolejnego gościa. |   |
+| `status.rejected.eyebrow` | NOT PUBLISHED | NIEOPUBLIKOWANY |   |
+| `status.rejected.title` | Oh no… your note didn’t pass review. | Oj… Twój wpis nie przeszedł weryfikacji. |   |
+| `status.rejected.reasons.inappropriate` | It doesn’t fit the tone of this site. | Nie pasuje do charakteru tej strony. |   |
+| `status.rejected.reasons.off_topic` | It looks like a meme or isn’t about the site. | Wygląda na mema albo nie jest o tej stronie. |   |
+| `status.rejected.reasons.impersonation` | Please don’t sign as the site’s author. | Nie podpisuj się jako autor strony. |   |
+| `status.rejected.reasons.personal_data` | Please leave out personal details. | Pomiń dane osobowe. |   |
+| `status.superseded.eyebrow` | REPLACED | ZASTĄPIONY |   |
+| `status.superseded.title` | Someone was a little faster | Ktoś był odrobinę szybszy |   |
+| `status.superseded.body` | A newer note arrived before yours was reviewed, and the newest one wins. Feel free to try again later! | Zanim Twój wpis został sprawdzony, pojawił się nowszy, a wygrywa najnowszy. Spróbuj jeszcze raz później! |   |
+| `status.slow.eyebrow` | STILL CHECKING | WCIĄŻ SPRAWDZAM |   |
+| `status.slow.title` | This is taking longer than usual. | To trwa dłużej niż zwykle. |   |
+| `status.slow.body` | If your note is approved, it will appear on the site. | Jeśli Twój wpis zostanie zatwierdzony, pojawi się na stronie. |   |
 
 ## Contact
 
@@ -301,16 +325,16 @@ Source: `apps/web/src/i18n/messages/privacy.ts`
 | `sections[1].blocks[1].rows[0][2]` | Consent (you submit it voluntarily; a notice sits under the form) | Zgoda (wpis wysyłasz dobrowolnie; informacja znajduje się pod formularzem) |   |
 | `sections[1].blocks[1].rows[0][3]` | Database on Railway, region [OWNER: Railway region] | Baza danych w Railway, region [WŁAŚCICIEL: region Railway] |   |
 | `sections[1].blocks[1].rows[0][4]` | Shown publicly until a newer message replaces it, then kept in a private archive of at most 100 messages until newer ones push it out. A message not yet reviewed is deleted after 24 hours at most. Deleted on request. Copies stay in backups until they rotate out [OWNER: confirm backup retention]. | Widoczny publicznie, dopóki nie zastąpi go nowszy wpis, następnie przechowywany w prywatnym archiwum liczącym najwyżej 100 wpisów, dopóki nie wypchną go nowsze. Wpis, który nie został jeszcze sprawdzony, jest usuwany najpóźniej po 24 godzinach. Usuwany na żądanie. Wpis pozostaje w kopiach zapasowych do czasu ich rotacji [WŁAŚCICIEL: potwierdź okres przechowywania kopii]. |   |
-| `sections[1].blocks[1].rows[1][0]` | Guestbook text sent to OpenAI moderation | Treść wpisu wysyłana do moderacji OpenAI |   |
+| `sections[1].blocks[1].rows[1][0]` | Guestbook text sent to Google (Gemini API) for a safety check | Treść wpisu wysyłana do Google (Gemini API) w celu kontroli bezpieczeństwa |   |
 | `sections[1].blocks[1].rows[1][1]` | Safety review | Kontrola bezpieczeństwa |   |
 | `sections[1].blocks[1].rows[1][2]` | Legitimate interest | Prawnie uzasadniony interes |   |
-| `sections[1].blocks[1].rows[1][3]` | OpenAI (US). Not retained for abuse monitoring and not used for training. | OpenAI (USA). Bez przechowywania na potrzeby monitorowania nadużyć, nie służy do trenowania modeli. |   |
-| `sections[1].blocks[1].rows[1][4]` | None | Brak |   |
-| `sections[1].blocks[1].rows[2][0]` | Guestbook text sent to OpenAI for a suitability review | Treść wpisu wysyłana do OpenAI w celu oceny przydatności |   |
+| `sections[1].blocks[1].rows[1][3]` | Google (Gemini API). Processed under Google's data terms for the paid service; not used to improve Google products. | Google (Gemini API). Przetwarzane na warunkach danych Google dla usługi płatnej; nie służy do ulepszania produktów Google. |   |
+| `sections[1].blocks[1].rows[1][4]` | Logged by Google for a limited period for abuse monitoring [OWNER: confirm period] | Logowane przez Google przez ograniczony czas w celu wykrywania nadużyć [WŁAŚCICIEL: potwierdź okres] |   |
+| `sections[1].blocks[1].rows[2][0]` | Guestbook text sent to Google (Gemini API) for a suitability review | Treść wpisu wysyłana do Google (Gemini API) w celu oceny przydatności |   |
 | `sections[1].blocks[1].rows[2][1]` | Check that the message fits a professional portfolio | Sprawdzenie, czy wpis pasuje do profesjonalnego portfolio |   |
 | `sections[1].blocks[1].rows[2][2]` | Legitimate interest | Prawnie uzasadniony interes |   |
-| `sections[1].blocks[1].rows[2][3]` | OpenAI (US). Stored for abuse monitoring for up to 30 days; not used for training. | OpenAI (USA). Przechowywana do 30 dni na potrzeby monitorowania nadużyć, nie służy do trenowania modeli. |   |
-| `sections[1].blocks[1].rows[2][4]` | Up to 30 days at OpenAI | Do 30 dni u OpenAI |   |
+| `sections[1].blocks[1].rows[2][3]` | Google (Gemini API). Same terms as the safety check. | Google (Gemini API). Te same warunki co przy kontroli bezpieczeństwa. |   |
+| `sections[1].blocks[1].rows[2][4]` | Logged by Google for a limited period for abuse monitoring [OWNER: confirm period] | Logowane przez Google przez ograniczony czas w celu wykrywania nadużyć [WŁAŚCICIEL: potwierdź okres] |   |
 | `sections[1].blocks[1].rows[3][0]` | Contact form: name, email, message | Formularz kontaktowy: imię, e-mail, wiadomość |   |
 | `sections[1].blocks[1].rows[3][1]` | Reply to your enquiry | Odpowiedź na Twoje zapytanie |   |
 | `sections[1].blocks[1].rows[3][2]` | Steps before a contract / legitimate interest | Działania przed zawarciem umowy / prawnie uzasadniony interes |   |
@@ -357,15 +381,15 @@ Source: `apps/web/src/i18n/messages/privacy.ts`
 | `sections[1].blocks[1].rows[11][3]` | PostHog EU cloud (server-side hash) | Chmura PostHog w UE (skrót liczony po stronie serwera) |   |
 | `sections[1].blocks[1].rows[11][4]` | Per the PostHog project settings | Zgodnie z ustawieniami projektu PostHog |   |
 | `sections[1].blocks[2].text` | The guestbook has no accounts and the site stores no identifier with your message, so a message can only be found by its text. Please do not put personal data in it; the form rejects emails and phone numbers. | Księga gości nie ma kont, a strona nie zapisuje przy Twoim wpisie żadnego identyfikatora, więc wpis można odnaleźć tylko po jego treści. Proszę, nie wpisuj danych osobowych; formularz odrzuca adresy e-mail i numery telefonu. |   |
-| `sections[1].blocks[3].text` | Whether a guestbook message is published is decided automatically by simple text rules and the OpenAI checks described below. This has no legal effect on you. If you disagree, write to the address above. | O publikacji wpisu w księdze gości decydują automatycznie proste reguły tekstowe oraz opisane niżej kontrole OpenAI. Nie ma to wobec Ciebie skutków prawnych. Jeśli się z tym nie zgadzasz, napisz na adres podany wyżej. |   |
+| `sections[1].blocks[3].text` | Whether a guestbook message is published is decided automatically by simple text rules and the Google (Gemini API) checks described below. This has no legal effect on you. If you disagree, write to the address above. | O publikacji wpisu w księdze gości decydują automatycznie proste reguły tekstowe oraz opisane niżej kontrole Google (Gemini API). Nie ma to wobec Ciebie skutków prawnych. Jeśli się z tym nie zgadzasz, napisz na adres podany wyżej. |   |
 | `sections[2].heading` | Who else handles data | Kto jeszcze przetwarza dane |   |
 | `sections[2].blocks[0].text` | These providers handle data for the purposes in the table above. Transfers outside the EEA rely on the safeguards the provider offers under Chapter V of the GDPR. | Ci dostawcy przetwarzają dane w celach wskazanych w tabeli wyżej. Przekazanie danych poza EOG opiera się na zabezpieczeniach oferowanych przez dostawcę zgodnie z rozdziałem V RODO. |   |
 | `sections[2].blocks[1].text` | Cloudflare | Cloudflare |   |
 | `sections[2].blocks[2].text` | Hosts and delivers the website, sets the “lang” cookie, and, like any host, handles the technical data of each request (IP address, browser user agent, requested URL, time). Cloudflare Turnstile, its bot check, is loaded only when you click “Show number” to reveal the phone number. | Hostuje i dostarcza stronę, ustawia cookie „lang” i, jak każdy hosting, przetwarza dane techniczne każdego żądania (adres IP, user agent przeglądarki, żądany adres URL, czas). Cloudflare Turnstile, czyli kontrola antybotowa, ładuje się dopiero po kliknięciu „Pokaż numer”, aby odsłonić numer telefonu. |   |
 | `sections[2].blocks[3].text` | Railway | Railway |   |
 | `sections[2].blocks[4].text` | Hosts the API and its database, which holds the guestbook, and handles the technical data of each API request (IP address, browser user agent, requested URL, time). Region: [OWNER: Railway region]. | Hostuje API oraz jego bazę danych z księgą gości i przetwarza dane techniczne każdego żądania do API (adres IP, user agent przeglądarki, żądany adres URL, czas). Region: [WŁAŚCICIEL: region Railway]. |   |
-| `sections[2].blocks[5].text` | OpenAI | OpenAI |   |
-| `sections[2].blocks[6].text` | Guestbook text is sent to OpenAI (United States) for two automated checks: a moderation check, which OpenAI does not retain, and a suitability review that is kept for up to 30 days for abuse monitoring. OpenAI does not use it for training. Your IP address is not sent. | Treść wpisu w księdze gości trafia do OpenAI (Stany Zjednoczone) w ramach dwóch automatycznych kontroli: moderacji, której OpenAI nie przechowuje, oraz oceny przydatności, przechowywanej do 30 dni w celu monitorowania nadużyć. OpenAI nie używa tych danych do trenowania modeli. Twój adres IP nie jest wysyłany. |   |
+| `sections[2].blocks[5].text` | Google (Gemini API) | Google (Gemini API) |   |
+| `sections[2].blocks[6].text` | Guestbook text is sent to Google (Gemini API) for two automated checks: a safety check and a suitability review. Because this site is operated from Poland (EEA), Google processes the text under its data terms for the paid service and does not use it to improve its products. Google logs requests for a limited period for abuse monitoring [OWNER: confirm period]. The free quota is used, so no fee is charged. Please do not include personal data in a message. Your IP address is not sent. | Treść wpisu w księdze gości trafia do Google (Gemini API) w ramach dwóch automatycznych kontroli: kontroli bezpieczeństwa i oceny przydatności. Ponieważ ta strona jest prowadzona z Polski (EOG), Google przetwarza treść na warunkach danych dla usługi płatnej i nie używa jej do ulepszania swoich produktów. Google loguje zapytania przez ograniczony czas w celu wykrywania nadużyć [WŁAŚCICIEL: potwierdź okres]. Wykorzystywany jest bezpłatny limit, więc nie ponosimy opłat. Nie podawaj w wpisie danych osobowych. Twój adres IP nie jest wysyłany. |   |
 | `sections[2].blocks[7].text` | Resend | Resend |   |
 | `sections[2].blocks[8].text` | Delivers the contact form as an email to my mailbox. Your name, email address, and message pass through it. | Dostarcza wiadomość z formularza kontaktowego na moją skrzynkę. Przechodzą przez niego Twoje imię, adres e-mail i treść wiadomości. |   |
 | `sections[2].blocks[9].text` | Google Analytics 4 | Google Analytics 4 |   |
@@ -439,16 +463,18 @@ Source: `apps/web/src/content/projects.ts`
 
 | Key | EN | PL | Owner correction |
 | --- | -- | -- | ---------------- |
-| `01.title` | Hosting control panel | Panel zarządzania hostingiem |   |
-| `01.desc` | Evolved core modules of the control panel and product site: server configuration, purchase/upgrade flow, in-browser file manager (WebFTP), web console, and gRPC-powered server process views | Rozwijałem kluczowe moduły panelu zarządzania i strony produktowej: konfigurację serwera, proces zakupu i zmiany planu, menedżer plików w przeglądarce (WebFTP), konsolę webową oraz widoki procesów serwera oparte na gRPC. |   |
-| `02.title` | Item shop builder | Kreator sklepów z przedmiotami |   |
-| `02.desc` | Co-built from scratch, together with the backend team, an online store builder (item shops) for server administrators. | Współtworzyłem od podstaw, razem z zespołem backendu, kreator sklepów internetowych (sklepów z przedmiotami) dla administratorów serwerów. |   |
-| `03.title` | Real-time support chat | Czat wsparcia w czasie rzeczywistym |   |
-| `03.desc` | Built a custom real-time chat frontend (WebSocket) for help seekers, volunteers and admins; created and maintain the shared React / React Native component library. | Zbudowałem własny frontend czatu w czasie rzeczywistym (WebSocket) dla osób szukających pomocy, wolontariuszy i administratorów; stworzyłem i utrzymuję wspólną bibliotekę komponentów React / React Native. |   |
-| `04.title` | Volunteer matching system | System dopasowywania wolontariuszy |   |
-| `04.desc` | Prepared requirements, documentation and logic diagrams for an automated matching system pairing help seekers with volunteers, used as the basis for its backend implementation. | Przygotowałem wymagania, dokumentację i diagramy logiki automatycznego systemu łączącego osoby szukające pomocy z wolontariuszami, które posłużyły za podstawę jego implementacji po stronie backendu. |   |
-| `05.title` | Gaming event web apps | Aplikacje webowe na wydarzenia gamingowe |   |
-| `05.desc` | Built web apps for Polish gaming-industry events featuring popular Polish content creators. | Budowałem aplikacje webowe na polskie wydarzenia branży gamingowej z udziałem popularnych polskich twórców internetowych. |   |
+| `01.title` | Game Hosting Platform & Server Management Dashboard | Platforma hostingu gier i panel zarządzania serwerem |   |
+| `01.paragraphs[0]` | I developed key modules of a game server hosting platform, including the server management panel (settings, payment flow, an in-browser file manager (WebFTP), a web console, and server configurators). I also worked on the public-facing website: the homepage, offer pages, payment forms, and a server builder tailored to users’ needs. The platform caters to a wide audience, from young gamers to experienced server administrators, so I focused on making complex functionality simple and accessible. | Rozwijałem kluczowe moduły platformy hostingu serwerów gier, w tym panel zarządzania serwerem (ustawienia, proces płatności, przeglądarkowy menedżer plików WebFTP, konsolę webową i konfiguratory serwerów). Pracowałem również nad publiczną częścią platformy: stroną główną, stronami ofertowymi, formularzami płatności oraz kreatorem serwerów dopasowanym do potrzeb użytkowników. Platforma jest skierowana do szerokiego grona odbiorców, od młodych graczy po doświadczonych administratorów, dlatego skupiałem się na tym, by złożone funkcje przedstawiać prosto i przystępnie. |   |
+| `01.paragraphs[1]` | I was responsible for UI/UX design, including a redesign, as well as for developing the company’s internal TypeScript frontend libraries. I started as part of a frontend team and later became the sole frontend developer on the product, taking full ownership of the codebase and its technical direction. | Odpowiadałem za projektowanie UI/UX, w tym redesign, a także za rozwój wewnętrznych bibliotek frontendowych firmy w TypeScripcie. Zaczynałem w zespole frontendowym, a później zostałem jedynym frontend developerem w tym produkcie, przejmując pełną odpowiedzialność za kod i kierunek jego rozwoju. |   |
+| `02.title` | Item Shop Builder | Item Shop Builder |   |
+| `02.paragraphs[0]` | An application that allows game server administrators to build their own item shops, where players can purchase virtual products. I worked on it as part of a team, alongside other frontend and backend developers. After moving to another product, I continued to support the project by supervising the interns working on it. | Aplikacja umożliwiająca administratorom serwerów gier budowanie własnych itemshopów, w których gracze mogą kupować wirtualne produkty. Pracowałem nad nią w zespole, razem z innymi frontend i backend developerami. Po przejściu do innego produktu nadal wspierałem projekt, nadzorując pracę praktykantów. |   |
+| `03.title` | Web Apps for Events Hosted by Popular Polish Streamers | Aplikacje webowe na wydarzenia popularnych polskich streamerów |   |
+| `03.paragraphs[0]` | I developed a variety of web applications for online events hosted by some of Poland’s most popular gaming streamers. I worked both independently and as part of a team, often under tight deadlines. | Tworzyłem różnorodne aplikacje webowe na potrzeby wydarzeń online organizowanych przez jednych z najpopularniejszych polskich streamerów gamingowych. Pracowałem zarówno samodzielnie, jak i w zespole, często pod presją krótkich terminów. |   |
+| `04.title` | Free Psychological Support Platform | Platforma bezpłatnej pomocy psychologicznej |   |
+| `04.paragraphs[0]` | I developed the frontend of a platform for a foundation providing free psychological support, including a dedicated real-time chat. The platform features an admin panel for approving applications, matching people seeking support with volunteers, approving and editing articles, managing user permissions, forms, and chats, and browsing large lists such as user directories. | Stworzyłem frontend platformy fundacji oferującej bezpłatną pomoc psychologiczną, wraz z dedykowanym czatem działającym w czasie rzeczywistym. Platforma zawiera panel zarządzania, w którym można akceptować formularze, łączyć podopiecznych z wolontariuszami, akceptować i redagować artykuły, zarządzać uprawnieniami użytkowników, formularzami i czatami oraz przeglądać duże listy, takie jak listy użytkowników. |   |
+| `04.paragraphs[1]` | I also designed the application’s UI. To support the mobile app, I created a shared UI component library built on Tamagui, used by both the web app and the React Native app. | Zaprojektowałem także interfejs aplikacji. Na potrzeby aplikacji mobilnej stworzyłem współdzieloną bibliotekę komponentów UI opartą na Tamagui, wykorzystywaną zarówno w aplikacji webowej, jak i w aplikacji napisanej w React Native. |   |
+| `05.title` | This Portfolio | To portfolio |   |
+| `05.paragraphs[0]` | You’re looking at it right now. | Właśnie tu jesteś! |   |
 
 ## Content: skill groups
 
