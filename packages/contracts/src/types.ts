@@ -1,11 +1,19 @@
 import type { z } from 'zod';
-import type { ERROR_CODES, FIELD_ERROR_CODES, LOCALES, PAINT_IDS } from './constants.ts';
+import type {
+  ERROR_CODES,
+  FIELD_ERROR_CODES,
+  LOCALES,
+  PAINT_IDS,
+  SUBMISSION_REASONS,
+  SUBMISSION_STATUSES,
+} from './constants.ts';
 import type {
   ApiErrorBodySchema,
   ContactRequestSchema,
   ContactResponseSchema,
   GuestbookLatestResponseSchema,
   GuestbookMessageDtoSchema,
+  GuestbookSubmissionStatusResponseSchema,
   GuestbookSubmitRequestSchema,
   GuestbookSubmitResponseSchema,
   PhoneRevealRequestSchema,
@@ -21,6 +29,11 @@ export type GuestbookSubmitRequest = z.infer<typeof GuestbookSubmitRequestSchema
 export type GuestbookSubmitResponse = z.infer<typeof GuestbookSubmitResponseSchema>;
 export type GuestbookMessageDto = z.infer<typeof GuestbookMessageDtoSchema>;
 export type GuestbookLatestResponse = z.infer<typeof GuestbookLatestResponseSchema>;
+export type SubmissionStatus = (typeof SUBMISSION_STATUSES)[number];
+export type SubmissionReason = (typeof SUBMISSION_REASONS)[number];
+export type GuestbookSubmissionStatusResponse = z.infer<
+  typeof GuestbookSubmissionStatusResponseSchema
+>;
 export type ContactRequest = z.infer<typeof ContactRequestSchema>;
 export type ContactResponse = z.infer<typeof ContactResponseSchema>;
 export type PhoneRevealRequest = z.infer<typeof PhoneRevealRequestSchema>;

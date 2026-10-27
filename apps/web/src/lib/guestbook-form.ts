@@ -19,7 +19,7 @@ export type SubmitOutcome =
   | { kind: 'empty' }
   | { kind: 'field-error'; code: BodyErrorCode }
   | { kind: 'failed'; reason: 'rate_limited' | 'retry' }
-  | { kind: 'sent'; body: string; paint: PaintId };
+  | { kind: 'sent'; body: string; paint: PaintId; clientRequestId: string };
 
 export interface SubmitInput {
   raw: string;
@@ -57,8 +57,9 @@ function toOutcome(
   result: ApiResult<GuestbookSubmitData>,
   body: string,
   paint: PaintId,
+  clientRequestId: string,
 ): SubmitOutcome {
-  if (result.ok) return { kind: 'sent', body, paint };
+  if (result.ok) return { kind: 'sent', body, paint, clientRequestId };
   switch (result.kind) {
     case 'validation': {
       const code = result.fields.body?.find(isBodyCode);
@@ -67,6 +68,7 @@ function toOutcome(
     }
     case 'rate_limited':
       return { kind: 'failed', reason: 'rate_limited' };
+    case 'not_found':
     case 'unavailable':
     case 'network':
     case 'unexpected':
@@ -107,7 +109,7 @@ export function createSubmitController(deps: SubmitDeps): SubmitController {
           locale,
           website,
         });
-        const outcome = toOutcome(result, check.body, paint);
+        const outcome = toOutcome(result, check.body, paint, current.id);
         if (outcome.kind === 'sent') current = null;
         return outcome;
       } finally {

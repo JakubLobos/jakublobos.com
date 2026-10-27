@@ -52,7 +52,7 @@ function rows(db: Db): { public_id: string; status: string }[] {
 describe('migrations', () => {
   it('create the exact schema and are idempotent', () => {
     const db = openDatabase(IN_MEMORY);
-    expect(migrate(db)).toEqual(['0001_guestbook.sql']);
+    expect(migrate(db)).toEqual(['0001_guestbook.sql', '0002_submission_outcomes.sql']);
     expect(migrate(db)).toEqual([]);
 
     const schema = db
@@ -63,6 +63,7 @@ describe('migrations', () => {
     const byName = new Map(schema.map((entry) => [entry.name, entry.sql]));
     expect([...byName.keys()].sort()).toEqual([
       'guestbook_messages',
+      'guestbook_submission_outcomes',
       'ix_guestbook_approved',
       'trg_guestbook_retention_cap',
       'ux_guestbook_single_pending',
@@ -71,7 +72,7 @@ describe('migrations', () => {
     // The SQL literals must agree with the contract constants.
     expect(byName.get('trg_guestbook_retention_cap')).toContain(`>= ${GUESTBOOK_RETENTION_LIMIT}`);
     expect(GUESTBOOK_MAX_PENDING).toBe(1);
-    expect(db.prepare('SELECT COUNT(*) AS n FROM schema_migrations').get()).toEqual({ n: 1 });
+    expect(db.prepare('SELECT COUNT(*) AS n FROM schema_migrations').get()).toEqual({ n: 2 });
   });
 });
 
@@ -217,6 +218,61 @@ describe('review lifecycle', () => {
     repo.approve(id, T0);
     expect(repo.deletePending(id)).toBe(false);
     expect(repo.findLatestApproved()).not.toBeNull();
+  });
+});
+
+describe('submission outcomes (ADR-0017)', () => {
+  it('reports each state by token and stores no text for rejected or superseded rows', () => {
+    const { db, repo } = setup();
+    const first = message({ body: 'unique-secret-body' });
+    expect(repo.findSubmissionStatus(first.clientRequestId)).toBeNull();
+
+    repo.insertPendingNewestWins(first);
+    expect(repo.findSubmissionStatus(first.clientRequestId)).toEqual({ status: 'pending' });
+
+    const second = message();
+    repo.insertPendingNewestWins(second);
+    expect(repo.findSubmissionStatus(first.clientRequestId)).toEqual({ status: 'superseded' });
+
+    const id = repo.findDuePending(T0)?.id ?? -1;
+    expect(repo.rejectPending(id, 'off_topic', T0 + 1)).toBe(true);
+    expect(repo.rejectPending(id, 'off_topic', T0 + 1)).toBe(false);
+    expect(repo.findSubmissionStatus(second.clientRequestId)).toEqual({
+      status: 'rejected',
+      reason: 'off_topic',
+    });
+
+    const third = message();
+    repo.insertPendingNewestWins(third);
+    repo.approve(repo.findDuePending(T0)?.id ?? -1, T0 + 2);
+    expect(repo.findSubmissionStatus(third.clientRequestId)).toEqual({ status: 'approved' });
+
+    repo.recordRejection('dropped-token', 'inappropriate', T0);
+    expect(repo.findSubmissionStatus('dropped-token')).toEqual({
+      status: 'rejected',
+      reason: 'inappropriate',
+    });
+
+    const columns = db
+      .prepare<[], { name: string }>("PRAGMA table_info('guestbook_submission_outcomes')")
+      .all()
+      .map((column) => column.name);
+    expect(columns).toEqual(['client_request_id', 'outcome', 'reason', 'created_at']);
+  });
+
+  it('prunes outcomes with the pending retention and caps the table size', () => {
+    const { db, repo } = setup();
+    repo.recordRejection('old', 'off_topic', T0);
+    repo.deleteExpiredPending(T0 + 1);
+    expect(repo.findSubmissionStatus('old')).toBeNull();
+
+    for (let i = 0; i < 1100; i += 1) repo.recordRejection(`flood-${i}`, 'off_topic', T0 + i);
+    const count = db
+      .prepare<[], { n: number }>('SELECT COUNT(*) AS n FROM guestbook_submission_outcomes')
+      .get();
+    expect(count?.n).toBe(1000);
+    expect(repo.findSubmissionStatus('flood-1099')).not.toBeNull();
+    expect(repo.findSubmissionStatus('flood-0')).toBeNull();
   });
 });
 

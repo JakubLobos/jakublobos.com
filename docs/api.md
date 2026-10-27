@@ -90,6 +90,23 @@ Returns the newest **approved** message. This is the only public read of guestbo
 - `Cache-Control: no-cache` + `ETag` (a revalidated request returns `304`).
 - Rate limit: 60 / minute / client.
 
+### `GET /api/guestbook/submissions/:clientRequestId`
+
+Review progress of one submission (ADR-0017). The key is the `clientRequestId` the browser sent with the `POST`: a random UUID, so it works as an unguessable token.
+
+```jsonc
+// 200
+{ "data": { "status": "pending" } }
+{ "data": { "status": "approved" } }
+{ "data": { "status": "superseded" } }
+{ "data": { "status": "rejected", "reason": "inappropriate" } } // inappropriate | off_topic | impersonation | personal_data
+// 404 NOT_FOUND: unknown, pruned (after 24 h) or never recorded (for example a duplicate text)
+// 400 VALIDATION_FAILED: the id is not a UUID
+```
+
+- The reason is one of four deliberately coarse labels mapped from the internal outcome (`guestbook-moderation.md` §2.1). The response never contains the text, scores, categories, provider names or internal reasons.
+- `Cache-Control: no-store`. Rate limit: 30 / minute / client.
+
 ### `POST /api/guestbook`
 
 Submit a message for review.
@@ -172,22 +189,25 @@ The server verifies via `siteverify` (`remoteip`, `idempotency_key`) and require
 
 ## 4. Rate limits and caps (server constants)
 
-| Route                       | Per client (`X-Real-IP` on Railway; IPv6 /56) | Global (accepted requests only)                                            |
-| --------------------------- | --------------------------------------------- | -------------------------------------------------------------------------- |
-| `GET /api/guestbook/latest` | 60 / 1 min                                    | —                                                                          |
-| `POST /api/guestbook`       | 3 / 10 min **and** 10 / 24 h                  | **20 / h and 50 / 24 h** → `503 GUESTBOOK_BUSY`                            |
-| `POST /api/contact`         | 3 / 10 min **and** 10 / 24 h                  | **20 / h and 60 / 24 h** (below Resend's 100/day) → `503 MAIL_UNAVAILABLE` |
-| `POST /api/contact/phone`   | 5 / 10 min **and** 20 / 24 h                  | 300 / 24 h → `503 VERIFICATION_UNAVAILABLE`                                |
+| Route                                | Per client (`X-Real-IP` on Railway; IPv6 /56) | Global (accepted requests only)                                            |
+| ------------------------------------ | --------------------------------------------- | -------------------------------------------------------------------------- |
+| `GET /api/guestbook/latest`          | 60 / 1 min                                    | —                                                                          |
+| `GET /api/guestbook/submissions/:id` | 30 / 1 min                                    | —                                                                          |
+| `POST /api/guestbook`                | 3 / 10 min **and** 10 / 24 h                  | **20 / h and 50 / 24 h** → `503 GUESTBOOK_BUSY`                            |
+| `POST /api/contact`                  | 3 / 10 min **and** 10 / 24 h                  | **20 / h and 60 / 24 h** (below Resend's 100/day) → `503 MAIL_UNAVAILABLE` |
+| `POST /api/contact/phone`            | 5 / 10 min **and** 20 / 24 h                  | 300 / 24 h → `503 VERIFICATION_UNAVAILABLE`                                |
 
 Per-client limiters count every request, including invalid ones, to slow brute-forcing of the rules. Global caps count only requests that pass validation and honeypot checks. They bound archive displacement, paid review calls, and email volume regardless of IP spoofing.
 
 ## 5. Client mapping (web)
 
-| Result                               | Guestbook UI                                                   | Contact UI                                           |
-| ------------------------------------ | -------------------------------------------------------------- | ---------------------------------------------------- |
-| 202 / 200                            | "In review" modal; input cleared                               | "Message sent" state                                 |
-| 422                                  | inline localized field error; text kept                        | per-field errors (design copy) + focus first invalid |
-| 429                                  | "You've left a few marks already. Try again in a few minutes." | "Too many messages. Please try again later."         |
-| 503 / network / timeout / unexpected | "Couldn't send that right now. Please try again in a moment."  | failure status; button back to idle; fields kept     |
+| Result                                        | Guestbook UI                                                                                                               | Contact UI                                           |
+| --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| 202 / 200                                     | Modal opens in "Checking your note…" and polls the status endpoint (ADR-0017); input cleared                               | "Message sent" state                                 |
+| status `approved` / `rejected` / `superseded` | Modal states "Your note is live!" (quote refetched), "didn't pass review" + localized general reason, "someone was faster" | n/a                                                  |
+| status `404`, or 60 s without a result        | Modal: "This is taking longer than usual…"; polling stops                                                                  | n/a                                                  |
+| 422                                           | inline localized field error; text kept                                                                                    | per-field errors (design copy) + focus first invalid |
+| 429                                           | "You've left a few marks already. Try again in a few minutes."                                                             | "Too many messages. Please try again later."         |
+| 503 / network / timeout / unexpected          | "Couldn't send that right now. Please try again in a moment."                                                              | failure status; button back to idle; fields kept     |
 
 Copy lives in `apps/web/src/i18n/messages/errors.ts` (generic) and `messages/guestbook.ts` / `messages/contact.ts` (field codes).

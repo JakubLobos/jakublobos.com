@@ -46,10 +46,40 @@ export const guestbook = defineMessages({
       retry: 'Couldn’t send that right now. Please try again in a moment.',
     },
     modal: {
-      eyebrow: 'IN REVIEW',
-      title: 'Thanks for your mark!',
-      body: 'Your message is waiting for a quick review. Once approved, it will greet the next visitor.',
       close: 'Got it',
+    },
+    // Live review progress shown in the dialog after sending (ADR-0017). Reasons are deliberately vague.
+    status: {
+      checking: {
+        eyebrow: 'CHECKING',
+        title: 'Checking your note…',
+        body: 'This usually takes a few seconds.',
+      },
+      approved: {
+        eyebrow: 'LIVE',
+        title: 'Your note is live!',
+        body: 'It now greets the next visitor.',
+      },
+      rejected: {
+        eyebrow: 'NOT PUBLISHED',
+        title: 'Oh no… your note didn’t pass review.',
+        reasons: {
+          inappropriate: 'It doesn’t fit the tone of this site.',
+          off_topic: 'It looks like a meme or isn’t about the site.',
+          impersonation: 'Please don’t sign as the site’s author.',
+          personal_data: 'Please leave out personal details.',
+        },
+      },
+      superseded: {
+        eyebrow: 'REPLACED',
+        title: 'Someone was a little faster',
+        body: 'A newer note arrived before yours was reviewed, and the newest one wins. Feel free to try again later!',
+      },
+      slow: {
+        eyebrow: 'STILL CHECKING',
+        title: 'This is taking longer than usual.',
+        body: 'If your note is approved, it will appear on the site.',
+      },
     },
   },
   pl: {
@@ -96,10 +126,39 @@ export const guestbook = defineMessages({
       retry: 'Nie udało się teraz wysłać wiadomości. Spróbuj ponownie za chwilę.',
     },
     modal: {
-      eyebrow: 'W TRAKCIE SPRAWDZANIA',
-      title: 'Dzięki za ślad!',
-      body: 'Twoja wiadomość czeka na szybkie sprawdzenie. Po zatwierdzeniu przywita kolejnego gościa.',
       close: 'Rozumiem',
+    },
+    status: {
+      checking: {
+        eyebrow: 'SPRAWDZAM',
+        title: 'Sprawdzam Twój wpis…',
+        body: 'Zwykle zajmuje to kilka sekund.',
+      },
+      approved: {
+        eyebrow: 'JUŻ NA STRONIE',
+        title: 'Twój wpis jest już na stronie!',
+        body: 'Wita teraz kolejnego gościa.',
+      },
+      rejected: {
+        eyebrow: 'NIEOPUBLIKOWANY',
+        title: 'Oj… Twój wpis nie przeszedł weryfikacji.',
+        reasons: {
+          inappropriate: 'Nie pasuje do charakteru tej strony.',
+          off_topic: 'Wygląda na mema albo nie jest o tej stronie.',
+          impersonation: 'Nie podpisuj się jako autor strony.',
+          personal_data: 'Pomiń dane osobowe.',
+        },
+      },
+      superseded: {
+        eyebrow: 'ZASTĄPIONY',
+        title: 'Ktoś był odrobinę szybszy',
+        body: 'Zanim Twój wpis został sprawdzony, pojawił się nowszy, a wygrywa najnowszy. Spróbuj jeszcze raz później!',
+      },
+      slow: {
+        eyebrow: 'WCIĄŻ SPRAWDZAM',
+        title: 'To trwa dłużej niż zwykle.',
+        body: 'Jeśli Twój wpis zostanie zatwierdzony, pojawi się na stronie.',
+      },
     },
   },
 });

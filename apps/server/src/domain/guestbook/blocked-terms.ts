@@ -145,6 +145,10 @@ const MATCHERS: readonly { readonly term: string; readonly pattern: RegExp }[] =
   BLOCKED_TERM_GROUPS,
 ).flatMap((group) => group.map((term) => ({ term, pattern: compileTerm(term) })));
 
+export function isMemeTerm(term: string): boolean {
+  return BLOCKED_TERM_GROUPS.meme.some((meme) => meme === term);
+}
+
 /** The list entry that matched as a whole word, or `null`. Never log the input text. */
 export function findBlockedTerm(text: string): string | null {
   for (const token of foldText(text).match(TOKEN) ?? []) {

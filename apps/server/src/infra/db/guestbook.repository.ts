@@ -1,4 +1,4 @@
-import { GUESTBOOK_RETENTION_LIMIT } from '@portfolio/contracts';
+import { GUESTBOOK_RETENTION_LIMIT, type SubmissionReason } from '@portfolio/contracts';
 import { LocaleSchema, PaintIdSchema } from '@portfolio/contracts/schemas';
 import { z } from 'zod';
 import type {
@@ -8,6 +8,7 @@ import type {
   GuestbookRepository,
   NewPendingMessage,
   PendingMessage,
+  SubmissionStatusResult,
 } from '../../domain/guestbook/repository.port.ts';
 import type { Db } from './connection.ts';
 
@@ -35,6 +36,14 @@ function approvedAtOf(row: Row): number {
   }
   return fromDb(row.approved_at);
 }
+
+// Outcomes carry no text, but a distributed flood of silent drops must not grow the table.
+const OUTCOMES_MAX_ROWS = 1000;
+
+const OutcomeRowSchema = z.object({
+  outcome: z.enum(['rejected', 'superseded']),
+  reason: z.enum(['inappropriate', 'off_topic', 'impersonation', 'personal_data']).nullable(),
+});
 
 function isUniqueViolation(error: unknown): boolean {
   return error instanceof Error && 'code' in error && error.code === 'SQLITE_CONSTRAINT_UNIQUE';
@@ -89,6 +98,35 @@ export function createGuestbookRepository(db: Db): GuestbookRepository {
   const selectApproved = db.prepare(
     "SELECT * FROM guestbook_messages WHERE status = 'approved' ORDER BY approved_at DESC, id DESC",
   );
+  const recordSuperseded = db.prepare(
+    `INSERT OR REPLACE INTO guestbook_submission_outcomes
+       (client_request_id, outcome, reason, created_at)
+     SELECT client_request_id, 'superseded', NULL, ? FROM guestbook_messages WHERE status = 'pending'`,
+  );
+  const insertRejection = db.prepare(
+    `INSERT OR REPLACE INTO guestbook_submission_outcomes
+       (client_request_id, outcome, reason, created_at) VALUES (?, 'rejected', ?, ?)`,
+  );
+  const insertRejectionForRow = db.prepare(
+    `INSERT OR REPLACE INTO guestbook_submission_outcomes
+       (client_request_id, outcome, reason, created_at)
+     SELECT client_request_id, 'rejected', ?, ? FROM guestbook_messages
+     WHERE id = ? AND status = 'pending'`,
+  );
+  const trimOutcomes = db.prepare(
+    `DELETE FROM guestbook_submission_outcomes WHERE client_request_id IN (
+       SELECT client_request_id FROM guestbook_submission_outcomes
+       ORDER BY created_at DESC, rowid DESC LIMIT -1 OFFSET ?)`,
+  );
+  const deleteExpiredOutcomes = db.prepare(
+    'DELETE FROM guestbook_submission_outcomes WHERE created_at < ?',
+  );
+  const selectMessageStatus = db.prepare<[string], { status: 'pending' | 'approved' }>(
+    'SELECT status FROM guestbook_messages WHERE client_request_id = ?',
+  );
+  const selectOutcome = db.prepare(
+    'SELECT outcome, reason FROM guestbook_submission_outcomes WHERE client_request_id = ?',
+  );
   const deleteByPublic = db.prepare('DELETE FROM guestbook_messages WHERE public_id = ?');
 
   const insertNewestWins = db.transaction((m: NewPendingMessage) => {
@@ -96,7 +134,9 @@ export function createGuestbookRepository(db: Db): GuestbookRepository {
     if (existsDuplicate.get(m.clientRequestId, m.contentHash) !== undefined) {
       return { kind: 'duplicate' } as const;
     }
-    // 3. Newest wins: at most one pending row exists.
+    // 3. Newest wins: at most one pending row exists. Its token keeps answering "superseded".
+    recordSuperseded.run(toDb(m.now));
+    trimOutcomes.run(OUTCOMES_MAX_ROWS);
     const supersededCount = deleteAllPending.run().changes;
     // 4. Make room for the new row (the trigger is the backstop).
     const total = countAll.get()?.n ?? 0;
@@ -118,6 +158,13 @@ export function createGuestbookRepository(db: Db): GuestbookRepository {
     );
     return { kind: 'inserted', supersededCount } as const;
   });
+
+  const rejectInTransaction = db.transaction(
+    (id: number, reason: SubmissionReason, now: number): boolean => {
+      insertRejectionForRow.run(reason, toDb(now), id);
+      return deletePendingRow.run(id).changes === 1;
+    },
+  );
 
   const toPending = (row: Row): PendingMessage => ({
     id: row.id,
@@ -160,10 +207,28 @@ export function createGuestbookRepository(db: Db): GuestbookRepository {
 
     approve: (id, now) => approveRow.run(toDb(now), id).changes === 1,
     deletePending: (id) => deletePendingRow.run(id).changes === 1,
+    rejectPending: (id, reason, now) => rejectInTransaction.immediate(id, reason, now),
+    recordRejection(clientRequestId, reason, now) {
+      insertRejection.run(clientRequestId, reason, toDb(now));
+      trimOutcomes.run(OUTCOMES_MAX_ROWS);
+    },
+    findSubmissionStatus(clientRequestId): SubmissionStatusResult | null {
+      const message = selectMessageStatus.get(clientRequestId);
+      if (message !== undefined) return { status: message.status };
+      const raw = selectOutcome.get(clientRequestId);
+      if (raw === undefined) return null;
+      const outcome = OutcomeRowSchema.parse(raw);
+      return outcome.outcome === 'rejected' && outcome.reason !== null
+        ? { status: 'rejected', reason: outcome.reason }
+        : { status: 'superseded' };
+    },
     recordFailure(id, code, nextAttemptAt) {
       failRow.run(code, toDb(nextAttemptAt), id);
     },
-    deleteExpiredPending: (createdBefore) => deleteExpired.run(toDb(createdBefore)).changes,
+    deleteExpiredPending(createdBefore) {
+      deleteExpiredOutcomes.run(toDb(createdBefore));
+      return deleteExpired.run(toDb(createdBefore)).changes;
+    },
 
     listArchive({ status, limit }): ArchiveRow[] {
       return selectArchive

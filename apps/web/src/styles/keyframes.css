@@ -13,6 +13,16 @@
   }
 }
 
+/* Review progress in the guestbook dialog: a brush stroke swept across its track. */
+@keyframes brush {
+  0% {
+    transform: translateX(-100%) scaleX(0.45);
+  }
+  100% {
+    transform: translateX(220%) scaleX(0.45);
+  }
+}
+
 @keyframes spin {
   to {
     transform: rotate(360deg);

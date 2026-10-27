@@ -178,3 +178,86 @@ describe('GET /api/guestbook/latest', () => {
     expect(limited.status).toBe(429);
   });
 });
+
+describe('GET /api/guestbook/submissions/:clientRequestId', () => {
+  const SECRET = 'Status secret text zebra';
+
+  it('walks pending, approved, rejected (general reason), superseded and silent drops', async () => {
+    const app = setup();
+    const pending = submission({ body: `${SECRET} one` });
+    app.moderation.set({ kind: 'transient', code: 'timeout' });
+    await app.fresh(pending);
+    await app.worker.tick();
+    const waiting = await app.status(pending.clientRequestId);
+    expect(waiting.status).toBe(200);
+    expect(waiting.body).toEqual({ data: { status: 'pending' } });
+    expect(waiting.headers['cache-control']).toBe('no-store');
+
+    // A newer note supersedes the pending one.
+    const newer = submission({ body: `${SECRET} two` });
+    await app.fresh(newer);
+    expect((await app.status(pending.clientRequestId)).body).toEqual({
+      data: { status: 'superseded' },
+    });
+
+    app.moderation.set({ kind: 'ok', flagged: true, categories: {}, scores: { hate: 1 } });
+    app.clock.advance(60_000);
+    await app.worker.tick();
+    const rejected = await app.status(newer.clientRequestId);
+    expect(rejected.body).toEqual({ data: { status: 'rejected', reason: 'inappropriate' } });
+
+    const good = submission({ body: `${SECRET} three` });
+    app.moderation.set({ kind: 'ok', flagged: false, categories: {}, scores: { hate: 0 } });
+    await app.fresh(good);
+    await app.worker.tick();
+    expect((await app.status(good.clientRequestId)).body).toEqual({
+      data: { status: 'approved' },
+    });
+
+    // Silent drops answer like a reviewed rejection; the text is never stored.
+    const meme = submission({ body: 'so skibidi but nice site' });
+    const profane = submission({ body: 'what a shit site honestly' });
+    const mash = submission({ body: 'qwrtpsdfghkl wow' });
+    for (const note of [meme, profane, mash]) await app.fresh(note);
+    expect((await app.status(meme.clientRequestId)).body.data).toEqual({
+      status: 'rejected',
+      reason: 'off_topic',
+    });
+    expect((await app.status(profane.clientRequestId)).body.data).toEqual({
+      status: 'rejected',
+      reason: 'inappropriate',
+    });
+    expect((await app.status(mash.clientRequestId)).body.data.status).toBe('rejected');
+  });
+
+  it('maps a suitability rejection to its general reason without leaking anything else', async () => {
+    const app = setup();
+    app.suitability.set({ kind: 'ok', verdict: 'reject', reason: 'impersonation' });
+    const note = submission({ body: `${SECRET} impersonation` });
+    await app.fresh(note);
+    await app.worker.tick();
+    const res = await app.status(note.clientRequestId);
+    expect(res.body).toEqual({ data: { status: 'rejected', reason: 'impersonation' } });
+    expect(res.text).not.toContain(SECRET);
+    expect(res.text).not.toMatch(/suitability|moderation|score|category|layer/i);
+  });
+
+  it('answers 404 for unknown tokens and 400 for anything that is not a UUID', async () => {
+    const app = setup();
+    const unknown = await app.status('00000000-0000-4000-8000-00000000ffff');
+    expect(unknown.status).toBe(404);
+    expect(unknown.body.error.code).toBe('NOT_FOUND');
+    for (const bad of ['1', 'not-a-uuid', '00000000-0000-4000-8000-00000000fff']) {
+      expect((await app.status(bad)).status).toBe(400);
+    }
+  });
+
+  it('limits a client to 30 reads per minute', async () => {
+    const app = setup();
+    const token = '00000000-0000-4000-8000-00000000ffff';
+    for (let i = 0; i < 30; i += 1) {
+      expect((await app.status(token, '203.0.113.9')).status).toBe(404);
+    }
+    expect((await app.status(token, '203.0.113.9')).status).toBe(429);
+  });
+});

@@ -4,6 +4,7 @@ export type ApiResult<T> =
   | { ok: true; data: T }
   | { ok: false; kind: 'validation'; fields: Partial<Record<string, FieldErrorCode[]>> }
   | { ok: false; kind: 'rate_limited'; retryAfterSeconds: number | null }
+  | { ok: false; kind: 'not_found' }
   | { ok: false; kind: 'unavailable' | 'network' | 'unexpected' };
 
 /** Validates the envelope's `data` payload; hand-written so zod stays out of the bundle. */
@@ -90,6 +91,7 @@ export async function request<T>(
         retryAfterSeconds: parseRetryAfter(response.headers.get('Retry-After')),
       };
     }
+    if (response.status === 404) return { ok: false, kind: 'not_found' };
     if (UNAVAILABLE_STATUSES.has(response.status)) return { ok: false, kind: 'unavailable' };
     if (response.status === 422) {
       const fields = parseFields(await readJson(response));

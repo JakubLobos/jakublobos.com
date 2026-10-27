@@ -1,6 +1,7 @@
 import { getLatestGuestbookMessage } from '../lib/api/guestbook.ts';
 import { toLatestView, type LatestView } from '../lib/guestbook-latest.ts';
 import { tintValue } from '../lib/guestbook-paint.ts';
+import { APPROVED_EVENT } from '../lib/guestbook-status.ts';
 
 /** Starts loading shortly before the section scrolls into view, so the quote is usually ready. */
 const PRELOAD_MARGIN = '600px 0px';
@@ -23,6 +24,15 @@ class LastVisitorElement extends HTMLElement {
         // The retry button is about to be hidden; keep keyboard focus inside the block.
         this.querySelector<HTMLElement>('[data-stage]')?.focus({ preventScroll: true });
         void this.#load();
+      },
+      { signal },
+    );
+
+    // A visitor's own note was just approved: swap in the new quote without the loading flash.
+    document.addEventListener(
+      APPROVED_EVENT,
+      () => {
+        void this.#refresh();
       },
       { signal },
     );
@@ -51,6 +61,17 @@ class LastVisitorElement extends HTMLElement {
     const result = await getLatestGuestbookMessage();
     this.#loading = false;
     if (this.isConnected) this.#show(toLatestView(result));
+  }
+
+  async #refresh(): Promise<void> {
+    if (this.#loading) return;
+    this.#loading = true;
+    const result = await getLatestGuestbookMessage();
+    this.#loading = false;
+    // A failed refresh keeps whatever is shown; the next page load fetches again anyway.
+    if (!this.isConnected || !result.ok) return;
+    this.#observer?.disconnect();
+    this.#show(toLatestView(result));
   }
 
   #show(view: LatestView | { state: 'loading' }): void {

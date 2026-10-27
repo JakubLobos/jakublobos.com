@@ -141,6 +141,10 @@ export function buildGuestbookTestApp(options: { clientIpSource?: 'socket' | 'x-
       const req = request(app).post('/api/guestbook').set('Origin', ALLOWED_ORIGIN);
       return (ip === undefined ? req : req.set('X-Real-IP', ip)).send(body as object);
     },
+    status: (token: string, ip?: string) => {
+      const req = request(app).get(`/api/guestbook/submissions/${token}`);
+      return ip === undefined ? req : req.set('X-Real-IP', ip);
+    },
     latest: (etag?: string) => {
       const req = request(app).get('/api/guestbook/latest');
       return etag === undefined ? req : req.set('If-None-Match', etag);
