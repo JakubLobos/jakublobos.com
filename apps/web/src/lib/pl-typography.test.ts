@@ -20,7 +20,7 @@ describe('polishTypography', () => {
     expect(polishTypography('do 30 dni, 100 wpisów, 1 rok, 120 znakach, 24 godzin')).toBe(
       `do 30${NBSP}dni, 100${NBSP}wpisów, 1${NBSP}rok, 120${NBSP}znakach, 24${NBSP}godzin`,
     );
-    expect(polishTypography('2023 — obecnie')).toBe('2023 — obecnie');
+    expect(polishTypography('2023 — obecnie')).toBe(`2023${NBSP}— obecnie`);
     expect(polishTypography('5 dniach')).toBe(`5${NBSP}dniach`);
   });
 
@@ -28,6 +28,14 @@ describe('polishTypography', () => {
     expect(polishTypography('(maks. 60 znaków), min. 10 znaków, art. 6 ust. 1 lit. a zgoda')).toBe(
       `(maks.${NBSP}60${NBSP}znaków), min.${NBSP}10${NBSP}znaków, art.${NBSP}6 ust.${NBSP}1 lit.${NBSP}a${NBSP}zgoda`,
     );
+  });
+
+  it('keeps a spaced dash on the line of the word before it', () => {
+    expect(polishTypography('Madery, Cypru i Teneryfy – każde miejsce')).toBe(
+      `Madery, Cypru i${NBSP}Teneryfy${NBSP}– każde miejsce`,
+    );
+    expect(polishTypography('od — do')).toBe(`od${NBSP}— do`);
+    expect(polishTypography('bez-spacji plus - minus')).toBe('bez-spacji plus - minus');
   });
 
   it('is idempotent and keeps placeholders intact', () => {

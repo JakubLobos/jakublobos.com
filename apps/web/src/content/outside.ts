@@ -14,7 +14,8 @@ export interface OutsidePhoto {
 }
 
 // TODO(owner): the three photos are generated placeholders. To use real ones, replace the files
-// in src/assets/outside/ and write the real alt text below. PL alt texts are drafts (D-02).
+// in src/assets/outside/ (any size or ratio: each is cropped to its collage slot, 4:3, 3:4, 4:3)
+// and write the real alt text below. PL alt texts are drafts (D-02).
 const rawPhotos: readonly OutsidePhoto[] = [
   {
     id: 'photo-1',

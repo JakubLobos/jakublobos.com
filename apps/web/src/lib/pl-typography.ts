@@ -10,16 +10,20 @@ const NUMBER_UNIT =
 // Abbreviations that introduce a number or a letter ("min. 10", "art. 6", "lit. a").
 const ABBREVIATION = /(?<!\p{L})(art|ust|lit|min|maks|nr)\. (?=\S)/gu;
 
+// A spaced en or em dash must not start a line, so the space before it is non-breaking.
+const SPACED_DASH = / (?=[–—] )/gu;
+
 /**
  * Applies Polish typographic conventions to a string: non-breaking spaces after single-letter
  * words, between a number and its unit, and after the abbreviations "art.", "ust.", "lit.",
- * "min.", "maks." and "nr". Idempotent and safe to run on strings with `{placeholders}`.
+ * "min.", "maks." and "nr", and before a spaced en or em dash. Idempotent and safe to run on strings with `{placeholders}`.
  */
 export function polishTypography(text: string): string {
   return (
     text
       .replace(ABBREVIATION, `$1.${NBSP}`)
       .replace(NUMBER_UNIT, `$1${NBSP}`)
+      .replace(SPACED_DASH, NBSP)
       // Last, so that "lit. a zgoda" binds the letter too (the abbreviation rule adds a NBSP
       // before it, which the single-letter lookbehind does not mind).
       .replace(SINGLE_LETTER, `$1${NBSP}`)

@@ -28,13 +28,14 @@ const messages = outsideMessages(locale);
     {outsidePhotos.map((photo) => (
       <li class="photo">
         <figure class="frame">
+          {/* Widest photo (62% slot) renders 225px from 760px up, and about 51vw (max 425px) below it; srcset covers 2x of both. */}
           <Picture
             src={photo.src}
             alt={photo.alt[locale]}
             formats={['avif', 'webp']}
             fallbackFormat="jpg"
-            widths={[240, 360, 560]}
-            sizes="(min-width: 760px) 280px, 60vw"
+            widths={[240, 360, 480, 640, 840]}
+            sizes="(min-width: 760px) 230px, 55vw"
             loading="lazy"
             decoding="async"
           />
@@ -106,6 +107,9 @@ const messages = outsideMessages(locale);
     display: block;
     width: 100%;
     height: auto;
+    /* Each slot fixes its own ratio and crops the file to it, so any photo fits the collage. */
+    aspect-ratio: var(--photo-ratio);
+    object-fit: cover;
     outline: var(--border-hairline) solid var(--color-line-strong);
   }
 
@@ -148,6 +152,7 @@ const messages = outsideMessages(locale);
   /* Photo 1 (landscape): one strip across the top edge. */
   .photo:nth-child(1) {
     --photo-w: 62%;
+    --photo-ratio: 4 / 3;
     --tilt: -3deg;
     top: 0;
     left: 0;
@@ -164,6 +169,7 @@ const messages = outsideMessages(locale);
   /* Photo 2 (portrait): a strip on each top corner, tilted the other way. */
   .photo:nth-child(2) {
     --photo-w: 44%;
+    --photo-ratio: 3 / 4;
     --tilt: 2.5deg;
     --tape-paint: var(--paint-blue-tint);
     top: 12%;
@@ -193,6 +199,7 @@ const messages = outsideMessages(locale);
   /* Photo 3 (landscape): a single strip folded over the top-right corner. */
   .photo:nth-child(3) {
     --photo-w: 58%;
+    --photo-ratio: 4 / 3;
     --tilt: -1.5deg;
     --tape-paint: var(--paint-coral-tint);
     bottom: 0;
