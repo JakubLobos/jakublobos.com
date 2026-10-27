@@ -90,11 +90,14 @@ const messages = skillsMessages(locale);
 
   .items li {
     display: inline;
+    white-space: nowrap;
   }
 
-  /* Visual separator only; the empty alt text keeps it out of the accessible name. */
+  /* Visual separator only; the empty alt text keeps it out of the accessible name. The no-break
+     space keeps the slash on the item's line; the trailing normal space is the only break point. */
   .items li:not(:last-child)::after {
-    content: ' / ';
-    content: ' / ' / '';
+    content: '\00a0/ ';
+    content: '\00a0/ ' / '';
+    white-space: normal;
   }
 </style>

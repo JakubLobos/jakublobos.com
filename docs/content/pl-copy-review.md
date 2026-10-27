@@ -10,7 +10,7 @@ date and the word "approved" once the owner has gone through every row (T-034, A
 > `{name}` marks a value filled in at runtime. Address form is informal "Ty"; quotes are „…”;
 > a guestbook entry is a "wpis".
 
-Strings: 359 across 20 areas.
+Strings: 366 across 20 areas.
 
 ## Owner sign-off
 
@@ -20,7 +20,7 @@ Strings: 359 across 20 areas.
 
 ## PL equal to EN
 
-39 whitelisted (proper nouns, technology names), 1 to check.
+40 whitelisted (proper nouns, technology names), 1 to check.
 
 | Area | Key | Text |
 | ---- | --- | ---- |
@@ -98,6 +98,11 @@ Source: `apps/web/src/i18n/messages/projects.ts`
 | `eyebrow` | PROJECTS | PROJEKTY |   |
 | `title` | I’m specializing in making web-apps | Specjalizuję się w tworzeniu aplikacji webowych |   |
 | `technologies` | Technologies | Technologie |   |
+| `links` | Links | Linki |   |
+| `link.website` | Website | Strona |   |
+| `link.frontend` | Frontend code | Kod frontendu |   |
+| `link.ui` | UI library | Biblioteka UI |   |
+| `link.source` | Source code | Kod źródłowy |   |
 
 ## Skills labels
 
@@ -467,16 +472,18 @@ Source: `apps/web/src/content/projects.ts`
 
 | Key | EN | PL | Owner correction |
 | --- | -- | -- | ---------------- |
-| `01.title` | Hosting control panel | Panel zarządzania hostingiem |   |
-| `01.desc` | Evolved core modules of the control panel and product site: server configuration, purchase/upgrade flow, in-browser file manager (WebFTP), web console, and gRPC-powered server process views | Rozwijałem kluczowe moduły panelu zarządzania i strony produktowej: konfigurację serwera, proces zakupu i zmiany planu, menedżer plików w przeglądarce (WebFTP), konsolę webową oraz widoki procesów serwera oparte na gRPC. |   |
-| `02.title` | Item shop builder | Kreator sklepów z przedmiotami |   |
-| `02.desc` | Co-built from scratch, together with the backend team, an online store builder (item shops) for server administrators. | Współtworzyłem od podstaw, razem z zespołem backendu, kreator sklepów internetowych (sklepów z przedmiotami) dla administratorów serwerów. |   |
-| `03.title` | Real-time support chat | Czat wsparcia w czasie rzeczywistym |   |
-| `03.desc` | Built a custom real-time chat frontend (WebSocket) for help seekers, volunteers and admins; created and maintain the shared React / React Native component library. | Zbudowałem własny frontend czatu w czasie rzeczywistym (WebSocket) dla osób szukających pomocy, wolontariuszy i administratorów; stworzyłem i utrzymuję wspólną bibliotekę komponentów React / React Native. |   |
-| `04.title` | Volunteer matching system | System dopasowywania wolontariuszy |   |
-| `04.desc` | Prepared requirements, documentation and logic diagrams for an automated matching system pairing help seekers with volunteers, used as the basis for its backend implementation. | Przygotowałem wymagania, dokumentację i diagramy logiki automatycznego systemu łączącego osoby szukające pomocy z wolontariuszami, które posłużyły za podstawę jego implementacji po stronie backendu. |   |
-| `05.title` | Gaming event web apps | Aplikacje webowe na wydarzenia gamingowe |   |
-| `05.desc` | Built web apps for Polish gaming-industry events featuring popular Polish content creators. | Budowałem aplikacje webowe na polskie wydarzenia branży gamingowej z udziałem popularnych polskich twórców internetowych. |   |
+| `01.title` | Game Hosting Platform & Server Management Dashboard | Platforma hostingu gier i panel zarządzania serwerem |   |
+| `01.paragraphs[0]` | I developed key modules of a game server hosting platform, including the server management panel (settings, payment flow, an in-browser file manager (WebFTP), a web console, and server configurators). I also worked on the public-facing website: the homepage, offer pages, payment forms, and a server builder tailored to users’ needs. The platform caters to a wide audience, from young gamers to experienced server administrators, so I focused on making complex functionality simple and accessible. | Rozwijałem kluczowe moduły platformy hostingu serwerów gier, w tym panel zarządzania serwerem (ustawienia, proces płatności, przeglądarkowy menedżer plików WebFTP, konsolę webową i konfiguratory serwerów). Pracowałem również nad publiczną częścią platformy: stroną główną, stronami ofertowymi, formularzami płatności oraz kreatorem serwerów dopasowanym do potrzeb użytkowników. Platforma jest skierowana do szerokiego grona odbiorców, od młodych graczy po doświadczonych administratorów, dlatego skupiałem się na tym, by złożone funkcje przedstawiać prosto i przystępnie. |   |
+| `01.paragraphs[1]` | I was responsible for UI/UX design, including a redesign, as well as for developing the company’s internal TypeScript frontend libraries. I started as part of a frontend team and later became the sole frontend developer on the product, taking full ownership of the codebase and its technical direction. | Odpowiadałem za projektowanie UI/UX, w tym redesign, a także za rozwój wewnętrznych bibliotek frontendowych firmy w TypeScripcie. Zaczynałem w zespole frontendowym, a później zostałem jedynym frontend developerem w tym produkcie, przejmując pełną odpowiedzialność za kod i kierunek jego rozwoju. |   |
+| `02.title` | Item Shop Builder | Item Shop Builder |   |
+| `02.paragraphs[0]` | An application that allows game server administrators to build their own item shops, where players can purchase virtual products. I worked on it as part of a team, alongside other frontend and backend developers. After moving to another product, I continued to support the project by supervising the interns working on it. | Aplikacja umożliwiająca administratorom serwerów gier budowanie własnych itemshopów, w których gracze mogą kupować wirtualne produkty. Pracowałem nad nią w zespole, razem z innymi frontend i backend developerami. Po przejściu do innego produktu nadal wspierałem projekt, nadzorując pracę praktykantów. |   |
+| `03.title` | Web Apps for Events Hosted by Popular Polish Streamers | Aplikacje webowe na wydarzenia popularnych polskich streamerów |   |
+| `03.paragraphs[0]` | I developed a variety of web applications for online events hosted by some of Poland’s most popular gaming streamers. I worked both independently and as part of a team, often under tight deadlines. | Tworzyłem różnorodne aplikacje webowe na potrzeby wydarzeń online organizowanych przez jednych z najpopularniejszych polskich streamerów gamingowych. Pracowałem zarówno samodzielnie, jak i w zespole, często pod presją krótkich terminów. |   |
+| `04.title` | Free Psychological Support Platform | Platforma bezpłatnej pomocy psychologicznej |   |
+| `04.paragraphs[0]` | I developed the frontend of a platform for a foundation providing free psychological support, including a dedicated real-time chat. The platform features an admin panel for approving applications, matching people seeking support with volunteers, approving and editing articles, managing user permissions, forms, and chats, and browsing large lists such as user directories. | Stworzyłem frontend platformy fundacji oferującej bezpłatną pomoc psychologiczną, wraz z dedykowanym czatem działającym w czasie rzeczywistym. Platforma zawiera panel zarządzania, w którym można akceptować formularze, łączyć podopiecznych z wolontariuszami, akceptować i redagować artykuły, zarządzać uprawnieniami użytkowników, formularzami i czatami oraz przeglądać duże listy, takie jak listy użytkowników. |   |
+| `04.paragraphs[1]` | I also designed the application’s UI. To support the mobile app, I created a shared UI component library built on Tamagui, used by both the web app and the React Native app. | Zaprojektowałem także interfejs aplikacji. Na potrzeby aplikacji mobilnej stworzyłem współdzieloną bibliotekę komponentów UI opartą na Tamagui, wykorzystywaną zarówno w aplikacji webowej, jak i w aplikacji napisanej w React Native. |   |
+| `05.title` | This Portfolio | To portfolio |   |
+| `05.paragraphs[0]` | You’re looking at it right now. | Właśnie tu jesteś! |   |
 
 ## Content: skill groups
 
