@@ -218,6 +218,15 @@ const updated = new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeZone: '
     border-bottom: 0;
   }
 
+  /* The transparent desktop header would print its links over the tables while scrolling; the
+     mobile header already gets this treatment from Header.astro (D-16). */
+  @media (width >= 760px) {
+    :global(header[data-site-header][data-scrolled]) {
+      background: color-mix(in srgb, var(--color-bg) 90%, transparent);
+      backdrop-filter: blur(6px);
+    }
+  }
+
   @media (forced-colors: active) {
     .policy a {
       color: LinkText;
