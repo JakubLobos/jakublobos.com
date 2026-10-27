@@ -108,12 +108,41 @@ export default defineConfig({
       fallbacks: ['monospace'],
     },
     {
+      // Subset by tools/fonts/subset-display.mjs to the characters display text can contain.
       name: 'Rubik Doodle Shadow',
       cssVariable: '--font-display',
-      provider,
-      weights: [400],
-      styles: ['normal'],
-      subsets,
+      provider: fontProviders.local(),
+      options: {
+        variants: [
+          {
+            src: ['./src/assets/fonts/rubik-doodle-shadow-latin-subset.woff2'],
+            weight: 400,
+            style: 'normal',
+            unicodeRange: [
+              'U+0020-007E',
+              'U+00A0',
+              'U+00F3',
+              'U+2013-2014',
+              'U+2018-201A',
+              'U+201C-201E',
+              'U+2026',
+              'U+00B7',
+            ],
+          },
+          {
+            src: ['./src/assets/fonts/rubik-doodle-shadow-latin-ext-subset.woff2'],
+            weight: 400,
+            style: 'normal',
+            unicodeRange: [
+              'U+0104-0107',
+              'U+0118-0119',
+              'U+0141-0144',
+              'U+015A-015B',
+              'U+0179-017C',
+            ],
+          },
+        ],
+      },
       fallbacks: ['cursive'],
     },
   ],

@@ -18,6 +18,7 @@ const site = Astro.site ?? new URL(Astro.url.origin);
 const ogImage = new URL(`/og/og-${locale}.png`, site).href;
 const absolute = (target: Locale) => new URL(alternatePath(target, path), site).href;
 
+const indexable = seoKey !== 'notFound';
 const canonical = absolute(locale);
 const alternates = LOCALES.map((target) => ({ hreflang: target, href: absolute(target) }));
 const otherLocales = LOCALES.filter((target) => target !== locale);
@@ -38,19 +39,19 @@ const personJson = JSON.stringify(person).replaceAll('<', String.raw`\u003c`);
 
 <title>{title}</title>
 <meta name="description" content={description} />
-{seoKey === 'notFound' && <meta name="robots" content="noindex" />}
-<link rel="canonical" href={canonical} />
-{alternates.map((alt) => (
-  <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
-))}
-<link rel="alternate" hreflang="x-default" href={absolute('en')} />
+{!indexable && <meta name="robots" content="noindex" />}
+{/* A 404 is not a real URL: canonical/hreflang would point crawlers at /404. */}
+{indexable && <link rel="canonical" href={canonical} />}
+{indexable &&
+  alternates.map((alt) => <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />)}
+{indexable && <link rel="alternate" hreflang="x-default" href={absolute('en')} />}
 <meta name="theme-color" content="#f7f7f6" />
 
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content={common(locale).siteName} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
-<meta property="og:url" content={canonical} />
+{indexable && <meta property="og:url" content={canonical} />}
 <meta property="og:locale" content={ogLocale(locale)} />
 {otherLocales.map((other) => (
   <meta property="og:locale:alternate" content={ogLocale(other)} />
