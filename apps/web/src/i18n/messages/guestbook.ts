@@ -18,7 +18,8 @@ export const guestbook = defineMessages({
       submit: 'Leave a mark',
       sending: 'Sending…',
       honeypot: 'Leave empty',
-      notice: 'Your message is reviewed before it appears. Please don’t include personal details.',
+      notice:
+        'Your message is reviewed automatically by AI before it appears. Please don’t include personal details.',
       privacy: 'Privacy',
       needsScript: 'Leaving a mark needs JavaScript.',
       charsLeft: '{n} characters left',
@@ -98,7 +99,7 @@ export const guestbook = defineMessages({
       sending: 'Wysyłanie…',
       honeypot: 'Zostaw puste',
       notice:
-        'Wiadomość jest sprawdzana, zanim pojawi się na stronie. Nie podawaj danych osobowych.',
+        'Twój wpis jest automatycznie sprawdzany przez AI, zanim się pojawi. Nie podawaj danych osobowych.',
       privacy: 'Prywatność',
       needsScript: 'Zostawienie śladu wymaga JavaScriptu.',
       charsLeft: 'Zostało znaków: {n}',
