@@ -65,7 +65,7 @@ Source: `apps/web/src/i18n/messages/hero.ts`
 
 | Key | EN | PL | Owner correction |
 | --- | -- | -- | ---------------- |
-| `title` | Engineering with the user relationship in mind | Inżynieria z myślą o relacji z użytkownikiem |   |
+| `title` | Engineering centered around the user | Inżynieria z myślą o relacji z użytkownikiem |   |
 | `build.before` | I’m making web-apps mostly in | Tworzę aplikacje webowe głównie w |   |
 | `build.first` | react | react |   |
 | `build.join` | & | i |   |
@@ -262,7 +262,7 @@ Source: `apps/web/src/i18n/messages/seo.ts`
 | --- | -- | -- | ---------------- |
 | `og.subtitle` | Software Engineer · React & TypeScript | Software Engineer · React i TypeScript |   |
 | `og.domain` | jakublobos.com | jakublobos.com |   |
-| `og.alt` | Jakub Łobos, Software Engineer: a hand-drawn mascot under the headline “Engineering with the user relationship in mind” | Jakub Łobos, Software Engineer: ręcznie rysowana maskotka pod hasłem „Inżynieria z myślą o relacji z użytkownikiem” |   |
+| `og.alt` | Jakub Łobos, Software Engineer: a hand-drawn mascot under the headline “Engineering centered around the user” | Jakub Łobos, Software Engineer: ręcznie rysowana maskotka pod hasłem „Inżynieria z myślą o relacji z użytkownikiem” |   |
 | `home.title` | Jakub Łobos — Software Engineer Portfolio | Jakub Łobos — portfolio Software Engineera |   |
 | `home.description` | Portfolio of Jakub Łobos, a software engineer building web apps with React and TypeScript and designing them in Figma. | Portfolio Jakuba Łobosa — Software Engineera, który tworzy aplikacje webowe w React i TypeScript i projektuje je w Figmie. |   |
 | `privacy.title` | Privacy policy — Jakub Łobos | Polityka prywatności — Jakub Łobos |   |
