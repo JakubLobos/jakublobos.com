@@ -139,7 +139,7 @@ Source: `apps/web/src/i18n/messages/guestbook.ts`
 | `form.submit` | Leave a mark | Zostaw ślad |   |
 | `form.sending` | Sending… | Wysyłanie… |   |
 | `form.honeypot` | Leave empty | Zostaw puste |   |
-| `form.notice` | Your message is reviewed before it appears. Please don’t include personal details. | Wiadomość jest sprawdzana, zanim pojawi się na stronie. Nie podawaj danych osobowych. |   |
+| `form.notice` | Your message is reviewed automatically by AI before it appears. Please don’t include personal details. | Twój wpis jest automatycznie sprawdzany przez AI, zanim się pojawi. Nie podawaj danych osobowych. |   |
 | `form.privacy` | Privacy | Prywatność |   |
 | `form.needsScript` | Leaving a mark needs JavaScript. | Zostawienie śladu wymaga JavaScriptu. |   |
 | `form.charsLeft` | {n} characters left | Zostało znaków: {n} |   |
