@@ -47,6 +47,7 @@ Work top to bottom; later steps need earlier values. Never paste secrets into ch
 ### 2.4 Third parties
 
 - [ ] **OpenAI**: a dedicated project, an API key restricted to it, prepaid credits, and a **monthly budget limit** (Billing > Limits). Key goes into Railway as `OPENAI_API_KEY`. Confirm the suitability model still exists (D-26): if `gpt-5-nano` is retired, set `OPENAI_SUITABILITY_MODEL` to its successor; a rejected model fails closed (nothing is published).
+- [ ] **Gemini (alternative to OpenAI, free tier)**: create a key in Google AI Studio for a dedicated project and put it into Railway as `GEMINI_API_KEY`; set `MODERATION_PROVIDER` and `SUITABILITY_PROVIDER` to `gemini`. Free-tier quota exhaustion returns 429 and the post is retried later (fails closed). Read ADR-0016 first: outside the EEA, UK and Switzerland, free-tier content may be used to improve Google products and read by human reviewers, and the privacy policy says so. After the first deploy, post one test note and check the API log shows `gemini-moderation` and `gemini-suitability` with `outcome: ok`.
 - [ ] **Resend**: add the domain `jakublobos.com`, then add **exactly the DNS records Resend shows** (SPF and DKIM) in Cloudflare, all DNS-only. Add a DMARC record: `TXT _dmarc  v=DMARC1; p=none; rua=mailto:<your address>` (tighten to `quarantine` once reports look clean). Create a sending-only API key limited to the domain.
 - [ ] **GA4**: create the property, copy the measurement ID (`G-…`) into `PUBLIC_GA4_ID`; Admin > Data settings > Data retention: **2 months**.
 - [ ] **PostHog** (EU cloud): create the project, put its key in `PUBLIC_POSTHOG_KEY`; enable _Cookieless server hash mode_ in the project's settings.
@@ -73,8 +74,9 @@ Set in the service's **Variables** tab. Names only here; `.env.example` has the 
 | `NODE_ENV`                                    | `production` (the image already sets it)                                           |
 | `CORS_ALLOWED_ORIGINS`                        | `https://jakublobos.com` (every origin must be `https://`)                         |
 | `CLIENT_IP_SOURCE`                            | `x-real-ip`                                                                        |
-| `MODERATION_PROVIDER`, `SUITABILITY_PROVIDER` | `openai` (`fake` is refused)                                                       |
-| `OPENAI_API_KEY`                              | secret                                                                             |
+| `MODERATION_PROVIDER`, `SUITABILITY_PROVIDER` | `openai` or `gemini` (`fake` is refused)                                           |
+| `OPENAI_API_KEY`                              | secret; only when a provider is `openai`                                           |
+| `GEMINI_API_KEY`                              | secret; only when a provider is `gemini`                                           |
 | `MAILER`                                      | `resend` (`console` is refused)                                                    |
 | `RESEND_API_KEY`                              | secret                                                                             |
 | `MAIL_FROM`, `CONTACT_RECIPIENT_EMAIL`        | address on the verified domain; your mailbox                                       |
@@ -85,7 +87,7 @@ Set in the service's **Variables** tab. Names only here; `.env.example` has the 
 | `LOG_LEVEL`                                   | optional, default `info`                                                           |
 | `PORT`, `HOST`, `DATABASE_PATH`               | do not set: Railway injects `PORT`; the image sets `HOST` and `/data/portfolio.db` |
 
-Optional tuning (`OPENAI_*_MODEL`, timeouts, `MODERATION_SCORE_THRESHOLD`) keeps its default unless needed.
+Optional tuning (`OPENAI_*_MODEL`, `GEMINI_MODEL`, timeouts, `MODERATION_SCORE_THRESHOLD`) keeps its default unless needed.
 
 ## 4. Verifying the client IP (`X-Real-IP`)
 
@@ -193,12 +195,12 @@ Open the site with the console open: no CSP violations, guestbook loads, contact
 
 Rotate on any suspicion of leakage, and when someone with access leaves.
 
-| Secret                             | Steps                                                                                                                                                      |
-| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `OPENAI_API_KEY`, `RESEND_API_KEY` | Create a new key in the provider dashboard, update the Railway variable (redeploys), confirm a guestbook post and a contact mail work, revoke the old key. |
-| `TURNSTILE_SECRET_KEY`             | Cloudflare > Turnstile > widget > rotate secret key; update Railway immediately. The phone reveal fails closed until then.                                 |
-| `CLOUDFLARE_API_TOKEN`             | Create a new scoped token, update the GitHub secret, re-run the deploy, delete the old token.                                                              |
-| `CONTACT_PHONE`                    | Change the Railway variable. Nothing else holds it.                                                                                                        |
+| Secret                                               | Steps                                                                                                                                                      |
+| ---------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `OPENAI_API_KEY`, `GEMINI_API_KEY`, `RESEND_API_KEY` | Create a new key in the provider dashboard, update the Railway variable (redeploys), confirm a guestbook post and a contact mail work, revoke the old key. |
+| `TURNSTILE_SECRET_KEY`                               | Cloudflare > Turnstile > widget > rotate secret key; update Railway immediately. The phone reveal fails closed until then.                                 |
+| `CLOUDFLARE_API_TOKEN`                               | Create a new scoped token, update the GitHub secret, re-run the deploy, delete the old token.                                                              |
+| `CONTACT_PHONE`                                      | Change the Railway variable. Nothing else holds it.                                                                                                        |
 
 ## 9. Monitoring and logs
 

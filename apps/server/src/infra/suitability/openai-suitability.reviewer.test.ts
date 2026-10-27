@@ -135,8 +135,8 @@ describe('OpenAiSuitabilityReviewer request', () => {
   });
 
   it('stays within the prompt budget and carries a version', () => {
-    // Roughly 4 characters per token; the brief asks for under about 350 tokens.
-    expect(DEVELOPER_INSTRUCTIONS.length / 4).toBeLessThan(350);
+    // Roughly 4 characters per token; the v3 rubric adds tone and impersonation few-shots, so the cap is 900.
+    expect(DEVELOPER_INSTRUCTIONS.length / 4).toBeLessThan(900);
     expect(PROMPT_VERSION).toMatch(/^guestbook-suitability-v\d+$/);
   });
 });

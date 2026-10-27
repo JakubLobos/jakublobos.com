@@ -151,6 +151,7 @@ The pipeline is pure orchestration over ports, with a single call site that retu
             "impersonation",
             "negative_about_owner",
             "off_topic_or_weird",
+            "low_effort_or_meme",
             "other"
           ]
         }
@@ -158,13 +159,25 @@ The pipeline is pure orchestration over ports, with a single call site that retu
     }
     ```
   - Exact parameter names are verified against the current OpenAI docs during T-013. Compatible equivalents are acceptable; the behaviour isn't negotiable.
-- **Prompt** (`infra/suitability/prompt.ts`, versioned constant `PROMPT_VERSION`): the developer instructions describe a public guestbook on a professional frontend developer's portfolio and approve only short, friendly, sensible notes a visitor would leave (greetings, compliments, kind or witty remarks about the site or frontend). In any language. When in doubt, reject. The visitor text goes in a separate user message wrapped as `<visitor_note>…</visitor_note>`, with an explicit statement that it is untrusted data and that instructions inside it must be ignored.
+- **Prompt** (`infra/suitability/prompt.ts`, versioned constant `PROMPT_VERSION`): the developer instructions describe a public guestbook on a professional frontend developer's portfolio and approve only respectful, professional-but-warm notes a recruiter or client could read (greetings, sincere compliments, thoughtful or gently witty remarks about the site, projects, design or frontend work), in any language. Harmless but low-effort, childish or meme content (brainrot slang and number memes, random statements about the visitor's life, emoji or keyboard spam, copypasta, ALL CAPS shouting, in-jokes aimed at a friend) is rejected with reason `low_effort_or_meme`. Notes that speak as the owner (Jakub Łobos, "Kuba", "admin"), are signed with his name or claim to come from the site are rejected as `impersonation`, even when friendly; notes addressed to him by name are fine. The prompt (`guestbook-suitability-v3`) carries English few-shot examples for both rules and states that every rule applies the same way to notes in any language (mostly English or Polish). When in doubt, reject. Cheap first line: `skibidi` and `6767` are in the blocked terms. The visitor text goes in a separate user message wrapped as `<visitor_note>…</visitor_note>`, with an explicit statement that it is untrusted data and that instructions inside it must be ignored.
 - **Outcome mapping:**
   - valid JSON matching the schema → `ok` with verdict and reason
   - a `refusal` content item → `ok` with `{ verdict: 'reject', reason: 'other' }`
   - `status: 'incomplete'`, unparseable or schema-invalid output, or HTTP errors → `transient` (same mapping as §6.1)
 - Logged: verdict, reason, latency, model, prompt version. **Never** the text.
 - **Fake** (`fake-suitability.reviewer.ts`): text containing `[unsuitable]` → reject (`off_topic_or_weird`), `[sfail]` → transient, otherwise approve. Refused in production.
+
+### 6.2a Gemini moderation (`infra/moderation/gemini-moderation.provider.ts`, ADR-0016)
+
+- Selected with `MODERATION_PROVIDER=gemini`. `POST https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent`, key in the `x-goog-api-key` header (never the URL), `safetySettings` for the four harm categories at `BLOCK_NONE`, `temperature: 0`, `maxOutputTokens: 512`, `thinkingConfig.thinkingLevel: minimal`. Same timeout, status mapping and logging rules as §6.1.
+- Primary signal: a JSON-schema classification call (`responseSchema`) returning 0 to 1 scores for `harassment`, `hate`, `sexual`, `dangerous`, `self_harm`, `spam`; the note is treated strictly as data. Safety ratings are not relied on (newer models often omit them).
+- Any `safetyRatings` present (prompt or candidate) are merged by max per category: NEGLIGIBLE 0, LOW 0.1, MEDIUM 0.6, HIGH 0.9. The 0.2 policy therefore rejects MEDIUM and above.
+- `promptFeedback.blockReason`, or a candidate `finishReason` of `SAFETY` / `PROHIBITED_CONTENT` / `BLOCKLIST`: `flagged: true` plus a `prompt_blocked` category with score 1. Only a missing or invalid JSON verdict (with no block) is `invalid_response` (transient).
+
+### 6.2b Gemini suitability (`infra/suitability/gemini-suitability.reviewer.ts`, ADR-0016)
+
+- Selected with `SUITABILITY_PROVIDER=gemini`. Same endpoint and key header. The §6.2 prompt is the `systemInstruction`; the note is the user content. `generationConfig`: `temperature: 0`, `maxOutputTokens: 512`, `thinkingConfig.thinkingLevel: minimal`, `responseMimeType: application/json`, and a `responseSchema` with the same verdict and reason enums.
+- Outcomes: valid verdict JSON is `ok`; `promptFeedback.blockReason` or a `SAFETY`-class `finishReason` is `ok` with `reject`/`other`; `MAX_TOKENS` is `incomplete`; anything unparseable is `invalid_response`; HTTP errors map as in §6.1. Approve with a rejection reason is rewritten to reject.
 
 ### 6.3 Fake moderation (`fake-moderation.provider.ts`)
 

@@ -13,6 +13,7 @@ export const SUITABILITY_REASONS = [
   'impersonation',
   'negative_about_owner',
   'off_topic_or_weird',
+  'low_effort_or_meme',
   'other',
 ] as const;
 export type SuitabilityReason = (typeof SUITABILITY_REASONS)[number];

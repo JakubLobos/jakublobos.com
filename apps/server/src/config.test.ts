@@ -96,6 +96,46 @@ describe('loadConfig (development)', () => {
   });
 });
 
+describe('loadConfig (Gemini)', () => {
+  const geminiEnv = { MODERATION_PROVIDER: 'gemini', SUITABILITY_PROVIDER: 'gemini' };
+
+  it('requires GEMINI_API_KEY when either provider is gemini', () => {
+    expect(variablesOf(geminiEnv)).toEqual(['GEMINI_API_KEY']);
+    expect(variablesOf({ SUITABILITY_PROVIDER: 'gemini' })).toEqual(['GEMINI_API_KEY']);
+  });
+
+  it('uses the verified default model and the key when set', () => {
+    const config = loadConfig({ ...geminiEnv, GEMINI_API_KEY: 'AIza-test' });
+    expect(config.geminiApiKey).toBe('AIza-test');
+    expect(config.moderation.model).toBe('gemini-3.5-flash-lite');
+    expect(config.suitability.model).toBe('gemini-3.5-flash-lite');
+  });
+
+  it('does not need the Gemini key when only OpenAI is used', () => {
+    expect(
+      variablesOf({
+        MODERATION_PROVIDER: 'openai',
+        SUITABILITY_PROVIDER: 'openai',
+        OPENAI_API_KEY: 'sk-test',
+      }),
+    ).toEqual([]);
+  });
+
+  it('accepts production with Gemini and no OpenAI key, and still refuses fakes', () => {
+    const { OPENAI_API_KEY: _omitted, ...rest } = productionEnv;
+    expect(variablesOf({ ...rest, ...geminiEnv, GEMINI_API_KEY: 'AIza-test' })).toEqual([]);
+    expect(variablesOf({ ...rest, ...geminiEnv })).toEqual(['GEMINI_API_KEY']);
+    expect(
+      variablesOf({
+        ...rest,
+        MODERATION_PROVIDER: 'fake',
+        SUITABILITY_PROVIDER: 'gemini',
+        GEMINI_API_KEY: 'k',
+      }),
+    ).toEqual(['MODERATION_PROVIDER']);
+  });
+});
+
 describe('loadConfig (production)', () => {
   it('accepts a complete production environment', () => {
     const config = loadConfig(productionEnv);
