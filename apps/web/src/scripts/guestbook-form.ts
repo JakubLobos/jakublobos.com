@@ -22,47 +22,7 @@ import {
   type StatusView,
   type StoredSubmission,
 } from '../lib/guestbook-status.ts';
-
-const INK_OUT: Keyframe[] = [{ opacity: 1 }, { opacity: 0, transform: 'translateY(-0.3em)' }];
-const INK_IN: Keyframe[] = [{ opacity: 0, transform: 'translateY(0.3em)' }, { opacity: 1 }];
-
-// One-shot accents on the card when the review ends (approved settles, the others get a nudge).
-const SETTLE: Keyframe[] = [
-  { transform: 'scale(1) rotate(0)' },
-  { transform: 'scale(1.03) rotate(-0.8deg)', offset: 0.35 },
-  { transform: 'scale(0.99) rotate(0.3deg)', offset: 0.7 },
-  { transform: 'scale(1) rotate(0)' },
-];
-const NUDGE: Keyframe[] = [
-  { transform: 'translateX(0)' },
-  { transform: 'translateX(-6px)', offset: 0.2 },
-  { transform: 'translateX(5px)', offset: 0.45 },
-  { transform: 'translateX(-3px)', offset: 0.7 },
-  { transform: 'translateX(0)' },
-];
-const ACCENTS: Partial<Record<StatusView['state'], Keyframe[]>> = {
-  approved: SETTLE,
-  rejected: NUDGE,
-  superseded: NUDGE,
-};
-
-const FALLBACK_MS = 150;
-
-/** Web Animations take no `var()`, so the motion tokens are read from the computed style. */
-function tokenTiming(
-  element: Element,
-  duration: string,
-  easing: string,
-  fill: FillMode,
-): KeyframeAnimationOptions {
-  const style = getComputedStyle(element);
-  const ms = parseFloat(style.getPropertyValue(duration));
-  return {
-    duration: ms > 0 ? ms : FALLBACK_MS,
-    easing: style.getPropertyValue(easing).trim() || 'ease',
-    fill,
-  };
-}
+import { createStatusMotion } from './guestbook-status-motion.ts';
 
 interface Resettable extends HTMLElement {
   reset: () => void;
@@ -252,45 +212,18 @@ function bind(
     if (!busy && submitHadFocus) submit.focus();
   }
 
-  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
-  const statusTexts = [parts.eyebrow, parts.title, parts.copy];
-  let inking: Animation[] = [];
-
-  signal.addEventListener(
-    'abort',
-    () => {
-      for (const animation of inking) animation.cancel();
-    },
-    { once: true },
-  );
-
-  /**
-   * Old texts lift away, the new ones are written, then settle in. A newer render cancels the
-   * running animations, which rejects `finished` and leaves the text to that render.
-   */
-  async function reink(write: () => void): Promise<void> {
-    const timing = tokenTiming(parts.card, '--duration-hover', '--ease-type', 'both');
-    const out = statusTexts.map((element) => element.animate(INK_OUT, timing));
-    inking = out;
-    try {
-      await Promise.all(out.map((animation) => animation.finished));
-    } catch {
-      return;
-    }
-    // Held open by `fill`; released in the same task as the write, so no frame shows the old text.
-    for (const animation of out) animation.cancel();
-    write();
-    inking = statusTexts.map((element) => element.animate(INK_IN, timing));
-  }
+  const motion = createStatusMotion({
+    card: parts.card,
+    texts: [parts.eyebrow, parts.title, parts.copy],
+    signal,
+  });
 
   /** Shows one review state in the dialog; `null` is "still checking". */
   function render(view: StatusView | null): void {
     const copy = copyFor(statusMessages, view);
     const state = view?.state ?? 'checking';
     // Only a change while the dialog is on screen is worth animating; opening it is not one.
-    const animated = dialog.open && parts.card.dataset.state !== state && !reducedMotion.matches;
-    for (const animation of inking) animation.cancel();
-    inking = [];
+    const animated = dialog.open && parts.card.dataset.state !== state;
 
     parts.card.dataset.state = state;
     // The live region never waits for the animation.
@@ -300,17 +233,11 @@ function bind(
       parts.title.textContent = copy.title;
       parts.copy.textContent = copy.body;
     };
-    if (!animated) {
+    if (animated) {
+      motion.swap(state, write);
+    } else {
+      motion.cancel();
       write();
-      return;
-    }
-    void reink(write);
-    const accent = view ? ACCENTS[view.state] : undefined;
-    if (accent) {
-      parts.card.animate(
-        accent,
-        tokenTiming(parts.card, '--duration-panel', '--ease-standard', 'none'),
-      );
     }
   }
 

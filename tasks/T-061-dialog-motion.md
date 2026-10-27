@@ -34,7 +34,7 @@ The mobile menu and the guestbook "review" modal currently snap open, snap shut 
 
 ## Allowed files
 
-`apps/web/src/components/site/MobileMenu.astro`, `apps/web/src/scripts/mobile-menu.ts`, `apps/web/src/components/guestbook/GuestbookModal.astro`, `apps/web/src/scripts/guestbook-form.ts`, `apps/web/src/lib/guestbook-status.ts` (only if a pure helper is genuinely needed, with a test), `tasks/T-061-dialog-motion.md` (commit this spec), `tasks/reports/T-061/**`.
+`apps/web/src/components/site/MobileMenu.astro`, `apps/web/src/scripts/mobile-menu.ts`, `apps/web/src/components/guestbook/GuestbookModal.astro`, `apps/web/src/scripts/guestbook-form.ts`, `apps/web/src/scripts/motion.ts`, `apps/web/src/scripts/guestbook-status-motion.ts`, `apps/web/src/lib/guestbook-status.ts` (only if a pure helper is genuinely needed, with a test), `tasks/T-061-dialog-motion.md` (commit this spec), `tasks/reports/T-061/**`.
 
 ## Acceptance criteria
 
