@@ -23,7 +23,7 @@ Work top to bottom; later steps need earlier values. Never paste secrets into ch
 - [ ] Add `jakublobos.com` as a zone in your Cloudflare account and point the registrar's nameservers at it.
 - [ ] Create `www`: a proxied (orange cloud) `A` record to `192.0.2.1` (placeholder; it only needs to exist), then **Rules > Redirect Rules > Single redirect**: hostname equals `www.jakublobos.com` -> dynamic `concat("https://jakublobos.com", http.request.uri.path)`, 301, preserve query string.
 - [ ] Create an API token (**My Profile > API Tokens > Create**, template _Edit Cloudflare Workers_, restricted to this account and the `jakublobos.com` zone). Note the **Account ID** from the dashboard.
-- [ ] **Custom-domain route (code change, not yet done).** `apps/web/wrangler.jsonc` still has the route commented out, so `wrangler deploy` would publish only to `*.workers.dev`. Before the first deploy, uncomment `"routes": [{ "pattern": "jakublobos.com", "custom_domain": true }]` (this was outside T-050's allowed files; ask the orchestrator or make the one-line change yourself). Cloudflare creates the DNS record itself; delete any existing `A`/`AAAA`/`CNAME` for the apex first.
+- [ ] **Custom domain.** `apps/web/wrangler.jsonc` routes the Worker to `jakublobos.com` (`custom_domain: true`), so Cloudflare creates the apex DNS record itself on the first deploy. Delete any existing `A`/`AAAA`/`CNAME` for the apex first.
 
 ### 2.2 GitHub (T-051)
 
