@@ -315,7 +315,7 @@ Source: `apps/web/src/i18n/messages/privacy.ts`
 | `sections[0].blocks[0].items[0].term` | Controller | Administrator |   |
 | `sections[0].blocks[0].items[0].value` | Jakub Łobos | Jakub Łobos |   |
 | `sections[0].blocks[0].items[1].term` | Address | Adres |   |
-| `sections[0].blocks[0].items[1].value` | [OWNER: postal address, or business registration if you act as a business] | [WŁAŚCICIEL: adres korespondencyjny lub dane rejestrowe działalności, jeśli działasz jako firma] |   |
+| `sections[0].blocks[0].items[1].value` | PO Box 10, ul. Wielicka 42C, 30-552 Kraków, Poland | Skrytka pocztowa nr 10, ul. Wielicka 42C, 30-552 Kraków |   |
 | `sections[0].blocks[0].items[2].term` | Email | E-mail |   |
 | `sections[0].blocks[0].items[2].value` | hello@jakublobos.com | hello@jakublobos.com |   |
 | `sections[0].blocks[1].text` | Write to this address for anything in this policy, including the requests described under “Your rights”. | Pod tym adresem możesz zgłaszać wszystkie sprawy związane z tą polityką, w tym wnioski opisane w części „Twoje prawa”. |   |
@@ -330,7 +330,7 @@ Source: `apps/web/src/i18n/messages/privacy.ts`
 | `sections[1].blocks[1].rows[0][0]` | Guestbook text, paint colour, page language | Treść wpisu w księdze gości, kolor farby, język strony |   |
 | `sections[1].blocks[1].rows[0][1]` | Show the newest approved message publicly and keep a private archive | Publiczne wyświetlanie najnowszego zatwierdzonego wpisu i prywatne archiwum |   |
 | `sections[1].blocks[1].rows[0][2]` | Consent (you submit it voluntarily; a notice sits under the form) | Zgoda (wpis wysyłasz dobrowolnie; informacja znajduje się pod formularzem) |   |
-| `sections[1].blocks[1].rows[0][3]` | Database on Railway, region [OWNER: Railway region] | Baza danych w Railway, region [WŁAŚCICIEL: region Railway] |   |
+| `sections[1].blocks[1].rows[0][3]` | Database on Railway, region EU West (Amsterdam) | Baza danych w Railway, region EU West (Amsterdam) |   |
 | `sections[1].blocks[1].rows[0][4]` | Shown publicly until a newer message replaces it, then kept in a private archive of at most 100 messages until newer ones push it out. A message not yet reviewed is deleted after 24 hours at most. Deleted on request. Copies stay in the daily backups for up to 6 days. | Widoczny publicznie, dopóki nie zastąpi go nowszy wpis, następnie przechowywany w prywatnym archiwum liczącym najwyżej 100 wpisów, dopóki nie wypchną go nowsze. Wpis, który nie został jeszcze sprawdzony, jest usuwany najpóźniej po 24 godzinach. Usuwany na żądanie. Wpis pozostaje w codziennych kopiach zapasowych najwyżej 6 dni. |   |
 | `sections[1].blocks[1].rows[1][0]` | Guestbook text sent to Google (Gemini API) for automated moderation | Treść wpisu wysyłana do Google (Gemini API) w celu automatycznej moderacji |   |
 | `sections[1].blocks[1].rows[1][1]` | Safety check and suitability review | Kontrola bezpieczeństwa i ocena przydatności |   |
@@ -341,7 +341,7 @@ Source: `apps/web/src/i18n/messages/privacy.ts`
 | `sections[1].blocks[1].rows[2][1]` | Reply to your enquiry | Odpowiedź na Twoje zapytanie |   |
 | `sections[1].blocks[1].rows[2][2]` | Steps before a contract / legitimate interest | Działania przed zawarciem umowy / prawnie uzasadniony interes |   |
 | `sections[1].blocks[1].rows[2][3]` | Resend (email delivery, in transit) passes name, email and message to the owner’s mailbox | Resend (dostarczanie poczty, w trakcie przesyłania) przekazuje imię, e-mail i wiadomość do skrzynki właściciela |   |
-| `sections[1].blocks[1].rows[2][4]` | Not stored by the site’s server. Resend keeps delivery logs per its own settings. The mailbox keeps the message as long as needed to handle the enquiry [OWNER: confirm period]. | Serwer strony niczego nie zapisuje. Resend przechowuje logi dostarczenia zgodnie z własnymi ustawieniami. Skrzynka przechowuje wiadomość tak długo, jak trzeba, by obsłużyć zapytanie [WŁAŚCICIEL: potwierdź okres]. |   |
+| `sections[1].blocks[1].rows[2][4]` | Not stored by the site’s server. Resend keeps delivery logs per its own settings. The mailbox keeps the conversation for up to 12 months after the last message, or longer if it leads to a collaboration. | Serwer strony niczego nie zapisuje. Resend przechowuje logi dostarczenia zgodnie z własnymi ustawieniami. Skrzynka przechowuje korespondencję do 12 miesięcy od ostatniej wiadomości, a dłużej, jeśli rozmowa przerodzi się we współpracę. |   |
 | `sections[1].blocks[1].rows[3][0]` | Browser signals and your IP address for the Cloudflare Turnstile check | Sygnały przeglądarki i Twój adres IP dla kontroli Cloudflare Turnstile |   |
 | `sections[1].blocks[1].rows[3][1]` | Bot check before the phone number is shown | Sprawdzenie, czy nie jesteś botem, przed pokazaniem numeru telefonu |   |
 | `sections[1].blocks[1].rows[3][2]` | Legitimate interest (securing a function you asked for) | Prawnie uzasadniony interes (zabezpieczenie funkcji, o którą prosisz) |   |

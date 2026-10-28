@@ -56,7 +56,7 @@ Work top to bottom; later steps need earlier values. Never paste secrets into ch
 
 ### 2.5 Content
 
-- [ ] Privacy policy placeholders: `grep -rn "OWNER" apps/web/src` must print nothing. They cover the controller's postal address or registration, the Railway region, mailbox retention for contact messages and GA4 retention. Use the retention figures in section 5 for backups. Have the policy text reviewed (EN and PL).
+- [x] Privacy policy placeholders are filled (T-078). Confirm that the Railway region in `apps/web/src/i18n/messages/privacy.ts` (EU West, Amsterdam) matches the service, and have the policy text reviewed (EN and PL).
 - [ ] Resume PDFs in place and the Polish copy reviewed (D-23 items 8 and 9).
 
 ### 2.6 First deploy
