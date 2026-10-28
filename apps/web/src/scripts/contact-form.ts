@@ -212,12 +212,13 @@ class ContactFormElement extends HTMLElement {
       serverErrors = {};
       pending = null;
       setPhase('idle');
-      for (const name of CONTACT_FIELDS) {
-        // Clearing through the typing field keeps its decorative mirror and the counter in sync.
-        fields[name].typing?.reset();
-      }
+      // Only the message starts over: the visitor is still the same person. Clearing through the
+      // typing field keeps its decorative mirror and the counter in sync.
+      fields.message.typing?.reset();
+      // The kept name and email become the new draft, so a reload does not lose them either.
+      saveDraft(values());
       renderErrors();
-      fields.name.control.focus();
+      fields.message.control.focus();
     };
 
     const fieldOf = (target: EventTarget | null): ContactField | null =>
