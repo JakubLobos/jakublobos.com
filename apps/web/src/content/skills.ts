@@ -34,7 +34,7 @@ const rawGroups: readonly SkillGroup[] = [
   // Worked with, but far less deeply than the groups above.
   {
     label: { en: 'Familiar with', pl: 'Miałem styczność' },
-    items: ['Next.js', 'Node.js', 'React Native'],
+    items: ['Next.js', 'React Native'],
   },
 ];
 
