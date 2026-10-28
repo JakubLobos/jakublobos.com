@@ -108,7 +108,7 @@ Source: `apps/web/src/i18n/messages/outside.ts`
 | --- | -- | -- | ---------------- |
 | `eyebrow` | OUTSIDE OF WORK | POZA PRACĄ |   |
 | `title` | I like to travel | Lubię podróżować |   |
-| `body` | Outside of work, I love exploring new places, meeting people, and discovering different cultures. From the landscapes of Iceland to the streets of Japan, and the sunny shores of Madeira, Cyprus, and Tenerife, every destination has something unique to offer. | Poza pracą uwielbiam odkrywać nowe miejsca, poznawać ludzi i różne kultury. Od krajobrazów Islandii, przez ulice Japonii, po słoneczne wybrzeża Madery, Cypru i Teneryfy – każde miejsce ma w sobie coś wyjątkowego. |   |
+| `body` | Outside of work, I love exploring new places, meeting people, and discovering different cultures. From the landscapes of Iceland to the streets of Japan, and the sunny shores of Madeira, Cyprus, and Tenerife, every destination has something unique to offer. | Poza pracą podróżuję. Podróżuję, by poznawać ludzi i różne kultury. Od krajobrazów Islandii, przez ulice Japonii, po słoneczne wybrzeża Madery, Cypru i Teneryfy - każde miejsce ma w sobie coś wyjątkowego. |   |
 | `photosLabel` | Travel photos | Zdjęcia z podróży |   |
 
 ## Skills labels

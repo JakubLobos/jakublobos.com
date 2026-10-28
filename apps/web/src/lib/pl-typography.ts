@@ -10,13 +10,14 @@ const NUMBER_UNIT =
 // Abbreviations that introduce a number or a letter ("min. 10", "art. 6", "lit. a").
 const ABBREVIATION = /(?<!\p{L})(art|ust|lit|min|maks|nr)\. (?=\S)/gu;
 
-// A spaced en or em dash must not start a line, so the space before it is non-breaking.
-const SPACED_DASH = / (?=[–—] )/gu;
+// A spaced dash (hyphen, en or em dash) must not start a line, so the space before it is
+// non-breaking.
+const SPACED_DASH = / (?=[-–—] )/gu;
 
 /**
  * Applies Polish typographic conventions to a string: non-breaking spaces after single-letter
  * words, between a number and its unit, and after the abbreviations "art.", "ust.", "lit.",
- * "min.", "maks." and "nr", and before a spaced en or em dash. Idempotent and safe to run on
+ * "min.", "maks." and "nr", and before a spaced dash. Idempotent and safe to run on
  * strings with `{placeholders}`.
  */
 export function polishTypography(text: string): string {
