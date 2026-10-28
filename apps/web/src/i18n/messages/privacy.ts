@@ -124,7 +124,7 @@ const en: PrivacyCopy = {
               'Technical request data: IP address, browser user agent, requested URL, time',
               'Deliver the site and the API and protect them; rate limiting against abuse',
               'Legitimate interest',
-              'Cloudflare (site) and Railway (API), as processors. For rate limiting the API keeps the IP address in memory only; the app never saves it to disk or writes it to logs. It is also sent to Cloudflare if you reveal the phone number (see above).',
+              'Cloudflare (site) and Railway (API), as processors. For rate limiting the API keeps the IP address in memory only; the app never saves it to disk or writes it to logs. It is also sent to Cloudflare if you reveal the phone number or download the resume (see above).',
               'Logs: per the hosts’ log retention. Rate limiting: a window of at most 24 hours, kept in memory only, never on disk or in logs; lost on restart.',
             ],
             [
@@ -318,7 +318,7 @@ const pl: PrivacyCopy = {
               'Dane techniczne żądań: adres IP, user agent przeglądarki, żądany adres URL, czas',
               'Dostarczanie strony i API oraz ich ochrona; ograniczanie liczby żądań w celu ochrony przed nadużyciami',
               'Prawnie uzasadniony interes',
-              'Cloudflare (strona) i Railway (API), jako podmioty przetwarzające. Do ograniczania liczby żądań API trzyma adres IP wyłącznie w pamięci; aplikacja nigdy nie zapisuje go na dysku ani w logach. Jest też wysyłany do Cloudflare, gdy odsłaniasz numer telefonu (patrz wyżej).',
+              'Cloudflare (strona) i Railway (API), jako podmioty przetwarzające. Do ograniczania liczby żądań API trzyma adres IP wyłącznie w pamięci; aplikacja nigdy nie zapisuje go na dysku ani w logach. Jest też wysyłany do Cloudflare, gdy odsłaniasz numer telefonu lub pobierasz CV (patrz wyżej).',
               'Logi: zgodnie z okresem przechowywania u dostawców. Ograniczanie liczby żądań: okno najwyżej 24 godzin, wyłącznie w pamięci, nigdy na dysku ani w logach; znika po restarcie.',
             ],
             [
