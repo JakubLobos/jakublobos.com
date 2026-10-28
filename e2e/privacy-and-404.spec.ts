@@ -14,14 +14,14 @@ test.describe('privacy policy', () => {
 
       await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1);
       const levels = await page
-        .locator('main :is(h1, h2, h3)')
+        .locator('main :is(h1, h2)')
         .evaluateAll((headings) => headings.map((heading) => Number(heading.tagName.slice(1))));
       expect(levels[0]).toBe(1);
       levels.forEach((level, index) => {
         // A heading may go at most one level deeper than the one before it.
         if (index > 0) expect(level - (levels[index - 1] ?? 0)).toBeLessThanOrEqual(1);
       });
-      expect(levels).toContain(3);
+      expect(levels).toContain(2);
 
       // 70ch of body text is about 560 px; the cap allows for font fallbacks.
       const widest = await page
@@ -43,13 +43,13 @@ test.describe('privacy policy', () => {
   const DATA_TABLE: Record<Locale, { name: string; ga4: string; posthog: string }> = {
     en: {
       name: 'Personal data processed on this site',
-      ga4: 'Google Analytics 4 cookies and identifiers',
-      posthog: 'PostHog cookieless counting',
+      ga4: 'Visit statistics (Google Analytics 4)',
+      posthog: 'PostHog product analytics',
     },
     pl: {
       name: 'Dane osobowe przetwarzane na tej stronie',
-      ga4: 'Cookies i identyfikatory Google Analytics 4',
-      posthog: 'Bezcookiesowe zliczanie PostHog',
+      ga4: 'Statystyki odwiedzin (Google Analytics 4)',
+      posthog: 'Analityka produktowa PostHog',
     },
   };
 
@@ -61,8 +61,8 @@ test.describe('privacy policy', () => {
       const expected = DATA_TABLE[locale];
       const table = page.getByRole('region', { name: expected.name });
       await expect(table.getByRole('columnheader')).toHaveCount(5);
-      // Header row + 12 data categories (security.md §8 plus the approved hosting row).
-      await expect(table.getByRole('row')).toHaveCount(13);
+      // Header row + 7 processings; storage entries live in the cookies table only.
+      await expect(table.getByRole('row')).toHaveCount(8);
       await expect(table.getByText(expected.ga4)).toBeVisible();
       await expect(table.getByText(expected.posthog)).toBeVisible();
     });

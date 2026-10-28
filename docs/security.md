@@ -131,6 +131,8 @@ The owner is the data controller. This is engineering guidance, not legal advice
 | Request metadata (IP, user agent, URL, time)                                               | Serving the site and API; security               | Legitimate interest                                         | Cloudflare (site, Worker) and Railway (API edge) as processors                                                                                                                 | Per the hosts' log retention                                                                                                                                                                          |
 | PostHog cookieless counting (after "Only essential")                                       | Aggregate visit counts without device storage    | Legitimate interest (**flag for legal review**)             | PostHog EU (server-side hash)                                                                                                                                                  | Per PostHog settings                                                                                                                                                                                  |
 
+The public policy page (`apps/web/src/i18n/messages/privacy.ts`) presents the same facts in a shorter form: the Gemini rows, the IP rate-limit and request-metadata rows, and the two PostHog rows are merged, and the storage entries (`lang`, `jl-cookies`, `jl-contact-draft`, GA4 and PostHog cookies) appear only in its cookies table, with their legal basis.
+
 Requirements that follow:
 
 - Privacy policy pages (EN and PL), linked from the footer, the banner, and the form notices.

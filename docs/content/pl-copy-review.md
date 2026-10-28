@@ -10,7 +10,7 @@ date and the word "approved" once the owner has gone through every row (T-034, A
 > `{name}` marks a value filled in at runtime. Address form is informal "Ty"; quotes are „…”;
 > a guestbook entry is a "wpis".
 
-Strings: 376 across 22 areas.
+Strings: 338 across 22 areas.
 
 ## Owner sign-off
 
@@ -20,11 +20,7 @@ Strings: 376 across 22 areas.
 
 ## PL equal to EN
 
-40 whitelisted (proper nouns, technology names), 1 to check.
-
-| Area | Key | Text |
-| ---- | --- | ---- |
-| Privacy policy | `sections[2].blocks[5].text` | Google (Gemini API) |
+36 whitelisted (proper nouns, technology names), 0 to check.
 
 ## Common
 
@@ -313,7 +309,7 @@ Source: `apps/web/src/i18n/messages/privacy.ts`
 | --- | -- | -- | ---------------- |
 | `eyebrow` | LEGAL | PRAWNE |   |
 | `title` | Privacy policy | Polityka prywatności |   |
-| `lead` | This site is a personal portfolio. It collects as little as possible. This page explains what is processed when you use the guestbook, the contact form, the phone number reveal, the language switch, or the cookie choices, who handles it, and what rights you have. | Ta strona to osobiste portfolio i zbiera jak najmniej danych. Poniżej wyjaśniam, co jest przetwarzane, gdy korzystasz z księgi gości, formularza kontaktowego, odsłonięcia numeru telefonu, przełącznika języka lub ustawień cookies, kto się tym zajmuje i jakie masz prawa. |   |
+| `lead` | This site collects as little as possible. Below: what is processed, who handles it, and your rights. | Ta strona zbiera jak najmniej danych. Poniżej: co jest przetwarzane, kto się tym zajmuje i jakie masz prawa. |   |
 | `lastUpdated` | Last updated | Ostatnia aktualizacja |   |
 | `sections[0].heading` | Who is responsible | Kto jest odpowiedzialny |   |
 | `sections[0].blocks[0].items[0].term` | Controller | Administrator |   |
@@ -324,7 +320,7 @@ Source: `apps/web/src/i18n/messages/privacy.ts`
 | `sections[0].blocks[0].items[2].value` | jakubloboskontakt@gmail.com | jakubloboskontakt@gmail.com |   |
 | `sections[0].blocks[1].text` | Write to this address for anything in this policy, including the requests described under “Your rights”. | Pod tym adresem możesz zgłaszać wszystkie sprawy związane z tą polityką, w tym wnioski opisane w części „Twoje prawa”. |   |
 | `sections[1].heading` | What is processed, why, and for how long | Co jest przetwarzane, po co i jak długo |   |
-| `sections[1].blocks[0].text` | Nothing is processed for advertising or sold. The table lists everything, with the legal basis under the GDPR (Art. 6(1)(a) consent, (b) steps before a contract, (f) legitimate interests). | Dane nie są przetwarzane w celach reklamowych ani sprzedawane. Tabela wymienia wszystko wraz z podstawą prawną według RODO (art. 6 ust. 1 lit. a zgoda, lit. b działania przed zawarciem umowy, lit. f prawnie uzasadniony interes). |   |
+| `sections[1].blocks[0].text` | Nothing is processed for advertising or sold. The table lists everything, with the legal basis under the GDPR (Art. 6(1)(a) consent, (b) steps before a contract, (f) legitimate interests). Transfers outside the EEA rely on the safeguards the provider offers under Chapter V of the GDPR. | Dane nie są przetwarzane w celach reklamowych ani sprzedawane. Tabela wymienia wszystko wraz z podstawą prawną według RODO (art. 6 ust. 1 lit. a zgoda, lit. b działania przed zawarciem umowy, lit. f prawnie uzasadniony interes). Przekazanie danych poza EOG opiera się na zabezpieczeniach oferowanych przez dostawcę zgodnie z rozdziałem V RODO. |   |
 | `sections[1].blocks[1].caption` | Personal data processed on this site | Dane osobowe przetwarzane na tej stronie |   |
 | `sections[1].blocks[1].head[0]` | Data | Dane |   |
 | `sections[1].blocks[1].head[1]` | Purpose | Cel |   |
@@ -336,120 +332,82 @@ Source: `apps/web/src/i18n/messages/privacy.ts`
 | `sections[1].blocks[1].rows[0][2]` | Consent (you submit it voluntarily; a notice sits under the form) | Zgoda (wpis wysyłasz dobrowolnie; informacja znajduje się pod formularzem) |   |
 | `sections[1].blocks[1].rows[0][3]` | Database on Railway, region [OWNER: Railway region] | Baza danych w Railway, region [WŁAŚCICIEL: region Railway] |   |
 | `sections[1].blocks[1].rows[0][4]` | Shown publicly until a newer message replaces it, then kept in a private archive of at most 100 messages until newer ones push it out. A message not yet reviewed is deleted after 24 hours at most. Deleted on request. Copies stay in backups until they rotate out [OWNER: confirm backup retention]. | Widoczny publicznie, dopóki nie zastąpi go nowszy wpis, następnie przechowywany w prywatnym archiwum liczącym najwyżej 100 wpisów, dopóki nie wypchną go nowsze. Wpis, który nie został jeszcze sprawdzony, jest usuwany najpóźniej po 24 godzinach. Usuwany na żądanie. Wpis pozostaje w kopiach zapasowych do czasu ich rotacji [WŁAŚCICIEL: potwierdź okres przechowywania kopii]. |   |
-| `sections[1].blocks[1].rows[1][0]` | Guestbook text sent to Google (Gemini API) for a safety check | Treść wpisu wysyłana do Google (Gemini API) w celu kontroli bezpieczeństwa |   |
-| `sections[1].blocks[1].rows[1][1]` | Safety review | Kontrola bezpieczeństwa |   |
+| `sections[1].blocks[1].rows[1][0]` | Guestbook text sent to Google (Gemini API) for automated moderation | Treść wpisu wysyłana do Google (Gemini API) w celu automatycznej moderacji |   |
+| `sections[1].blocks[1].rows[1][1]` | Safety check and suitability review | Kontrola bezpieczeństwa i ocena przydatności |   |
 | `sections[1].blocks[1].rows[1][2]` | Legitimate interest | Prawnie uzasadniony interes |   |
-| `sections[1].blocks[1].rows[1][3]` | Google (Gemini API). Processed under Google's data terms for the paid service; not used to improve Google products. | Google (Gemini API). Przetwarzane na warunkach danych Google dla usługi płatnej; nie służy do ulepszania produktów Google. |   |
+| `sections[1].blocks[1].rows[1][3]` | Google (Gemini API). Operated from the EEA, so the paid-service data terms apply; not used to improve Google products. Your IP address is not sent. | Google (Gemini API). Przetwarzane na warunkach danych Google dla usługi płatnej, ponieważ strona jest prowadzona z EOG; nie służy do ulepszania produktów Google. Twój adres IP nie jest wysyłany. |   |
 | `sections[1].blocks[1].rows[1][4]` | Logged by Google for a limited period for abuse monitoring [OWNER: confirm period] | Logowane przez Google przez ograniczony czas w celu wykrywania nadużyć [WŁAŚCICIEL: potwierdź okres] |   |
-| `sections[1].blocks[1].rows[2][0]` | Guestbook text sent to Google (Gemini API) for a suitability review | Treść wpisu wysyłana do Google (Gemini API) w celu oceny przydatności |   |
-| `sections[1].blocks[1].rows[2][1]` | Check that the message fits a professional portfolio | Sprawdzenie, czy wpis pasuje do profesjonalnego portfolio |   |
-| `sections[1].blocks[1].rows[2][2]` | Legitimate interest | Prawnie uzasadniony interes |   |
-| `sections[1].blocks[1].rows[2][3]` | Google (Gemini API). Same terms as the safety check. | Google (Gemini API). Te same warunki co przy kontroli bezpieczeństwa. |   |
-| `sections[1].blocks[1].rows[2][4]` | Logged by Google for a limited period for abuse monitoring [OWNER: confirm period] | Logowane przez Google przez ograniczony czas w celu wykrywania nadużyć [WŁAŚCICIEL: potwierdź okres] |   |
-| `sections[1].blocks[1].rows[3][0]` | Contact form: name, email, message | Formularz kontaktowy: imię, e-mail, wiadomość |   |
-| `sections[1].blocks[1].rows[3][1]` | Reply to your enquiry | Odpowiedź na Twoje zapytanie |   |
-| `sections[1].blocks[1].rows[3][2]` | Steps before a contract / legitimate interest | Działania przed zawarciem umowy / prawnie uzasadniony interes |   |
-| `sections[1].blocks[1].rows[3][3]` | Resend (email delivery, in transit), then the owner’s mailbox | Resend (dostarczanie poczty, w trakcie przesyłania), następnie skrzynka właściciela |   |
-| `sections[1].blocks[1].rows[3][4]` | Not stored by the site’s server. Resend keeps delivery logs per its own settings. The mailbox keeps the message as long as needed to handle the enquiry [OWNER: confirm period]. | Serwer strony niczego nie zapisuje. Resend przechowuje logi dostarczenia zgodnie z własnymi ustawieniami. Skrzynka przechowuje wiadomość tak długo, jak trzeba, by obsłużyć zapytanie [WŁAŚCICIEL: potwierdź okres]. |   |
-| `sections[1].blocks[1].rows[4][0]` | Browser signals and your IP address for the Cloudflare Turnstile check | Sygnały przeglądarki i Twój adres IP dla kontroli Cloudflare Turnstile |   |
-| `sections[1].blocks[1].rows[4][1]` | Bot check before the phone number is shown | Sprawdzenie, czy nie jesteś botem, przed pokazaniem numeru telefonu |   |
-| `sections[1].blocks[1].rows[4][2]` | Legitimate interest (securing a function you asked for) | Prawnie uzasadniony interes (zabezpieczenie funkcji, o którą prosisz) |   |
-| `sections[1].blocks[1].rows[4][3]` | Cloudflare. Loaded only after you click “Show number”; the API then sends your IP address to Cloudflare to verify the check. | Cloudflare. Ładowane dopiero po kliknięciu „Pokaż numer”; API wysyła wtedy Twój adres IP do Cloudflare w celu weryfikacji. |   |
-| `sections[1].blocks[1].rows[4][4]` | Per Cloudflare | Zgodnie z zasadami Cloudflare |   |
-| `sections[1].blocks[1].rows[5][0]` | IP address | Adres IP |   |
-| `sections[1].blocks[1].rows[5][1]` | Rate limiting against abuse | Ograniczanie liczby żądań w celu ochrony przed nadużyciami |   |
-| `sections[1].blocks[1].rows[5][2]` | Legitimate interest | Prawnie uzasadniony interes |   |
-| `sections[1].blocks[1].rows[5][3]` | The API keeps it in memory only; the app never saves it to disk or writes it to logs. It is also sent to Cloudflare if you reveal the phone number (see above). | API trzyma go wyłącznie w pamięci; aplikacja nigdy nie zapisuje go na dysku ani w logach. Jest też wysyłany do Cloudflare, gdy odsłaniasz numer telefonu (patrz wyżej). |   |
-| `sections[1].blocks[1].rows[5][4]` | A window of at most 24 hours; lost on restart | Okno najwyżej 24 godzin; znika po restarcie |   |
-| `sections[1].blocks[1].rows[6][0]` | Technical request data: IP address, browser user agent, requested URL, time | Dane techniczne żądań: adres IP, user agent przeglądarki, żądany adres URL, czas |   |
-| `sections[1].blocks[1].rows[6][1]` | Deliver the site and the API and protect them | Dostarczanie strony i API oraz ich ochrona |   |
-| `sections[1].blocks[1].rows[6][2]` | Legitimate interest | Prawnie uzasadniony interes |   |
-| `sections[1].blocks[1].rows[6][3]` | Cloudflare (site) and Railway (API), as processors | Cloudflare (strona) i Railway (API), jako podmioty przetwarzające |   |
-| `sections[1].blocks[1].rows[6][4]` | Per the hosts’ log retention | Zgodnie z okresem przechowywania logów u dostawców |   |
-| `sections[1].blocks[1].rows[7][0]` | “lang” cookie | Cookie „lang” |   |
-| `sections[1].blocks[1].rows[7][1]` | Remember an explicit language choice | Zapamiętanie wybranego języka |   |
-| `sections[1].blocks[1].rows[7][2]` | Strictly necessary (you asked for it) | Niezbędne (o to prosisz) |   |
-| `sections[1].blocks[1].rows[7][3]` | Your browser | Twoja przeglądarka |   |
-| `sections[1].blocks[1].rows[7][4]` | 1 year | 1 rok |   |
-| `sections[1].blocks[1].rows[8][0]` | “jl-cookies” (local storage) | „jl-cookies” (local storage) |   |
-| `sections[1].blocks[1].rows[8][1]` | Remember your cookie choice | Zapamiętanie Twojego wyboru dotyczącego cookies |   |
-| `sections[1].blocks[1].rows[8][2]` | Strictly necessary | Niezbędne |   |
-| `sections[1].blocks[1].rows[8][3]` | Your browser | Twoja przeglądarka |   |
-| `sections[1].blocks[1].rows[8][4]` | Until you change it | Do czasu zmiany wyboru |   |
-| `sections[1].blocks[1].rows[9][0]` | “jl-contact-draft” (session storage) | „jl-contact-draft” (pamięć sesji) |   |
-| `sections[1].blocks[1].rows[9][1]` | Keep an unsent contact-form draft in this tab | Zachowanie niewysłanej wersji roboczej wiadomości z formularza kontaktowego w tej karcie |   |
-| `sections[1].blocks[1].rows[9][2]` | Strictly necessary (you asked for it) | Niezbędne (o to prosisz) |   |
-| `sections[1].blocks[1].rows[9][3]` | Your browser only; it is never sent | Tylko Twoja przeglądarka; nigdy nie jest wysyłany |   |
-| `sections[1].blocks[1].rows[9][4]` | Until you close the tab or send the message | Do zamknięcia karty lub wysłania wiadomości |   |
-| `sections[1].blocks[1].rows[10][0]` | Google Analytics 4 cookies and identifiers | Cookies i identyfikatory Google Analytics 4 |   |
-| `sections[1].blocks[1].rows[10][1]` | Visit statistics | Statystyki odwiedzin |   |
-| `sections[1].blocks[1].rows[10][2]` | Consent (“Accept”) | Zgoda („Akceptuję”) |   |
-| `sections[1].blocks[1].rows[10][3]` | Google (US) | Google (USA) |   |
-| `sections[1].blocks[1].rows[10][4]` | Per the GA4 property settings, set to the shortest period available [OWNER: confirm] | Zgodnie z ustawieniami usługi GA4, ustawionymi na najkrótszy dostępny okres [WŁAŚCICIEL: potwierdź] |   |
-| `sections[1].blocks[1].rows[11][0]` | PostHog, with consent | PostHog, za zgodą |   |
-| `sections[1].blocks[1].rows[11][1]` | Product analytics | Analityka produktowa |   |
-| `sections[1].blocks[1].rows[11][2]` | Consent (“Accept”) | Zgoda („Akceptuję”) |   |
-| `sections[1].blocks[1].rows[11][3]` | PostHog EU cloud | Chmura PostHog w UE |   |
-| `sections[1].blocks[1].rows[11][4]` | Per the PostHog project settings | Zgodnie z ustawieniami projektu PostHog |   |
-| `sections[1].blocks[1].rows[12][0]` | PostHog cookieless counting, after “Only essential” | Bezcookiesowe zliczanie PostHog po wyborze „Tylko niezbędne” |   |
-| `sections[1].blocks[1].rows[12][1]` | Count visits in aggregate without storing anything on your device | Zliczanie odwiedzin zbiorczo, bez zapisywania czegokolwiek na Twoim urządzeniu |   |
-| `sections[1].blocks[1].rows[12][2]` | Legitimate interest | Prawnie uzasadniony interes |   |
-| `sections[1].blocks[1].rows[12][3]` | PostHog EU cloud (server-side hash) | Chmura PostHog w UE (skrót liczony po stronie serwera) |   |
-| `sections[1].blocks[1].rows[12][4]` | Per the PostHog project settings | Zgodnie z ustawieniami projektu PostHog |   |
+| `sections[1].blocks[1].rows[2][0]` | Contact form: name, email, message | Formularz kontaktowy: imię, e-mail, wiadomość |   |
+| `sections[1].blocks[1].rows[2][1]` | Reply to your enquiry | Odpowiedź na Twoje zapytanie |   |
+| `sections[1].blocks[1].rows[2][2]` | Steps before a contract / legitimate interest | Działania przed zawarciem umowy / prawnie uzasadniony interes |   |
+| `sections[1].blocks[1].rows[2][3]` | Resend (email delivery, in transit) passes name, email and message to the owner’s mailbox | Resend (dostarczanie poczty, w trakcie przesyłania) przekazuje imię, e-mail i wiadomość do skrzynki właściciela |   |
+| `sections[1].blocks[1].rows[2][4]` | Not stored by the site’s server. Resend keeps delivery logs per its own settings. The mailbox keeps the message as long as needed to handle the enquiry [OWNER: confirm period]. | Serwer strony niczego nie zapisuje. Resend przechowuje logi dostarczenia zgodnie z własnymi ustawieniami. Skrzynka przechowuje wiadomość tak długo, jak trzeba, by obsłużyć zapytanie [WŁAŚCICIEL: potwierdź okres]. |   |
+| `sections[1].blocks[1].rows[3][0]` | Browser signals and your IP address for the Cloudflare Turnstile check | Sygnały przeglądarki i Twój adres IP dla kontroli Cloudflare Turnstile |   |
+| `sections[1].blocks[1].rows[3][1]` | Bot check before the phone number is shown | Sprawdzenie, czy nie jesteś botem, przed pokazaniem numeru telefonu |   |
+| `sections[1].blocks[1].rows[3][2]` | Legitimate interest (securing a function you asked for) | Prawnie uzasadniony interes (zabezpieczenie funkcji, o którą prosisz) |   |
+| `sections[1].blocks[1].rows[3][3]` | Cloudflare. Loaded only after you click “Show number”; the API then sends your IP address to Cloudflare to verify the check. | Cloudflare. Ładowane dopiero po kliknięciu „Pokaż numer”; API wysyła wtedy Twój adres IP do Cloudflare w celu weryfikacji. |   |
+| `sections[1].blocks[1].rows[3][4]` | Per Cloudflare | Zgodnie z zasadami Cloudflare |   |
+| `sections[1].blocks[1].rows[4][0]` | Technical request data: IP address, browser user agent, requested URL, time | Dane techniczne żądań: adres IP, user agent przeglądarki, żądany adres URL, czas |   |
+| `sections[1].blocks[1].rows[4][1]` | Deliver the site and the API and protect them; rate limiting against abuse | Dostarczanie strony i API oraz ich ochrona; ograniczanie liczby żądań w celu ochrony przed nadużyciami |   |
+| `sections[1].blocks[1].rows[4][2]` | Legitimate interest | Prawnie uzasadniony interes |   |
+| `sections[1].blocks[1].rows[4][3]` | Cloudflare (site) and Railway (API), as processors. For rate limiting the API keeps the IP address in memory only; the app never saves it to disk or writes it to logs. It is also sent to Cloudflare if you reveal the phone number (see above). | Cloudflare (strona) i Railway (API), jako podmioty przetwarzające. Do ograniczania liczby żądań API trzyma adres IP wyłącznie w pamięci; aplikacja nigdy nie zapisuje go na dysku ani w logach. Jest też wysyłany do Cloudflare, gdy odsłaniasz numer telefonu (patrz wyżej). |   |
+| `sections[1].blocks[1].rows[4][4]` | Logs: per the hosts’ log retention. Rate limiting: a window of at most 24 hours, kept in memory only, never on disk or in logs; lost on restart. | Logi: zgodnie z okresem przechowywania u dostawców. Ograniczanie liczby żądań: okno najwyżej 24 godzin, wyłącznie w pamięci, nigdy na dysku ani w logach; znika po restarcie. |   |
+| `sections[1].blocks[1].rows[5][0]` | Visit statistics (Google Analytics 4) | Statystyki odwiedzin (Google Analytics 4) |   |
+| `sections[1].blocks[1].rows[5][1]` | Visit statistics | Statystyki odwiedzin |   |
+| `sections[1].blocks[1].rows[5][2]` | Consent (“Accept”) | Zgoda („Akceptuję”) |   |
+| `sections[1].blocks[1].rows[5][3]` | Google (US). Loaded only if you press “Accept” in the cookie banner. | Google (USA). Ładowany tylko po kliknięciu „Akceptuję” w komunikacie o cookies. |   |
+| `sections[1].blocks[1].rows[5][4]` | Per the GA4 property settings, set to the shortest period available [OWNER: confirm] | Zgodnie z ustawieniami usługi GA4, ustawionymi na najkrótszy dostępny okres [WŁAŚCICIEL: potwierdź] |   |
+| `sections[1].blocks[1].rows[6][0]` | PostHog product analytics | Analityka produktowa PostHog |   |
+| `sections[1].blocks[1].rows[6][1]` | With “Accept”: product analytics. With “Only essential”: counting visits in aggregate without storing anything on your device | Z „Akceptuję”: analityka produktowa. Z „Tylko niezbędne”: zliczanie odwiedzin zbiorczo, bez zapisywania czegokolwiek na Twoim urządzeniu |   |
+| `sections[1].blocks[1].rows[6][2]` | With “Accept”: consent. With “Only essential”: legitimate interest | Z „Akceptuję”: zgoda. Z „Tylko niezbędne”: prawnie uzasadniony interes |   |
+| `sections[1].blocks[1].rows[6][3]` | PostHog EU cloud. With “Accept” it uses its cookies; with “Only essential” it uses a server-side hash. Until you choose, it does nothing. | Chmura PostHog w UE. Z „Akceptuję” używa cookies; z „Tylko niezbędne” używa skrótu liczonego po stronie serwera. Do czasu dokonania wyboru nic nie robi. |   |
+| `sections[1].blocks[1].rows[6][4]` | Per the PostHog project settings | Zgodnie z ustawieniami projektu PostHog |   |
 | `sections[1].blocks[2].text` | The guestbook has no accounts and the site stores no identifier with your message, so a message can only be found by its text. Please do not put personal data in it; the form rejects emails and phone numbers. | Księga gości nie ma kont, a strona nie zapisuje przy Twoim wpisie żadnego identyfikatora, więc wpis można odnaleźć tylko po jego treści. Proszę, nie wpisuj danych osobowych; formularz odrzuca adresy e-mail i numery telefonu. |   |
-| `sections[1].blocks[3].text` | Whether a guestbook message is published is decided automatically by simple text rules and the Google (Gemini API) checks described below. This has no legal effect on you. If you disagree, write to the address above. | O publikacji wpisu w księdze gości decydują automatycznie proste reguły tekstowe oraz opisane niżej kontrole Google (Gemini API). Nie ma to wobec Ciebie skutków prawnych. Jeśli się z tym nie zgadzasz, napisz na adres podany wyżej. |   |
-| `sections[2].heading` | Who else handles data | Kto jeszcze przetwarza dane |   |
-| `sections[2].blocks[0].text` | These providers handle data for the purposes in the table above. Transfers outside the EEA rely on the safeguards the provider offers under Chapter V of the GDPR. | Ci dostawcy przetwarzają dane w celach wskazanych w tabeli wyżej. Przekazanie danych poza EOG opiera się na zabezpieczeniach oferowanych przez dostawcę zgodnie z rozdziałem V RODO. |   |
-| `sections[2].blocks[1].text` | Cloudflare | Cloudflare |   |
-| `sections[2].blocks[2].text` | Hosts and delivers the website, sets the “lang” cookie, and, like any host, handles the technical data of each request (IP address, browser user agent, requested URL, time). Cloudflare Turnstile, its bot check, is loaded only when you click “Show number” to reveal the phone number. | Hostuje i dostarcza stronę, ustawia cookie „lang” i, jak każdy hosting, przetwarza dane techniczne każdego żądania (adres IP, user agent przeglądarki, żądany adres URL, czas). Cloudflare Turnstile, czyli kontrola antybotowa, ładuje się dopiero po kliknięciu „Pokaż numer”, aby odsłonić numer telefonu. |   |
-| `sections[2].blocks[3].text` | Railway | Railway |   |
-| `sections[2].blocks[4].text` | Hosts the API and its database, which holds the guestbook, and handles the technical data of each API request (IP address, browser user agent, requested URL, time). Region: [OWNER: Railway region]. | Hostuje API oraz jego bazę danych z księgą gości i przetwarza dane techniczne każdego żądania do API (adres IP, user agent przeglądarki, żądany adres URL, czas). Region: [WŁAŚCICIEL: region Railway]. |   |
-| `sections[2].blocks[5].text` | Google (Gemini API) | Google (Gemini API) |   |
-| `sections[2].blocks[6].text` | Guestbook text is sent to Google (Gemini API) for two automated checks: a safety check and a suitability review. Because this site is operated from Poland (EEA), Google processes the text under its data terms for the paid service and does not use it to improve its products. Google logs requests for a limited period for abuse monitoring [OWNER: confirm period]. The free quota is used, so no fee is charged. Please do not include personal data in a message. Your IP address is not sent. | Treść wpisu w księdze gości trafia do Google (Gemini API) w ramach dwóch automatycznych kontroli: kontroli bezpieczeństwa i oceny przydatności. Ponieważ ta strona jest prowadzona z Polski (EOG), Google przetwarza treść na warunkach danych dla usługi płatnej i nie używa jej do ulepszania swoich produktów. Google loguje zapytania przez ograniczony czas w celu wykrywania nadużyć [WŁAŚCICIEL: potwierdź okres]. Wykorzystywany jest bezpłatny limit, więc nie ponosimy opłat. Nie podawaj w wpisie danych osobowych. Twój adres IP nie jest wysyłany. |   |
-| `sections[2].blocks[7].text` | Resend | Resend |   |
-| `sections[2].blocks[8].text` | Delivers the contact form as an email to my mailbox. Your name, email address, and message pass through it. | Dostarcza wiadomość z formularza kontaktowego na moją skrzynkę. Przechodzą przez niego Twoje imię, adres e-mail i treść wiadomości. |   |
-| `sections[2].blocks[9].text` | Google Analytics 4 | Google Analytics 4 |   |
-| `sections[2].blocks[10].text` | Loaded only if you press “Accept” in the cookie banner. Google (United States) receives your visit data and sets its analytics cookies. | Ładowany tylko wtedy, gdy klikniesz „Akceptuję” w komunikacie o cookies. Google (Stany Zjednoczone) otrzymuje dane o Twojej wizycie i ustawia swoje cookies analityczne. |   |
-| `sections[2].blocks[11].text` | PostHog (EU) | PostHog (UE) |   |
-| `sections[2].blocks[12].text` | If you press “Accept”, PostHog records your visit with its cookies. If you press “Only essential”, it only counts visits in aggregate using a server-side hash, with no cookies or other storage on your device. Until you choose, it does nothing. | Jeśli klikniesz „Akceptuję”, PostHog rejestruje Twoją wizytę z użyciem swoich cookies. Jeśli klikniesz „Tylko niezbędne”, jedynie zlicza wizyty zbiorczo za pomocą skrótu liczonego po stronie serwera, bez cookies i bez zapisu na Twoim urządzeniu. Do czasu dokonania wyboru nic nie robi. |   |
-| `sections[3].heading` | Cookies and local storage | Cookies i pamięć lokalna |   |
-| `sections[3].blocks[0].text` | Only the first three entries are used without your consent. Choose “Only essential” and nothing else is stored. You can change your choice at any time with “Cookie settings” in the footer; withdrawing consent stops Google Analytics, removes its cookies, and switches PostHog to cookieless counting. | Bez Twojej zgody używane są tylko trzy pierwsze wpisy. Jeśli wybierzesz „Tylko niezbędne”, nic więcej nie jest zapisywane. Wybór możesz zmienić w dowolnej chwili przez „Ustawienia cookies” w stopce; wycofanie zgody zatrzymuje Google Analytics, usuwa jego cookies i przełącza PostHog na zliczanie bez cookies. |   |
-| `sections[3].blocks[1].caption` | Cookies and browser storage | Cookies i pamięć przeglądarki |   |
-| `sections[3].blocks[1].head[0]` | Name | Nazwa |   |
-| `sections[3].blocks[1].head[1]` | Purpose | Cel |   |
-| `sections[3].blocks[1].head[2]` | Set when | Kiedy powstaje |   |
-| `sections[3].blocks[1].head[3]` | Lasts | Czas trwania |   |
-| `sections[3].blocks[1].rows[0][0]` | lang (cookie) | lang (cookie) |   |
-| `sections[3].blocks[1].rows[0][1]` | Your explicit language choice | Wybrany przez Ciebie język |   |
-| `sections[3].blocks[1].rows[0][2]` | You use the language switch | Używasz przełącznika języka |   |
-| `sections[3].blocks[1].rows[0][3]` | 1 year | 1 rok |   |
-| `sections[3].blocks[1].rows[1][0]` | jl-cookies (local storage) | jl-cookies (local storage) |   |
-| `sections[3].blocks[1].rows[1][1]` | Your cookie choice | Twój wybór dotyczący cookies |   |
-| `sections[3].blocks[1].rows[1][2]` | You answer the cookie banner | Odpowiadasz na komunikat o cookies |   |
-| `sections[3].blocks[1].rows[1][3]` | Until you change it | Do czasu zmiany wyboru |   |
-| `sections[3].blocks[1].rows[2][0]` | jl-contact-draft (session storage) | jl-contact-draft (pamięć sesji) |   |
-| `sections[3].blocks[1].rows[2][1]` | Your unsent contact-form draft | Twoja niewysłana wersja robocza wiadomości |   |
-| `sections[3].blocks[1].rows[2][2]` | You type in the contact form | Piszesz w formularzu kontaktowym |   |
-| `sections[3].blocks[1].rows[2][3]` | Until you close the tab or send the message | Do zamknięcia karty lub wysłania wiadomości |   |
-| `sections[3].blocks[1].rows[3][0]` | _ga, _ga_* (cookies) | _ga, _ga_* (cookies) |   |
-| `sections[3].blocks[1].rows[3][1]` | Google Analytics | Google Analytics |   |
-| `sections[3].blocks[1].rows[3][2]` | You press “Accept” | Klikasz „Akceptuję” |   |
-| `sections[3].blocks[1].rows[3][3]` | Per GA4 settings | Zgodnie z ustawieniami GA4 |   |
-| `sections[3].blocks[1].rows[4][0]` | PostHog keys (cookies and local storage) | Klucze PostHog (cookies i local storage) |   |
-| `sections[3].blocks[1].rows[4][1]` | PostHog analytics | Analityka PostHog |   |
-| `sections[3].blocks[1].rows[4][2]` | You press “Accept” | Klikasz „Akceptuję” |   |
-| `sections[3].blocks[1].rows[4][3]` | Per PostHog settings | Zgodnie z ustawieniami PostHog |   |
-| `sections[4].heading` | Your rights | Twoje prawa |   |
-| `sections[4].blocks[0].text` | Under the GDPR you may ask me to: | Na podstawie RODO możesz zażądać ode mnie: |   |
-| `sections[4].blocks[1].items[0]` | tell you whether I process your data and give you a copy (access), | informacji, czy przetwarzam Twoje dane, i kopii tych danych (dostęp), |   |
-| `sections[4].blocks[1].items[1]` | correct inaccurate data (rectification), | sprostowania nieprawidłowych danych, |   |
-| `sections[4].blocks[1].items[2]` | delete your data (erasure), for example a guestbook message, | usunięcia danych, na przykład wpisu w księdze gości, |   |
-| `sections[4].blocks[1].items[3]` | limit the processing, or receive your data in a portable form where that applies, | ograniczenia przetwarzania lub przeniesienia danych, gdy ma to zastosowanie, |   |
-| `sections[4].blocks[1].items[4]` | stop processing that is based on legitimate interest (objection). | zaprzestania przetwarzania opartego na prawnie uzasadnionym interesie (sprzeciw). |   |
-| `sections[4].blocks[2].text` | Where processing rests on consent you can withdraw it at any time; this does not affect what happened before. To find a guestbook message, quote its text. | Jeśli przetwarzanie opiera się na zgodzie, możesz ją w każdej chwili wycofać; nie wpływa to na zgodność z prawem wcześniejszego przetwarzania. Aby odnaleźć wpis w księdze gości, podaj jego treść. |   |
-| `sections[4].blocks[3].text` | You may also complain to the supervisory authority: in Poland, the President of the Personal Data Protection Office (UODO, uodo.gov.pl), or the authority in your own EU country. | Możesz też złożyć skargę do organu nadzorczego: w Polsce do Prezesa Urzędu Ochrony Danych Osobowych (UODO, uodo.gov.pl) albo do organu w Twoim kraju UE. |   |
-| `sections[5].heading` | Changes to this policy | Zmiany tej polityki |   |
-| `sections[5].blocks[0].text` | If the site starts processing data differently, this page is updated first and the date above changes. | Jeśli strona zacznie przetwarzać dane inaczej, najpierw zaktualizuję tę stronę, a data powyżej się zmieni. |   |
+| `sections[1].blocks[3].text` | Whether a guestbook message is published is decided automatically by simple text rules and the Google (Gemini API) checks described in the table above. This has no legal effect on you. If you disagree, write to the address above. | O publikacji wpisu w księdze gości decydują automatycznie proste reguły tekstowe oraz kontrole Google (Gemini API) opisane w tabeli powyżej. Nie ma to wobec Ciebie skutków prawnych. Jeśli się z tym nie zgadzasz, napisz na adres podany wyżej. |   |
+| `sections[2].heading` | Cookies and local storage | Cookies i pamięć lokalna |   |
+| `sections[2].blocks[0].text` | The first three entries are strictly necessary and used without your consent; the rest need it. Choose “Only essential” and nothing else is stored. You can change your choice at any time with “Cookie settings” in the footer; withdrawing consent stops Google Analytics, removes its cookies, and switches PostHog to cookieless counting. | Trzy pierwsze wpisy są niezbędne i używane bez Twojej zgody; pozostałe wymagają zgody. Jeśli wybierzesz „Tylko niezbędne”, nic więcej nie jest zapisywane. Wybór możesz zmienić w dowolnej chwili przez „Ustawienia cookies” w stopce; wycofanie zgody zatrzymuje Google Analytics, usuwa jego cookies i przełącza PostHog na zliczanie bez cookies. |   |
+| `sections[2].blocks[1].caption` | Cookies and browser storage | Cookies i pamięć przeglądarki |   |
+| `sections[2].blocks[1].head[0]` | Name | Nazwa |   |
+| `sections[2].blocks[1].head[1]` | Purpose | Cel |   |
+| `sections[2].blocks[1].head[2]` | Set when | Kiedy powstaje |   |
+| `sections[2].blocks[1].head[3]` | Legal basis | Podstawa prawna |   |
+| `sections[2].blocks[1].head[4]` | Lasts | Czas trwania |   |
+| `sections[2].blocks[1].rows[0][0]` | lang (cookie) | lang (cookie) |   |
+| `sections[2].blocks[1].rows[0][1]` | Your explicit language choice | Wybrany przez Ciebie język |   |
+| `sections[2].blocks[1].rows[0][2]` | You use the language switch | Używasz przełącznika języka |   |
+| `sections[2].blocks[1].rows[0][3]` | Strictly necessary (you asked for it) | Niezbędne (o to prosisz) |   |
+| `sections[2].blocks[1].rows[0][4]` | 1 year | 1 rok |   |
+| `sections[2].blocks[1].rows[1][0]` | jl-cookies (local storage) | jl-cookies (local storage) |   |
+| `sections[2].blocks[1].rows[1][1]` | Your cookie choice | Twój wybór dotyczący cookies |   |
+| `sections[2].blocks[1].rows[1][2]` | You answer the cookie banner | Odpowiadasz na komunikat o cookies |   |
+| `sections[2].blocks[1].rows[1][3]` | Strictly necessary | Niezbędne |   |
+| `sections[2].blocks[1].rows[1][4]` | Until you change it | Do czasu zmiany wyboru |   |
+| `sections[2].blocks[1].rows[2][0]` | jl-contact-draft (session storage) | jl-contact-draft (pamięć sesji) |   |
+| `sections[2].blocks[1].rows[2][1]` | Your unsent contact-form draft; never sent | Twoja niewysłana wersja robocza wiadomości; nigdy nie jest wysyłana |   |
+| `sections[2].blocks[1].rows[2][2]` | You type in the contact form | Piszesz w formularzu kontaktowym |   |
+| `sections[2].blocks[1].rows[2][3]` | Strictly necessary (you asked for it) | Niezbędne (o to prosisz) |   |
+| `sections[2].blocks[1].rows[2][4]` | Until you close the tab or send the message | Do zamknięcia karty lub wysłania wiadomości |   |
+| `sections[2].blocks[1].rows[3][0]` | _ga, _ga_* (cookies) | _ga, _ga_* (cookies) |   |
+| `sections[2].blocks[1].rows[3][1]` | Google Analytics | Google Analytics |   |
+| `sections[2].blocks[1].rows[3][2]` | You press “Accept” | Klikasz „Akceptuję” |   |
+| `sections[2].blocks[1].rows[3][3]` | Consent | Zgoda |   |
+| `sections[2].blocks[1].rows[3][4]` | Per GA4 settings | Zgodnie z ustawieniami GA4 |   |
+| `sections[2].blocks[1].rows[4][0]` | PostHog keys (cookies and local storage) | Klucze PostHog (cookies i local storage) |   |
+| `sections[2].blocks[1].rows[4][1]` | PostHog analytics | Analityka PostHog |   |
+| `sections[2].blocks[1].rows[4][2]` | You press “Accept” | Klikasz „Akceptuję” |   |
+| `sections[2].blocks[1].rows[4][3]` | Consent | Zgoda |   |
+| `sections[2].blocks[1].rows[4][4]` | Per PostHog settings | Zgodnie z ustawieniami PostHog |   |
+| `sections[3].heading` | Your rights | Twoje prawa |   |
+| `sections[3].blocks[0].text` | Under the GDPR you may ask me to: | Na podstawie RODO możesz zażądać ode mnie: |   |
+| `sections[3].blocks[1].items[0]` | tell you whether I process your data and give you a copy (access), | informacji, czy przetwarzam Twoje dane, i kopii tych danych (dostęp), |   |
+| `sections[3].blocks[1].items[1]` | correct inaccurate data (rectification), | sprostowania nieprawidłowych danych, |   |
+| `sections[3].blocks[1].items[2]` | delete your data (erasure), for example a guestbook message, | usunięcia danych, na przykład wpisu w księdze gości, |   |
+| `sections[3].blocks[1].items[3]` | limit the processing, or receive your data in a portable form where that applies, | ograniczenia przetwarzania lub przeniesienia danych, gdy ma to zastosowanie, |   |
+| `sections[3].blocks[1].items[4]` | stop processing that is based on legitimate interest (objection). | zaprzestania przetwarzania opartego na prawnie uzasadnionym interesie (sprzeciw). |   |
+| `sections[3].blocks[2].text` | Where processing rests on consent you can withdraw it at any time; this does not affect what happened before. To find a guestbook message, quote its text. | Jeśli przetwarzanie opiera się na zgodzie, możesz ją w każdej chwili wycofać; nie wpływa to na zgodność z prawem wcześniejszego przetwarzania. Aby odnaleźć wpis w księdze gości, podaj jego treść. |   |
+| `sections[3].blocks[3].text` | You may also complain to the supervisory authority: in Poland, the President of the Personal Data Protection Office (UODO, uodo.gov.pl), or the authority in your own EU country. | Możesz też złożyć skargę do organu nadzorczego: w Polsce do Prezesa Urzędu Ochrony Danych Osobowych (UODO, uodo.gov.pl) albo do organu w Twoim kraju UE. |   |
+| `sections[4].heading` | Changes to this policy | Zmiany tej polityki |   |
+| `sections[4].blocks[0].text` | If the site starts processing data differently, this page is updated first and the date above changes. | Jeśli strona zacznie przetwarzać dane inaczej, najpierw zaktualizuję tę stronę, a data powyżej się zmieni. |   |
 
 ## Content: experience
 

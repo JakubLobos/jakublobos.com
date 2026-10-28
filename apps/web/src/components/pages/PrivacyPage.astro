@@ -33,8 +33,6 @@ const updated = new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeZone: '
             switch (block.type) {
               case 'p':
                 return <p>{block.text}</p>;
-              case 'h3':
-                return <h3>{block.text}</h3>;
               case 'ul':
                 return (
                   <ul>
@@ -112,7 +110,7 @@ const updated = new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeZone: '
   }
 
   /* A readable measure for running text; tables use the full container width. */
-  .policy :is(p, ul, dl, h2, h3) {
+  .policy :is(p, ul, dl, h2) {
     max-width: var(--policy-measure);
     margin: 0;
   }
@@ -135,14 +133,6 @@ const updated = new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeZone: '
     font-weight: var(--weight-regular);
     font-size: var(--text-h3);
     line-height: var(--leading-h3);
-    color: var(--color-ink);
-  }
-
-  h3 {
-    margin-top: var(--space-8);
-    font-size: var(--text-title);
-    font-weight: var(--weight-medium);
-    line-height: var(--leading-title);
     color: var(--color-ink);
   }
 
