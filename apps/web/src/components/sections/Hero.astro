@@ -36,7 +36,7 @@ const siteKey = typeof configuredKey === 'string' ? configuredKey : '';
   <div class="actions">
     <Button href="#contact">{t.contact}</Button>
     <resume-download data-locale={locale} data-site-key={siteKey}>
-      <Button variant="secondary" data-resume data-confetti>
+      <Button variant="secondary" data-resume>
         {t.resume}
       </Button>
       <span class="nojs">
@@ -52,13 +52,6 @@ const siteKey = typeof configuredKey === 'string' ? configuredKey : '';
 
 <script>
   import '../../scripts/resume-download.ts';
-  import { burstFrom } from '../../scripts/confetti.ts';
-
-  for (const trigger of document.querySelectorAll<HTMLElement>('#hero [data-confetti]')) {
-    trigger.addEventListener('click', () => {
-      burstFrom(trigger);
-    });
-  }
 </script>
 
 <style>
@@ -121,7 +114,7 @@ const siteKey = typeof configuredKey === 'string' ? configuredKey : '';
     flex-direction: column;
     align-items: center;
     gap: var(--space-8);
-    padding-top: var(--space-8);
+    padding-top: var(--space-16);
   }
 
   .status {

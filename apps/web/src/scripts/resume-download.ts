@@ -1,6 +1,8 @@
 import { DEFAULT_LOCALE, isLocale } from '../i18n/locales.ts';
 import { hero } from '../i18n/messages/hero.ts';
 import { fetchResume } from '../lib/api/resume.ts';
+import { burstFrom } from './confetti.ts';
+import { nudge } from './nudge.ts';
 import { obtainToken } from './turnstile.ts';
 
 const ACTION = 'download-resume';
@@ -8,6 +10,8 @@ const ACTION = 'download-resume';
 const FILE_NAME = 'Jakub_Lobos_CV.pdf';
 /** Long enough for the browser to start the save; the blob is then no longer needed. */
 const REVOKE_DELAY_MS = 1_000;
+/** Long enough to read the outcome; the live region has already announced it. */
+const CLEAR_DELAY_MS = 10_000;
 
 function saveBlob(blob: Blob): void {
   const url = URL.createObjectURL(blob);
@@ -26,6 +30,7 @@ function saveBlob(blob: Blob): void {
  */
 class ResumeDownloadElement extends HTMLElement {
   #abort: AbortController | null = null;
+  #clearTimer: ReturnType<typeof setTimeout> | undefined;
 
   connectedCallback(): void {
     const button = this.querySelector('[data-resume]');
@@ -44,10 +49,26 @@ class ResumeDownloadElement extends HTMLElement {
     const siteKey = this.dataset.siteKey ?? '';
     let busy = false;
 
+    const clearTimer = () => {
+      clearTimeout(this.#clearTimer);
+      this.#clearTimer = undefined;
+    };
+
+    // Every outcome goes through here so a newer message always restarts the countdown.
+    const show = (text: string, failed: boolean) => {
+      clearTimer();
+      status.textContent = text;
+      if (failed) nudge(button);
+      this.#clearTimer = setTimeout(() => {
+        status.textContent = '';
+      }, CLEAR_DELAY_MS);
+    };
+
     const setBusy = (next: boolean) => {
       busy = next;
       // Not natively disabled, so keyboard focus stays on the control.
       if (next) {
+        clearTimer();
         button.setAttribute('aria-busy', 'true');
         button.dataset.busy = '';
         status.textContent = copy.busy;
@@ -66,17 +87,18 @@ class ResumeDownloadElement extends HTMLElement {
         setBusy(false);
         if (response.ok) {
           saveBlob(response.data);
-          status.textContent = copy.done;
+          burstFrom(button);
+          show(copy.done, false);
         } else if (response.kind === 'rate_limited') {
-          status.textContent = copy.rateLimited;
+          show(copy.rateLimited, true);
         } else if (response.kind === 'unavailable') {
-          status.textContent = copy.unavailable;
+          show(copy.unavailable, true);
         } else {
-          status.textContent = copy.failed;
+          show(copy.failed, true);
         }
       } catch {
         setBusy(false);
-        status.textContent = copy.failed;
+        show(copy.failed, true);
       }
     };
 
@@ -93,6 +115,8 @@ class ResumeDownloadElement extends HTMLElement {
   disconnectedCallback(): void {
     this.#abort?.abort();
     this.#abort = null;
+    clearTimeout(this.#clearTimer);
+    this.#clearTimer = undefined;
   }
 }
 
