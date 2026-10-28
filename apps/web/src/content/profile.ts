@@ -6,7 +6,7 @@ export const profile = {
   role: { en: 'Software Engineer', pl: 'Software Engineer' } satisfies Record<Locale, string>,
   email: 'hello@jakublobos.com',
   github: { handle: 'JakubLobos', url: 'https://github.com/JakubLobos' },
-  linkedin: { handle: 'JakubLobos', url: 'https://linkedin.com/in/JakubLobos' },
+  linkedin: { handle: 'jakubłobos', url: 'https://www.linkedin.com/in/jakub%C5%82obos/' },
   /** BCP 47 codes of the languages spoken (structured data). */
   languageCodes: ['pl', 'en'],
   languages: {
