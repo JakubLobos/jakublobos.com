@@ -69,25 +69,52 @@ Work top to bottom; later steps need earlier values. Never paste secrets into ch
 
 Set in the service's **Variables** tab. Names only here; `.env.example` has the formats and defaults. Anything unsafe in production makes the process exit with 1 and log the offending variable **names** (never values).
 
-| Variable                                      | Production value                                                                   |
-| --------------------------------------------- | ---------------------------------------------------------------------------------- |
-| `NODE_ENV`                                    | `production` (the image already sets it)                                           |
-| `CORS_ALLOWED_ORIGINS`                        | `https://jakublobos.com` (every origin must be `https://`)                         |
-| `CLIENT_IP_SOURCE`                            | `x-real-ip`                                                                        |
-| `MODERATION_PROVIDER`, `SUITABILITY_PROVIDER` | `openai` or `gemini` (`fake` is refused)                                           |
-| `OPENAI_API_KEY`                              | secret; only when a provider is `openai`                                           |
-| `GEMINI_API_KEY`                              | secret; only when a provider is `gemini`                                           |
-| `MAILER`                                      | `resend` (`console` is refused)                                                    |
-| `RESEND_API_KEY`                              | secret                                                                             |
-| `MAIL_FROM`, `CONTACT_RECIPIENT_EMAIL`        | address on the verified domain; your mailbox                                       |
-| `HUMAN_VERIFIER`                              | `turnstile` (`fake` is refused)                                                    |
-| `TURNSTILE_SECRET_KEY`                        | secret (the production widget's, not the test key)                                 |
-| `TURNSTILE_ALLOWED_HOSTNAMES`                 | `jakublobos.com` (`localhost` is refused)                                          |
-| `CONTACT_PHONE`                               | the real number, set here and nowhere else                                         |
-| `LOG_LEVEL`                                   | optional, default `info`                                                           |
-| `PORT`, `HOST`, `DATABASE_PATH`               | do not set: Railway injects `PORT`; the image sets `HOST` and `/data/portfolio.db` |
+| Variable                                      | Production value                                                                    |
+| --------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `NODE_ENV`                                    | `production` (the image already sets it)                                            |
+| `CORS_ALLOWED_ORIGINS`                        | `https://jakublobos.com` (every origin must be `https://`)                          |
+| `CLIENT_IP_SOURCE`                            | `x-real-ip`                                                                         |
+| `MODERATION_PROVIDER`, `SUITABILITY_PROVIDER` | `openai` or `gemini` (`fake` is refused)                                            |
+| `OPENAI_API_KEY`                              | secret; only when a provider is `openai`                                            |
+| `GEMINI_API_KEY`                              | secret; only when a provider is `gemini`                                            |
+| `MAILER`                                      | `resend` (`console` is refused)                                                     |
+| `RESEND_API_KEY`                              | secret                                                                              |
+| `MAIL_FROM`, `CONTACT_RECIPIENT_EMAIL`        | address on the verified domain; your mailbox                                        |
+| `HUMAN_VERIFIER`                              | `turnstile` (`fake` is refused)                                                     |
+| `TURNSTILE_SECRET_KEY`                        | secret (the production widget's, not the test key)                                  |
+| `TURNSTILE_ALLOWED_HOSTNAMES`                 | `jakublobos.com` (`localhost` is refused)                                           |
+| `CONTACT_PHONE`                               | the real number, set here and nowhere else                                          |
+| `RESUME_DIR`                                  | do not set: the image sets `/data/resume`; the file is `/data/resume/cv.pdf` (§3.1) |
+| `LOG_LEVEL`                                   | optional, default `info`                                                            |
+| `PORT`, `HOST`, `DATABASE_PATH`               | do not set: Railway injects `PORT`; the image sets `HOST` and `/data/portfolio.db`  |
 
 Optional tuning (`OPENAI_*_MODEL`, `GEMINI_MODEL`, timeouts, `MODERATION_SCORE_THRESHOLD`) keeps its default unless needed.
+
+### 3.1 Uploading or replacing the resume
+
+The resume PDF contains the owner's phone number, so it is never in git, the site build or the image (ADR-0018). The API serves `/data/resume/cv.pdf` (one English CV for both languages) after a Turnstile check. Until the file exists, the hero button answers "unavailable" and the API logs `resume file is not configured`.
+
+Prerequisites: the Railway CLI (`railway update` to get a current version, `railway login`, `railway link` in a checkout, pick the production environment and the API service).
+
+**Procedure (Railway CLI, volume files over SFTP; Railway changelog 2026-05-29):**
+
+```
+railway volume files --help          # confirm the exact upload syntax of your CLI version
+railway volume files upload ./Jakub_Lobos_CV.pdf /resume/cv.pdf
+railway volume files list /resume
+```
+
+The volume is mounted at `/data`, so the path inside the volume is `/resume/cv.pdf` (= `/data/resume/cv.pdf`). Run it from outside the repository (the PDF must never be copied into the checkout). To replace the resume, upload the new file to the same path; no redeploy is needed, because the API reads the file on every request.
+
+Check: after the upload, press "Get my resume" on the live site. A PDF named `Jakub_Lobos_CV.pdf` downloads. If it answers "unavailable", look in the Railway logs for `resume file is not configured` (missing) or `not an acceptable PDF` (not a PDF, or over 5 MB).
+
+**What was not verified (no Railway account or CLI was available when this was written):**
+
+- The exact `railway volume files upload` argument order, whether the source and destination are positional, and whether `/resume/` has to exist first. `--help` is the source of truth; if the destination directory is missing, create it with whatever the same command group offers (or upload to `/cv.pdf` and move it from `railway ssh`: `mkdir -p /data/resume && mv /data/cv.pdf /data/resume/cv.pdf`).
+- That the CLI needs a linked service or volume selection flag in a multi-volume project.
+- Railway's docs describe `railway ssh` only as an interactive shell; nothing documents running a command with piped stdin, so `cat cv.pdf | railway ssh "cat > …"` is **untested** and not part of the procedure.
+
+**Fallback if the CLI command is unavailable:** host the PDF on a private, expiring link (for example a time-limited signed URL from storage you control), run `railway ssh`, then `mkdir -p /data/resume && curl -fL -o /data/resume/cv.pdf '<url>'`, and delete the link afterwards.
 
 ## 4. Verifying the client IP (`X-Real-IP`)
 

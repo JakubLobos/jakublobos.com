@@ -18,6 +18,7 @@ import type {
   GuestbookSubmitResponseSchema,
   PhoneRevealRequestSchema,
   PhoneRevealResponseSchema,
+  ResumeRequestSchema,
 } from './schemas.ts';
 
 export type Locale = (typeof LOCALES)[number];
@@ -38,6 +39,7 @@ export type ContactRequest = z.infer<typeof ContactRequestSchema>;
 export type ContactResponse = z.infer<typeof ContactResponseSchema>;
 export type PhoneRevealRequest = z.infer<typeof PhoneRevealRequestSchema>;
 export type PhoneRevealResponse = z.infer<typeof PhoneRevealResponseSchema>;
+export type ResumeRequest = z.infer<typeof ResumeRequestSchema>;
 export type ApiErrorBody = z.infer<typeof ApiErrorBodySchema>;
 export interface ApiSuccess<T> {
   data: T;

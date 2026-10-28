@@ -73,6 +73,10 @@ export const PhoneRevealResponseSchema = z.object({
   data: z.object({ display: z.string(), tel: z.string() }),
 });
 
+export const ResumeRequestSchema = z.object({
+  turnstileToken: z.string().min(1).max(4096),
+});
+
 export const ApiErrorBodySchema = z.object({
   error: z.object({
     code: ErrorCodeSchema,

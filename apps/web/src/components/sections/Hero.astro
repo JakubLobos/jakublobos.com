@@ -13,6 +13,10 @@ interface Props {
 
 const { locale } = Astro.props;
 const t = hero(locale);
+
+// Empty (e.g. local development) switches the download to its fake flow.
+const configuredKey: unknown = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+const siteKey = typeof configuredKey === 'string' ? configuredKey : '';
 ---
 
 <section id="hero" class="hero" aria-labelledby="hero-heading">
@@ -31,19 +35,23 @@ const t = hero(locale);
   <div class="divider" aria-hidden="true"></div>
   <div class="actions">
     <Button href="#contact">{t.contact}</Button>
-    <Button
-      variant="secondary"
-      href={profile.resume[locale]}
-      download
-      mimeType="application/pdf"
-      data-confetti
-    >
-      {t.resume}
-    </Button>
+    <resume-download data-locale={locale} data-site-key={siteKey}>
+      <Button variant="secondary" data-resume data-confetti>
+        {t.resume}
+      </Button>
+      <span class="nojs">
+        {t.resumeNoScript} <a href={`mailto:${profile.email}`}>{profile.email}</a>
+      </span>
+      <div class="feedback">
+        <p class="status" data-status aria-live="polite"></p>
+        <div class="widget" data-widget></div>
+      </div>
+    </resume-download>
   </div>
 </section>
 
 <script>
+  import '../../scripts/resume-download.ts';
   import { burstFrom } from '../../scripts/confetti.ts';
 
   for (const trigger of document.querySelectorAll<HTMLElement>('#hero [data-confetti]')) {
@@ -98,6 +106,53 @@ const t = hero(locale);
     justify-content: center;
     gap: var(--space-16);
     padding-top: var(--space-8);
+  }
+
+  .actions {
+    position: relative;
+  }
+
+  /* Out of flow, so a status line or an interactive challenge never moves the hero. */
+  .feedback {
+    position: absolute;
+    inset: 100% 0 auto;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-8);
+    padding-top: var(--space-8);
+  }
+
+  .status {
+    margin: 0;
+    font-size: var(--text-caption);
+    line-height: var(--leading-caption);
+    color: var(--color-text-muted);
+  }
+
+  .status:empty,
+  .widget:empty {
+    display: none;
+  }
+
+  .nojs {
+    display: none;
+    max-width: var(--intro-max);
+    font-size: var(--text-caption);
+    line-height: var(--leading-caption);
+    color: var(--color-text-muted);
+  }
+
+  /* Without scripting the download can't work, so say where to go instead of a dead button. */
+  @media (scripting: none) {
+    resume-download :global([data-resume]) {
+      display: none;
+    }
+
+    .nojs {
+      display: block;
+    }
   }
 
   /* Entrance: the hero is stuck, inked and drawn onto the page like a sheet of paper. Backwards

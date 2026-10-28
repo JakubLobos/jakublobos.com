@@ -10,6 +10,7 @@ import {
   GuestbookSubmitResponseSchema,
   PhoneRevealRequestSchema,
   PhoneRevealResponseSchema,
+  ResumeRequestSchema,
 } from './schemas.ts';
 
 const uuid = 'd1b7c0b4-3f1e-4d6c-9a52-2b9f0b8f61a1';
@@ -100,6 +101,13 @@ describe('contact schemas', () => {
     ['non-uuid id', { ...valid, clientRequestId: 'nope' }],
   ])('rejects %s', (_label, input) => {
     expect(ContactRequestSchema.safeParse(input).success).toBe(false);
+  });
+});
+
+describe('resume request schema', () => {
+  it('needs a non-empty token and nothing else', () => {
+    expect(ResumeRequestSchema.safeParse({ turnstileToken: 'tok' }).success).toBe(true);
+    expect(ResumeRequestSchema.safeParse({ turnstileToken: '' }).success).toBe(false);
   });
 });
 

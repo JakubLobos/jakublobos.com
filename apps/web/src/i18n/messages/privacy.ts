@@ -17,7 +17,7 @@ import { profile } from '../../content/profile.ts';
  */
 
 /** ISO date of the last substantive change; shown as "last updated". */
-export const PRIVACY_LAST_UPDATED = '2026-10-26';
+export const PRIVACY_LAST_UPDATED = '2026-10-28';
 
 export type PolicyBlock =
   | { readonly type: 'p'; readonly text: string }
@@ -121,9 +121,9 @@ const en: PrivacyCopy = {
             ],
             [
               'Browser signals and your IP address for the Cloudflare Turnstile check',
-              'Bot check before the phone number is shown',
+              'Bot check before the phone number is shown or the resume is downloaded',
               'Legitimate interest (securing a function you asked for)',
-              'Cloudflare. Loaded only after you click “Show number”; the API then sends your IP address to Cloudflare to verify the check.',
+              'Cloudflare. Loaded only after you click “Show number” or “Get my resume”; the API then sends your IP address to Cloudflare to verify the check.',
               'Per Cloudflare',
             ],
             [
@@ -322,9 +322,9 @@ const pl: PrivacyCopy = {
             ],
             [
               'Sygnały przeglądarki i Twój adres IP dla kontroli Cloudflare Turnstile',
-              'Sprawdzenie, czy nie jesteś botem, przed pokazaniem numeru telefonu',
+              'Sprawdzenie, czy nie jesteś botem, przed pokazaniem numeru telefonu lub pobraniem CV',
               'Prawnie uzasadniony interes (zabezpieczenie funkcji, o którą prosisz)',
-              'Cloudflare. Ładowane dopiero po kliknięciu „Pokaż numer”; API wysyła wtedy Twój adres IP do Cloudflare w celu weryfikacji.',
+              'Cloudflare. Ładowane dopiero po kliknięciu „Pokaż numer” lub „Pobierz moje CV”; API wysyła wtedy Twój adres IP do Cloudflare w celu weryfikacji.',
               'Zgodnie z zasadami Cloudflare',
             ],
             [
