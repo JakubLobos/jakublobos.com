@@ -12,7 +12,7 @@ export interface TagPlacement {
   left: number;
   top: number;
   /** Which side of the anchor the tag landed on. */
-  side: 'above' | 'below';
+  side: 'above' | 'below' | 'left';
 }
 
 const GAP = 10;
@@ -30,13 +30,23 @@ export function placeCopyTag(
   tag: Pick<Box, 'width' | 'height'>,
   viewport: Pick<Box, 'width' | 'height'>,
 ): TagPlacement {
+  const maxLeft = Math.max(EDGE, viewport.width - tag.width - EDGE);
+  const maxTop = Math.max(EDGE, viewport.height - tag.height - EDGE);
+  // A vertical link (the social aside) would be covered by a tag centred above it.
+  if (anchor.height > anchor.width) {
+    return {
+      left: clamp(anchor.left - GAP - tag.width, EDGE, maxLeft),
+      top: clamp(anchor.top + anchor.height / 2 - tag.height / 2, EDGE, maxTop),
+      side: 'left',
+    };
+  }
   const above = anchor.top - GAP - tag.height;
   const side = above >= EDGE ? 'above' : 'below';
   const top = side === 'above' ? above : anchor.top + anchor.height + GAP;
   const centred = anchor.left + anchor.width / 2 - tag.width / 2;
   return {
-    left: clamp(centred, EDGE, Math.max(EDGE, viewport.width - tag.width - EDGE)),
-    top: clamp(top, EDGE, Math.max(EDGE, viewport.height - tag.height - EDGE)),
+    left: clamp(centred, EDGE, maxLeft),
+    top: clamp(top, EDGE, maxTop),
     side,
   };
 }

@@ -15,9 +15,14 @@ describe('placeCopyTag', () => {
     expect(placeCopyTag(anchor, tag, viewport)).toEqual({ left: 350, top: 50, side: 'below' });
   });
 
-  it('keeps the tag inside the viewport at the right edge', () => {
-    const anchor = { left: 790, top: 300, width: 10, height: 100 };
-    expect(placeCopyTag(anchor, tag, viewport).left).toBe(692);
+  it('places the tag left of a vertical link, centred on it', () => {
+    const anchor = { left: 760, top: 300, width: 20, height: 100 };
+    expect(placeCopyTag(anchor, tag, viewport)).toEqual({ left: 650, top: 335, side: 'left' });
+  });
+
+  it('keeps a left-placed tag inside the viewport', () => {
+    const anchor = { left: 50, top: 300, width: 20, height: 100 };
+    expect(placeCopyTag(anchor, tag, viewport).left).toBe(8);
   });
 
   it('keeps the tag inside the viewport at the left edge', () => {
