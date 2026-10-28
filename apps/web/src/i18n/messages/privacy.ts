@@ -8,16 +8,15 @@ import { profile } from '../../content/profile.ts';
  * the cookies table); keep the facts in sync. The Polish text is a draft for the
  * owner's language review (D-02).
  *
- * OWNER-PLACEHOLDER: every value written as "[OWNER: …]" (EN) or "[WŁAŚCICIEL: …]" (PL) is a
- * fact only the owner can supply. They are rendered visibly on the page and listed in
- * tasks/reports/T-033/. Search for "OWNER" / "WŁAŚCICIEL" before launch.
+ * The Railway region was set before the service existed (2026-10-28); confirm it matches the
+ * region chosen in Railway.
  *
  * LEGAL-REVIEW: PostHog cookieless counting for visitors who choose "Only essential" is a
  * legitimate-interest claim (ADR-0011); whether ePrivacy requires consent for it is a legal call.
  */
 
 /** ISO date of the last substantive change; shown as "last updated". */
-export const PRIVACY_LAST_UPDATED = '2026-10-26';
+export const PRIVACY_LAST_UPDATED = '2026-10-28';
 
 export type PolicyBlock =
   | { readonly type: 'p'; readonly text: string }
@@ -69,8 +68,7 @@ const en: PrivacyCopy = {
             { term: 'Controller', value: profile.name },
             {
               term: 'Address',
-              // OWNER-PLACEHOLDER
-              value: '[OWNER: postal address, or business registration if you act as a business]',
+              value: 'PO Box 10, ul. Wielicka 42C, 30-552 Kraków, Poland',
             },
             { term: 'Email', value: profile.email, href: email },
           ],
@@ -98,26 +96,22 @@ const en: PrivacyCopy = {
               'Guestbook text, paint colour, page language',
               'Show the newest approved message publicly and keep a private archive',
               'Consent (you submit it voluntarily; a notice sits under the form)',
-              // OWNER-PLACEHOLDER (region)
-              'Database on Railway, region [OWNER: Railway region]',
-              // OWNER-PLACEHOLDER (backup retention)
-              'Shown publicly until a newer message replaces it, then kept in a private archive of at most 100 messages until newer ones push it out. A message not yet reviewed is deleted after 24 hours at most. Deleted on request. Copies stay in backups until they rotate out [OWNER: confirm backup retention].',
+              'Database on Railway, region EU West (Amsterdam)',
+              'Shown publicly until a newer message replaces it, then kept in a private archive of at most 100 messages until newer ones push it out. A message not yet reviewed is deleted after 24 hours at most. Deleted on request. Copies stay in the daily backups for up to 6 days.',
             ],
             [
               'Guestbook text sent to Google (Gemini API) for automated moderation',
               'Safety check and suitability review',
               'Legitimate interest',
               'Google (Gemini API). Operated from the EEA, so the paid-service data terms apply; not used to improve Google products. Your IP address is not sent.',
-              // OWNER-PLACEHOLDER (Gemini log period)
-              'Logged by Google for a limited period for abuse monitoring [OWNER: confirm period]',
+              'Logged by Google for 55 days for abuse monitoring',
             ],
             [
               'Contact form: name, email, message',
               'Reply to your enquiry',
               'Steps before a contract / legitimate interest',
               'Resend (email delivery, in transit) passes name, email and message to the owner’s mailbox',
-              // OWNER-PLACEHOLDER (mailbox period)
-              'Not stored by the site’s server. Resend keeps delivery logs per its own settings. The mailbox keeps the message as long as needed to handle the enquiry [OWNER: confirm period].',
+              'Not stored by the site’s server. Resend keeps delivery logs per its own settings. The mailbox keeps the conversation for up to 12 months after the last message, or longer if it leads to a collaboration.',
             ],
             [
               'Browser signals and your IP address for the Cloudflare Turnstile check',
@@ -138,8 +132,7 @@ const en: PrivacyCopy = {
               'Visit statistics',
               'Consent (“Accept”)',
               'Google (US). Loaded only if you press “Accept” in the cookie banner.',
-              // OWNER-PLACEHOLDER (GA4 retention)
-              'Per the GA4 property settings, set to the shortest period available [OWNER: confirm]',
+              '2 months, the shortest period GA4 offers',
             ],
             [
               'PostHog product analytics',
@@ -269,9 +262,7 @@ const pl: PrivacyCopy = {
             { term: 'Administrator', value: profile.name },
             {
               term: 'Adres',
-              // OWNER-PLACEHOLDER
-              value:
-                '[WŁAŚCICIEL: adres korespondencyjny lub dane rejestrowe działalności, jeśli działasz jako firma]',
+              value: 'Skrytka pocztowa nr 10, ul. Wielicka 42C, 30-552 Kraków',
             },
             { term: 'E-mail', value: profile.email, href: email },
           ],
@@ -299,26 +290,22 @@ const pl: PrivacyCopy = {
               'Treść wpisu w księdze gości, kolor farby, język strony',
               'Publiczne wyświetlanie najnowszego zatwierdzonego wpisu i prywatne archiwum',
               'Zgoda (wpis wysyłasz dobrowolnie; informacja znajduje się pod formularzem)',
-              // OWNER-PLACEHOLDER (region)
-              'Baza danych w Railway, region [WŁAŚCICIEL: region Railway]',
-              // OWNER-PLACEHOLDER (backup retention)
-              'Widoczny publicznie, dopóki nie zastąpi go nowszy wpis, następnie przechowywany w prywatnym archiwum liczącym najwyżej 100 wpisów, dopóki nie wypchną go nowsze. Wpis, który nie został jeszcze sprawdzony, jest usuwany najpóźniej po 24 godzinach. Usuwany na żądanie. Wpis pozostaje w kopiach zapasowych do czasu ich rotacji [WŁAŚCICIEL: potwierdź okres przechowywania kopii].',
+              'Baza danych w Railway, region EU West (Amsterdam)',
+              'Widoczny publicznie, dopóki nie zastąpi go nowszy wpis, następnie przechowywany w prywatnym archiwum liczącym najwyżej 100 wpisów, dopóki nie wypchną go nowsze. Wpis, który nie został jeszcze sprawdzony, jest usuwany najpóźniej po 24 godzinach. Usuwany na żądanie. Wpis pozostaje w codziennych kopiach zapasowych najwyżej 6 dni.',
             ],
             [
               'Treść wpisu wysyłana do Google (Gemini API) w celu automatycznej moderacji',
               'Kontrola bezpieczeństwa i ocena przydatności',
               'Prawnie uzasadniony interes',
               'Google (Gemini API). Przetwarzane na warunkach danych Google dla usługi płatnej, ponieważ strona jest prowadzona z EOG; nie służy do ulepszania produktów Google. Twój adres IP nie jest wysyłany.',
-              // OWNER-PLACEHOLDER (Gemini log period)
-              'Logowane przez Google przez ograniczony czas w celu wykrywania nadużyć [WŁAŚCICIEL: potwierdź okres]',
+              'Logowane przez Google przez 55 dni w celu wykrywania nadużyć',
             ],
             [
               'Formularz kontaktowy: imię, e-mail, wiadomość',
               'Odpowiedź na Twoje zapytanie',
               'Działania przed zawarciem umowy / prawnie uzasadniony interes',
               'Resend (dostarczanie poczty, w trakcie przesyłania) przekazuje imię, e-mail i wiadomość do skrzynki właściciela',
-              // OWNER-PLACEHOLDER (mailbox period)
-              'Serwer strony niczego nie zapisuje. Resend przechowuje logi dostarczenia zgodnie z własnymi ustawieniami. Skrzynka przechowuje wiadomość tak długo, jak trzeba, by obsłużyć zapytanie [WŁAŚCICIEL: potwierdź okres].',
+              'Serwer strony niczego nie zapisuje. Resend przechowuje logi dostarczenia zgodnie z własnymi ustawieniami. Skrzynka przechowuje korespondencję do 12 miesięcy od ostatniej wiadomości, a dłużej, jeśli rozmowa przerodzi się we współpracę.',
             ],
             [
               'Sygnały przeglądarki i Twój adres IP dla kontroli Cloudflare Turnstile',
@@ -339,8 +326,7 @@ const pl: PrivacyCopy = {
               'Statystyki odwiedzin',
               'Zgoda („Akceptuję”)',
               'Google (USA). Ładowany tylko po kliknięciu „Akceptuję” w komunikacie o cookies.',
-              // OWNER-PLACEHOLDER (GA4 retention)
-              'Zgodnie z ustawieniami usługi GA4, ustawionymi na najkrótszy dostępny okres [WŁAŚCICIEL: potwierdź]',
+              '2 miesiące, najkrótszy okres dostępny w GA4',
             ],
             [
               'Analityka produktowa PostHog',
