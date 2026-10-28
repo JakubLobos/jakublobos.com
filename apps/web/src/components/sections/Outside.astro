@@ -28,17 +28,13 @@ const messages = outsideMessages(locale);
     {outsidePhotos.map((photo) => (
       <li class="photo">
         <figure class="frame">
-          {/*
-            Widest photo (62% slot) renders 225px from 760px up, and about 51vw (max 425px) below it;
-            the srcset covers 2x of both.
-          */}
           <Picture
             src={photo.src}
             alt={photo.alt[locale]}
             formats={['avif', 'webp']}
             fallbackFormat="jpg"
-            widths={[240, 360, 480, 640, 840]}
-            sizes="(min-width: 760px) 230px, 55vw"
+            widths={[240, 320, 480, 640, 800, 960]}
+            sizes={photo.sizes}
             loading="lazy"
             decoding="async"
           />
@@ -53,6 +49,8 @@ const messages = outsideMessages(locale);
     --photo-pad: var(--space-8);
     --tape-w: calc(var(--space-64) + var(--space-8));
     --tape-h: var(--space-20);
+    /* Keeps the rotated corners of the outermost photos inside the section's box. */
+    --tilt-inset: var(--space-8);
     --tape-paint: var(--paint-yellow-tint);
     display: grid;
     gap: var(--space-section-gap);
@@ -67,7 +65,7 @@ const messages = outsideMessages(locale);
   .copy {
     display: flex;
     flex-direction: column;
-    gap: var(--space-section-gap);
+    gap: var(--space-20);
     align-self: start;
   }
 
@@ -84,7 +82,7 @@ const messages = outsideMessages(locale);
      space up front and nothing shifts while the images load. */
   .photos {
     position: relative;
-    aspect-ratio: 1 / 1.2;
+    aspect-ratio: 1 / 1.3;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -154,11 +152,11 @@ const messages = outsideMessages(locale);
 
   /* Photo 1 (landscape): one strip across the top edge. */
   .photo:nth-child(1) {
-    --photo-w: 62%;
+    --photo-w: 66%;
     --photo-ratio: 4 / 3;
     --tilt: -3deg;
     top: 0;
-    left: 0;
+    left: var(--tilt-inset);
     z-index: 1;
   }
 
@@ -171,12 +169,12 @@ const messages = outsideMessages(locale);
 
   /* Photo 2 (portrait): a strip on each top corner, tilted the other way. */
   .photo:nth-child(2) {
-    --photo-w: 44%;
+    --photo-w: 40%;
     --photo-ratio: 3 / 4;
     --tilt: 2.5deg;
     --tape-paint: var(--paint-blue-tint);
-    top: 12%;
-    right: 0;
+    top: 14%;
+    right: var(--space-20);
     z-index: 2;
   }
 
@@ -199,15 +197,20 @@ const messages = outsideMessages(locale);
     rotate: 38deg;
   }
 
-  /* Photo 3 (landscape): a single strip folded over the top-right corner. */
+  /* Photo 3 (portrait, the owner): a single strip folded over the top-right corner. The crop is
+     a no-op at the file's own ratio; the focal point only matters if the slot ratio is changed. */
   .photo:nth-child(3) {
-    --photo-w: 58%;
-    --photo-ratio: 4 / 3;
+    --photo-w: 46%;
+    --photo-ratio: 3 / 4;
     --tilt: -1.5deg;
     --tape-paint: var(--paint-coral-tint);
     bottom: 0;
-    left: 10%;
+    left: 8%;
     z-index: 3;
+  }
+
+  .photo:nth-child(3) .frame :global(img) {
+    object-position: 50% 30%;
   }
 
   .photo:nth-child(3) .frame::before {

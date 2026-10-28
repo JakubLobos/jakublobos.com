@@ -5,13 +5,13 @@ import { defineMessages } from '../t.ts';
 export const outsideMessages = defineMessages({
   en: {
     eyebrow: 'OUTSIDE OF WORK',
-    title: 'Exploring the world',
+    title: 'I like to travel',
     body: 'Outside of work, I love exploring new places, meeting people, and discovering different cultures. From the landscapes of Iceland to the streets of Japan, and the sunny shores of Madeira, Cyprus, and Tenerife, every destination has something unique to offer.',
     photosLabel: 'Travel photos',
   },
   pl: {
     eyebrow: 'POZA PRACĄ',
-    title: 'Odkrywam świat',
+    title: 'Lubię podróżować',
     body: 'Poza pracą uwielbiam odkrywać nowe miejsca, poznawać ludzi i różne kultury. Od krajobrazów Islandii, przez ulice Japonii, po słoneczne wybrzeża Madery, Cypru i Teneryfy – każde miejsce ma w sobie coś wyjątkowego.',
     photosLabel: 'Zdjęcia z podróży',
   },

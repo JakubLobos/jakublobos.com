@@ -111,7 +111,7 @@ Source: `apps/web/src/i18n/messages/outside.ts`
 | Key | EN | PL | Owner correction |
 | --- | -- | -- | ---------------- |
 | `eyebrow` | OUTSIDE OF WORK | POZA PRACĄ |   |
-| `title` | Exploring the world | Odkrywam świat |   |
+| `title` | I like to travel | Lubię podróżować |   |
 | `body` | Outside of work, I love exploring new places, meeting people, and discovering different cultures. From the landscapes of Iceland to the streets of Japan, and the sunny shores of Madeira, Cyprus, and Tenerife, every destination has something unique to offer. | Poza pracą uwielbiam odkrywać nowe miejsca, poznawać ludzi i różne kultury. Od krajobrazów Islandii, przez ulice Japonii, po słoneczne wybrzeża Madery, Cypru i Teneryfy – każde miejsce ma w sobie coś wyjątkowego. |   |
 | `photosLabel` | Travel photos | Zdjęcia z podróży |   |
 
@@ -502,9 +502,9 @@ Source: `apps/web/src/content/outside.ts`
 
 | Key | EN | PL | Owner correction |
 | --- | -- | -- | ---------------- |
-| `photo-1.alt` | Travel photo (placeholder) | Zdjęcie z podróży (zastępcze) |   |
-| `photo-2.alt` | Travel photo (placeholder) | Zdjęcie z podróży (zastępcze) |   |
-| `photo-3.alt` | Travel photo (placeholder) | Zdjęcie z podróży (zastępcze) |   |
+| `madeira.alt` | Green mountain ridges above the ocean on Madeira | Zielone górskie grzbiety nad oceanem na Maderze |   |
+| `iceland.alt` | A car with a rooftop tent by a lake under a grey Icelandic sky | Samochód z namiotem dachowym nad jeziorem pod szarym islandzkim niebem |   |
+| `japan.alt` | Jakub holding a tray of street food on a busy, neon-lit street in Japan | Jakub z tacką ulicznego jedzenia na zatłoczonej, pełnej neonów ulicy w Japonii |   |
 
 ## Content: skill groups
 
