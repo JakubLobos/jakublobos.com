@@ -1,17 +1,19 @@
 import { defineMessages } from '../t.ts';
 
-// The intro is two lines assembled around the tech words, which are inflected per language
-// (Polish "w figmie").
+// The intro is one sentence assembled around its two emphasised phrases (inflected per language).
+// The pieces carry their own spaces: a single-letter word that ends a piece ("w", "i") is
+// followed by an explicit no-break space, because the Polish typography pass only binds words
+// inside one string.
 export const hero = defineMessages({
   en: {
     title: 'Engineering centered around the user',
-    build: {
-      before: 'I’m making web-apps mostly in',
-      first: 'react',
-      join: '&',
-      second: 'typescript',
+    intro: {
+      before: 'Specializing in ',
+      build: 'web application development',
+      join: ' and ',
+      design: 'interface design',
+      after: ' using modern web technologies.',
     },
-    design: { before: 'Designing web-apps in', tool: 'figma' },
     contact: 'Reach me out',
     resume: 'Get my resume',
     resumeStatus: {
@@ -25,13 +27,13 @@ export const hero = defineMessages({
   },
   pl: {
     title: 'Inżynieria z myślą o relacji z użytkownikiem',
-    build: {
-      before: 'Tworzę aplikacje webowe głównie w',
-      first: 'react',
-      join: 'i',
-      second: 'typescript',
+    intro: {
+      before: 'Specjalizuję się w ',
+      build: 'tworzeniu aplikacji webowych',
+      join: ' i ',
+      design: 'projektowaniu interfejsów',
+      after: ' z użyciem nowoczesnych technologii webowych.',
     },
-    design: { before: 'Projektuję aplikacje webowe w', tool: 'figmie' },
     contact: 'Napisz do mnie',
     resume: 'Pobierz moje CV',
     resumeStatus: {

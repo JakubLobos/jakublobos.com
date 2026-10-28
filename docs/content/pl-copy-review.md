@@ -10,7 +10,7 @@ date and the word "approved" once the owner has gone through every row (T-034, A
 > `{name}` marks a value filled in at runtime. Address form is informal "Ty"; quotes are „…”;
 > a guestbook entry is a "wpis".
 
-Strings: 347 across 22 areas.
+Strings: 346 across 22 areas.
 
 ## Owner sign-off
 
@@ -20,7 +20,7 @@ Strings: 347 across 22 areas.
 
 ## PL equal to EN
 
-36 whitelisted (proper nouns, technology names), 0 to check.
+34 whitelisted (proper nouns, technology names), 0 to check.
 
 ## Common
 
@@ -69,12 +69,11 @@ Source: `apps/web/src/i18n/messages/hero.ts`
 | Key | EN | PL | Owner correction |
 | --- | -- | -- | ---------------- |
 | `title` | Engineering centered around the user | Inżynieria z myślą o relacji z użytkownikiem |   |
-| `build.before` | I’m making web-apps mostly in | Tworzę aplikacje webowe głównie w |   |
-| `build.first` | react | react |   |
-| `build.join` | & | i |   |
-| `build.second` | typescript | typescript |   |
-| `design.before` | Designing web-apps in | Projektuję aplikacje webowe w |   |
-| `design.tool` | figma | figmie |   |
+| `intro.before` | Specializing in  | Specjalizuję się w  |   |
+| `intro.build` | web application development | tworzeniu aplikacji webowych |   |
+| `intro.join` |  and  |  i  |   |
+| `intro.design` | interface design | projektowaniu interfejsów |   |
+| `intro.after` |  using modern web technologies. |  z użyciem nowoczesnych technologii webowych. |   |
 | `contact` | Reach me out | Napisz do mnie |   |
 | `resume` | Get my resume | Pobierz moje CV |   |
 | `resumeStatus.busy` | Checking that you are human… | Sprawdzam, czy jesteś człowiekiem… |   |
