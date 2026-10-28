@@ -120,20 +120,23 @@ const data = { 'data-variant': variant, 'data-size': size, 'data-min-width': min
     width: 100%;
   }
 
-  .btn:hover {
+  /* Busy shares the hover colours (one selector list, so they cannot drift): a pointer that has
+     moved off a busy button must not leave the label unreadable. */
+  .btn:hover,
+  .btn[data-busy] {
     color: var(--color-on-primary);
     background: var(--color-primary-hover);
   }
 
-  .btn[data-variant='secondary']:hover {
+  .btn[data-variant='secondary']:hover,
+  .btn[data-variant='secondary'][data-busy] {
     color: var(--color-on-highlight);
     background: var(--color-highlight);
   }
 
-  /* Sending: pressed in, lighter blue, no hover or press response. */
+  /* Sending: pressed in, hover colours (above), no hover or press response. */
   .btn[data-busy] {
     --btn-rest: var(--press-busy);
-    background: var(--color-primary-hover);
     transform: translateY(var(--sink-busy));
     cursor: progress;
   }
