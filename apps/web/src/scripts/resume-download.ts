@@ -1,6 +1,7 @@
 import { DEFAULT_LOCALE, isLocale } from '../i18n/locales.ts';
 import { hero } from '../i18n/messages/hero.ts';
 import { fetchResume } from '../lib/api/resume.ts';
+import { burstFrom } from './confetti.ts';
 import { nudge } from './nudge.ts';
 import { obtainToken } from './turnstile.ts';
 
@@ -86,6 +87,7 @@ class ResumeDownloadElement extends HTMLElement {
         setBusy(false);
         if (response.ok) {
           saveBlob(response.data);
+          burstFrom(button);
           show(copy.done, false);
         } else if (response.kind === 'rate_limited') {
           show(copy.rateLimited, true);
