@@ -44,6 +44,7 @@
 | `MAIL_UNAVAILABLE`         | 503  | Mail delivery failed or global contact cap reached                         |
 | `VERIFICATION_FAILED`      | 403  | Turnstile token invalid, expired, reused, or for the wrong hostname/action |
 | `VERIFICATION_UNAVAILABLE` | 503  | Turnstile verification unreachable, or the global reveal cap was reached   |
+| `RESUME_UNAVAILABLE`       | 503  | The resume file is missing or not an acceptable PDF (ADR-0018)             |
 | `INTERNAL`                 | 500  | Unexpected error (details only in server logs, by `requestId`)             |
 
 ### 1.2 Field error codes (`FieldErrorCode`)
@@ -187,6 +188,19 @@ Reveal the owner's phone number after a Cloudflare Turnstile check ([ADR-0015](d
 
 The server verifies via `siteverify` (`remoteip`, `idempotency_key`) and requires `success`, `hostname ∈ TURNSTILE_ALLOWED_HOSTNAMES`, and `action === "reveal-phone"`. Failure → `403 VERIFICATION_FAILED`; provider error or timeout → `503 VERIFICATION_UNAVAILABLE`. The number is never part of an error response.
 
+### `POST /api/resume`
+
+Download the owner's resume after a Cloudflare Turnstile check ([ADR-0018](decisions/0018-resume-behind-human-verification.md)). One English CV serves both site locales.
+
+```jsonc
+// request
+{ "turnstileToken": "0.AbC…" } // single-use; the widget action is "download-resume"
+```
+
+- `200`: the raw PDF. `Content-Type: application/pdf`, `Content-Disposition: attachment; filename="Jakub_Lobos_CV.pdf"`, `Cache-Control: no-store`, `X-Content-Type-Options: nosniff`.
+- `422 VALIDATION_FAILED` (`fields.turnstileToken`), `403 VERIFICATION_FAILED`, `503 VERIFICATION_UNAVAILABLE`: as for the phone reveal.
+- `503 RESUME_UNAVAILABLE` + `Retry-After`: `<RESUME_DIR>/cv.pdf` is missing, does not start with `%PDF-`, or is over 5 MB. Errors keep the JSON envelope.
+
 ## 4. Rate limits and caps (server constants)
 
 | Route                                | Per client (`X-Real-IP` on Railway; IPv6 /56) | Global (accepted requests only)                                            |
@@ -196,6 +210,7 @@ The server verifies via `siteverify` (`remoteip`, `idempotency_key`) and require
 | `POST /api/guestbook`                | 3 / 10 min **and** 10 / 24 h                  | **20 / h and 50 / 24 h** → `503 GUESTBOOK_BUSY`                            |
 | `POST /api/contact`                  | 3 / 10 min **and** 10 / 24 h                  | **20 / h and 60 / 24 h** (below Resend's 100/day) → `503 MAIL_UNAVAILABLE` |
 | `POST /api/contact/phone`            | 5 / 10 min **and** 20 / 24 h                  | 300 / 24 h → `503 VERIFICATION_UNAVAILABLE`                                |
+| `POST /api/resume`                   | 5 / 10 min **and** 20 / 24 h                  | 300 / 24 h → `503 VERIFICATION_UNAVAILABLE` (separate from the phone cap)  |
 
 Per-client limiters count every request, including invalid ones, to slow brute-forcing of the rules. Global caps count only requests that pass validation and honeypot checks. They bound archive displacement, paid review calls, and email volume regardless of IP spoofing.
 

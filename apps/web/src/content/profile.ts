@@ -13,9 +13,4 @@ export const profile = {
     en: 'Polish (native), English (B2)',
     pl: 'polski (ojczysty), angielski (B2)',
   } satisfies Record<Locale, string>,
-  // The owner adds the PDFs at the end of the project (D-10).
-  resume: {
-    en: '/resume/jakub-lobos-cv-en.pdf',
-    pl: '/resume/jakub-lobos-cv-pl.pdf',
-  } satisfies Record<Locale, string>,
 } as const;

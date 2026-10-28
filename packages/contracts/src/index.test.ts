@@ -32,6 +32,7 @@ describe('constants (api.md section 2)', () => {
         'MAIL_UNAVAILABLE',
         'VERIFICATION_FAILED',
         'VERIFICATION_UNAVAILABLE',
+        'RESUME_UNAVAILABLE',
         'INTERNAL',
       ].sort(),
     );

@@ -115,16 +115,16 @@ const en: PrivacyCopy = {
             ],
             [
               'Browser signals and your IP address for the Cloudflare Turnstile check',
-              'Bot check before the phone number is shown',
+              'Bot check before the phone number is shown or the resume is downloaded',
               'Legitimate interest (securing a function you asked for)',
-              'Cloudflare. Loaded only after you click “Show number”; the API then sends your IP address to Cloudflare to verify the check.',
+              'Cloudflare. Loaded only after you click “Show number” or “Get my resume”; the API then sends your IP address to Cloudflare to verify the check.',
               'Per Cloudflare',
             ],
             [
               'Technical request data: IP address, browser user agent, requested URL, time',
               'Deliver the site and the API and protect them; rate limiting against abuse',
               'Legitimate interest',
-              'Cloudflare (site) and Railway (API), as processors. For rate limiting the API keeps the IP address in memory only; the app never saves it to disk or writes it to logs. It is also sent to Cloudflare if you reveal the phone number (see above).',
+              'Cloudflare (site) and Railway (API), as processors. For rate limiting the API keeps the IP address in memory only; the app never saves it to disk or writes it to logs. It is also sent to Cloudflare if you reveal the phone number or download the resume (see above).',
               'Logs: per the hosts’ log retention. Rate limiting: a window of at most 24 hours, kept in memory only, never on disk or in logs; lost on restart.',
             ],
             [
@@ -309,16 +309,16 @@ const pl: PrivacyCopy = {
             ],
             [
               'Sygnały przeglądarki i Twój adres IP dla kontroli Cloudflare Turnstile',
-              'Sprawdzenie, czy nie jesteś botem, przed pokazaniem numeru telefonu',
+              'Sprawdzenie, czy nie jesteś botem, przed pokazaniem numeru telefonu lub pobraniem CV',
               'Prawnie uzasadniony interes (zabezpieczenie funkcji, o którą prosisz)',
-              'Cloudflare. Ładowane dopiero po kliknięciu „Pokaż numer”; API wysyła wtedy Twój adres IP do Cloudflare w celu weryfikacji.',
+              'Cloudflare. Ładowane dopiero po kliknięciu „Pokaż numer” lub „Pobierz moje CV”; API wysyła wtedy Twój adres IP do Cloudflare w celu weryfikacji.',
               'Zgodnie z zasadami Cloudflare',
             ],
             [
               'Dane techniczne żądań: adres IP, user agent przeglądarki, żądany adres URL, czas',
               'Dostarczanie strony i API oraz ich ochrona; ograniczanie liczby żądań w celu ochrony przed nadużyciami',
               'Prawnie uzasadniony interes',
-              'Cloudflare (strona) i Railway (API), jako podmioty przetwarzające. Do ograniczania liczby żądań API trzyma adres IP wyłącznie w pamięci; aplikacja nigdy nie zapisuje go na dysku ani w logach. Jest też wysyłany do Cloudflare, gdy odsłaniasz numer telefonu (patrz wyżej).',
+              'Cloudflare (strona) i Railway (API), jako podmioty przetwarzające. Do ograniczania liczby żądań API trzyma adres IP wyłącznie w pamięci; aplikacja nigdy nie zapisuje go na dysku ani w logach. Jest też wysyłany do Cloudflare, gdy odsłaniasz numer telefonu lub pobierasz CV (patrz wyżej).',
               'Logi: zgodnie z okresem przechowywania u dostawców. Ograniczanie liczby żądań: okno najwyżej 24 godzin, wyłącznie w pamięci, nigdy na dysku ani w logach; znika po restarcie.',
             ],
             [

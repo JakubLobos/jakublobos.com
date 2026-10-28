@@ -91,7 +91,7 @@ apps/web/
 ├─ integrations/              dev-showcase.ts (dev-only routes), cloudflare-headers.ts (writes dist/_headers)
 ├─ worker/                    Cloudflare Worker: index.ts (fetch handler), negotiate-locale.ts (pure),
 │                             set-language.ts (allowlisted redirect), tsconfig.json (workers types)
-├─ public/                    robots.txt, favicon, og/og-{en,pl}.png (T-035), resume/*.pdf (owner, D-10)
+├─ public/                    robots.txt, favicon, og/og-{en,pl}.png (T-035)
 └─ src/
    ├─ pages/                  index, privacy, 404 + pl/{index,privacy,404}: one-line wrappers
    ├─ layouts/BaseLayout.astro
@@ -169,7 +169,7 @@ src/
 │  ├─ client-ip.ts            resolveClientIp(req, source): X-Real-IP (validated) | socket
 │  ├─ rate-limit.ts           per-client limiter factory (keyed by resolveClientIp) + global caps
 │  ├─ respond.ts              ok() / fail() envelope helpers
-│  └─ routes/                 guestbook.routes.ts, contact.routes.ts, phone.routes.ts, health.routes.ts
+│  └─ routes/                 guestbook.routes.ts, contact.routes.ts, phone.routes.ts, resume.routes.ts, health.routes.ts
 ├─ domain/                    framework-free business logic (no express, sqlite, fetch, process.env)
 │  ├─ guestbook/
 │  │  ├─ guestbook.service.ts       submit(), latest()
@@ -181,6 +181,7 @@ src/
 │  │  ├─ moderation-policy.ts  backoff.ts
 │  │  ├─ repository.port.ts  moderation.port.ts  suitability.port.ts
 │  ├─ contact/                contact.service.ts, mailer.port.ts, human-verifier.port.ts, phone.ts (formatter)
+│  ├─ resume/                 resume-store.port.ts, resume.ts (PDF check, download name); adapter infra/resume/ reads RESUME_DIR/cv.pdf
 │  └─ shared/                 clock.ts, ids.ts, ttl-cache.ts, result.ts
 ├─ infra/
 │  ├─ db/                     connection.ts, migrate.ts, migrations/*.sql, guestbook.repository.ts

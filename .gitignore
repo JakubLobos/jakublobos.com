@@ -30,3 +30,6 @@ Thumbs.db
 # Wrangler local state
 .wrangler/
 e2e/visual/compare/
+
+# Resume PDFs contain a phone number: never commit one (ADR-0018)
+/*.pdf

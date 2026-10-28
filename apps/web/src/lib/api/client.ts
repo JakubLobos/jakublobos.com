@@ -59,6 +59,36 @@ function apiBaseUrl(): string {
   return typeof base === 'string' ? base.replace(/\/+$/, '') : '';
 }
 
+type Failure = Extract<ApiResult<never>, { ok: false }>;
+
+async function failureOf(response: Response): Promise<Failure> {
+  if (response.status === 429) {
+    return {
+      ok: false,
+      kind: 'rate_limited',
+      retryAfterSeconds: parseRetryAfter(response.headers.get('Retry-After')),
+    };
+  }
+  if (response.status === 404) return { ok: false, kind: 'not_found' };
+  if (UNAVAILABLE_STATUSES.has(response.status)) return { ok: false, kind: 'unavailable' };
+  if (response.status === 422) {
+    const fields = parseFields(await readJson(response));
+    if (fields) return { ok: false, kind: 'validation', fields };
+  }
+  return { ok: false, kind: 'unexpected' };
+}
+
+function send(path: string, init: ApiRequestInit, accept: string): Promise<Response> {
+  const hasBody = init.body !== undefined;
+  return fetch(`${apiBaseUrl()}${path}`, {
+    method: init.method ?? 'GET',
+    headers: hasBody ? { Accept: accept, 'Content-Type': 'application/json' } : { Accept: accept },
+    body: hasBody ? JSON.stringify(init.body) : null,
+    credentials: 'omit',
+    signal: AbortSignal.timeout(init.timeoutMs ?? REQUEST_TIMEOUT_MS),
+  });
+}
+
 /** Never throws: every failure is mapped to an `ApiResult` kind (architecture §4.4). */
 export async function request<T>(
   path: string,
@@ -66,40 +96,31 @@ export async function request<T>(
   guard: Guard<T>,
 ): Promise<ApiResult<T>> {
   try {
-    const hasBody = init.body !== undefined;
-    const response = await fetch(`${apiBaseUrl()}${path}`, {
-      method: init.method ?? 'GET',
-      headers: hasBody
-        ? { Accept: 'application/json', 'Content-Type': 'application/json' }
-        : { Accept: 'application/json' },
-      body: hasBody ? JSON.stringify(init.body) : null,
-      credentials: 'omit',
-      signal: AbortSignal.timeout(init.timeoutMs ?? REQUEST_TIMEOUT_MS),
-    });
-
-    if (response.ok) {
-      const body = await readJson(response);
-      return isRecord(body) && guard(body.data)
-        ? { ok: true, data: body.data }
-        : { ok: false, kind: 'unexpected' };
-    }
-
-    if (response.status === 429) {
-      return {
-        ok: false,
-        kind: 'rate_limited',
-        retryAfterSeconds: parseRetryAfter(response.headers.get('Retry-After')),
-      };
-    }
-    if (response.status === 404) return { ok: false, kind: 'not_found' };
-    if (UNAVAILABLE_STATUSES.has(response.status)) return { ok: false, kind: 'unavailable' };
-    if (response.status === 422) {
-      const fields = parseFields(await readJson(response));
-      if (fields) return { ok: false, kind: 'validation', fields };
-    }
-    return { ok: false, kind: 'unexpected' };
+    const response = await send(path, init, 'application/json');
+    if (!response.ok) return await failureOf(response);
+    const body = await readJson(response);
+    return isRecord(body) && guard(body.data)
+      ? { ok: true, data: body.data }
+      : { ok: false, kind: 'unexpected' };
   } catch {
     // fetch (or a body read) rejects on network failure and on our own timeout abort.
+    return { ok: false, kind: 'network' };
+  }
+}
+
+/** Like `request`, for endpoints that answer with a file: success is the raw body as a Blob. */
+export async function requestFile(
+  path: string,
+  init: ApiRequestInit,
+  mimeType: string,
+): Promise<ApiResult<Blob>> {
+  try {
+    const response = await send(path, init, mimeType);
+    if (!response.ok) return await failureOf(response);
+    const blob = await response.blob();
+    // A proxy error page with a 200 must not be saved as the resume.
+    return blob.type === mimeType ? { ok: true, data: blob } : { ok: false, kind: 'unexpected' };
+  } catch {
     return { ok: false, kind: 'network' };
   }
 }

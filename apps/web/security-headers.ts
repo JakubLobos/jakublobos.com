@@ -47,5 +47,4 @@ export interface CacheRule {
 export const CACHE_RULES: readonly CacheRule[] = [
   { pattern: '/_astro/*', cacheControl: 'public, max-age=31536000, immutable' },
   { pattern: '/og/*', cacheControl: 'public, max-age=86400' },
-  { pattern: '/resume/*', cacheControl: 'public, max-age=86400' },
 ];

@@ -18,7 +18,9 @@ import { createContactRoutes } from './http/routes/contact.routes.ts';
 import { createGuestbookCap, createGuestbookRoutes } from './http/routes/guestbook.routes.ts';
 import { createHealthRoutes } from './http/routes/health.routes.ts';
 import { createPhoneRoutes } from './http/routes/phone.routes.ts';
+import { createResumeRoutes } from './http/routes/resume.routes.ts';
 import { sha256Hasher } from './infra/crypto/sha256.hasher.ts';
+import { createFileResumeStore } from './infra/resume/file.resume-store.ts';
 import { createReviewProviders } from './infra/review/index.ts';
 import { createFakeVerifier } from './infra/verification/fake.verifier.ts';
 import { createTurnstileVerifier } from './infra/verification/turnstile.verifier.ts';
@@ -84,6 +86,7 @@ function main(): void {
     recentRejections,
   });
 
+  const verifier = createHumanVerifier(config);
   const app = createApp({
     logger,
     ids: uuidGenerator,
@@ -100,8 +103,13 @@ function main(): void {
         clientIpSource: config.clientIpSource,
       }),
       createPhoneRoutes({
-        verifier: createHumanVerifier(config),
+        verifier,
         phone: config.contactPhone,
+        clientIpSource: config.clientIpSource,
+      }),
+      createResumeRoutes({
+        verifier,
+        store: createFileResumeStore(config.resumeDir),
         clientIpSource: config.clientIpSource,
       }),
     ],

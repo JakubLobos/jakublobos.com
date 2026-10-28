@@ -26,7 +26,8 @@ FROM node:24-slim
 ENV NODE_ENV=production \
     HOST=0.0.0.0 \
     PORT=3000 \
-    DATABASE_PATH=/data/portfolio.db
+    DATABASE_PATH=/data/portfolio.db \
+    RESUME_DIR=/data/resume
 WORKDIR /app
 COPY --from=deps /app/node_modules node_modules
 COPY --from=deps /app/apps/server/node_modules apps/server/node_modules

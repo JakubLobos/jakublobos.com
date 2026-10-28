@@ -27,14 +27,6 @@ function read(name) {
   }
 }
 
-// Resume PDFs: the owner adds them last (D-10), so they are expected to be reported until then.
-for (const locale of ['en', 'pl']) {
-  const name = `resume/jakub-lobos-cv-${locale}.pdf`;
-  const pdf = read(name);
-  if (pdf === undefined) problems.push(`missing ${name} (D-10: the owner adds the resume PDFs)`);
-  else if (!pdf.subarray(0, 5).equals(Buffer.from('%PDF-'))) problems.push(`${name} is not a PDF`);
-}
-
 // Social images: 1200x630 PNGs under 100 KB (T-035).
 for (const locale of ['en', 'pl']) {
   const name = `og/og-${locale}.png`;

@@ -68,6 +68,7 @@ const envSchema = z.object({
   CORS_ALLOWED_ORIGINS: withDefault(corsOrigins, 'http://localhost:4321,http://localhost:8787'),
   CLIENT_IP_SOURCE: withDefault(z.enum(['socket', 'x-real-ip']), 'socket'),
   DATABASE_PATH: withDefault(z.string().trim().min(1), './data/portfolio.db'),
+  RESUME_DIR: withDefault(z.string().trim().min(1), './data/resume'),
 
   MODERATION_PROVIDER: withDefault(z.enum(['openai', 'gemini', 'fake']), 'fake'),
   SUITABILITY_PROVIDER: withDefault(z.enum(['openai', 'gemini', 'fake']), 'fake'),
@@ -112,6 +113,7 @@ export interface Config {
   readonly corsAllowedOrigins: readonly string[];
   readonly clientIpSource: Env['CLIENT_IP_SOURCE'];
   readonly databasePath: string;
+  readonly resumeDir: string;
   readonly moderation: {
     readonly provider: Env['MODERATION_PROVIDER'];
     readonly model: string;
@@ -206,6 +208,7 @@ export function loadConfig(env: Readonly<Record<string, string | undefined>>): C
     corsAllowedOrigins: Object.freeze(values.CORS_ALLOWED_ORIGINS),
     clientIpSource: values.CLIENT_IP_SOURCE,
     databasePath: values.DATABASE_PATH,
+    resumeDir: values.RESUME_DIR,
     moderation: Object.freeze({
       provider: values.MODERATION_PROVIDER,
       model:

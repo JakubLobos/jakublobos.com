@@ -16,6 +16,7 @@ export type ApiErrorCode =
   | 'MAIL_UNAVAILABLE'
   | 'VERIFICATION_FAILED'
   | 'VERIFICATION_UNAVAILABLE'
+  | 'RESUME_UNAVAILABLE'
   | 'INTERNAL';
 
 export interface FailOptions {

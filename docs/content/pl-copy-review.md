@@ -10,7 +10,7 @@ date and the word "approved" once the owner has gone through every row (T-034, A
 > `{name}` marks a value filled in at runtime. Address form is informal "Ty"; quotes are „…”;
 > a guestbook entry is a "wpis".
 
-Strings: 338 across 22 areas.
+Strings: 344 across 22 areas.
 
 ## Owner sign-off
 
@@ -74,6 +74,12 @@ Source: `apps/web/src/i18n/messages/hero.ts`
 | `design.tool` | figma | figmie |   |
 | `contact` | Reach me out | Napisz do mnie |   |
 | `resume` | Get my resume | Pobierz moje CV |   |
+| `resumeStatus.busy` | Checking that you are human… | Sprawdzam, czy jesteś człowiekiem… |   |
+| `resumeStatus.done` | Resume downloaded. | CV zostało pobrane. |   |
+| `resumeStatus.failed` | The resume could not be downloaded. Please try again. | Nie udało się pobrać CV. Spróbuj ponownie. |   |
+| `resumeStatus.rateLimited` | Too many attempts. Please try again in a few minutes. | Zbyt wiele prób. Spróbuj ponownie za kilka minut. |   |
+| `resumeStatus.unavailable` | The resume is unavailable right now. Please email me instead. | CV jest chwilowo niedostępne. Napisz do mnie e-mailem. |   |
+| `resumeNoScript` | Enable JavaScript to download my resume, or email | Włącz JavaScript, aby pobrać CV, albo napisz na adres |   |
 
 ## Marquee labels
 
@@ -343,14 +349,14 @@ Source: `apps/web/src/i18n/messages/privacy.ts`
 | `sections[1].blocks[1].rows[2][3]` | Resend (email delivery, in transit) passes name, email and message to the owner’s mailbox | Resend (dostarczanie poczty, w trakcie przesyłania) przekazuje imię, e-mail i wiadomość do skrzynki właściciela |   |
 | `sections[1].blocks[1].rows[2][4]` | Not stored by the site’s server. Resend keeps delivery logs per its own settings. The mailbox keeps the conversation for up to 12 months after the last message, or longer if it leads to a collaboration. | Serwer strony niczego nie zapisuje. Resend przechowuje logi dostarczenia zgodnie z własnymi ustawieniami. Skrzynka przechowuje korespondencję do 12 miesięcy od ostatniej wiadomości, a dłużej, jeśli rozmowa przerodzi się we współpracę. |   |
 | `sections[1].blocks[1].rows[3][0]` | Browser signals and your IP address for the Cloudflare Turnstile check | Sygnały przeglądarki i Twój adres IP dla kontroli Cloudflare Turnstile |   |
-| `sections[1].blocks[1].rows[3][1]` | Bot check before the phone number is shown | Sprawdzenie, czy nie jesteś botem, przed pokazaniem numeru telefonu |   |
+| `sections[1].blocks[1].rows[3][1]` | Bot check before the phone number is shown or the resume is downloaded | Sprawdzenie, czy nie jesteś botem, przed pokazaniem numeru telefonu lub pobraniem CV |   |
 | `sections[1].blocks[1].rows[3][2]` | Legitimate interest (securing a function you asked for) | Prawnie uzasadniony interes (zabezpieczenie funkcji, o którą prosisz) |   |
-| `sections[1].blocks[1].rows[3][3]` | Cloudflare. Loaded only after you click “Show number”; the API then sends your IP address to Cloudflare to verify the check. | Cloudflare. Ładowane dopiero po kliknięciu „Pokaż numer”; API wysyła wtedy Twój adres IP do Cloudflare w celu weryfikacji. |   |
+| `sections[1].blocks[1].rows[3][3]` | Cloudflare. Loaded only after you click “Show number” or “Get my resume”; the API then sends your IP address to Cloudflare to verify the check. | Cloudflare. Ładowane dopiero po kliknięciu „Pokaż numer” lub „Pobierz moje CV”; API wysyła wtedy Twój adres IP do Cloudflare w celu weryfikacji. |   |
 | `sections[1].blocks[1].rows[3][4]` | Per Cloudflare | Zgodnie z zasadami Cloudflare |   |
 | `sections[1].blocks[1].rows[4][0]` | Technical request data: IP address, browser user agent, requested URL, time | Dane techniczne żądań: adres IP, user agent przeglądarki, żądany adres URL, czas |   |
 | `sections[1].blocks[1].rows[4][1]` | Deliver the site and the API and protect them; rate limiting against abuse | Dostarczanie strony i API oraz ich ochrona; ograniczanie liczby żądań w celu ochrony przed nadużyciami |   |
 | `sections[1].blocks[1].rows[4][2]` | Legitimate interest | Prawnie uzasadniony interes |   |
-| `sections[1].blocks[1].rows[4][3]` | Cloudflare (site) and Railway (API), as processors. For rate limiting the API keeps the IP address in memory only; the app never saves it to disk or writes it to logs. It is also sent to Cloudflare if you reveal the phone number (see above). | Cloudflare (strona) i Railway (API), jako podmioty przetwarzające. Do ograniczania liczby żądań API trzyma adres IP wyłącznie w pamięci; aplikacja nigdy nie zapisuje go na dysku ani w logach. Jest też wysyłany do Cloudflare, gdy odsłaniasz numer telefonu (patrz wyżej). |   |
+| `sections[1].blocks[1].rows[4][3]` | Cloudflare (site) and Railway (API), as processors. For rate limiting the API keeps the IP address in memory only; the app never saves it to disk or writes it to logs. It is also sent to Cloudflare if you reveal the phone number or download the resume (see above). | Cloudflare (strona) i Railway (API), jako podmioty przetwarzające. Do ograniczania liczby żądań API trzyma adres IP wyłącznie w pamięci; aplikacja nigdy nie zapisuje go na dysku ani w logach. Jest też wysyłany do Cloudflare, gdy odsłaniasz numer telefonu lub pobierasz CV (patrz wyżej). |   |
 | `sections[1].blocks[1].rows[4][4]` | Logs: per the hosts’ log retention. Rate limiting: a window of at most 24 hours, kept in memory only, never on disk or in logs; lost on restart. | Logi: zgodnie z okresem przechowywania u dostawców. Ograniczanie liczby żądań: okno najwyżej 24 godzin, wyłącznie w pamięci, nigdy na dysku ani w logach; znika po restarcie. |   |
 | `sections[1].blocks[1].rows[5][0]` | Visit statistics (Google Analytics 4) | Statystyki odwiedzin (Google Analytics 4) |   |
 | `sections[1].blocks[1].rows[5][1]` | Visit statistics | Statystyki odwiedzin |   |
