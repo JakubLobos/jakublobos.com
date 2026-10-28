@@ -26,13 +26,9 @@ const siteKey = typeof configuredKey === 'string' ? configuredKey : '';
   <h1 id="hero-heading" class="title">
     {t.title}
   </h1>
-  <p class="intro">
-    {t.intro.before}
-    <span class="tech">{t.intro.build}</span>
-    {t.intro.join}
-    <Highlight>{t.intro.design}</Highlight>
-    {t.intro.after}
-  </p>
+  {/* The message strings carry their own spaces (incl. no-break ones), so no markup whitespace may sit between the pieces. */}
+  <!-- prettier-ignore -->
+  <p class="intro">{t.intro.before}<span class="tech">{t.intro.build}</span>{t.intro.join}<Highlight>{t.intro.design}</Highlight>{t.intro.after}</p>
   <div class="divider" aria-hidden="true"></div>
   <div class="actions">
     <Button href="#contact">{t.contact}</Button>
