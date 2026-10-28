@@ -1,0 +1,97 @@
+---
+// D-36: shared pieces of the copy-the-address behaviour (scripts/copy-email.ts): the one polite
+// live region, the visually hidden description the links point to, and the tag's styles (the tag
+// itself is built by scripts/copy-toast.ts).
+import '../../styles/motion/copy-tag.css';
+import type { Locale } from '../../i18n/locales.ts';
+import { common } from '../../i18n/messages/common.ts';
+
+interface Props {
+  locale: Locale;
+}
+
+const m = common(Astro.props.locale).copyEmail;
+---
+
+<span id="copy-email-hint" class="visually-hidden">
+  {m.description}
+</span>
+<span
+  id="copy-email-announce"
+  class="visually-hidden"
+  role="status"
+  aria-live="polite"
+  data-tag={m.tag}
+  data-announced={m.announced}
+></span>
+
+<script>
+  import '../../scripts/copy-email.ts';
+</script>
+
+<style is:global>
+  .copy-tag {
+    position: fixed;
+    inset: auto;
+    left: var(--tag-x, 0);
+    top: var(--tag-y, 0);
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-6);
+    padding: var(--space-6) var(--space-12);
+    overflow: visible;
+    color: var(--color-ink);
+    background: var(--color-surface);
+    border: var(--border-thick) solid var(--color-ink);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-thumb);
+    font-family: var(--font-ui);
+    font-size: var(--text-caption);
+    font-weight: var(--weight-semibold);
+    white-space: nowrap;
+    pointer-events: none;
+    transform: rotate(-2deg);
+  }
+
+  /* The display above would otherwise override the popover's own display: none. */
+  .copy-tag:not(:popover-open) {
+    display: none;
+  }
+
+  .copy-tag svg {
+    width: var(--icon-check);
+    height: var(--icon-check);
+    padding: 1px;
+    background: var(--color-highlight);
+    border-radius: 50%;
+    fill: none;
+    stroke: var(--color-on-highlight);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .copy-tag[data-state='out'] {
+    animation: copy-tag-leave var(--duration-state) var(--ease-standard) forwards;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .copy-tag[data-state='in'] {
+      animation: copy-tag-stick var(--duration-page) var(--ease-spring);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .copy-tag {
+      color: CanvasText;
+      background: Canvas;
+      border-color: CanvasText;
+    }
+
+    .copy-tag svg {
+      background: transparent;
+      stroke: CanvasText;
+    }
+  }
+</style>

@@ -7,6 +7,12 @@ export const common = defineMessages({
     mainNavigation: 'Main',
     menu: 'Menu',
     socialLinks: 'Social links',
+    // D-36: activating an email link copies the address.
+    copyEmail: {
+      tag: 'Copied!',
+      announced: 'Email address copied',
+      description: 'Copies the address',
+    },
     // Accessible names for page sections (landmarks and nav items).
     sections: {
       hero: 'Introduction',
@@ -24,6 +30,11 @@ export const common = defineMessages({
     mainNavigation: 'Główna',
     menu: 'Menu',
     socialLinks: 'Linki społecznościowe',
+    copyEmail: {
+      tag: 'Skopiowano!',
+      announced: 'Adres e-mail skopiowany',
+      description: 'Kopiuje adres',
+    },
     sections: {
       hero: 'Wprowadzenie',
       marquee: 'Umiejętności i informacje o mnie',

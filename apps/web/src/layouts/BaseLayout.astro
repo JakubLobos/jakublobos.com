@@ -2,6 +2,7 @@
 import { Font } from 'astro:assets';
 import Seo from '../components/seo/Seo.astro';
 import CookieBanner from '../components/site/CookieBanner.astro';
+import CopyEmail from '../components/site/CopyEmail.astro';
 import CustomScrollbar from '../components/site/CustomScrollbar.astro';
 import DecorLayer from '../components/site/DecorLayer.astro';
 import Footer from '../components/site/Footer.astro';
@@ -48,6 +49,7 @@ const { locale, seoKey, path } = Astro.props;
       <Footer locale={locale} />
       <CookieBanner locale={locale} />
       <MobileMenu locale={locale} path={path} />
+      <CopyEmail {locale} />
     </div>
   </body>
 </html>
