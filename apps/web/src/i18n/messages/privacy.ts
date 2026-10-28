@@ -3,8 +3,9 @@ import { polishDeep } from '../../lib/pl-typography.ts';
 import { profile } from '../../content/profile.ts';
 
 /*
- * DRAFT: requires owner and legal review before go-live. The text mirrors the data table in
- * docs/security.md §8 row by row; keep the two in sync. The Polish text is a draft for the
+ * DRAFT: requires owner and legal review before go-live. The data table here covers the same
+ * processings as docs/security.md §8, grouped into fewer rows (storage entries live only in
+ * the cookies table); keep the facts in sync. The Polish text is a draft for the
  * owner's language review (D-02).
  *
  * OWNER-PLACEHOLDER: every value written as "[OWNER: …]" (EN) or "[WŁAŚCICIEL: …]" (PL) is a
@@ -20,7 +21,6 @@ export const PRIVACY_LAST_UPDATED = '2026-10-26';
 
 export type PolicyBlock =
   | { readonly type: 'p'; readonly text: string }
-  | { readonly type: 'h3'; readonly text: string }
   | { readonly type: 'ul'; readonly items: readonly string[] }
   | {
       readonly type: 'dl';
@@ -56,7 +56,7 @@ const email = `mailto:${profile.email}`;
 const en: PrivacyCopy = {
   eyebrow: 'LEGAL',
   title: 'Privacy policy',
-  lead: 'This site is a personal portfolio. It collects as little as possible. This page explains what is processed when you use the guestbook, the contact form, the phone number reveal, the language switch, or the cookie choices, who handles it, and what rights you have.',
+  lead: 'This site collects as little as possible. Below: what is processed, who handles it, and your rights.',
   lastUpdated: 'Last updated',
   sections: [
     {
@@ -87,7 +87,7 @@ const en: PrivacyCopy = {
       blocks: [
         {
           type: 'p',
-          text: 'Nothing is processed for advertising or sold. The table lists everything, with the legal basis under the GDPR (Art. 6(1)(a) consent, (b) steps before a contract, (f) legitimate interests).',
+          text: 'Nothing is processed for advertising or sold. The table lists everything, with the legal basis under the GDPR (Art. 6(1)(a) consent, (b) steps before a contract, (f) legitimate interests). Transfers outside the EEA rely on the safeguards the provider offers under Chapter V of the GDPR.',
         },
         {
           type: 'table',
@@ -104,24 +104,18 @@ const en: PrivacyCopy = {
               'Shown publicly until a newer message replaces it, then kept in a private archive of at most 100 messages until newer ones push it out. A message not yet reviewed is deleted after 24 hours at most. Deleted on request. Copies stay in backups until they rotate out [OWNER: confirm backup retention].',
             ],
             [
-              'Guestbook text sent to Google (Gemini API) for a safety check',
-              'Safety review',
+              'Guestbook text sent to Google (Gemini API) for automated moderation',
+              'Safety check and suitability review',
               'Legitimate interest',
-              "Google (Gemini API). Processed under Google's data terms for the paid service; not used to improve Google products.",
-              'Logged by Google for a limited period for abuse monitoring [OWNER: confirm period]',
-            ],
-            [
-              'Guestbook text sent to Google (Gemini API) for a suitability review',
-              'Check that the message fits a professional portfolio',
-              'Legitimate interest',
-              'Google (Gemini API). Same terms as the safety check.',
+              'Google (Gemini API, US). Operated from the EEA, so the paid-service data terms apply; not used to improve Google products. Your IP address is not sent.',
+              // OWNER-PLACEHOLDER (Gemini log period)
               'Logged by Google for a limited period for abuse monitoring [OWNER: confirm period]',
             ],
             [
               'Contact form: name, email, message',
               'Reply to your enquiry',
               'Steps before a contract / legitimate interest',
-              'Resend (email delivery, in transit), then the owner’s mailbox',
+              'Resend (email delivery, in transit) passes name, email and message to the owner’s mailbox',
               // OWNER-PLACEHOLDER (mailbox period)
               'Not stored by the site’s server. Resend keeps delivery logs per its own settings. The mailbox keeps the message as long as needed to handle the enquiry [OWNER: confirm period].',
             ],
@@ -133,60 +127,25 @@ const en: PrivacyCopy = {
               'Per Cloudflare',
             ],
             [
-              'IP address',
-              'Rate limiting against abuse',
-              'Legitimate interest',
-              'The API keeps it in memory only; the app never saves it to disk or writes it to logs. It is also sent to Cloudflare if you reveal the phone number (see above).',
-              'A window of at most 24 hours; lost on restart',
-            ],
-            [
               'Technical request data: IP address, browser user agent, requested URL, time',
-              'Deliver the site and the API and protect them',
+              'Deliver the site and the API and protect them; rate limiting against abuse',
               'Legitimate interest',
-              'Cloudflare (site) and Railway (API), as processors',
-              'Per the hosts’ log retention',
+              'Cloudflare (site) and Railway (API), as processors. For rate limiting the API keeps the IP address in memory only; the app never saves it to disk or writes it to logs. It is also sent to Cloudflare if you reveal the phone number (see above).',
+              'Logs: per the hosts’ log retention. Rate limiting: a window of at most 24 hours, kept in memory only, never on disk or in logs; lost on restart.',
             ],
             [
-              '“lang” cookie',
-              'Remember an explicit language choice',
-              'Strictly necessary (you asked for it)',
-              'Your browser',
-              '1 year',
-            ],
-            [
-              '“jl-cookies” (local storage)',
-              'Remember your cookie choice',
-              'Strictly necessary',
-              'Your browser',
-              'Until you change it',
-            ],
-            [
-              '“jl-contact-draft” (session storage)',
-              'Keep an unsent contact-form draft in this tab',
-              'Strictly necessary (you asked for it)',
-              'Your browser only; it is never sent',
-              'Until you close the tab or send the message',
-            ],
-            [
-              'Google Analytics 4 cookies and identifiers',
+              'Visit statistics (Google Analytics 4)',
               'Visit statistics',
               'Consent (“Accept”)',
-              'Google (US)',
+              'Google (US). Loaded only if you press “Accept” in the cookie banner.',
               // OWNER-PLACEHOLDER (GA4 retention)
               'Per the GA4 property settings, set to the shortest period available [OWNER: confirm]',
             ],
             [
-              'PostHog, with consent',
-              'Product analytics',
-              'Consent (“Accept”)',
-              'PostHog EU cloud',
-              'Per the PostHog project settings',
-            ],
-            [
-              'PostHog cookieless counting, after “Only essential”',
-              'Count visits in aggregate without storing anything on your device',
-              'Legitimate interest',
-              'PostHog EU cloud (server-side hash)',
+              'PostHog product analytics',
+              'With “Accept”: product analytics. With “Only essential”: counting visits in aggregate without storing anything on your device',
+              'With “Accept”: consent. With “Only essential”: legitimate interest',
+              'PostHog EU cloud. With “Accept” it uses its cookies; with “Only essential” it uses a server-side hash. Until you choose, it does nothing.',
               'Per the PostHog project settings',
             ],
           ],
@@ -202,82 +161,51 @@ const en: PrivacyCopy = {
       ],
     },
     {
-      id: 'recipients',
-      heading: 'Who else handles data',
-      blocks: [
-        {
-          type: 'p',
-          text: 'These providers handle data for the purposes in the table above. Transfers outside the EEA rely on the safeguards the provider offers under Chapter V of the GDPR.',
-        },
-        { type: 'h3', text: 'Cloudflare' },
-        {
-          type: 'p',
-          text: 'Hosts and delivers the website, sets the “lang” cookie, and, like any host, handles the technical data of each request (IP address, browser user agent, requested URL, time). Cloudflare Turnstile, its bot check, is loaded only when you click “Show number” to reveal the phone number.',
-        },
-        { type: 'h3', text: 'Railway' },
-        {
-          type: 'p',
-          // OWNER-PLACEHOLDER (region)
-          text: 'Hosts the API and its database, which holds the guestbook, and handles the technical data of each API request (IP address, browser user agent, requested URL, time). Region: [OWNER: Railway region].',
-        },
-        { type: 'h3', text: 'Google (Gemini API)' },
-        {
-          type: 'p',
-          text: 'Guestbook text is sent to Google (Gemini API) for two automated checks: a safety check and a suitability review. Because this site is operated from Poland (EEA), Google processes the text under its data terms for the paid service and does not use it to improve its products. Google logs requests for a limited period for abuse monitoring [OWNER: confirm period]. The free quota is used, so no fee is charged. Please do not include personal data in a message. Your IP address is not sent.',
-        },
-        { type: 'h3', text: 'Resend' },
-        {
-          type: 'p',
-          text: 'Delivers the contact form as an email to my mailbox. Your name, email address, and message pass through it.',
-        },
-        { type: 'h3', text: 'Google Analytics 4' },
-        {
-          type: 'p',
-          text: 'Loaded only if you press “Accept” in the cookie banner. Google (United States) receives your visit data and sets its analytics cookies.',
-        },
-        { type: 'h3', text: 'PostHog (EU)' },
-        {
-          type: 'p',
-          text: 'If you press “Accept”, PostHog records your visit with its cookies. If you press “Only essential”, it only counts visits in aggregate using a server-side hash, with no cookies or other storage on your device. Until you choose, it does nothing.',
-        },
-      ],
-    },
-    {
       id: 'cookies',
       heading: 'Cookies and local storage',
       blocks: [
         {
           type: 'p',
-          text: 'Only the first three entries are used without your consent. Choose “Only essential” and nothing else is stored. You can change your choice at any time with “Cookie settings” in the footer; withdrawing consent stops Google Analytics, removes its cookies, and switches PostHog to cookieless counting.',
+          text: 'The first three entries are strictly necessary and used without your consent; the rest need it. Choose “Only essential” and nothing else is stored. You can change your choice at any time with “Cookie settings” in the footer; withdrawing consent stops Google Analytics, removes its cookies, and switches PostHog to cookieless counting.',
         },
         {
           type: 'table',
           caption: 'Cookies and browser storage',
-          head: ['Name', 'Purpose', 'Set when', 'Lasts'],
+          head: ['Name', 'Purpose', 'Set when', 'Legal basis', 'Lasts'],
           rows: [
             [
               'lang (cookie)',
               'Your explicit language choice',
               'You use the language switch',
+              'Strictly necessary (you asked for it)',
               '1 year',
             ],
             [
               'jl-cookies (local storage)',
               'Your cookie choice',
               'You answer the cookie banner',
+              'Strictly necessary',
               'Until you change it',
             ],
             [
               'jl-contact-draft (session storage)',
-              'Your unsent contact-form draft',
+              'Your unsent contact-form draft; never sent',
               'You type in the contact form',
+              'Strictly necessary (you asked for it)',
               'Until you close the tab or send the message',
             ],
-            ['_ga, _ga_* (cookies)', 'Google Analytics', 'You press “Accept”', 'Per GA4 settings'],
+            [
+              '_ga, _ga_* (cookies)',
+              'Google Analytics',
+              'You press “Accept”',
+              'Consent',
+              'Per GA4 settings',
+            ],
             [
               'PostHog keys (cookies and local storage)',
               'PostHog analytics',
               'You press “Accept”',
+              'Consent',
               'Per PostHog settings',
             ],
           ],
@@ -328,7 +256,7 @@ const en: PrivacyCopy = {
 const pl: PrivacyCopy = {
   eyebrow: 'PRAWNE',
   title: 'Polityka prywatności',
-  lead: 'Ta strona to osobiste portfolio i zbiera jak najmniej danych. Poniżej wyjaśniam, co jest przetwarzane, gdy korzystasz z księgi gości, formularza kontaktowego, odsłonięcia numeru telefonu, przełącznika języka lub ustawień cookies, kto się tym zajmuje i jakie masz prawa.',
+  lead: 'Ta strona zbiera jak najmniej danych. Poniżej: co jest przetwarzane, kto się tym zajmuje i jakie masz prawa.',
   lastUpdated: 'Ostatnia aktualizacja',
   sections: [
     {
@@ -360,7 +288,7 @@ const pl: PrivacyCopy = {
       blocks: [
         {
           type: 'p',
-          text: 'Dane nie są przetwarzane w celach reklamowych ani sprzedawane. Tabela wymienia wszystko wraz z podstawą prawną według RODO (art. 6 ust. 1 lit. a zgoda, lit. b działania przed zawarciem umowy, lit. f prawnie uzasadniony interes).',
+          text: 'Dane nie są przetwarzane w celach reklamowych ani sprzedawane. Tabela wymienia wszystko wraz z podstawą prawną według RODO (art. 6 ust. 1 lit. a zgoda, lit. b działania przed zawarciem umowy, lit. f prawnie uzasadniony interes). Przekazanie danych poza EOG opiera się na zabezpieczeniach oferowanych przez dostawcę zgodnie z rozdziałem V RODO.',
         },
         {
           type: 'table',
@@ -377,24 +305,18 @@ const pl: PrivacyCopy = {
               'Widoczny publicznie, dopóki nie zastąpi go nowszy wpis, następnie przechowywany w prywatnym archiwum liczącym najwyżej 100 wpisów, dopóki nie wypchną go nowsze. Wpis, który nie został jeszcze sprawdzony, jest usuwany najpóźniej po 24 godzinach. Usuwany na żądanie. Wpis pozostaje w kopiach zapasowych do czasu ich rotacji [WŁAŚCICIEL: potwierdź okres przechowywania kopii].',
             ],
             [
-              'Treść wpisu wysyłana do Google (Gemini API) w celu kontroli bezpieczeństwa',
-              'Kontrola bezpieczeństwa',
+              'Treść wpisu wysyłana do Google (Gemini API) w celu automatycznej moderacji',
+              'Kontrola bezpieczeństwa i ocena przydatności',
               'Prawnie uzasadniony interes',
-              'Google (Gemini API). Przetwarzane na warunkach danych Google dla usługi płatnej; nie służy do ulepszania produktów Google.',
-              'Logowane przez Google przez ograniczony czas w celu wykrywania nadużyć [WŁAŚCICIEL: potwierdź okres]',
-            ],
-            [
-              'Treść wpisu wysyłana do Google (Gemini API) w celu oceny przydatności',
-              'Sprawdzenie, czy wpis pasuje do profesjonalnego portfolio',
-              'Prawnie uzasadniony interes',
-              'Google (Gemini API). Te same warunki co przy kontroli bezpieczeństwa.',
+              'Google (Gemini API, USA). Przetwarzane na warunkach danych Google dla usługi płatnej, ponieważ strona jest prowadzona z EOG; nie służy do ulepszania produktów Google. Twój adres IP nie jest wysyłany.',
+              // OWNER-PLACEHOLDER (Gemini log period)
               'Logowane przez Google przez ograniczony czas w celu wykrywania nadużyć [WŁAŚCICIEL: potwierdź okres]',
             ],
             [
               'Formularz kontaktowy: imię, e-mail, wiadomość',
               'Odpowiedź na Twoje zapytanie',
               'Działania przed zawarciem umowy / prawnie uzasadniony interes',
-              'Resend (dostarczanie poczty, w trakcie przesyłania), następnie skrzynka właściciela',
+              'Resend (dostarczanie poczty, w trakcie przesyłania) przekazuje imię, e-mail i wiadomość do skrzynki właściciela',
               // OWNER-PLACEHOLDER (mailbox period)
               'Serwer strony niczego nie zapisuje. Resend przechowuje logi dostarczenia zgodnie z własnymi ustawieniami. Skrzynka przechowuje wiadomość tak długo, jak trzeba, by obsłużyć zapytanie [WŁAŚCICIEL: potwierdź okres].',
             ],
@@ -406,60 +328,25 @@ const pl: PrivacyCopy = {
               'Zgodnie z zasadami Cloudflare',
             ],
             [
-              'Adres IP',
-              'Ograniczanie liczby żądań w celu ochrony przed nadużyciami',
-              'Prawnie uzasadniony interes',
-              'API trzyma go wyłącznie w pamięci; aplikacja nigdy nie zapisuje go na dysku ani w logach. Jest też wysyłany do Cloudflare, gdy odsłaniasz numer telefonu (patrz wyżej).',
-              'Okno najwyżej 24 godzin; znika po restarcie',
-            ],
-            [
               'Dane techniczne żądań: adres IP, user agent przeglądarki, żądany adres URL, czas',
-              'Dostarczanie strony i API oraz ich ochrona',
+              'Dostarczanie strony i API oraz ich ochrona; ograniczanie liczby żądań w celu ochrony przed nadużyciami',
               'Prawnie uzasadniony interes',
-              'Cloudflare (strona) i Railway (API), jako podmioty przetwarzające',
-              'Zgodnie z okresem przechowywania logów u dostawców',
+              'Cloudflare (strona) i Railway (API), jako podmioty przetwarzające. Do ograniczania liczby żądań API trzyma adres IP wyłącznie w pamięci; aplikacja nigdy nie zapisuje go na dysku ani w logach. Jest też wysyłany do Cloudflare, gdy odsłaniasz numer telefonu (patrz wyżej).',
+              'Logi: zgodnie z okresem przechowywania u dostawców. Ograniczanie liczby żądań: okno najwyżej 24 godzin, wyłącznie w pamięci, nigdy na dysku ani w logach; znika po restarcie.',
             ],
             [
-              'Cookie „lang”',
-              'Zapamiętanie wybranego języka',
-              'Niezbędne (o to prosisz)',
-              'Twoja przeglądarka',
-              '1 rok',
-            ],
-            [
-              '„jl-cookies” (local storage)',
-              'Zapamiętanie Twojego wyboru dotyczącego cookies',
-              'Niezbędne',
-              'Twoja przeglądarka',
-              'Do czasu zmiany wyboru',
-            ],
-            [
-              '„jl-contact-draft” (pamięć sesji)',
-              'Zachowanie niewysłanej wersji roboczej wiadomości z formularza kontaktowego w tej karcie',
-              'Niezbędne (o to prosisz)',
-              'Tylko Twoja przeglądarka; nigdy nie jest wysyłany',
-              'Do zamknięcia karty lub wysłania wiadomości',
-            ],
-            [
-              'Cookies i identyfikatory Google Analytics 4',
+              'Statystyki odwiedzin (Google Analytics 4)',
               'Statystyki odwiedzin',
               'Zgoda („Akceptuję”)',
-              'Google (USA)',
+              'Google (USA). Ładowany tylko po kliknięciu „Akceptuję” w komunikacie o cookies.',
               // OWNER-PLACEHOLDER (GA4 retention)
               'Zgodnie z ustawieniami usługi GA4, ustawionymi na najkrótszy dostępny okres [WŁAŚCICIEL: potwierdź]',
             ],
             [
-              'PostHog, za zgodą',
-              'Analityka produktowa',
-              'Zgoda („Akceptuję”)',
-              'Chmura PostHog w UE',
-              'Zgodnie z ustawieniami projektu PostHog',
-            ],
-            [
-              'Bezcookiesowe zliczanie PostHog po wyborze „Tylko niezbędne”',
-              'Zliczanie odwiedzin zbiorczo, bez zapisywania czegokolwiek na Twoim urządzeniu',
-              'Prawnie uzasadniony interes',
-              'Chmura PostHog w UE (skrót liczony po stronie serwera)',
+              'Analityka produktowa PostHog',
+              'Z „Akceptuję”: analityka produktowa. Z „Tylko niezbędne”: zliczanie odwiedzin zbiorczo, bez zapisywania czegokolwiek na Twoim urządzeniu',
+              'Z „Akceptuję”: zgoda. Z „Tylko niezbędne”: prawnie uzasadniony interes',
+              'Chmura PostHog w UE. Z „Akceptuję” używa cookies; z „Tylko niezbędne” używa skrótu liczonego po stronie serwera. Do czasu dokonania wyboru nic nie robi.',
               'Zgodnie z ustawieniami projektu PostHog',
             ],
           ],
@@ -475,82 +362,51 @@ const pl: PrivacyCopy = {
       ],
     },
     {
-      id: 'recipients',
-      heading: 'Kto jeszcze przetwarza dane',
-      blocks: [
-        {
-          type: 'p',
-          text: 'Ci dostawcy przetwarzają dane w celach wskazanych w tabeli wyżej. Przekazanie danych poza EOG opiera się na zabezpieczeniach oferowanych przez dostawcę zgodnie z rozdziałem V RODO.',
-        },
-        { type: 'h3', text: 'Cloudflare' },
-        {
-          type: 'p',
-          text: 'Hostuje i dostarcza stronę, ustawia cookie „lang” i, jak każdy hosting, przetwarza dane techniczne każdego żądania (adres IP, user agent przeglądarki, żądany adres URL, czas). Cloudflare Turnstile, czyli kontrola antybotowa, ładuje się dopiero po kliknięciu „Pokaż numer”, aby odsłonić numer telefonu.',
-        },
-        { type: 'h3', text: 'Railway' },
-        {
-          type: 'p',
-          // OWNER-PLACEHOLDER (region)
-          text: 'Hostuje API oraz jego bazę danych z księgą gości i przetwarza dane techniczne każdego żądania do API (adres IP, user agent przeglądarki, żądany adres URL, czas). Region: [WŁAŚCICIEL: region Railway].',
-        },
-        { type: 'h3', text: 'Google (Gemini API)' },
-        {
-          type: 'p',
-          text: 'Treść wpisu w księdze gości trafia do Google (Gemini API) w ramach dwóch automatycznych kontroli: kontroli bezpieczeństwa i oceny przydatności. Ponieważ ta strona jest prowadzona z Polski (EOG), Google przetwarza treść na warunkach danych dla usługi płatnej i nie używa jej do ulepszania swoich produktów. Google loguje zapytania przez ograniczony czas w celu wykrywania nadużyć [WŁAŚCICIEL: potwierdź okres]. Wykorzystywany jest bezpłatny limit, więc nie ponosimy opłat. Nie podawaj w wpisie danych osobowych. Twój adres IP nie jest wysyłany.',
-        },
-        { type: 'h3', text: 'Resend' },
-        {
-          type: 'p',
-          text: 'Dostarcza wiadomość z formularza kontaktowego na moją skrzynkę. Przechodzą przez niego Twoje imię, adres e-mail i treść wiadomości.',
-        },
-        { type: 'h3', text: 'Google Analytics 4' },
-        {
-          type: 'p',
-          text: 'Ładowany tylko wtedy, gdy klikniesz „Akceptuję” w komunikacie o cookies. Google (Stany Zjednoczone) otrzymuje dane o Twojej wizycie i ustawia swoje cookies analityczne.',
-        },
-        { type: 'h3', text: 'PostHog (UE)' },
-        {
-          type: 'p',
-          text: 'Jeśli klikniesz „Akceptuję”, PostHog rejestruje Twoją wizytę z użyciem swoich cookies. Jeśli klikniesz „Tylko niezbędne”, jedynie zlicza wizyty zbiorczo za pomocą skrótu liczonego po stronie serwera, bez cookies i bez zapisu na Twoim urządzeniu. Do czasu dokonania wyboru nic nie robi.',
-        },
-      ],
-    },
-    {
       id: 'cookies',
       heading: 'Cookies i pamięć lokalna',
       blocks: [
         {
           type: 'p',
-          text: 'Bez Twojej zgody używane są tylko trzy pierwsze wpisy. Jeśli wybierzesz „Tylko niezbędne”, nic więcej nie jest zapisywane. Wybór możesz zmienić w dowolnej chwili przez „Ustawienia cookies” w stopce; wycofanie zgody zatrzymuje Google Analytics, usuwa jego cookies i przełącza PostHog na zliczanie bez cookies.',
+          text: 'Trzy pierwsze wpisy są niezbędne i używane bez Twojej zgody; pozostałe wymagają zgody. Jeśli wybierzesz „Tylko niezbędne”, nic więcej nie jest zapisywane. Wybór możesz zmienić w dowolnej chwili przez „Ustawienia cookies” w stopce; wycofanie zgody zatrzymuje Google Analytics, usuwa jego cookies i przełącza PostHog na zliczanie bez cookies.',
         },
         {
           type: 'table',
           caption: 'Cookies i pamięć przeglądarki',
-          head: ['Nazwa', 'Cel', 'Kiedy powstaje', 'Czas trwania'],
+          head: ['Nazwa', 'Cel', 'Kiedy powstaje', 'Podstawa prawna', 'Czas trwania'],
           rows: [
-            ['lang (cookie)', 'Wybrany przez Ciebie język', 'Używasz przełącznika języka', '1 rok'],
+            [
+              'lang (cookie)',
+              'Wybrany przez Ciebie język',
+              'Używasz przełącznika języka',
+              'Niezbędne (o to prosisz)',
+              '1 rok',
+            ],
             [
               'jl-cookies (local storage)',
               'Twój wybór dotyczący cookies',
               'Odpowiadasz na komunikat o cookies',
+              'Niezbędne',
               'Do czasu zmiany wyboru',
             ],
             [
               'jl-contact-draft (pamięć sesji)',
-              'Twoja niewysłana wersja robocza wiadomości',
+              'Twoja niewysłana wersja robocza wiadomości; nigdy nie jest wysyłana',
               'Piszesz w formularzu kontaktowym',
+              'Niezbędne (o to prosisz)',
               'Do zamknięcia karty lub wysłania wiadomości',
             ],
             [
               '_ga, _ga_* (cookies)',
               'Google Analytics',
               'Klikasz „Akceptuję”',
+              'Zgoda',
               'Zgodnie z ustawieniami GA4',
             ],
             [
               'Klucze PostHog (cookies i local storage)',
               'Analityka PostHog',
               'Klikasz „Akceptuję”',
+              'Zgoda',
               'Zgodnie z ustawieniami PostHog',
             ],
           ],
