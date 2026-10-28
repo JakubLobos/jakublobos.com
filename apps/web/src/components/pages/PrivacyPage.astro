@@ -47,7 +47,18 @@ const updated = new Intl.DateTimeFormat(locale, { dateStyle: 'long', timeZone: '
                     {block.items.map((item) => (
                       <div>
                         <dt>{item.term}</dt>
-                        <dd>{item.href ? <a href={item.href}>{item.value}</a> : item.value}</dd>
+                        <dd>
+                          {item.href ? (
+                            <a
+                              href={item.href}
+                              data-copy-email={item.href.startsWith('mailto:') || undefined}
+                            >
+                              {item.value}
+                            </a>
+                          ) : (
+                            item.value
+                          )}
+                        </dd>
                       </div>
                     ))}
                   </dl>

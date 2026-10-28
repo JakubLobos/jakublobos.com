@@ -46,13 +46,17 @@ const n = nav(locale);
     </nav>
     <div class="bottom">
       <div class="reach">
-        <Button href={`mailto:${profile.email}`}>{n.reachMe}</Button>
+        <Button href={`mailto:${profile.email}`} data-copy-email>
+          {n.reachMe}
+        </Button>
       </div>
       <div class="row">
         <ul class="socials">
           {SOCIAL_LINKS.map(({ id, href }) => (
             <li>
-              <a {href}>{n.social[id]}</a>
+              <a {href} data-copy-email={id === 'email' || undefined}>
+                {n.social[id]}
+              </a>
             </li>
           ))}
         </ul>
