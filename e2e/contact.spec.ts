@@ -46,9 +46,13 @@ test.describe('@contact form', () => {
     );
     await expectNoA11yViolations(page, { include: '#contact' });
 
+    // Only the message starts over; the sender's name and email are kept.
     await page.getByRole('button', { name: 'Send another' }).click();
-    await expect(page.getByLabel('YOUR NAME')).toBeFocused();
-    await expect(page.getByLabel('YOUR NAME')).toHaveValue('');
+    const message = page.getByLabel('MESSAGE', { exact: true });
+    await expect(message).toBeFocused();
+    await expect(message).toHaveValue('');
+    await expect(page.getByLabel('YOUR NAME')).toHaveValue('Jane Doe');
+    await expect(page.getByLabel('EMAIL', { exact: true })).toHaveValue('jane@company.com');
     await expect(page.getByRole('button', { name: 'Send message' })).toBeEnabled();
   });
 
