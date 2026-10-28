@@ -27,10 +27,11 @@ const siteKey = typeof configuredKey === 'string' ? configuredKey : '';
     {t.title}
   </h1>
   <p class="intro">
-    {t.build.before} <span class="tech">{t.build.first}</span> {t.build.join}{' '}
-    <span class="tech">{t.build.second}</span>
-    <br />
-    {t.design.before} <Highlight>{t.design.tool}</Highlight>
+    {t.intro.before}
+    <span class="tech">{t.intro.build}</span>
+    {t.intro.join}
+    <Highlight>{t.intro.design}</Highlight>
+    {t.intro.after}
   </p>
   <div class="divider" aria-hidden="true"></div>
   <div class="actions">
@@ -80,6 +81,7 @@ const siteKey = typeof configuredKey === 'string' ? configuredKey : '';
     margin: 0;
     font-size: var(--text-lead);
     line-height: var(--leading-lead);
+    text-wrap: balance;
   }
 
   .tech {
@@ -99,9 +101,6 @@ const siteKey = typeof configuredKey === 'string' ? configuredKey : '';
     justify-content: center;
     gap: var(--space-16);
     padding-top: var(--space-8);
-  }
-
-  .actions {
     position: relative;
   }
 
