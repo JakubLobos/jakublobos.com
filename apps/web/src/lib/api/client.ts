@@ -89,7 +89,7 @@ function send(path: string, init: ApiRequestInit, accept: string): Promise<Respo
   });
 }
 
-/** Never throws: every failure is mapped to an `ApiResult` kind (architecture �4.4). */
+/** Never throws: every failure is mapped to an `ApiResult` kind (architecture §4.4). */
 export async function request<T>(
   path: string,
   init: ApiRequestInit,
