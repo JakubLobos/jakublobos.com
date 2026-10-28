@@ -17,7 +17,7 @@ import { profile } from '../../content/profile.ts';
  */
 
 /** ISO date of the last substantive change; shown as "last updated". */
-export const PRIVACY_LAST_UPDATED = '2026-10-26';
+export const PRIVACY_LAST_UPDATED = '2026-10-28';
 
 export type PolicyBlock =
   | { readonly type: 'p'; readonly text: string }
@@ -100,16 +100,14 @@ const en: PrivacyCopy = {
               'Consent (you submit it voluntarily; a notice sits under the form)',
               // OWNER-PLACEHOLDER (region)
               'Database on Railway, region [OWNER: Railway region]',
-              // OWNER-PLACEHOLDER (backup retention)
-              'Shown publicly until a newer message replaces it, then kept in a private archive of at most 100 messages until newer ones push it out. A message not yet reviewed is deleted after 24 hours at most. Deleted on request. Copies stay in backups until they rotate out [OWNER: confirm backup retention].',
+              'Shown publicly until a newer message replaces it, then kept in a private archive of at most 100 messages until newer ones push it out. A message not yet reviewed is deleted after 24 hours at most. Deleted on request. Copies stay in the daily backups for up to 6 days.',
             ],
             [
               'Guestbook text sent to Google (Gemini API) for automated moderation',
               'Safety check and suitability review',
               'Legitimate interest',
               'Google (Gemini API). Operated from the EEA, so the paid-service data terms apply; not used to improve Google products. Your IP address is not sent.',
-              // OWNER-PLACEHOLDER (Gemini log period)
-              'Logged by Google for a limited period for abuse monitoring [OWNER: confirm period]',
+              'Logged by Google for 55 days for abuse monitoring',
             ],
             [
               'Contact form: name, email, message',
@@ -138,8 +136,7 @@ const en: PrivacyCopy = {
               'Visit statistics',
               'Consent (“Accept”)',
               'Google (US). Loaded only if you press “Accept” in the cookie banner.',
-              // OWNER-PLACEHOLDER (GA4 retention)
-              'Per the GA4 property settings, set to the shortest period available [OWNER: confirm]',
+              '2 months, the shortest period GA4 offers',
             ],
             [
               'PostHog product analytics',
@@ -301,16 +298,14 @@ const pl: PrivacyCopy = {
               'Zgoda (wpis wysyłasz dobrowolnie; informacja znajduje się pod formularzem)',
               // OWNER-PLACEHOLDER (region)
               'Baza danych w Railway, region [WŁAŚCICIEL: region Railway]',
-              // OWNER-PLACEHOLDER (backup retention)
-              'Widoczny publicznie, dopóki nie zastąpi go nowszy wpis, następnie przechowywany w prywatnym archiwum liczącym najwyżej 100 wpisów, dopóki nie wypchną go nowsze. Wpis, który nie został jeszcze sprawdzony, jest usuwany najpóźniej po 24 godzinach. Usuwany na żądanie. Wpis pozostaje w kopiach zapasowych do czasu ich rotacji [WŁAŚCICIEL: potwierdź okres przechowywania kopii].',
+              'Widoczny publicznie, dopóki nie zastąpi go nowszy wpis, następnie przechowywany w prywatnym archiwum liczącym najwyżej 100 wpisów, dopóki nie wypchną go nowsze. Wpis, który nie został jeszcze sprawdzony, jest usuwany najpóźniej po 24 godzinach. Usuwany na żądanie. Wpis pozostaje w codziennych kopiach zapasowych najwyżej 6 dni.',
             ],
             [
               'Treść wpisu wysyłana do Google (Gemini API) w celu automatycznej moderacji',
               'Kontrola bezpieczeństwa i ocena przydatności',
               'Prawnie uzasadniony interes',
               'Google (Gemini API). Przetwarzane na warunkach danych Google dla usługi płatnej, ponieważ strona jest prowadzona z EOG; nie służy do ulepszania produktów Google. Twój adres IP nie jest wysyłany.',
-              // OWNER-PLACEHOLDER (Gemini log period)
-              'Logowane przez Google przez ograniczony czas w celu wykrywania nadużyć [WŁAŚCICIEL: potwierdź okres]',
+              'Logowane przez Google przez 55 dni w celu wykrywania nadużyć',
             ],
             [
               'Formularz kontaktowy: imię, e-mail, wiadomość',
@@ -339,8 +334,7 @@ const pl: PrivacyCopy = {
               'Statystyki odwiedzin',
               'Zgoda („Akceptuję”)',
               'Google (USA). Ładowany tylko po kliknięciu „Akceptuję” w komunikacie o cookies.',
-              // OWNER-PLACEHOLDER (GA4 retention)
-              'Zgodnie z ustawieniami usługi GA4, ustawionymi na najkrótszy dostępny okres [WŁAŚCICIEL: potwierdź]',
+              '2 miesiące, najkrótszy okres dostępny w GA4',
             ],
             [
               'Analityka produktowa PostHog',
