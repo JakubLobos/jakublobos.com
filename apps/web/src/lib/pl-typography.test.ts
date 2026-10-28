@@ -31,11 +31,12 @@ describe('polishTypography', () => {
   });
 
   it('keeps a spaced dash on the line of the word before it', () => {
-    expect(polishTypography('Madery, Cypru i Teneryfy – każde miejsce')).toBe(
-      `Madery, Cypru i${NBSP}Teneryfy${NBSP}– każde miejsce`,
+    expect(polishTypography('Madery, Cypru i Teneryfy - każde miejsce')).toBe(
+      `Madery, Cypru i${NBSP}Teneryfy${NBSP}- każde miejsce`,
     );
     expect(polishTypography('od — do')).toBe(`od${NBSP}— do`);
-    expect(polishTypography('bez-spacji plus - minus')).toBe('bez-spacji plus - minus');
+    expect(polishTypography('od – do')).toBe(`od${NBSP}– do`);
+    expect(polishTypography('bez-spacji')).toBe('bez-spacji');
   });
 
   it('is idempotent and keeps placeholders intact', () => {
