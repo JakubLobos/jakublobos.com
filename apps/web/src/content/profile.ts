@@ -4,7 +4,7 @@ import type { Locale } from '@portfolio/contracts';
 export const profile = {
   name: 'Jakub Łobos',
   role: { en: 'Software Engineer', pl: 'Software Engineer' } satisfies Record<Locale, string>,
-  email: 'jakubloboskontakt@gmail.com',
+  email: 'hello@jakublobos.com',
   github: { handle: 'JakubLobos', url: 'https://github.com/JakubLobos' },
   linkedin: { handle: 'JakubLobos', url: 'https://linkedin.com/in/JakubLobos' },
   /** BCP 47 codes of the languages spoken (structured data). */

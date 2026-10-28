@@ -12,6 +12,6 @@
     // apps/web/edge-emulator reads this list, so edit it here only.
     "run_worker_first": ["/", "/set-language"],
   },
-  // Custom domain, enabled at deployment (T-050/T-051):
-  // "routes": [{ "pattern": "jakublobos.com", "custom_domain": true }]
+  // Cloudflare creates the apex DNS record for the custom domain on the first deploy.
+  "routes": [{ "pattern": "jakublobos.com", "custom_domain": true }],
 }

@@ -23,7 +23,7 @@ Work top to bottom; later steps need earlier values. Never paste secrets into ch
 - [ ] Add `jakublobos.com` as a zone in your Cloudflare account and point the registrar's nameservers at it.
 - [ ] Create `www`: a proxied (orange cloud) `A` record to `192.0.2.1` (placeholder; it only needs to exist), then **Rules > Redirect Rules > Single redirect**: hostname equals `www.jakublobos.com` -> dynamic `concat("https://jakublobos.com", http.request.uri.path)`, 301, preserve query string.
 - [ ] Create an API token (**My Profile > API Tokens > Create**, template _Edit Cloudflare Workers_, restricted to this account and the `jakublobos.com` zone). Note the **Account ID** from the dashboard.
-- [ ] **Custom-domain route (code change, not yet done).** `apps/web/wrangler.jsonc` still has the route commented out, so `wrangler deploy` would publish only to `*.workers.dev`. Before the first deploy, uncomment `"routes": [{ "pattern": "jakublobos.com", "custom_domain": true }]` (this was outside T-050's allowed files; ask the orchestrator or make the one-line change yourself). Cloudflare creates the DNS record itself; delete any existing `A`/`AAAA`/`CNAME` for the apex first.
+- [ ] **Custom domain.** `apps/web/wrangler.jsonc` routes the Worker to `jakublobos.com` (`custom_domain: true`), so Cloudflare creates the apex DNS record itself on the first deploy. Delete any existing `A`/`AAAA`/`CNAME` for the apex first.
 
 ### 2.2 GitHub (T-051)
 
@@ -56,7 +56,7 @@ Work top to bottom; later steps need earlier values. Never paste secrets into ch
 
 ### 2.5 Content
 
-- [ ] Privacy policy placeholders: `grep -rn "OWNER" apps/web/src` must print nothing. They cover the controller's postal address or registration, the Railway region, mailbox retention for contact messages and GA4 retention. Use the retention figures in section 5 for backups. Have the policy text reviewed (EN and PL).
+- [x] Privacy policy placeholders are filled (T-078). Confirm that the Railway region in `apps/web/src/i18n/messages/privacy.ts` (EU West, Amsterdam) matches the service, and have the policy text reviewed (EN and PL).
 - [ ] Resume PDFs in place and the Polish copy reviewed (D-23 items 8 and 9).
 
 ### 2.6 First deploy
