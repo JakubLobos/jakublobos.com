@@ -9,43 +9,32 @@ export interface SkillGroup {
 
 // PL group labels are drafts pending owner review (D-02).
 const rawGroups: readonly SkillGroup[] = [
-  { label: { en: 'Core', pl: 'Podstawy' }, items: ['React', 'TypeScript', 'UI/UX', 'Figma', 'AI'] },
+  { label: { en: 'Core', pl: 'Podstawy' }, items: ['React', 'TypeScript', 'Astro'] },
+  { label: { en: 'Design', pl: 'Projektowanie' }, items: ['UI/UX', 'Figma'] },
   {
-    label: { en: 'Frameworks', pl: 'Frameworki' },
-    items: [
-      'Next.js',
-      'Astro',
-      'SSG',
-      'Tailwind',
-      'Node.js',
-      'Tamagui',
-      'MUI',
-      'styled-components',
-      'react-email',
-    ],
+    label: { en: 'UI & styling', pl: 'UI i stylowanie' },
+    items: ['Tailwind', 'styled-components', 'MUI', 'Tamagui', 'Storybook', 'react-email'],
   },
   {
-    label: { en: 'Data & state', pl: 'Dane i stan' },
-    items: [
-      'Redux Toolkit',
-      'TanStack',
-      'WebSocket',
-      'gRPC',
-      'Formik',
-      'Yup',
-      'Superstruct',
-      'i18next',
-      'Chart.js',
-      'ts-money',
-    ],
+    label: { en: 'State & APIs', pl: 'Stan i API' },
+    items: ['Redux Toolkit', 'TanStack', 'WebSocket', 'gRPC'],
+  },
+  {
+    label: { en: 'Libraries', pl: 'Biblioteki' },
+    items: ['Formik', 'Yup', 'Superstruct', 'i18next', 'Chart.js', 'ts-money'],
   },
   {
     label: { en: 'Testing', pl: 'Testowanie' },
-    items: ['Jest', 'Vitest', 'React Testing Library', 'Storybook', 'A/B Testing', 'Playwright'],
+    items: ['Jest', 'Vitest', 'React Testing Library', 'Playwright'],
   },
   {
     label: { en: 'Workflow', pl: 'Workflow' },
-    items: ['Git', 'GitHub Packages', 'monorepo', 'PostHog'],
+    items: ['Git', 'GitHub Packages', 'monorepo', 'PostHog', 'A/B testing', 'AI-assisted coding'],
+  },
+  // Worked with, but far less deeply than the groups above.
+  {
+    label: { en: 'Familiar with', pl: 'Miałem styczność' },
+    items: ['Next.js', 'Node.js', 'React Native'],
   },
 ];
 

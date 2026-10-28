@@ -10,7 +10,7 @@ date and the word "approved" once the owner has gone through every row (T-034, A
 > `{name}` marks a value filled in at runtime. Address form is informal "Ty"; quotes are „…”;
 > a guestbook entry is a "wpis".
 
-Strings: 373 across 22 areas.
+Strings: 376 across 22 areas.
 
 ## Owner sign-off
 
@@ -513,10 +513,13 @@ Source: `apps/web/src/content/skills.ts`
 | Key | EN | PL | Owner correction |
 | --- | -- | -- | ---------------- |
 | `group.Core` | Core | Podstawy |   |
-| `group.Frameworks` | Frameworks | Frameworki |   |
-| `group.Data & state` | Data & state | Dane i stan |   |
+| `group.Design` | Design | Projektowanie |   |
+| `group.UI & styling` | UI & styling | UI i stylowanie |   |
+| `group.State & APIs` | State & APIs | Stan i API |   |
+| `group.Libraries` | Libraries | Biblioteki |   |
 | `group.Testing` | Testing | Testowanie |   |
 | `group.Workflow` | Workflow | Workflow |   |
+| `group.Familiar with` | Familiar with | Miałem styczność |   |
 
 ## Content: marquee
 
