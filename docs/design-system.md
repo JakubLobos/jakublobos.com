@@ -196,6 +196,7 @@ CSS custom properties can't be used inside media queries, so breakpoints are con
 | `--ease-ink`         | `cubic-bezier(.45,0,.55,1)` | hero headline ink sweep            |
 
 Keyframes (`keyframes.css`): `type-in` (`0% translateY(.6em) rotate(4deg) opacity 0 → 60% translateY(-.08em) opacity 1 → 100% none`), `spin`, `marquee-ltr`, `marquee-rtl`. The hero entrance (D-30) keeps its `hero-*` keyframes in `styles/motion/hero.css` (imported by `Hero.astro`): stick, ink, settle, swipe, draw, place.
+The D-36 copy confirmation (`CopyEmail.astro`, `scripts/copy-toast.ts`) is a small paper tag in the top layer (`popover`): `--color-surface`, `--border-thick` ink border, `--shadow-thumb`, tilted -2deg, with a `--color-highlight` tick. It sticks on with `copy-tag-stick`, holds about 1.8 s and fades with `copy-tag-leave` (both in `styles/motion/copy-tag.css`). Reduced motion: no stick animation. Forced colors: `Canvas`/`CanvasText` with a border.
 
 ### 2.9 Controls (T-022)
 

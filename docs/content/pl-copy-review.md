@@ -10,7 +10,7 @@ date and the word "approved" once the owner has gone through every row (T-034, A
 > `{name}` marks a value filled in at runtime. Address form is informal "Ty"; quotes are „…”;
 > a guestbook entry is a "wpis".
 
-Strings: 344 across 22 areas.
+Strings: 347 across 22 areas.
 
 ## Owner sign-off
 
@@ -33,6 +33,9 @@ Source: `apps/web/src/i18n/messages/common.ts`
 | `mainNavigation` | Main | Główna |   |
 | `menu` | Menu | Menu |   |
 | `socialLinks` | Social links | Linki społecznościowe |   |
+| `copyEmail.tag` | Copied! | Skopiowano! |   |
+| `copyEmail.announced` | Email address copied | Adres e-mail skopiowany |   |
+| `copyEmail.description` | Copies the address | Kopiuje adres |   |
 | `sections.hero` | Introduction | Wprowadzenie |   |
 | `sections.marquee` | Skills and about me | Umiejętności i informacje o mnie |   |
 | `sections.experience` | Experience | Doświadczenie |   |

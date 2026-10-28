@@ -20,7 +20,9 @@ const siteKey = typeof configuredKey === 'string' ? configuredKey : '';
 <dl class="details">
   <dt>{m.details.email}</dt>
   <dd>
-    <a href={`mailto:${profile.email}`}>{profile.email}</a>
+    <a href={`mailto:${profile.email}`} data-copy-email>
+      {profile.email}
+    </a>
   </dd>
 
   <dt>{m.details.phone}</dt>

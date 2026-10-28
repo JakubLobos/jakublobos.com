@@ -16,7 +16,9 @@ const labels = nav(locale).social;
   <ul>
     {SOCIAL_LINKS.map(({ id, href }) => (
       <li>
-        <a {href}>{labels[id]}</a>
+        <a {href} data-copy-email={id === 'email' || undefined}>
+          {labels[id]}
+        </a>
       </li>
     ))}
   </ul>
