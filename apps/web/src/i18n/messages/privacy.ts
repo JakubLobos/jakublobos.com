@@ -107,7 +107,7 @@ const en: PrivacyCopy = {
               'Guestbook text sent to Google (Gemini API) for automated moderation',
               'Safety check and suitability review',
               'Legitimate interest',
-              'Google (Gemini API, US). Operated from the EEA, so the paid-service data terms apply; not used to improve Google products. Your IP address is not sent.',
+              'Google (Gemini API). Operated from the EEA, so the paid-service data terms apply; not used to improve Google products. Your IP address is not sent.',
               // OWNER-PLACEHOLDER (Gemini log period)
               'Logged by Google for a limited period for abuse monitoring [OWNER: confirm period]',
             ],
@@ -156,7 +156,7 @@ const en: PrivacyCopy = {
         },
         {
           type: 'p',
-          text: 'Whether a guestbook message is published is decided automatically by simple text rules and the Google (Gemini API) checks described below. This has no legal effect on you. If you disagree, write to the address above.',
+          text: 'Whether a guestbook message is published is decided automatically by simple text rules and the Google (Gemini API) checks described in the table above. This has no legal effect on you. If you disagree, write to the address above.',
         },
       ],
     },
@@ -308,7 +308,7 @@ const pl: PrivacyCopy = {
               'Treść wpisu wysyłana do Google (Gemini API) w celu automatycznej moderacji',
               'Kontrola bezpieczeństwa i ocena przydatności',
               'Prawnie uzasadniony interes',
-              'Google (Gemini API, USA). Przetwarzane na warunkach danych Google dla usługi płatnej, ponieważ strona jest prowadzona z EOG; nie służy do ulepszania produktów Google. Twój adres IP nie jest wysyłany.',
+              'Google (Gemini API). Przetwarzane na warunkach danych Google dla usługi płatnej, ponieważ strona jest prowadzona z EOG; nie służy do ulepszania produktów Google. Twój adres IP nie jest wysyłany.',
               // OWNER-PLACEHOLDER (Gemini log period)
               'Logowane przez Google przez ograniczony czas w celu wykrywania nadużyć [WŁAŚCICIEL: potwierdź okres]',
             ],
@@ -357,7 +357,7 @@ const pl: PrivacyCopy = {
         },
         {
           type: 'p',
-          text: 'O publikacji wpisu w księdze gości decydują automatycznie proste reguły tekstowe oraz opisane niżej kontrole Google (Gemini API). Nie ma to wobec Ciebie skutków prawnych. Jeśli się z tym nie zgadzasz, napisz na adres podany wyżej.',
+          text: 'O publikacji wpisu w księdze gości decydują automatycznie proste reguły tekstowe oraz kontrole Google (Gemini API) opisane w tabeli powyżej. Nie ma to wobec Ciebie skutków prawnych. Jeśli się z tym nie zgadzasz, napisz na adres podany wyżej.',
         },
       ],
     },
