@@ -195,7 +195,7 @@ CSS custom properties can't be used inside media queries, so breakpoints are con
 | `--ease-ink`         | `cubic-bezier(.45,0,.55,1)` | hero headline ink sweep            |
 | `--ease-ink`         | `cubic-bezier(.45,0,.55,1)` | hero headline ink sweep            |
 
-Keyframes (`keyframes.css`): `type-in` (`0% translateY(.6em) rotate(4deg) opacity 0 → 60% translateY(-.08em) opacity 1 → 100% none`), `spin`, `marquee-ltr`, `marquee-rtl`. The hero entrance (D-30) keeps its `hero-*` keyframes in `styles/motion/hero.css` (imported by `Hero.astro`): stick, ink, settle, swipe, draw, place.
+Keyframes (`keyframes.css`): `type-in` (`0% translateY(.6em) rotate(4deg) opacity 0 → 60% translateY(-.08em) opacity 1 → 100% none`), `spin`, `marquee-ltr`, `marquee-rtl`. The hero entrance (D-30) keeps its `hero-*` keyframes in `styles/motion/hero.css` (imported by `Hero.astro`): stick, ink, settle, swipe, draw, place. The limit nudge (T-068) is a shared helper, `scripts/nudge.ts`: a short left-right shake (`--duration-panel`, linear), optionally with a danger-colour flash. The guestbook counters use it with the flash; the hero resume button uses it without, on a failed, rate-limited or unavailable download. Reduced motion drops the shake.
 
 ### 2.9 Controls (T-022)
 
