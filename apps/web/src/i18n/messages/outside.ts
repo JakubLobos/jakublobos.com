@@ -12,7 +12,7 @@ export const outsideMessages = defineMessages({
   pl: {
     eyebrow: 'POZA PRACĄ',
     title: 'Lubię podróżować',
-    body: 'Poza pracą uwielbiam odkrywać nowe miejsca, poznawać ludzi i różne kultury. Od krajobrazów Islandii, przez ulice Japonii, po słoneczne wybrzeża Madery, Cypru i Teneryfy – każde miejsce ma w sobie coś wyjątkowego.',
+    body: 'Poza pracą podróżuje. Podróżuję, by poznawać ludzi i różne kultury. Od krajobrazów Islandii, przez ulice Japonii, po słoneczne wybrzeża Madery, Cypru i Teneryfy – każde miejsce ma w sobie coś wyjątkowego.',
     photosLabel: 'Zdjęcia z podróży',
   },
 });
