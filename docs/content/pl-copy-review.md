@@ -323,7 +323,7 @@ Source: `apps/web/src/i18n/messages/privacy.ts`
 | `sections[0].blocks[0].items[0].term` | Controller | Administrator |   |
 | `sections[0].blocks[0].items[0].value` | Jakub Łobos | Jakub Łobos |   |
 | `sections[0].blocks[0].items[1].term` | Address | Adres |   |
-| `sections[0].blocks[0].items[1].value` | PO Box 10, ul. Wielicka 42C, 30-552 Kraków, Poland | Skrytka pocztowa nr 10, ul. Wielicka 42C, 30-552 Kraków |   |
+| `sections[0].blocks[0].items[1].value` | PO Box 10, 42C Wielicka Street, 30-552 Kraków, Poland | Skrytka pocztowa nr 10, ul. Wielicka 42C, 30-552 Kraków |   |
 | `sections[0].blocks[0].items[2].term` | Email | E-mail |   |
 | `sections[0].blocks[0].items[2].value` | hello@jakublobos.com | hello@jakublobos.com |   |
 | `sections[0].blocks[1].text` | Write to this address for anything in this policy, including the requests described under “Your rights”. | Pod tym adresem możesz zgłaszać wszystkie sprawy związane z tą polityką, w tym wnioski opisane w części „Twoje prawa”. |   |
