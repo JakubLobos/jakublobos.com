@@ -211,6 +211,7 @@ Button, icon and heading-measure geometry. Button geometry isn't decor, so it us
 | `--lift-sm-hover` / `--sink-sm-active`                   | -1px / 3px                                | small-button hover lift and press sink   |
 | `--press-busy` / `--sink-busy`                           | 2px / 4px                                 | busy ("sending") resting offset          |
 | `--icon-spinner`, `--icon-check`                         | 16px, 18px                                | status icons                             |
+| `--icon-external`                                        | 0.9em                                     | external-link arrow (scales with text)   |
 | `--icon-menu-w` / `--icon-menu-w-short`, `--icon-close`  | 16px / 10px, 14px                         | Menu bars, Close cross                   |
 | `--title-max-narrow` / `--title-max-wide`                | 520px / 640px                             | `SectionHeading` title measure           |
 | `--hl-end`                                               | 92%                                       | `Highlight` band end (with `--hl-start`) |
