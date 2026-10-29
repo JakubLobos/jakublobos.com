@@ -2,14 +2,14 @@
 
 ## Summary
 
-- UI: `Projects.astro` link marker and the footer "Back to top" now use `ArrowUpRightIcon.astro` / `ArrowUpIcon.astro` (inline SVG, `aria-hidden`, `currentColor`, `--icon-arrow` token, spacing by margin so the underline has no odd gap). The glyphs were removed from `footer.ts` (EN and PL).
-- Repo text: status markers in docs, templates and past reports replaced mechanically (PASS / FAIL / WARN). Arrow `↔` in four docs replaced by words. The `✓` / `✗` in `docs/architecture.md` and `docs/guestbook-moderation.md` diagrams replaced by words (`never import each other`, `OK`).
+- UI: `Projects.astro` link marker and the footer "Back to top" now use `ArrowIcon.astro` (direction prop) (inline SVG, `aria-hidden`, `currentColor`, `--icon-arrow` token, spacing by margin so the underline has no odd gap). The glyphs were removed from `footer.ts` (EN and PL).
+- Repo text: status markers in docs, templates and past reports replaced mechanically (PASS / FAIL / WARN). The two-way arrow in four docs replaced by words. The `✓` / `✗` in `docs/architecture.md` and `docs/guestbook-moderation.md` diagrams replaced by words (`never import each other`, `OK`).
 - Rule: `AGENTS.md` rule 8 (later rules renumbered; `docs/design/fidelity-report.md` reference updated), `CLAUDE.md`, `docs/design-system.md` section 3a (with the approved deviation), both briefs, D-37 in `docs/decisions/open-questions.md`.
 - Guard: `tools/check-no-emoji.mjs`, run as `pnpm check:emoji` first after `format:check` in `pnpm verify`.
 
 ## Scan (tracked text files, `Extended_Pictographic` + `Emoji_Presentation` + U+FE0F; (c) (r) (tm) excluded as ordinary text)
 
-Before (first scan, (c)/(tm) excluded): apps/server 48, apps/web 1, docs 35 (agent-workflow 3, agents 22, implementation-plan 10), tasks specs 2, tasks/reports 581. The UI glyphs `↗` and `↑` were removed before that scan.
+Before (first scan, (c)/(tm) excluded): apps/server 48, apps/web 1, docs 35 (agent-workflow 3, agents 22, implementation-plan 10), tasks specs 2, tasks/reports 581. The two UI arrow glyphs were removed before that scan.
 After: apps/server 48, apps/web 1, tasks/reports 15. Everything left is an exception below.
 
 ## Exceptions kept

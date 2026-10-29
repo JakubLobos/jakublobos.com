@@ -234,7 +234,7 @@ Button, icon and heading-measure geometry. Button geometry isn't decor, so it us
 
 ## 3a. Icons (D-37)
 
-No emoji, and no Unicode pictographic or arrow glyphs as icons. Icons are inline SVG components in `components/ui/` (`CheckIcon`, `ArrowUpIcon`, `ArrowUpRightIcon`): `aria-hidden="true"`, `stroke="currentColor"` (so forced colours work), sized with an `--icon-*` token. Test data for user-typed emoji is the only repo exception.
+No emoji, and no Unicode pictographic or arrow glyphs as icons. Icons are inline SVG components in `components/ui/` (`CheckIcon`, `ArrowIcon`): `aria-hidden="true"`, `stroke="currentColor"` (so forced colours work), sized with an `--icon-*` token. Test data for user-typed emoji is the only repo exception.
 
 Deviation from the design source, approved by the owner (D-37): the footer "Back to top" up arrow and the project link north-east arrow are SVG icons instead of text glyphs.
 

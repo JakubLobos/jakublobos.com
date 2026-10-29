@@ -15,13 +15,11 @@ const EXEMPT = [
   'tasks/reports/T-010/review-r2.md',
   'tasks/reports/T-013/implementation-r2.md',
   'tasks/reports/T-013/review-r1.md',
-  // This task describes the rule and names the exempt strings.
-  'tools/check-no-emoji.mjs',
 ];
 const SKIP =
   /\.(png|jpe?g|webp|avif|gif|ico|woff2?|ttf|pdf|svg)$|(^|\/)design\.html$|pnpm-lock\.yaml$/;
 const TEXT_SIGNS = new Set(['©', '®', '™']);
-const EMOJI = /[\p{Extended_Pictographic}\p{Emoji_Presentation}️]/gu;
+const EMOJI = /[\p{Extended_Pictographic}\p{Emoji_Presentation}\u{FE0F}]/gu;
 
 const isExempt = (file) =>
   EXEMPT.some((entry) => (typeof entry === 'string' ? entry === file : entry.test(file)));
