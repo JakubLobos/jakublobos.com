@@ -211,6 +211,7 @@ Button, icon and heading-measure geometry. Button geometry isn't decor, so it us
 | `--lift-sm-hover` / `--sink-sm-active`                   | -1px / 3px                                | small-button hover lift and press sink   |
 | `--press-busy` / `--sink-busy`                           | 2px / 4px                                 | busy ("sending") resting offset          |
 | `--icon-spinner`, `--icon-check`                         | 16px, 18px                                | status icons                             |
+| `--icon-external`                                        | 0.9em                                     | external-link arrow (scales with text)   |
 | `--icon-menu-w` / `--icon-menu-w-short`, `--icon-close`  | 16px / 10px, 14px                         | Menu bars, Close cross                   |
 | `--title-max-narrow` / `--title-max-wide`                | 520px / 640px                             | `SectionHeading` title measure           |
 | `--hl-end`                                               | 92%                                       | `Highlight` band end (with `--hl-start`) |
@@ -231,12 +232,6 @@ Button, icon and heading-measure geometry. Button geometry isn't decor, so it us
 8. **Forced colours:** in `@media (forced-colors: active)`, hide the typing mirrors, drips, and the hero mascot (its pupils, brows, and fills depend on colour) and restore the native field text colour. Hard shadows disappear by default; add `border` fallbacks where meaning depends on shadow.
 9. **Breakpoints:** only the three in §2.6. Prefer intrinsic layout (`clamp`, `auto-fit`, `flex-wrap`) over new breakpoints.
 10. **Changing a token is a shared-surface change.** Only T-020 creates `tokens.css`. Later tasks request changes in their completion report ([`agent-workflow.md`](agent-workflow.md#shared-surfaces)).
-
-## 3a. Icons (D-37)
-
-No emoji, and no Unicode pictographic or arrow glyphs as icons. Icons are inline SVG components in `components/ui/` (`CheckIcon`, `ArrowIcon`): `aria-hidden="true"`, `stroke="currentColor"` (so forced colours work), sized with an `--icon-*` token. Test data for user-typed emoji is the only repo exception.
-
-Deviation from the design source, approved by the owner (D-37): the footer "Back to top" up arrow and the project link north-east arrow are SVG icons instead of text glyphs.
 
 ## 4. Accessibility adjustments approved (D-01)
 

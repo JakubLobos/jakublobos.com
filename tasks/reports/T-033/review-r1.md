@@ -6,12 +6,12 @@
 
 ## Gate results (re-run by reviewer)
 
-| Command                                                       | Result                                                                                                                        |
-| ------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `pnpm install --frozen-lockfile`                              | PASS already up to date                                                                                                       |
-| `pnpm verify`                                                 | PASS Prettier clean, lint clean, typecheck 0/0, tests 153 + 340 + 230 passed, build 6 pages                                   |
-| `pnpm test:e2e e2e/privacy-and-404.spec.ts`                   | PASS 19 passed, 2 skipped (header switcher on `chromium-mobile`, by design)                                                   |
-| Preview (`/privacy`, `/pl/privacy`, `/nope/deep`, `/pl/nope`) | PASS edge emulator on :8787: 200 / 200 / 404 / 404; inspected at 390, 768, 1024, 1440; no horizontal page scroll at any width |
+| Command                                                       | Result                                                                                                                      |
+| ------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `pnpm install --frozen-lockfile`                              | ✅ already up to date                                                                                                       |
+| `pnpm verify`                                                 | ✅ Prettier clean, lint clean, typecheck 0/0, tests 153 + 340 + 230 passed, build 6 pages                                   |
+| `pnpm test:e2e e2e/privacy-and-404.spec.ts`                   | ✅ 19 passed, 2 skipped (header switcher on `chromium-mobile`, by design)                                                   |
+| Preview (`/privacy`, `/pl/privacy`, `/nope/deep`, `/pl/nope`) | ✅ edge emulator on :8787: 200 / 200 / 404 / 404; inspected at 390, 768, 1024, 1440; no horizontal page scroll at any width |
 
 ## Scope check
 
@@ -21,16 +21,16 @@ Files outside _Allowed files_: `e2e/privacy-and-404.spec.ts` (disclosed; added a
 
 | #    | Status | Evidence gathered by reviewer                                                                                                                                                                                                                                                                                                                          |
 | ---- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| AC-1 | PASS   | e2e switcher round trip passes (chromium, webkit). Built `404.html` / `pl/404.html`: `<meta name="robots" content="noindex">`, localized titles, `lang` set. 404 switcher targets `/set-language?lang=pl&to=/pl/404` → Worker fallback to the other home (e2e passes).                                                                                 |
-| AC-2 | FAIL   | Data table has all 11 `security.md` §8 rows with matching purpose, legal basis, location, and retention; 4 placeholders visibly marked and listed. But the policy omits or misstates three things the system does (R1-01, R1-02, R1-03).                                                                                                               |
-| AC-3 | PASS   | Nested `/no/such/page` and `/pl/no/such/page` return 404 with the localized page; all links root-relative (`/`, `/pl`, `/#projects`, `/pl#projects`); home link lands on the right locale (e2e).                                                                                                                                                       |
-| AC-4 | PASS   | One h1, h1→h2→h3 with no jumps (e2e), axe clean in both locales and on 404 (e2e). Running text capped at `70ch` (measured ≈ 65–70 chars at 768–1440). Tables have `<caption>` and `th scope="col"`; scroll wrappers are `role="region"`, labelled, focusable, with a visible 2 px focus ring. Keyboard tab order is logical. No motion on either page. |
+| AC-1 | ✅     | e2e switcher round trip passes (chromium, webkit). Built `404.html` / `pl/404.html`: `<meta name="robots" content="noindex">`, localized titles, `lang` set. 404 switcher targets `/set-language?lang=pl&to=/pl/404` → Worker fallback to the other home (e2e passes).                                                                                 |
+| AC-2 | ❌     | Data table has all 11 `security.md` §8 rows with matching purpose, legal basis, location, and retention; 4 placeholders visibly marked and listed. But the policy omits or misstates three things the system does (R1-01, R1-02, R1-03).                                                                                                               |
+| AC-3 | ✅     | Nested `/no/such/page` and `/pl/no/such/page` return 404 with the localized page; all links root-relative (`/`, `/pl`, `/#projects`, `/pl#projects`); home link lands on the right locale (e2e).                                                                                                                                                       |
+| AC-4 | ✅     | One h1, h1→h2→h3 with no jumps (e2e), axe clean in both locales and on 404 (e2e). Running text capped at `70ch` (measured ≈ 65–70 chars at 768–1440). Tables have `<caption>` and `th scope="col"`; scroll wrappers are `role="region"`, labelled, focusable, with a visible 2 px focus ring. Keyboard tab order is logical. No motion on either page. |
 
 EN/PL structural parity checked by script: sections, block types, list lengths, and table shapes (5×11, 4×4) are identical.
 
 ## Checklist
 
-Requirements & design FAIL (R1-01..03) · Correctness PASS · Architecture PASS · Type safety PASS · Security & privacy FAIL (policy accuracy, R1-01..03) · Accessibility PASS · Responsive & performance PASS · Tests PASS · Process PASS
+Requirements & design ❌ (R1-01..03) · Correctness ✅ · Architecture ✅ · Type safety ✅ · Security & privacy ❌ (policy accuracy, R1-01..03) · Accessibility ✅ · Responsive & performance ✅ · Tests ✅ · Process ✅
 
 Security grep of the diff: no HTML sinks, `style=`, `any`, `PUBLIC_*`, or phone numbers. Fonts are self-hosted (`font-src 'self'`), so no third-party request to disclose there.
 

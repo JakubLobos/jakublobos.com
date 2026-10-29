@@ -28,14 +28,14 @@ After sending, the guestbook dialog now polls `GET /api/guestbook/submissions/:c
 
 ## Acceptance criteria
 
-| #    | Criterion                                              | Status                                                                          | Evidence                                                                                                        |
-| ---- | ------------------------------------------------------ | ------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| AC-1 | Endpoint statuses, 404, 400, no-store, 429, no leakage | PASS                                                                            | `guestbook.routes.test.ts` "GET /api/guestbook/submissions/:clientRequestId" (4 tests)                          |
-| AC-2 | Reasons mapped to four labels                          | PASS                                                                            | `rejection-reason.test.ts` (all suitability reasons covered)                                                    |
-| AC-3 | Silent drops: same 202, text-free row                  | PASS                                                                            | existing AC-6 byte-identity test still passes; routes test checks drop statuses; repository test checks columns |
-| AC-4 | Modal states, quote refresh, quiet polling             | PASS                                                                            | e2e "the modal reports each outcome..." and "ends in the taking longer state"                                   |
-| AC-5 | Poll schedule, hidden pause, resume                    | PASS (schedule, resume parsing unit-tested; hidden pause not covered by a test) | `guestbook-status.test.ts`                                                                                      |
-| AC-6 | Accessibility                                          | PASS                                                                            | axe on `#guestbook-modal` in checking and taking-longer states; polite live region asserted                     |
+| #    | Criterion                                              | Status                                                                        | Evidence                                                                                                        |
+| ---- | ------------------------------------------------------ | ----------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| AC-1 | Endpoint statuses, 404, 400, no-store, 429, no leakage | ✅                                                                            | `guestbook.routes.test.ts` "GET /api/guestbook/submissions/:clientRequestId" (4 tests)                          |
+| AC-2 | Reasons mapped to four labels                          | ✅                                                                            | `rejection-reason.test.ts` (all suitability reasons covered)                                                    |
+| AC-3 | Silent drops: same 202, text-free row                  | ✅                                                                            | existing AC-6 byte-identity test still passes; routes test checks drop statuses; repository test checks columns |
+| AC-4 | Modal states, quote refresh, quiet polling             | ✅                                                                            | e2e "the modal reports each outcome..." and "ends in the taking longer state"                                   |
+| AC-5 | Poll schedule, hidden pause, resume                    | ✅ (schedule, resume parsing unit-tested; hidden pause not covered by a test) | `guestbook-status.test.ts`                                                                                      |
+| AC-6 | Accessibility                                          | ✅                                                                            | axe on `#guestbook-modal` in checking and taking-longer states; polite live region asserted                     |
 
 ## Validation output
 

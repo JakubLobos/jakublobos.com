@@ -6,12 +6,12 @@
 
 ## Gate results (re-run by reviewer)
 
-| Command                                                                                                     | Result                                                                                                       |
-| ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| `pnpm install --frozen-lockfile`                                                                            | PASS "Already up to date"                                                                                    |
-| `pnpm verify`                                                                                               | PASS exit 0. contracts 153/153, server 135/135 (12 files), web 69/69; typecheck 0 errors; web build complete |
-| `pnpm --filter @portfolio/server test -- …` (task command; filter ignored, known spec issue)                | PASS 12 files, 135 tests                                                                                     |
-| `pnpm --filter @portfolio/server exec vitest run src/domain/contact src/infra/mail src/http/routes/contact` | PASS 3 files, 42 tests                                                                                       |
+| Command                                                                                                     | Result                                                                                                     |
+| ----------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `pnpm install --frozen-lockfile`                                                                            | ✅ "Already up to date"                                                                                    |
+| `pnpm verify`                                                                                               | ✅ exit 0. contracts 153/153, server 135/135 (12 files), web 69/69; typecheck 0 errors; web build complete |
+| `pnpm --filter @portfolio/server test -- …` (task command; filter ignored, known spec issue)                | ✅ 12 files, 135 tests                                                                                     |
+| `pnpm --filter @portfolio/server exec vitest run src/domain/contact src/infra/mail src/http/routes/contact` | ✅ 3 files, 42 tests                                                                                       |
 
 ## Scope check
 
@@ -21,16 +21,16 @@ Files outside _Allowed files_: none. Unlisted dependencies: none. `git merge-tre
 
 | #    | Status | Evidence gathered by reviewer                                                                                                                                                                                                                                                                                                 |
 | ---- | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| AC-1 | PASS   | The service calls the contracts `normalizeContactInput`/`validateContactInput` (no duplicated rules). Boundary tests cover 1/2/60/61 name, 9/10/1000/1001 message, email required/invalid/121, and control characters. The route maps the result to 422 `VALIDATION_FAILED` with `fields`.                                    |
-| AC-2 | PASS   | `\r\nBcc:` is rejected as `invalid_characters` before any mail is built. `buildSubject` also strips `\p{Cc}`/U+2028/U+2029 and caps at 80. `replyTo` is the normalized email (route and service tests). `from`/`to` come only from `ResendMailerOptions` (body snapshot in `mail.test.ts`).                                   |
-| AC-3 | PASS   | The injected-fetch snapshot asserts the URL, `POST`, `Authorization: Bearer`, `Idempotency-Key`, the `AbortSignal`, and the exact JSON body. The service test asserts key = `clientRequestId`. Field names match the Resend docs.                                                                                             |
-| AC-4 | WARN   | 429, 4xx, 5xx, network, and timeout → 503 + `Retry-After` through the real Resend mailer. Honeypot → 200 with no send. 4th request → 429. 21st request across IPs → 503. The **daily** cap (60) is correct in code (`contact.routes.ts:34`) but no test exercises it (R1-02). The idempotent-retry outcome is broken (R1-01). |
-| AC-5 | PASS   | The route log-capture test asserts no name, email, or message under a provider failure. The console mailer logs lengths only. The Resend 4xx log carries only `status` and `errorName`, never `message` or the key.                                                                                                           |
-| AC-6 | PASS   | `Łukasz Żółć` round-trips in the parsed Resend JSON body and in the subject.                                                                                                                                                                                                                                                  |
+| AC-1 | ✅     | The service calls the contracts `normalizeContactInput`/`validateContactInput` (no duplicated rules). Boundary tests cover 1/2/60/61 name, 9/10/1000/1001 message, email required/invalid/121, and control characters. The route maps the result to 422 `VALIDATION_FAILED` with `fields`.                                    |
+| AC-2 | ✅     | `\r\nBcc:` is rejected as `invalid_characters` before any mail is built. `buildSubject` also strips `\p{Cc}`/U+2028/U+2029 and caps at 80. `replyTo` is the normalized email (route and service tests). `from`/`to` come only from `ResendMailerOptions` (body snapshot in `mail.test.ts`).                                   |
+| AC-3 | ✅     | The injected-fetch snapshot asserts the URL, `POST`, `Authorization: Bearer`, `Idempotency-Key`, the `AbortSignal`, and the exact JSON body. The service test asserts key = `clientRequestId`. Field names match the Resend docs.                                                                                             |
+| AC-4 | ⚠️     | 429, 4xx, 5xx, network, and timeout → 503 + `Retry-After` through the real Resend mailer. Honeypot → 200 with no send. 4th request → 429. 21st request across IPs → 503. The **daily** cap (60) is correct in code (`contact.routes.ts:34`) but no test exercises it (R1-02). The idempotent-retry outcome is broken (R1-01). |
+| AC-5 | ✅     | The route log-capture test asserts no name, email, or message under a provider failure. The console mailer logs lengths only. The Resend 4xx log carries only `status` and `errorName`, never `message` or the key.                                                                                                           |
+| AC-6 | ✅     | `Łukasz Żółć` round-trips in the parsed Resend JSON body and in the subject.                                                                                                                                                                                                                                                  |
 
 ## Checklist
 
-Requirements & design FAIL (R1-01) · Correctness FAIL (R1-01) · Architecture PASS (domain has no Express/fetch/env; the cap is injected structurally) · Type safety PASS (provider bodies zod-parsed, no `any`, exhaustive `switch`) · Security & privacy PASS (no PII in logs or fixtures; JSON body, no raw headers; console mailer refused in production by `loadConfig`) · Accessibility N/A · Responsive & performance N/A · Tests FAIL (R1-02) · Process PASS
+Requirements & design ❌ (R1-01) · Correctness ❌ (R1-01) · Architecture ✅ (domain has no Express/fetch/env; the cap is injected structurally) · Type safety ✅ (provider bodies zod-parsed, no `any`, exhaustive `switch`) · Security & privacy ✅ (no PII in logs or fixtures; JSON body, no raw headers; console mailer refused in production by `loadConfig`) · Accessibility N/A · Responsive & performance N/A · Tests ❌ (R1-02) · Process ✅
 
 Declared deviations (all accepted):
 

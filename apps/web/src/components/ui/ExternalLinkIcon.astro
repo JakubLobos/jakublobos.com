@@ -1,18 +1,9 @@
 ---
-interface Props {
-  direction: 'up' | 'up-right';
-}
-
-const paths = {
-  up: 'M12 19V5M6 11l6-6 6 6',
-  'up-right': 'M7 17L17 7M8 7h9v9',
-} as const;
-
-const { direction } = Astro.props;
+// Marks a link that leaves the site. Drawn as SVG, never a glyph or emoji (CLAUDE.md).
 ---
 
 <svg
-  class="arrow"
+  class="external"
   viewBox="0 0 24 24"
   fill="none"
   stroke="currentColor"
@@ -21,15 +12,15 @@ const { direction } = Astro.props;
   stroke-linejoin="round"
   aria-hidden="true"
 >
-  <path d={paths[direction]}></path>
+  <path d="M7 17L17 7M8 7h9v9"></path>
 </svg>
 
 <style>
-  .arrow {
+  .external {
     display: inline-block;
     flex: none;
-    width: var(--icon-arrow);
-    height: var(--icon-arrow);
+    width: var(--icon-external);
+    height: var(--icon-external);
     margin-inline-start: var(--space-4);
     vertical-align: -0.1em;
   }

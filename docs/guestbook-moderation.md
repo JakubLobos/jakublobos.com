@@ -21,7 +21,7 @@ Requirements: FR-25…FR-27, FR-40…FR-48, NFR-05…NFR-07. Decisions: [ADR-000
  submit (validated, silent rules passed)
         │   in ONE transaction: delete existing pending (superseded) → evict oldest approved if needed → insert
         ▼
-  ┌──────────┐  rules OK → moderation OK → suitability OK    ┌──────────┐
+  ┌──────────┐  rules ✓ → moderation ✓ → suitability ✓       ┌──────────┐
   │ pending  │ ───────────────────────────────────────────►  │ approved │ ── private archive (≤ 100 rows)
   │ (max 1)  │                                               └──────────┘    evicted oldest-first when room is needed
   └──────────┘                                                                / deleted via admin CLI

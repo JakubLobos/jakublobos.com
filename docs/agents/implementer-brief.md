@@ -31,7 +31,6 @@ You are implementing **one** task in the portfolio repository: **`{TASK_ID}`** (
   - no inline styles or `define:vars`
   - no HTML sinks
   - tokens only (`docs/design-system.md#3-rules-for-consuming-tokens`)
-  - no emoji or glyph icons; icons are inline SVG components (`AGENTS.md` rule 8)
   - copy via i18n message modules, EN + PL
 - Write the tests the task requires **while** you implement. Tests must be deterministic and must fail if the behaviour breaks.
 - If the spec is ambiguous and the choice matters (behaviour, API, visuals, security, privacy), stop and report `BLOCKED` with a precise question. For low-impact choices, decide, stay consistent, and list them under Assumptions.

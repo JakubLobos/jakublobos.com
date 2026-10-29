@@ -49,7 +49,7 @@ Rationale: [ADR-0001](decisions/0001-pnpm-workspaces-monorepo.md).
 ```
 apps/web (site + worker) ──► packages/contracts  (types, constants, rules only; never "/schemas" → no zod in client or worker)
 apps/server              ──► packages/contracts  (types, constants, rules, schemas)
-apps/web and apps/server never import each other
+apps/web ✗ apps/server    apps/server ✗ apps/web
 ```
 
 ## 3. Shared contracts: `packages/contracts`
