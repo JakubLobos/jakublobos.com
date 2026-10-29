@@ -6,10 +6,13 @@ export const NAV_SECTIONS = ['experience', 'projects', 'skills', 'guestbook', 'c
 
 export type NavSection = (typeof NAV_SECTIONS)[number];
 
+/** Off-site profiles open in a new tab, without handing the new page `window.opener`. */
+export const EXTERNAL_LINK = { target: '_blank', rel: 'noopener noreferrer' } as const;
+
 export const SOCIAL_LINKS = [
-  { id: 'github', href: profile.github.url },
-  { id: 'linkedin', href: profile.linkedin.url },
-  { id: 'email', href: `mailto:${profile.email}` },
+  { id: 'github', href: profile.github.url, external: true },
+  { id: 'linkedin', href: profile.linkedin.url, external: true },
+  { id: 'email', href: `mailto:${profile.email}`, external: false },
 ] as const;
 
 /** Share of the viewport height above which a section counts as "reached" (design: 40 %). */
