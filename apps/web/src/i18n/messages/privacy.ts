@@ -68,7 +68,7 @@ const en: PrivacyCopy = {
             { term: 'Controller', value: profile.name },
             {
               term: 'Address',
-              value: 'PO Box 10, ul. Wielicka 42C, 30-552 Kraków, Poland',
+              value: 'PO Box 10, 42C Wielicka Street, 30-552 Kraków, Poland',
             },
             { term: 'Email', value: profile.email, href: email },
           ],
