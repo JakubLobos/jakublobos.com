@@ -1,4 +1,5 @@
 ---
+import ArrowUpIcon from '../ui/ArrowUpIcon.astro';
 import { profile } from '../../content/profile.ts';
 import { alternatePath, type Locale } from '../../i18n/locales.ts';
 import { footer } from '../../i18n/messages/footer.ts';
@@ -28,7 +29,10 @@ const year = new Date().getFullYear();
       </button>
     </li>
     <li>
-      <a href="#top">{m.backToTop}</a>
+      <a href="#top">
+        {m.backToTop}
+        <ArrowUpIcon />
+      </a>
     </li>
   </ul>
 </footer>

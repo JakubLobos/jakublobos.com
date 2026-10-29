@@ -2,6 +2,7 @@
 import { projects } from '../../content/projects.ts';
 import type { Locale } from '../../i18n/locales.ts';
 import { projectsMessages } from '../../i18n/messages/projects.ts';
+import ArrowUpRightIcon from '../ui/ArrowUpRightIcon.astro';
 import SectionHeading from '../ui/SectionHeading.astro';
 
 interface Props {
@@ -38,7 +39,7 @@ const messages = projectsMessages(locale);
                   <li>
                     <a href={link.href} target="_blank" rel="noopener noreferrer">
                       {messages.link[link.kind]}
-                      <span aria-hidden="true"> ↗</span>
+                      <ArrowUpRightIcon />
                     </a>
                   </li>
                 ))}
