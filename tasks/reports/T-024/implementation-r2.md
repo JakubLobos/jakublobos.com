@@ -8,7 +8,7 @@
 
 | Finding | Resolution                                                                                                                                                                                                                           |
 | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| R1-01   | fixed: `implementation-r1.md` rewritten as UTF-8 without a BOM (✅ and the PL strings restored); header SHA now `0143151`.                                                                                                           |
+| R1-01   | fixed: `implementation-r1.md` rewritten as UTF-8 without a BOM (PASS and the PL strings restored); header SHA now `0143151`.                                                                                                         |
 | R1-02   | doc fix by the orchestrator (`design-system.md` §3 rule 8); no code change.                                                                                                                                                          |
 | R1-03   | fixed: `scripts/mascot.ts` reads `--duration-blink` with `getComputedStyle` at blink time (`parseFloat`, token is in ms) and falls back to 180 ms if it is missing or not positive. `BLINK_DURATION_MS` removed from `lib/pupil.ts`. |
 | R1-04   | fixed: the four overlapping clamp rows replaced by one far-diagonal case; the exact 175 px boundary test stays.                                                                                                                      |

@@ -40,17 +40,17 @@ The executable backlog is [`tasks/README.md`](../tasks/README.md). This document
 
 ## 4. Readiness assessment
 
-| Item                                                | State                                                                                  |
-| --------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| Design analyzed; assets available                   | ✅                                                                                     |
-| Requirements, architecture, and decisions           | ✅ All implementation-relevant owner decisions answered (D-01…D-22)                    |
-| Root tooling (ESLint, Prettier, TS base, workspace) | ✅ Installed and verified                                                              |
-| Packages scaffolded                                 | ❌ Intentionally not done; T-001 is the first task                                     |
-| Task specs                                          | ✅ 32 tasks, each with allowed files, ACs, validation                                  |
-| Agent definitions and briefs                        | ✅                                                                                     |
-| Git                                                 | ✅ Initialized on `main`, **no commits yet**                                           |
-| Blocking items for implementation                   | ✅ None                                                                                |
-| Blocking items for go-live                          | ⚠️ D-23 owner actions (accounts, keys, DNS, credits), D-10 resume PDFs, D-02 PL review |
+| Item                                                | State                                                                                    |
+| --------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| Design analyzed; assets available                   | PASS                                                                                     |
+| Requirements, architecture, and decisions           | PASS All implementation-relevant owner decisions answered (D-01…D-22)                    |
+| Root tooling (ESLint, Prettier, TS base, workspace) | PASS Installed and verified                                                              |
+| Packages scaffolded                                 | FAIL Intentionally not done; T-001 is the first task                                     |
+| Task specs                                          | PASS 32 tasks, each with allowed files, ACs, validation                                  |
+| Agent definitions and briefs                        | PASS                                                                                     |
+| Git                                                 | PASS Initialized on `main`, **no commits yet**                                           |
+| Blocking items for implementation                   | PASS None                                                                                |
+| Blocking items for go-live                          | WARN D-23 owner actions (accounts, keys, DNS, credits), D-10 resume PDFs, D-02 PL review |
 
 **Verdict:** ready to start wave 1 (T-001) once the initial commit exists.
 

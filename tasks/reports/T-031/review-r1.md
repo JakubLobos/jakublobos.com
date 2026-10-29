@@ -6,11 +6,11 @@
 
 ## Gate results (re-run by reviewer)
 
-| Command                          | Result                                                                                                    |
-| -------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| `pnpm install --frozen-lockfile` | ✅ Already up to date                                                                                     |
-| `pnpm verify`                    | ✅ Prettier clean · lint exit 0 · astro check 0 errors · tests 153 + 340 + 201 passed · build Complete    |
-| `pnpm preview`                   | ✅ Ran the edge emulator from `dist` on :8797 instead (:8787 was held by another agent's process), CSP on |
+| Command                          | Result                                                                                                      |
+| -------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `pnpm install --frozen-lockfile` | PASS Already up to date                                                                                     |
+| `pnpm verify`                    | PASS Prettier clean · lint exit 0 · astro check 0 errors · tests 153 + 340 + 201 passed · build Complete    |
+| `pnpm preview`                   | PASS Ran the edge emulator from `dist` on :8797 instead (:8787 was held by another agent's process), CSP on |
 
 ## Scope check
 
@@ -22,14 +22,14 @@ Playwright 1.64 + axe 4.14 against the built site. The page is short on this bra
 
 | #    | Status | Evidence gathered by reviewer                                                                                                                                                                                                                                                                                                                                                                                               |
 | ---- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| AC-1 | ✅     | At 1440, 1024 and 768 the bar is at `top:14 bottom:886 width:18`, right 8 px. I compared a 2× crop of the right edge with `desktop-1440-hero.png`: the dashed line, tilted caps, sketch radius, 2 px border, `2px 3px` hard shadow and three tilted grips match, and the thumb turns yellow on hover and drag. At 390 the computed `display` is `none`. Re-check the thumb length once the full page is merged (see notes). |
-| AC-2 | ✅     | Top: thumb top = 14 (track top). Bottom: thumb bottom = 886.04 (track bottom; the 0.04 comes from the `sin(9)·1.2°` tilt). A 100 px drag scrolled 155 px, against an expected 100 × 449/290.25 = 154.7. A drag past the end clamps to 449. A track click near the bottom cap goes to 449. The maths matches design-source L463–488, plus `[0, max]` clamping on drag (an improvement).                                      |
-| AC-3 | ✅     | Wheel (300 px) and `End` key (to 449) scroll natively. 40 Tab presses never focus inside the bar. No focusable descendants. The ARIA snapshot has no scrollbar node. axe found 0 violations. There are no key, wheel or touch listeners. `user-select` and `data-dragging` are cleared on release.                                                                                                                          |
-| AC-4 | ✅     | Chrome trace while wheel-scrolling and dragging (60 steps): 0 long tasks, `FireAnimationFrame` max 0.28 ms (avg 0.055 ms across all page rAFs), 4 layouts (max 0.16 ms). There were 85 thumb renders for 84 scroll events (one per frame). Scroll, resize and `ResizeObserver` share one rAF, and `pointermove` only stores `clientY`.                                                                                      |
+| AC-1 | PASS   | At 1440, 1024 and 768 the bar is at `top:14 bottom:886 width:18`, right 8 px. I compared a 2× crop of the right edge with `desktop-1440-hero.png`: the dashed line, tilted caps, sketch radius, 2 px border, `2px 3px` hard shadow and three tilted grips match, and the thumb turns yellow on hover and drag. At 390 the computed `display` is `none`. Re-check the thumb length once the full page is merged (see notes). |
+| AC-2 | PASS   | Top: thumb top = 14 (track top). Bottom: thumb bottom = 886.04 (track bottom; the 0.04 comes from the `sin(9)·1.2°` tilt). A 100 px drag scrolled 155 px, against an expected 100 × 449/290.25 = 154.7. A drag past the end clamps to 449. A track click near the bottom cap goes to 449. The maths matches design-source L463–488, plus `[0, max]` clamping on drag (an improvement).                                      |
+| AC-3 | PASS   | Wheel (300 px) and `End` key (to 449) scroll natively. 40 Tab presses never focus inside the bar. No focusable descendants. The ARIA snapshot has no scrollbar node. axe found 0 violations. There are no key, wheel or touch listeners. `user-select` and `data-dragging` are cleared on release.                                                                                                                          |
+| AC-4 | PASS   | Chrome trace while wheel-scrolling and dragging (60 steps): 0 long tasks, `FireAnimationFrame` max 0.28 ms (avg 0.055 ms across all page rAFs), 4 layouts (max 0.16 ms). There were 85 thumb renders for 84 scroll events (one per frame). Scroll, resize and `ResizeObserver` share one rAF, and `pointermove` only stores `clientY`.                                                                                      |
 
 ## Checklist
 
-Requirements & design ✅ · Correctness ✅ · Architecture ✅ (`lib` is pure; the element only wires events) · Type safety ✅ (no `any`, casts or `!`) · Security & privacy ✅ (no sinks, no `style=`; CSSOM only) · Accessibility ✅ (`aria-hidden`, not focusable, forced colours map to `Canvas`/`CanvasText`/`Highlight`, and under reduced motion the transition is `0s` and the track click is instant) · Responsive & performance ✅ (fixed and initially `visibility:hidden`, so no layout shift; `AbortController` + `ResizeObserver.disconnect` + `cancelAnimationFrame` on disconnect) · Tests ✅ (R1-04) · Process ✅
+Requirements & design PASS · Correctness PASS · Architecture PASS (`lib` is pure; the element only wires events) · Type safety PASS (no `any`, casts or `!`) · Security & privacy PASS (no sinks, no `style=`; CSSOM only) · Accessibility PASS (`aria-hidden`, not focusable, forced colours map to `Canvas`/`CanvasText`/`Highlight`, and under reduced motion the transition is `0s` and the track click is instant) · Responsive & performance PASS (fixed and initially `visibility:hidden`, so no layout shift; `AbortController` + `ResizeObserver.disconnect` + `cancelAnimationFrame` on disconnect) · Tests PASS (R1-04) · Process PASS
 
 ## Findings
 
