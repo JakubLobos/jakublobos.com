@@ -59,7 +59,7 @@ const rawProjects: readonly RawProject[] = [
       'styled-components',
       'Superstruct',
       'Yup',
-      'posthog-js',
+      'PostHog',
       'A/B testing',
       'ts-money',
       'Astro',
