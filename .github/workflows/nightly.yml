@@ -10,7 +10,9 @@ permissions:
 
 jobs:
   e2e:
-    runs-on: ubuntu-latest
+    # Pinned: Playwright's browser builds and their system libraries follow the Ubuntu release, so
+    # a moving ubuntu-latest can break them (26.04 dropped the ICU 74 that WebKit links against).
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
     strategy:
       fail-fast: false

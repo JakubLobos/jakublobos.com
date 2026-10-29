@@ -31,7 +31,9 @@ jobs:
 
   e2e:
     needs: verify
-    runs-on: ubuntu-latest
+    # Pinned: Playwright's browser builds and their system libraries follow the Ubuntu release, so
+    # a moving ubuntu-latest can break them (26.04 dropped the ICU 74 that WebKit links against).
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -54,7 +56,9 @@ jobs:
   # The Node edge emulator used locally is only trustworthy while real workerd agrees with it.
   edge-parity:
     needs: verify
-    runs-on: ubuntu-latest
+    # Pinned: Playwright's browser builds and their system libraries follow the Ubuntu release, so
+    # a moving ubuntu-latest can break them (26.04 dropped the ICU 74 that WebKit links against).
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     env:
       E2E_EDGE: wrangler
