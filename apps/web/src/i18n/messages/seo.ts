@@ -2,11 +2,9 @@ import { defineMessages } from '../t.ts';
 
 export const seo = defineMessages({
   en: {
-    // Share image (T-035): the text rendered into og-en.png and its alt text.
+    // Alt text of the shared, English-only animated share image (T-095).
     og: {
-      subtitle: 'Software Engineer · React & TypeScript',
-      domain: 'jakublobos.com',
-      alt: 'Jakub Łobos, Software Engineer: a hand-drawn mascot under the headline “Engineering centered around the user”',
+      alt: 'Jakub Łobos: an animated card that turns from “Websites with personality.” into “Open to work!”',
     },
     home: {
       title: 'Jakub Łobos — Software Engineer Portfolio',
@@ -25,9 +23,7 @@ export const seo = defineMessages({
   },
   pl: {
     og: {
-      subtitle: 'Software Engineer · React i TypeScript',
-      domain: 'jakublobos.com',
-      alt: 'Jakub Łobos, Software Engineer: ręcznie rysowana maskotka pod hasłem „Inżynieria z myślą o relacji z użytkownikiem”',
+      alt: 'Jakub Łobos: animowana karta, która zmienia hasło „Websites with personality.” na „Open to work!”',
     },
     home: {
       title: 'Jakub Łobos — portfolio Software Engineera',

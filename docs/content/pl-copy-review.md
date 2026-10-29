@@ -10,7 +10,7 @@ date and the word "approved" once the owner has gone through every row (T-034, A
 > `{name}` marks a value filled in at runtime. Address form is informal "Ty"; quotes are „…”;
 > a guestbook entry is a "wpis".
 
-Strings: 346 across 22 areas.
+Strings: 344 across 22 areas.
 
 ## Owner sign-off
 
@@ -20,7 +20,7 @@ Strings: 346 across 22 areas.
 
 ## PL equal to EN
 
-34 whitelisted (proper nouns, technology names), 0 to check.
+33 whitelisted (proper nouns, technology names), 0 to check.
 
 ## Common
 
@@ -299,9 +299,7 @@ Source: `apps/web/src/i18n/messages/seo.ts`
 
 | Key | EN | PL | Owner correction |
 | --- | -- | -- | ---------------- |
-| `og.subtitle` | Software Engineer · React & TypeScript | Software Engineer · React i TypeScript |   |
-| `og.domain` | jakublobos.com | jakublobos.com |   |
-| `og.alt` | Jakub Łobos, Software Engineer: a hand-drawn mascot under the headline “Engineering centered around the user” | Jakub Łobos, Software Engineer: ręcznie rysowana maskotka pod hasłem „Inżynieria z myślą o relacji z użytkownikiem” |   |
+| `og.alt` | Jakub Łobos: an animated card that turns from “Websites with personality.” into “Open to work!” | Jakub Łobos: animowana karta, która zmienia hasło „Websites with personality.” na „Open to work!” |   |
 | `home.title` | Jakub Łobos — Software Engineer Portfolio | Jakub Łobos — portfolio Software Engineera |   |
 | `home.description` | Portfolio of Jakub Łobos, a software engineer building web apps with React and TypeScript and designing them in Figma. | Portfolio Jakuba Łobosa — Software Engineera, który tworzy aplikacje webowe w React i TypeScript i projektuje je w Figmie. |   |
 | `privacy.title` | Privacy policy — Jakub Łobos | Polityka prywatności — Jakub Łobos |   |

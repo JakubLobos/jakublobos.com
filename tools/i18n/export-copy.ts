@@ -63,7 +63,6 @@ const WHITELIST = new Set([
   'Cookies',
   'Workflow',
   'Email',
-  'jakublobos.com',
   'Jakub Łobos',
   'Railway',
   'Cloudflare',
