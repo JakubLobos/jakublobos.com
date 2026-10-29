@@ -19,9 +19,9 @@ You are reviewing task **`{TASK_ID}`** on branch `task/{TASK_ID}-…`, round **{
 1. **Scope check.** List the changed files (`git diff --stat`). Anything outside _Allowed files_ is a finding (MAJOR if it touches a shared surface without an approved Change Request). Any dependency not listed in the task is a finding.
 2. **Re-run gates yourself** in a clean state: `pnpm install --frozen-lockfile`, `pnpm verify`, and every command in the task's _Validation_ section. Record pass/fail with the summary lines. A failing gate is a BLOCKER.
 3. **Acceptance criteria.** Verify each one independently: run the test, read the code path, render the page, or call the endpoint. Record evidence for each. "Report says so" is not evidence.
-4. **Checklist.** Walk `docs/agent-workflow.md#9-review-checklist` completely and mark each item ✅ / ❌ / N/A.
+4. **Checklist.** Walk `docs/agent-workflow.md#9-review-checklist` completely and mark each item PASS / FAIL / N/A.
 5. **Tests.** Read them. Would they fail if the behaviour regressed? Are the boundaries from `docs/testing.md` covered? Is everything deterministic?
-6. **UI tasks.** Run `pnpm preview` (site on :8787 via wrangler dev, API on :3000) and inspect the pages at 390, 768, 1024, and 1440. Use `tools/design/capture-design.mjs` side-by-sides when available; otherwise compare with `docs/design/screenshots/`. Run axe (the e2e a11y spec or `@axe-core/playwright`) for the affected states. Check keyboard-only operation and `prefers-reduced-motion`.
+6. **UI tasks.** Confirm there is no emoji or glyph icon (inline SVG only, `AGENTS.md` rule 8). Run `pnpm preview` (site on :8787 via wrangler dev, API on :3000) and inspect the pages at 390, 768, 1024, and 1440. Use `tools/design/capture-design.mjs` side-by-sides when available; otherwise compare with `docs/design/screenshots/`. Run axe (the e2e a11y spec or `@axe-core/playwright`) for the affected states. Check keyboard-only operation and `prefers-reduced-motion`.
 7. **Security pass.** Grep the diff for HTML sinks, `style=`, `any`, string-built SQL, logging of bodies/emails/IPs/keys, and new `PUBLIC_` variables.
 8. **Previous findings** (round > 1): confirm each one is fixed or that the dispute is justified.
 
