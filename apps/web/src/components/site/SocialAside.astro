@@ -2,7 +2,7 @@
 import type { Locale } from '../../i18n/locales.ts';
 import { common } from '../../i18n/messages/common.ts';
 import { nav } from '../../i18n/messages/nav.ts';
-import { SOCIAL_LINKS } from '../../lib/nav.ts';
+import { EXTERNAL_LINK, SOCIAL_LINKS } from '../../lib/nav.ts';
 
 interface Props {
   locale: Locale;
@@ -14,9 +14,13 @@ const labels = nav(locale).social;
 
 <aside aria-label={common(locale).socialLinks}>
   <ul>
-    {SOCIAL_LINKS.map(({ id, href }) => (
+    {SOCIAL_LINKS.map(({ id, href, external }) => (
       <li>
-        <a {href} data-copy-email={id === 'email' || undefined}>
+        <a
+          {href}
+          {...(external ? EXTERNAL_LINK : {})}
+          data-copy-email={id === 'email' || undefined}
+        >
           {labels[id]}
         </a>
       </li>

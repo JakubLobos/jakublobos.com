@@ -4,6 +4,7 @@
 import { profile } from '../../content/profile.ts';
 import type { Locale } from '../../i18n/locales.ts';
 import { contactMessages } from '../../i18n/messages/contact.ts';
+import { EXTERNAL_LINK } from '../../lib/nav.ts';
 
 interface Props {
   locale: Locale;
@@ -41,12 +42,16 @@ const siteKey = typeof configuredKey === 'string' ? configuredKey : '';
 
   <dt>{m.details.github}</dt>
   <dd>
-    <a href={profile.github.url}>@{profile.github.handle}</a>
+    <a href={profile.github.url} {...EXTERNAL_LINK}>
+      @{profile.github.handle}
+    </a>
   </dd>
 
   <dt>{m.details.linkedin}</dt>
   <dd>
-    <a href={profile.linkedin.url}>@{profile.linkedin.handle}</a>
+    <a href={profile.linkedin.url} {...EXTERNAL_LINK}>
+      @{profile.linkedin.handle}
+    </a>
   </dd>
 
   <dt>{m.details.languages}</dt>
