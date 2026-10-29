@@ -41,7 +41,7 @@ test.describe('@contact form', () => {
 
     const sent = page.getByRole('button', { name: 'Message sent' });
     await expect(sent).toHaveAttribute('aria-disabled', 'true');
-    await expect(page.locator('[data-status]')).toHaveText(
+    await expect(page.locator('#contact [data-status]')).toHaveText(
       'Thanks! I’ll get back to you at jane@company.com.',
     );
     await expectNoA11yViolations(page, { include: '#contact' });
@@ -102,7 +102,7 @@ test.describe('@contact form', () => {
     await fillForm(page, message);
     await page.getByRole('button', { name: 'Send message' }).click();
 
-    await expect(page.locator('[data-status]')).toHaveText(
+    await expect(page.locator('#contact [data-status]')).toHaveText(
       'Couldn’t send your message right now. Please try again, or email me directly.',
     );
     await expect(page.getByLabel('YOUR NAME')).toHaveValue('Jane Doe');
