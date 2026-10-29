@@ -9,10 +9,16 @@ inputs:
 runs:
   using: composite
   steps:
+    # The runner's image (e.g. ubuntu24) keeps a cache built on one Ubuntu release from being reused
+    # on another, where the cached browser binaries may miss their system libraries. ImageOS is a
+    # machine variable, not part of the `env` context, so it is read in a step.
+    - id: image
+      run: echo "os=${ImageOS:-unknown}" >> "$GITHUB_OUTPUT"
+      shell: bash
     - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         path: ~/.cache/ms-playwright
-        key: playwright-${{ runner.os }}-${{ inputs.browsers }}-${{ hashFiles('pnpm-lock.yaml') }}
+        key: playwright-${{ runner.os }}-${{ steps.image.outputs.os }}-${{ inputs.browsers }}-${{ hashFiles('pnpm-lock.yaml') }}
     # With a warm cache this only installs the apt packages the browsers need.
     - run: pnpm exec playwright install --with-deps ${{ inputs.browsers }}
       shell: bash
