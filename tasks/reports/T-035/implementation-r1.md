@@ -24,10 +24,10 @@ A dev-only route `/__og/[locale]` renders a 1200 × 630 canvas from the real `Pa
 
 | #    | Criterion (short)                 | Status | Evidence                                                                                                                                         |
 | ---- | --------------------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| AC-1 | 1200×630, under 300 KB, legible   | ✅     | Generator clips to 1200×630 and fails above 300 KB; output 94366 and 99877 bytes. Images viewed: `apps/web/public/og/og-en.png`, `og-pl.png`.    |
-| AC-2 | `/__og/en` absent from production | ✅     | Route injected only when `command === 'dev'`; `find apps/web/dist -ipath "*__og*"` returns nothing.                                              |
-| AC-3 | absolute image URL in built pages | ✅     | With `PUBLIC_SITE_URL=https://jakublobos.com`: `index.html` has `og:image` = `https://jakublobos.com/og/og-en.png`, `pl.html` = `.../og-pl.png`. |
-| AC-4 | deterministic regeneration        | ✅     | `pnpm og:generate` run three times; `cmp` identical, and `git status` shows the committed PNGs unchanged after the last run.                     |
+| AC-1 | 1200×630, under 300 KB, legible   | PASS   | Generator clips to 1200×630 and fails above 300 KB; output 94366 and 99877 bytes. Images viewed: `apps/web/public/og/og-en.png`, `og-pl.png`.    |
+| AC-2 | `/__og/en` absent from production | PASS   | Route injected only when `command === 'dev'`; `find apps/web/dist -ipath "*__og*"` returns nothing.                                              |
+| AC-3 | absolute image URL in built pages | PASS   | With `PUBLIC_SITE_URL=https://jakublobos.com`: `index.html` has `og:image` = `https://jakublobos.com/og/og-en.png`, `pl.html` = `.../og-pl.png`. |
+| AC-4 | deterministic regeneration        | PASS   | `pnpm og:generate` run three times; `cmp` identical, and `git status` shows the committed PNGs unchanged after the last run.                     |
 
 ## Validation output
 

@@ -6,13 +6,13 @@
 
 ## Gate results (re-run by reviewer)
 
-| Command                                              | Result                                                                                                                                                                                                                                                                                          |
-| ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `pnpm install --frozen-lockfile` (worktree)          | ✅ after deleting every `node_modules`, `apps/web/dist` and `apps/web/.astro`: "Lockfile is up to date, resolution step is skipped", 545 packages, exit 0                                                                                                                                       |
-| `pnpm install --frozen-lockfile` (fresh `git clone`) | ✅ clone of the branch into a temp dir, exit 0, per-package `node_modules` created (temp dir deleted afterwards)                                                                                                                                                                                |
-| `pnpm verify`                                        | ✅ exit 0. Prettier "All matched files use Prettier code style!"; `eslint .` no output; typecheck contracts Done, server Done, `astro check` 0 errors / 0 warnings / 0 hints; vitest "No test files found, exiting with code 0" ×3; `astro build` "2 page(s) built" (`/pl.html`, `/index.html`) |
-| `pnpm dev` + `curl -s localhost:4321/api/health`     | ✅ `HTTP/1.1 200`, body `{"data":{"status":"ok"}}` (headers include `x-powered-by: Express`, i.e. proxied); direct `:3000/api/health` returns the same body                                                                                                                                     |
-| Process cleanup                                      | ✅ Ports 3000 and 4321 were free before. `TaskStop` left orphans on Windows (`astro dev` PID 13460, `node src/main.ts` PID 132 and their `cmd`/`node --watch` parents 15952/16264). I killed those four PIDs. `netstat -ano` then showed no listener on 3000 or 4321                            |
+| Command                                              | Result                                                                                                                                                                                                                                                                                            |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pnpm install --frozen-lockfile` (worktree)          | PASS after deleting every `node_modules`, `apps/web/dist` and `apps/web/.astro`: "Lockfile is up to date, resolution step is skipped", 545 packages, exit 0                                                                                                                                       |
+| `pnpm install --frozen-lockfile` (fresh `git clone`) | PASS clone of the branch into a temp dir, exit 0, per-package `node_modules` created (temp dir deleted afterwards)                                                                                                                                                                                |
+| `pnpm verify`                                        | PASS exit 0. Prettier "All matched files use Prettier code style!"; `eslint .` no output; typecheck contracts Done, server Done, `astro check` 0 errors / 0 warnings / 0 hints; vitest "No test files found, exiting with code 0" ×3; `astro build` "2 page(s) built" (`/pl.html`, `/index.html`) |
+| `pnpm dev` + `curl -s localhost:4321/api/health`     | PASS `HTTP/1.1 200`, body `{"data":{"status":"ok"}}` (headers include `x-powered-by: Express`, i.e. proxied); direct `:3000/api/health` returns the same body                                                                                                                                     |
+| Process cleanup                                      | PASS Ports 3000 and 4321 were free before. `TaskStop` left orphans on Windows (`astro dev` PID 13460, `node src/main.ts` PID 132 and their `cmd`/`node --watch` parents 15952/16264). I killed those four PIDs. `netstat -ano` then showed no listener on 3000 or 4321                            |
 
 ## Scope check
 
@@ -30,81 +30,81 @@ The lockfile has one `typescript@6.0.3`, one `@types/node@24.19.2` and one `zod@
 
 | #    | Status | Evidence gathered by reviewer                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 | ---- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| AC-1 | ✅     | Frozen install succeeds from a clean worktree and from a fresh clone (gate table above).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| AC-2 | ✅     | `pnpm verify` exit 0 (gate table). Lint, typecheck and test reach all 3 packages. Build output is `dist/index.html` (`<html lang="en">`), `dist/pl.html` (`<html lang="pl">`) and `dist/robots.txt`, with no `_astro` JS and no `zod` anywhere in `dist`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| AC-3 | ✅     | `pnpm dev` started `astro v7.4.2` on `http://localhost:4321/` and `node --watch … src/main.ts` on 3000 (`netstat`: PID 132 on `0.0.0.0:3000`, PID 13460 on `[::1]:4321`). The proxied curl returned `{"data":{"status":"ok"}}`. `/pl` renders `lang="pl"`, `/pl/` returns 404 (`trailingSlash: 'never'`). The log shows no type-stripping warnings, only "../../.env not found. Continuing without it."                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| AC-4 | ✅     | **Web:** `index.astro` imports `LOCALES`/`DEFAULT_LOCALE`, and the built `dist/index.html` contains `data-locales="en,pl" data-default="en"`. A temporary `src/pages/_review-neg.astro` assigning `LOCALES[1]` to `'de'` made `astro check` fail with `ts(2322) Type '"pl"' is not assignable to type '"de"'`, so the types resolve through the workspace link. The file was deleted. **Server:** `node --input-type=module -e "import { LOCALES, DEFAULT_LOCALE } from '@portfolio/contracts' …"` in `apps/server` printed `["en","pl"] en`. A temporary `src/_review_ac4.ts` (with `import type`) ran under plain `node` and printed the same; `tsc -p tsconfig.json` exited 0. A temporary negative file made `tsc` fail with TS2322 as expected. Both files were deleted. `main.ts` itself does not import contracts and logs nothing, which is consistent with the AC. |
-| AC-5 | ✅     | Grep for `any` in all `src` and config `.ts` files finds nothing. ESLint passes with `--max-warnings 0` when run explicitly on every config file, `main.ts`, `index.ts` and both `.astro` pages, so `projectService` finds them all. Temporary files in `packages/contracts/src` and `apps/server/src` containing `any` were flagged by `no-explicit-any` and the type-aware `no-unsafe-assignment`, so type-aware linting is active per package. The temp files were deleted. Root ESLint config is unchanged.                                                                                                                                                                                                                                                                                                                                                             |
+| AC-1 | PASS   | Frozen install succeeds from a clean worktree and from a fresh clone (gate table above).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| AC-2 | PASS   | `pnpm verify` exit 0 (gate table). Lint, typecheck and test reach all 3 packages. Build output is `dist/index.html` (`<html lang="en">`), `dist/pl.html` (`<html lang="pl">`) and `dist/robots.txt`, with no `_astro` JS and no `zod` anywhere in `dist`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| AC-3 | PASS   | `pnpm dev` started `astro v7.4.2` on `http://localhost:4321/` and `node --watch … src/main.ts` on 3000 (`netstat`: PID 132 on `0.0.0.0:3000`, PID 13460 on `[::1]:4321`). The proxied curl returned `{"data":{"status":"ok"}}`. `/pl` renders `lang="pl"`, `/pl/` returns 404 (`trailingSlash: 'never'`). The log shows no type-stripping warnings, only "../../.env not found. Continuing without it."                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| AC-4 | PASS   | **Web:** `index.astro` imports `LOCALES`/`DEFAULT_LOCALE`, and the built `dist/index.html` contains `data-locales="en,pl" data-default="en"`. A temporary `src/pages/_review-neg.astro` assigning `LOCALES[1]` to `'de'` made `astro check` fail with `ts(2322) Type '"pl"' is not assignable to type '"de"'`, so the types resolve through the workspace link. The file was deleted. **Server:** `node --input-type=module -e "import { LOCALES, DEFAULT_LOCALE } from '@portfolio/contracts' …"` in `apps/server` printed `["en","pl"] en`. A temporary `src/_review_ac4.ts` (with `import type`) ran under plain `node` and printed the same; `tsc -p tsconfig.json` exited 0. A temporary negative file made `tsc` fail with TS2322 as expected. Both files were deleted. `main.ts` itself does not import contracts and logs nothing, which is consistent with the AC. |
+| AC-5 | PASS   | Grep for `any` in all `src` and config `.ts` files finds nothing. ESLint passes with `--max-warnings 0` when run explicitly on every config file, `main.ts`, `index.ts` and both `.astro` pages, so `projectService` finds them all. Temporary files in `packages/contracts/src` and `apps/server/src` containing `any` were flagged by `no-explicit-any` and the type-aware `no-unsafe-assignment`, so type-aware linting is active per package. The temp files were deleted. Root ESLint config is unchanged.                                                                                                                                                                                                                                                                                                                                                             |
 
 ## Checklist
 
 **Requirements and design**
 
-- ✅ Every AC is met with evidence.
-- ✅ Behaviour matches the task and architecture §2–§5/§8–§10. The small unlisted additions are covered in R1-01; the rest are judged acceptable below.
+- PASS Every AC is met with evidence.
+- PASS Behaviour matches the task and architecture §2–§5/§8–§10. The small unlisted additions are covered in R1-01; the rest are judged acceptable below.
 - N/A UI design fidelity: placeholder pages only.
 
 **Correctness**
 
-- ✅ Edge cases are N/A for a scaffold. See R1-04 for the `PORT` parse, which is a placeholder issue.
-- ✅ Nothing is swallowed. A listen error such as `EADDRINUSE` crashes the process loudly, which is fine for this stub.
+- PASS Edge cases are N/A for a scaffold. See R1-04 for the `PORT` parse, which is a placeholder issue.
+- PASS Nothing is swallowed. A listen error such as `EADDRINUSE` crashes the process loudly, which is fine for this stub.
 - N/A Races, listeners, timers.
 
 **Architecture and maintainability**
 
-- ✅ Layering: no web↔server imports. Web imports only the root `@portfolio/contracts` entry, never `/schemas`. `zod` is not linked into `apps/web/node_modules` and not in `dist`.
-- ✅ `exports` map is `{ ".": "./src/index.ts", "./schemas": "./src/schemas.ts" }`, matching the task. `schemas.ts` is `export {};`.
-- ✅ Scripts match the task text exactly:
+- PASS Layering: no web/server imports. Web imports only the root `@portfolio/contracts` entry, never `/schemas`. `zod` is not linked into `apps/web/node_modules` and not in `dist`.
+- PASS `exports` map is `{ ".": "./src/index.ts", "./schemas": "./src/schemas.ts" }`, matching the task. `schemas.ts` is `export {};`.
+- PASS Scripts match the task text exactly:
   - server: `dev`, `start`, `typecheck`, `test`
   - web: `dev`, `build` (`astro check && astro build`), `typecheck`, `test`
   - contracts: `typecheck`, `test`
-- ✅ Astro config matches the task:
+- PASS Astro config matches the task:
   - `site` from `process.env.PUBLIC_SITE_URL ?? 'http://localhost:3000'`
   - `output: 'static'`, `build.format: 'file'`, `trailingSlash: 'never'`
   - `server.port: 4321`, `vite.server.proxy['/api'] = 'http://localhost:3000'`
-- ✅ tsconfigs:
+- PASS tsconfigs:
   - contracts and server extend `../../tsconfig.base.json`. The base includes `erasableSyntaxOnly`, `verbatimModuleSyntax`, `allowImportingTsExtensions` and `noEmit`.
   - server sets `types: ["node"]`.
   - web extends `astro/tsconfigs/strictest`.
   - every `include` covers the package's config files, so ESLint `projectService` works.
   - Minor redundancy: R1-03.
-- ✅ Each Vitest config sets `passWithNoTests: true`. Web uses `getViteConfig()`.
-- ✅ Erasable syntax only. Server `main.ts` uses `import express from 'express'`, has no relative imports, and runs under Node 24.20 type stripping with no flags.
-- ✅ `.vscode/extensions.json` recommends exactly the three requested extensions, and `.gitignore` already whitelists it.
-- ✅ Comments explain why only. The single comment (`main.ts:3`) states that the file is deliberately minimal and replaced by T-011.
+- PASS Each Vitest config sets `passWithNoTests: true`. Web uses `getViteConfig()`.
+- PASS Erasable syntax only. Server `main.ts` uses `import express from 'express'`, has no relative imports, and runs under Node 24.20 type stripping with no flags.
+- PASS `.vscode/extensions.json` recommends exactly the three requested extensions, and `.gitignore` already whitelists it.
+- PASS Comments explain why only. The single comment (`main.ts:3`) states that the file is deliberately minimal and replaced by T-011.
 
 **Type safety**
 
-- ✅ No `any`, no `as` casts, no non-null assertions.
+- PASS No `any`, no `as` casts, no non-null assertions.
 - N/A Discriminated unions.
 
 **Security and privacy**
 
-- ✅ No HTML sinks. Grep for `innerHTML|outerHTML|set:html|style=|eval(|console.` across the new sources finds nothing.
+- PASS No HTML sinks. Grep for `innerHTML|outerHTML|set:html|style=|eval(|console.` across the new sources finds nothing.
 - N/A Input validation and SQL.
-- ✅ No secrets or PII, and no new `PUBLIC_*` variables. `PUBLIC_SITE_URL` is only read in the config.
-- ✅ CSP: no inline styles, scripts or handlers in the pages.
+- PASS No secrets or PII, and no new `PUBLIC_*` variables. `PUBLIC_SITE_URL` is only read in the config.
+- PASS CSP: no inline styles, scripts or handlers in the pages.
 
 **Accessibility**
 
-- ✅ Both pages have `<html lang>`, `<meta charset>`, viewport, `<title>` and a single `<h1>`.
+- PASS Both pages have `<html lang>`, `<meta charset>`, viewport, `<title>` and a single `<h1>`.
 - N/A Keyboard, focus, motion, axe: placeholder pages with no interactivity. Real pages are covered by T-020/T-021/T-040.
 
 **Responsive and performance**
 
 - N/A Breakpoints and layout shift.
-- ✅ Zero client JS shipped. No dependency beyond the task list.
+- PASS Zero client JS shipped. No dependency beyond the task list.
 
 **Tests**
 
-- ✅ The task requires none. `passWithNoTests` is used, with no fake tests.
-- ✅ Deterministic: N/A.
+- PASS The task requires none. `passWithNoTests` is used, with no fake tests.
+- PASS Deterministic: N/A.
 
 **Process**
 
-- ✅ Only allowed files changed.
-- ✅ Commit `chore(workspace): scaffold web, server and contracts packages [T-001]` follows the convention.
-- ❌ The report is complete and honest, except that its "Deviations: None known" contradicts its own Assumptions list (see R1-01).
+- PASS Only allowed files changed.
+- PASS Commit `chore(workspace): scaffold web, server and contracts packages [T-001]` follows the convention.
+- FAIL The report is complete and honest, except that its "Deviations: None known" contradicts its own Assumptions list (see R1-01).
 
 ### Implementer's undocumented or self-reported additions
 

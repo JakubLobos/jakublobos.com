@@ -6,11 +6,11 @@
 
 ## Gate results (re-run by reviewer)
 
-| Command                          | Result            |
-| -------------------------------- | ----------------- |
-| `pnpm install --frozen-lockfile` | ✅ / ❌           |
-| `pnpm verify`                    | ✅ / ❌ (summary) |
-| task validation commands         | ✅ / ❌           |
+| Command                          | Result                |
+| -------------------------------- | --------------------- |
+| `pnpm install --frozen-lockfile` | PASS / FAIL           |
+| `pnpm verify`                    | PASS / FAIL (summary) |
+| task validation commands         | PASS / FAIL           |
 
 ## Scope check
 
@@ -18,13 +18,13 @@ Files outside _Allowed files_: none / list. Unlisted dependencies: none / list.
 
 ## Acceptance criteria (independently verified)
 
-| #    | Status  | Evidence gathered by reviewer |
-| ---- | ------- | ----------------------------- |
-| AC-1 | ✅ / ❌ | …                             |
+| #    | Status      | Evidence gathered by reviewer |
+| ---- | ----------- | ----------------------------- |
+| AC-1 | PASS / FAIL | …                             |
 
 ## Checklist
 
-Requirements & design ✅ · Correctness ✅ · Architecture ✅ · Type safety ✅ · Security & privacy ✅ · Accessibility ✅ · Responsive & performance ✅ · Tests ✅ · Process ✅ (❌ items have findings)
+Requirements & design PASS · Correctness PASS · Architecture PASS · Type safety PASS · Security & privacy PASS · Accessibility PASS · Responsive & performance PASS · Tests PASS · Process PASS (FAIL items have findings)
 
 ## Findings
 

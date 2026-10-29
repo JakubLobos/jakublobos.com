@@ -90,7 +90,7 @@ These files define cross-task interfaces. A task may modify one **only if its sp
 
 ## 9. Review checklist
 
-Each item: ✅ / ❌ (→ finding) / N/A.
+Each item: PASS / FAIL (→ finding) / N/A.
 
 **Requirements and design**
 
@@ -106,7 +106,7 @@ Each item: ✅ / ❌ (→ finding) / N/A.
 
 **Architecture and maintainability**
 
-- [ ] Respects layer boundaries (`domain` free of Express/SQLite/fetch; `lib` free of DOM; no web↔server imports).
+- [ ] Respects layer boundaries (`domain` free of Express/SQLite/fetch; `lib` free of DOM; no web/server imports).
 - [ ] Small focused modules; no duplication of rules that live in `contracts`; no speculative abstractions.
 - [ ] Names and file placement follow [`architecture.md` §9](architecture.md#9-conventions).
 - [ ] Comments explain _why_ only.

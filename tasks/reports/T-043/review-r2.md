@@ -4,10 +4,10 @@
 
 ## Acceptance criteria
 
-- AC-1: `check:budgets` runs at the end of `pnpm verify`; eager is 13.6 KB JS / 11.4 KB CSS gzip; a stub-analytics build finds 4 lazy chunks at 50.6 KB of the 80 KB cap, and a lowered cap fails as expected. ✅
-- AC-2: Lighthouse 13.5.0 mobile is 95/100/100/100 on `/` and `/pl`; desktop is 100 across the board. Measured behind a local HTTP/2 + brotli proxy, because the preview emulator serves HTTP/1.1 uncompressed; Cloudflare serves both in production. ✅
-- AC-3: `check:release` reports only the two resume PDFs (D-10). ✅
-- AC-4: keyboard walkthrough plus accessibility-tree review in both locales, no blockers; a real NVDA/VoiceOver pass is left to the owner. ✅ (owner spot check pending)
+- AC-1: `check:budgets` runs at the end of `pnpm verify`; eager is 13.6 KB JS / 11.4 KB CSS gzip; a stub-analytics build finds 4 lazy chunks at 50.6 KB of the 80 KB cap, and a lowered cap fails as expected. PASS
+- AC-2: Lighthouse 13.5.0 mobile is 95/100/100/100 on `/` and `/pl`; desktop is 100 across the board. Measured behind a local HTTP/2 + brotli proxy, because the preview emulator serves HTTP/1.1 uncompressed; Cloudflare serves both in production. PASS
+- AC-3: `check:release` reports only the two resume PDFs (D-10). PASS
+- AC-4: keyboard walkthrough plus accessibility-tree review in both locales, no blockers; a real NVDA/VoiceOver pass is left to the owner. PASS (owner spot check pending)
 
 ## Findings
 

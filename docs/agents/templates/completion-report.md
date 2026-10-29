@@ -16,9 +16,9 @@
 
 ## Acceptance criteria
 
-| #    | Criterion (short) | Status  | Evidence                                                               |
-| ---- | ----------------- | ------- | ---------------------------------------------------------------------- |
-| AC-1 | …                 | ✅ / ❌ | test `name` in `file.test.ts`, command output below, screenshot `…png` |
+| #    | Criterion (short) | Status      | Evidence                                                               |
+| ---- | ----------------- | ----------- | ---------------------------------------------------------------------- |
+| AC-1 | …                 | PASS / FAIL | test `name` in `file.test.ts`, command output below, screenshot `…png` |
 
 ## Validation output
 
