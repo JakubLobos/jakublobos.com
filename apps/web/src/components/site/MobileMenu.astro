@@ -211,10 +211,12 @@ const n = nav(locale);
 
     @supports (overlay: auto) {
       dialog {
+        --sheet-exit: calc(var(--duration-panel) * 0.65);
+
         transition:
-          clip-path calc(var(--duration-panel) * 0.65) var(--ease-standard),
-          display calc(var(--duration-panel) * 0.65) allow-discrete,
-          overlay calc(var(--duration-panel) * 0.65) allow-discrete;
+          clip-path var(--sheet-exit) var(--ease-standard),
+          display var(--sheet-exit) allow-discrete,
+          overlay var(--sheet-exit) allow-discrete;
       }
     }
 
