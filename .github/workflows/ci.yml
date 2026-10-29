@@ -87,8 +87,8 @@ jobs:
       - uses: ./.github/actions/setup
       - run: pnpm audit --prod --audit-level=high
 
-  # Docker is not available on the maintainer's machine, so this job is the only proof that the
-  # production image builds, starts as non-root, loads the native SQLite module and keeps its data.
+  # Proves that the production image builds, starts as non-root, loads the native SQLite module
+  # and keeps its data.
   api-image:
     needs: verify
     runs-on: ubuntu-latest
