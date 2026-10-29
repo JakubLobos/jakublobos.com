@@ -9,9 +9,9 @@
 
 ## Acceptance criteria
 
-- AC-1: coverage check fails on an uncovered module (`export-copy.ts` exits 1). PASS
-- AC-2: PL==EN report with whitelist. PASS
-- AC-3: NBSP rules unit-tested; applied centrally in `defineMessages` (approved CR) and at the content exports; `id`/`href` skipped in privacy; `profile.ts` untouched (JSON-LD/links). 390 px screenshot spot-check deferred to T-042's capture pass. PASS (spot-check pending)
+- AC-1: coverage check fails on an uncovered module (`export-copy.ts` exits 1). ✅
+- AC-2: PL==EN report with whitelist. ✅
+- AC-3: NBSP rules unit-tested; applied centrally in `defineMessages` (approved CR) and at the content exports; `id`/`href` skipped in privacy; `profile.ts` untouched (JSON-LD/links). 390 px screenshot spot-check deferred to T-042's capture pass. ✅ (spot-check pending)
 - AC-4: owner gate, open.
 
 ## Findings

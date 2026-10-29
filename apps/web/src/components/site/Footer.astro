@@ -2,7 +2,6 @@
 import { profile } from '../../content/profile.ts';
 import { alternatePath, type Locale } from '../../i18n/locales.ts';
 import { footer } from '../../i18n/messages/footer.ts';
-import ArrowIcon from '../ui/ArrowIcon.astro';
 
 interface Props {
   locale: Locale;
@@ -29,10 +28,7 @@ const year = new Date().getFullYear();
       </button>
     </li>
     <li>
-      <a href="#top">
-        {m.backToTop}
-        <ArrowIcon direction="up" />
-      </a>
+      <a href="#top">{m.backToTop}</a>
     </li>
   </ul>
 </footer>

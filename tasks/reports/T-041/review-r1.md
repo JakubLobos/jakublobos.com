@@ -4,9 +4,9 @@
 
 ## Acceptance criteria
 
-- AC-1: every `testing.md` §4 row has a spec; nav/guestbook/contact/consent run on chromium-mobile and webkit-desktop (project-specific skips are justified inline). PASS
-- AC-2: `--repeat-each=5` on `@guestbook|@contact`: 230 passed, 0 failed (implementer run); the old "once approved" flake root-caused (random suffix tripped the keyboard-mash rule) and fixed. PASS
-- AC-3: 2m53s full suite including build. PASS
+- AC-1: every `testing.md` §4 row has a spec; nav/guestbook/contact/consent run on chromium-mobile and webkit-desktop (project-specific skips are justified inline). ✅
+- AC-2: `--repeat-each=5` on `@guestbook|@contact`: 230 passed, 0 failed (implementer run); the old "once approved" flake root-caused (random suffix tripped the keyboard-mash rule) and fixed. ✅
+- AC-3: 2m53s full suite including build. ✅
 
 ## Findings
 

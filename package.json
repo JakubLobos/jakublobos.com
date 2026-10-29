@@ -22,13 +22,12 @@
     "format:check": "prettier --check .",
     "test": "pnpm --recursive test",
     "check:budgets": "node tools/check-budgets.mjs",
-    "check:emoji": "node tools/check-no-emoji.mjs",
     "check:release": "node tools/check-release-assets.mjs",
     "fonts:subset": "node tools/fonts/subset-display.mjs",
     "og:generate": "node tools/og/render-og.ts",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "verify": "pnpm format:check && pnpm check:emoji && pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm check:budgets"
+    "verify": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm check:budgets"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.14.0",

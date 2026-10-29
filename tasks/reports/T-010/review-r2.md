@@ -6,11 +6,11 @@
 
 ## Gate results (re-run by reviewer)
 
-| Command                                            | Result                                                                                                                                                   |
-| -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `pnpm install --frozen-lockfile`                   | PASS "Lockfile is up to date"                                                                                                                            |
-| `pnpm verify`                                      | PASS exit 0. contracts: 4 files / 153 tests passed. `astro check` 0 errors. Build complete                                                               |
-| `pnpm --filter @portfolio/contracts test:coverage` | PASS Statements 100 % (99/99) · Branches 100 % (55/55) · Functions 100 % (10/10) · Lines 100 % (81/81), with the 95/90 thresholds enforced by the script |
+| Command                                            | Result                                                                                                                                                 |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `pnpm install --frozen-lockfile`                   | ✅ "Lockfile is up to date"                                                                                                                            |
+| `pnpm verify`                                      | ✅ exit 0. contracts: 4 files / 153 tests passed. `astro check` 0 errors. Build complete                                                               |
+| `pnpm --filter @portfolio/contracts test:coverage` | ✅ Statements 100 % (99/99) · Branches 100 % (55/55) · Functions 100 % (10/10) · Lines 100 % (81/81), with the 95/90 thresholds enforced by the script |
 
 Extra checks:
 
@@ -25,11 +25,11 @@ Code changes are only in `packages/contracts/**` plus the implementation report.
 
 | #    | Status | Evidence gathered by reviewer                                                                                                                                                                                |
 | ---- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| AC-1 | PASS   | Constants are unchanged since round 1 and still asserted by `index.test.ts`.                                                                                                                                 |
-| AC-2 | PASS   | The `api.md` examples now include `locale: 'pl'`/`'en'` and parse. Missing `locale` is accepted. `de` and a number are rejected (`schemas.test.ts`, "locale field"). The other round-1 evidence still holds. |
-| AC-3 | PASS   | I probed the rules with about 60 adversarial inputs (below). Codes and priority order match `api.md` §3.                                                                                                     |
-| AC-4 | PASS   | Source test plus the scratch bundle (0 zod).                                                                                                                                                                 |
-| AC-5 | PASS   | 100/100 through `test:coverage`.                                                                                                                                                                             |
+| AC-1 | ✅     | Constants are unchanged since round 1 and still asserted by `index.test.ts`.                                                                                                                                 |
+| AC-2 | ✅     | The `api.md` examples now include `locale: 'pl'`/`'en'` and parse. Missing `locale` is accepted. `de` and a number are rejected (`schemas.test.ts`, "locale field"). The other round-1 evidence still holds. |
+| AC-3 | ✅     | I probed the rules with about 60 adversarial inputs (below). Codes and priority order match `api.md` §3.                                                                                                     |
+| AC-4 | ✅     | Source test plus the scratch bundle (0 zod).                                                                                                                                                                 |
+| AC-5 | ✅     | 100/100 through `test:coverage`.                                                                                                                                                                             |
 
 ## Probes of the new link rule and pipeline (reviewer's run)
 
@@ -48,7 +48,7 @@ Code changes are only in `packages/contracts/**` plus the implementation report.
 
 ## Checklist
 
-Requirements and design PASS · Correctness PASS (NITs R2-02, R2-03) · Architecture PASS · Type safety PASS · Security and privacy PASS (fixtures now `+48000000000`) · Accessibility N/A · Responsive and performance PASS (index bundle 5.5 kB, no zod) · Tests PASS (each R1-03 gap now has a test that fails if the behaviour regresses; I checked the email 120/121, message NFC, whitespace-only pipeline, and `0x7e` cases) · Process PASS
+Requirements and design ✅ · Correctness ✅ (NITs R2-02, R2-03) · Architecture ✅ · Type safety ✅ · Security and privacy ✅ (fixtures now `+48000000000`) · Accessibility N/A · Responsive and performance ✅ (index bundle 5.5 kB, no zod) · Tests ✅ (each R1-03 gap now has a test that fails if the behaviour regresses; I checked the email 120/121, message NFC, whitespace-only pipeline, and `0x7e` cases) · Process ✅
 
 ## Findings
 

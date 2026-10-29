@@ -44,7 +44,7 @@
 ## Acceptance criteria
 
 1. Type a name, an email and a message, then reload: the values come back, the counters are correct, and no error messages show.
-2. Switch the language (EN to PL and back): the draft comes back on the other locale's page.
+2. Switch the language (EN ↔ PL): the draft comes back on the other locale's page.
 3. A successful send removes `jl-contact-draft`; reload shows an empty form.
 4. Close the tab and open the site in a new tab: no draft.
 5. With blocked storage (e.g. `sessionStorage` throwing), the form works as before.

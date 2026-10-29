@@ -8,12 +8,12 @@ All round 1 findings are resolved. One new MINOR (R2-01) remains open. It doesn'
 
 ## Gate results (re-run by reviewer)
 
-| Command                                                      | Result                                                                                                                                                                                            |
-| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `pnpm install --frozen-lockfile`                             | PASS "Lockfile is up to date"                                                                                                                                                                     |
-| `pnpm verify`                                                | PASS exit 0. `apps/server`: Test Files 9 passed (9), Tests 93 passed (93). `apps/web`: 69 passed. Typecheck 0 errors. Build complete.                                                             |
-| `pnpm --filter @portfolio/server exec vitest run --coverage` | PASS thresholds met. Statements 88.14 %, Branches 86.57 %, Functions 87.35 %, Lines 88.11 %                                                                                                       |
-| Manual runs on `PORT=3012`                                   | PASS Slow-loris against the real `main.ts`: `408 Request Timeout` after **19.3 s** (round 1: 29.2 s), then in-process `SIGTERM` → exit 0. Every process was stopped and port 3012 confirmed free. |
+| Command                                                      | Result                                                                                                                                                                                          |
+| ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pnpm install --frozen-lockfile`                             | ✅ "Lockfile is up to date"                                                                                                                                                                     |
+| `pnpm verify`                                                | ✅ exit 0. `apps/server`: Test Files 9 passed (9), Tests 93 passed (93). `apps/web`: 69 passed. Typecheck 0 errors. Build complete.                                                             |
+| `pnpm --filter @portfolio/server exec vitest run --coverage` | ✅ thresholds met. Statements 88.14 %, Branches 86.57 %, Functions 87.35 %, Lines 88.11 %                                                                                                       |
+| Manual runs on `PORT=3012`                                   | ✅ Slow-loris against the real `main.ts`: `408 Request Timeout` after **19.3 s** (round 1: 29.2 s), then in-process `SIGTERM` → exit 0. Every process was stopped and port 3012 confirmed free. |
 
 ## Scope check
 
@@ -25,8 +25,8 @@ All AC-1…AC-7 evidence from round 1 still holds. The round 2 changes don't tou
 
 | #    | Status | Evidence gathered by reviewer                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | ---- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| AC-4 | PASS   | I re-ran the round 1 reproductions over raw `node:http` against the probe route (1 KB limit):<br>• `charset=latin1` → 415 `UNSUPPORTED_MEDIA_TYPE`<br>• `Content-Encoding: compress` → 415<br>• corrupt gzip → 400 `INVALID_JSON`<br>• corrupt zstd → 400<br>• valid gzip → 200<br>• valid zstd → 200<br>• a gzip body that inflates to 200 KB → 413 `PAYLOAD_TOO_LARGE`, so the limit applies to the inflated size<br>Every client error logs at level 40 with only `status` and `type`, with no `stack`, email or IP in the output. |
-| AC-6 | PASS   | `logger.test.ts` writes each of 17 paths through `createLogger({ destination })` and asserts `[Redacted]` is present and the value is absent. I confirmed the new paths are in `REDACT_PATHS` (`ip`, `*.ip`, `req.ip`, `remoteAddress`, `*.remoteAddress`, `x-forwarded-for` at the top level and under `*.headers`, and `*.headers.{authorization,cookie,x-real-ip}`).                                                                                                                                                               |
+| AC-4 | ✅     | I re-ran the round 1 reproductions over raw `node:http` against the probe route (1 KB limit):<br>• `charset=latin1` → 415 `UNSUPPORTED_MEDIA_TYPE`<br>• `Content-Encoding: compress` → 415<br>• corrupt gzip → 400 `INVALID_JSON`<br>• corrupt zstd → 400<br>• valid gzip → 200<br>• valid zstd → 200<br>• a gzip body that inflates to 200 KB → 413 `PAYLOAD_TOO_LARGE`, so the limit applies to the inflated size<br>Every client error logs at level 40 with only `status` and `type`, with no `stack`, email or IP in the output. |
+| AC-6 | ✅     | `logger.test.ts` writes each of 17 paths through `createLogger({ destination })` and asserts `[Redacted]` is present and the value is absent. I confirmed the new paths are in `REDACT_PATHS` (`ip`, `*.ip`, `req.ip`, `remoteAddress`, `*.remoteAddress`, `x-forwarded-for` at the top level and under `*.headers`, and `*.headers.{authorization,cookie,x-real-ip}`).                                                                                                                                                               |
 
 **zstd → `compress` swap:** I accept it, and my round 1 claim was wrong. body-parser 2.4.0 decodes `zstd` (`lib/read.js:225`, via Node 24 zlib): a valid zstd body returned 200 and a corrupt one 400. So `zstd` isn't an unsupported encoding, and `compress` (not implemented by body-parser) is the right fixture for the 415 path.
 
@@ -34,45 +34,45 @@ All AC-1…AC-7 evidence from round 1 still holds. The round 2 changes don't tou
 
 **Requirements and design**
 
-- PASS Every acceptance criterion met
-- PASS Scope respected
+- ✅ Every acceptance criterion met
+- ✅ Scope respected
 - N/A UI
 
 **Correctness**
 
-- PASS Edge cases: the client-error mapping is fixed
-- FAIL Errors handled explicitly (R2-01: the 4xx mapping is broader than body-parser errors)
-- PASS No races
+- ✅ Edge cases: the client-error mapping is fixed
+- ❌ Errors handled explicitly (R2-01: the 4xx mapping is broader than body-parser errors)
+- ✅ No races
 
 **Architecture and maintainability**
 
-- PASS Layers unchanged
-- PASS Dead `AppDeps` field removed
-- PASS `createHttpServer` is a small, focused module
-- PASS Comments accurate
+- ✅ Layers unchanged
+- ✅ Dead `AppDeps` field removed
+- ✅ `createHttpServer` is a small, focused module
+- ✅ Comments accurate
 
 **Type safety**
 
-- PASS No `any`. `error as Record<string, unknown>` follows an object/null guard. The cast in `server.test.ts` is needed because `connectionsCheckingInterval` is missing from `@types/node` (justified in a comment).
+- ✅ No `any`. `error as Record<string, unknown>` follows an object/null guard. The cast in `server.test.ts` is needed because `connectionsCheckingInterval` is missing from `@types/node` (justified in a comment).
 
 **Security and privacy**
 
-- PASS No sinks
-- PASS IP-shaped redaction paths added and tested
-- PASS No PII in logs (probe confirmed)
+- ✅ No sinks
+- ✅ IP-shaped redaction paths added and tested
+- ✅ No PII in logs (probe confirmed)
 
 **Accessibility / Responsive:** N/A
 
 **Tests**
 
-- PASS New tests would fail on regression: removing a redact path fails `logger.test.ts`, reverting the error mapping fails the three new envelope tests, and dropping a timeout fails `server.test.ts`
-- PASS Deterministic
+- ✅ New tests would fail on regression: removing a redact path fails `logger.test.ts`, reverting the error mapping fails the three new envelope tests, and dropping a timeout fails `server.test.ts`
+- ✅ Deterministic
 
 **Process**
 
-- PASS Allowed files only
-- PASS Conventional commit with the task ID
-- PASS The report addresses every round 1 finding honestly, including the zstd note and the not-yet-done `ApiErrorCode` swap
+- ✅ Allowed files only
+- ✅ Conventional commit with the task ID
+- ✅ The report addresses every round 1 finding honestly, including the zstd note and the not-yet-done `ApiErrorCode` swap
 
 ## Findings
 

@@ -8,13 +8,13 @@ No BLOCKER, MAJOR or QUESTION findings. Four MINORs and two NITs are below. R1-0
 
 ## Gate results (re-run by reviewer)
 
-| Command                                                                | Result                                                                                                                                                                                                                                                                                                                                                                                    |
-| ---------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `pnpm install --frozen-lockfile`                                       | PASS "Lockfile is up to date", lockfile passes supply-chain policies                                                                                                                                                                                                                                                                                                                      |
-| `pnpm verify`                                                          | PASS exit 0. Prettier clean, ESLint clean, tsc 0 errors (all packages), `apps/server`: Test Files 7 passed (7), Tests 72 passed (72). `astro check` 0 errors, `astro build` Complete                                                                                                                                                                                                      |
-| `pnpm --filter @portfolio/server test -- --coverage`                   | PASS exit 0, but the flag isn't forwarded, so no coverage runs (see orchestrator notes)                                                                                                                                                                                                                                                                                                   |
-| `pnpm --filter @portfolio/server exec vitest run --coverage`           | PASS thresholds enforced and met. Statements 87.12 %, Branches 85.5 %, Lines 87.05 %. `src/domain/shared` 97.72 % / 93.75 % (≥ 90/85). `main.ts` 0 %, `logger.ts` 50 %                                                                                                                                                                                                                    |
-| `pnpm --filter @portfolio/server start` + curls (run with `PORT=3012`) | PASS `GET /api/health` → 200 `{"data":{"status":"ok","db":"ok"}}` with CSP `default-src 'none';frame-ancestors 'none'`, `X-Frame-Options: DENY`, `Cache-Control: no-store`, no `X-Powered-By`, no HSTS. `OPTIONS` from `http://localhost:4321` → 204, ACAO echoed, `Max-Age: 600`, `Vary: Origin`, no `Allow-Credentials`. The server was stopped by PID and port 3012 was confirmed free |
+| Command                                                                | Result                                                                                                                                                                                                                                                                                                                                                                                  |
+| ---------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pnpm install --frozen-lockfile`                                       | ✅ "Lockfile is up to date", lockfile passes supply-chain policies                                                                                                                                                                                                                                                                                                                      |
+| `pnpm verify`                                                          | ✅ exit 0. Prettier clean, ESLint clean, tsc 0 errors (all packages), `apps/server`: Test Files 7 passed (7), Tests 72 passed (72). `astro check` 0 errors, `astro build` Complete                                                                                                                                                                                                      |
+| `pnpm --filter @portfolio/server test -- --coverage`                   | ✅ exit 0, but the flag isn't forwarded, so no coverage runs (see orchestrator notes)                                                                                                                                                                                                                                                                                                   |
+| `pnpm --filter @portfolio/server exec vitest run --coverage`           | ✅ thresholds enforced and met. Statements 87.12 %, Branches 85.5 %, Lines 87.05 %. `src/domain/shared` 97.72 % / 93.75 % (≥ 90/85). `main.ts` 0 %, `logger.ts` 50 %                                                                                                                                                                                                                    |
+| `pnpm --filter @portfolio/server start` + curls (run with `PORT=3012`) | ✅ `GET /api/health` → 200 `{"data":{"status":"ok","db":"ok"}}` with CSP `default-src 'none';frame-ancestors 'none'`, `X-Frame-Options: DENY`, `Cache-Control: no-store`, no `X-Powered-By`, no HSTS. `OPTIONS` from `http://localhost:4321` → 204, ACAO echoed, `Max-Age: 600`, `Vary: Origin`, no `Allow-Credentials`. The server was stopped by PID and port 3012 was confirmed free |
 
 ## Scope check
 
@@ -26,13 +26,13 @@ Unlisted dependencies: none. `@vitest/coverage-v8@5.0.5` was approved by the orc
 
 | #    | Status | Evidence gathered by reviewer                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | ---- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| AC-1 | PASS   | I read `config.ts`. The schema covers every API variable in `.env.example`. The production rules match `architecture.md` §7, which is stricter than the task text: they also require `CONTACT_PHONE` and `TURNSTILE_SECRET_KEY` and refuse `HUMAN_VERIFIER=fake`. Manual runs: `NODE_ENV=production OPENAI_API_KEY=sk-SECRETVAL CORS_ALLOWED_ORIGINS=http://insecure.example node src/main.ts` exits 1 and lists 10 variable names, with no values (neither the key nor the origin is echoed). `PORT=abc` exits 1 naming `PORT`. `CORS_ALLOWED_ORIGINS='*'` exits 1. `MODERATION_SCORE_THRESHOLD=abc` exits 1. Tests cover each production rule (`it.each` per secret) and assert that the message contains no values. |
-| AC-2 | PASS   | The curls above, plus a foreign preflight (`Origin: https://evil.example`), which got Express's automatic `200 Allow: GET, HEAD` with **no** `Access-Control-*` headers. A POST from a foreign origin → 403 `FORBIDDEN_ORIGIN` envelope with `requestId`. The supertest probe also covered `Origin: null`, upper-case `HTTP://LOCALHOST:4321` and a trailing slash: all 403 (exact string match). `cors.ts` uses the origin callback, so a disallowed origin calls `next()` without emitting headers. No wildcard, `credentials: false`.                                                                                                                                                                               |
-| AC-3 | PASS   | `client-ip.ts` handles only a single string header, trimmed, gated by `isIP() !== 0`, and otherwise falls back to the socket address. Tests cover v4, v6, padded, garbage, comma list, empty, `host:port`, repeated, missing, socket mode, and no socket. `rate-limit.test.ts`: separate buckets per `X-Real-IP`, a shared /56 for `2001:db8:0:1::/56` (`…:ff::1` included, `2001:db8:1::1` separate), and a shared bucket in socket mode. In the express-rate-limit 8.7.1 source, `ipKeyGenerator` collapses IPv4-mapped IPv6 (`::ffff:a.b.c.d`) to the IPv4 address, so a dual-stack listener doesn't merge every IPv4 client into `::/56`. `trust proxy` is never enabled (`app.ts:29`).                            |
-| AC-4 | PASS   | Tests assert 400/413/415/403/404/500 envelopes with `requestId === X-Request-Id`. The 500 body has no message, file names or `at ` frames. Headers on 404 and on preflight. HSTS is present only with `isProduction: true` (helmet default `max-age=31536000; includeSubDomains`). The live server matched `security.md` §4 (API). Gap: some client errors become 500 (R1-01).                                                                                                                                                                                                                                                                                                                                         |
-| AC-5 | PASS   | The test shows 429 + `RATE_LIMITED` envelope + `Retry-After > 0` + `RateLimit` and `RateLimit-Policy` (draft-8). In the library source, `setRetryAfterHeader` runs before our handler, so `Retry-After` comes from the real reset time, with `windowMs` as the fallback. `createGlobalCap`: `FakeClock` tests cover both windows, the longer wait is reported, and rejected attempts aren't counted.                                                                                                                                                                                                                                                                                                                   |
-| AC-6 | PASS   | The log-capture test sends name, email and body, `X-Real-IP`, cookie, authorization, a query secret, the 500 path and the invalid-JSON path, and asserts that none of them appear, including `127.0.0.1` and `::1`. In my own probe (charset/encoding/gzip/primitive errors with `X-Real-IP: 198.51.100.77` and an email in the body), the captured logs contained no email, IP, `remoteAddress` or `headers`. The `req`/`res` serializers are allow-lists (`id`, `method`, `path` without the query string, `statusCode`). Calling `createLogger` directly with each listed path showed every one redacted. `x-forwarded-for`, `ip` and nested `*.*.apiKey` are not redacted (R1-03).                                 |
-| AC-7 | PASS   | Health 200, plus 503 with `Retry-After: 5` for both throw and reject, with no detail in the body. Shutdown: the unit tests cover once, reverse order, error continuation and the deadline. The signal tests use an EventEmitter fake for SIGTERM/SIGINT → exit 0, a second signal ignored, the deadline → exit 1, and a rejected run → exit 1. I also loaded the real `main.ts` in-process on :3012, fetched `/api/health` (200), then emitted `SIGTERM` twice: one "shutting down" line, `EXIT code=0` about 0.5 s after the signal, and the keep-alive connection was closed by `closeIdleConnections()`.                                                                                                            |
+| AC-1 | ✅     | I read `config.ts`. The schema covers every API variable in `.env.example`. The production rules match `architecture.md` §7, which is stricter than the task text: they also require `CONTACT_PHONE` and `TURNSTILE_SECRET_KEY` and refuse `HUMAN_VERIFIER=fake`. Manual runs: `NODE_ENV=production OPENAI_API_KEY=sk-SECRETVAL CORS_ALLOWED_ORIGINS=http://insecure.example node src/main.ts` exits 1 and lists 10 variable names, with no values (neither the key nor the origin is echoed). `PORT=abc` exits 1 naming `PORT`. `CORS_ALLOWED_ORIGINS='*'` exits 1. `MODERATION_SCORE_THRESHOLD=abc` exits 1. Tests cover each production rule (`it.each` per secret) and assert that the message contains no values. |
+| AC-2 | ✅     | The curls above, plus a foreign preflight (`Origin: https://evil.example`), which got Express's automatic `200 Allow: GET, HEAD` with **no** `Access-Control-*` headers. A POST from a foreign origin → 403 `FORBIDDEN_ORIGIN` envelope with `requestId`. The supertest probe also covered `Origin: null`, upper-case `HTTP://LOCALHOST:4321` and a trailing slash: all 403 (exact string match). `cors.ts` uses the origin callback, so a disallowed origin calls `next()` without emitting headers. No wildcard, `credentials: false`.                                                                                                                                                                               |
+| AC-3 | ✅     | `client-ip.ts` handles only a single string header, trimmed, gated by `isIP() !== 0`, and otherwise falls back to the socket address. Tests cover v4, v6, padded, garbage, comma list, empty, `host:port`, repeated, missing, socket mode, and no socket. `rate-limit.test.ts`: separate buckets per `X-Real-IP`, a shared /56 for `2001:db8:0:1::/56` (`…:ff::1` included, `2001:db8:1::1` separate), and a shared bucket in socket mode. In the express-rate-limit 8.7.1 source, `ipKeyGenerator` collapses IPv4-mapped IPv6 (`::ffff:a.b.c.d`) to the IPv4 address, so a dual-stack listener doesn't merge every IPv4 client into `::/56`. `trust proxy` is never enabled (`app.ts:29`).                            |
+| AC-4 | ✅     | Tests assert 400/413/415/403/404/500 envelopes with `requestId === X-Request-Id`. The 500 body has no message, file names or `at ` frames. Headers on 404 and on preflight. HSTS is present only with `isProduction: true` (helmet default `max-age=31536000; includeSubDomains`). The live server matched `security.md` §4 (API). Gap: some client errors become 500 (R1-01).                                                                                                                                                                                                                                                                                                                                         |
+| AC-5 | ✅     | The test shows 429 + `RATE_LIMITED` envelope + `Retry-After > 0` + `RateLimit` and `RateLimit-Policy` (draft-8). In the library source, `setRetryAfterHeader` runs before our handler, so `Retry-After` comes from the real reset time, with `windowMs` as the fallback. `createGlobalCap`: `FakeClock` tests cover both windows, the longer wait is reported, and rejected attempts aren't counted.                                                                                                                                                                                                                                                                                                                   |
+| AC-6 | ✅     | The log-capture test sends name, email and body, `X-Real-IP`, cookie, authorization, a query secret, the 500 path and the invalid-JSON path, and asserts that none of them appear, including `127.0.0.1` and `::1`. In my own probe (charset/encoding/gzip/primitive errors with `X-Real-IP: 198.51.100.77` and an email in the body), the captured logs contained no email, IP, `remoteAddress` or `headers`. The `req`/`res` serializers are allow-lists (`id`, `method`, `path` without the query string, `statusCode`). Calling `createLogger` directly with each listed path showed every one redacted. `x-forwarded-for`, `ip` and nested `*.*.apiKey` are not redacted (R1-03).                                 |
+| AC-7 | ✅     | Health 200, plus 503 with `Retry-After: 5` for both throw and reject, with no detail in the body. Shutdown: the unit tests cover once, reverse order, error continuation and the deadline. The signal tests use an EventEmitter fake for SIGTERM/SIGINT → exit 0, a second signal ignored, the deadline → exit 1, and a rejected run → exit 1. I also loaded the real `main.ts` in-process on :3012, fetched `/api/health` (200), then emitted `SIGTERM` twice: one "shutting down" line, `EXIT code=0` about 0.5 s after the signal, and the keep-alive connection was closed by `closeIdleConnections()`.                                                                                                            |
 
 Additional checks:
 
@@ -50,49 +50,49 @@ Additional checks:
 
 **Requirements and design**
 
-- PASS Every acceptance criterion met, with evidence
-- PASS Behaviour matches FR-49, NFR-05, NFR-07 and NFR-11; nothing out of scope (the deviation is declared and accepted)
+- ✅ Every acceptance criterion met, with evidence
+- ✅ Behaviour matches FR-49, NFR-05, NFR-07 and NFR-11; nothing out of scope (the deviation is declared and accepted)
 - N/A UI
 
 **Correctness**
 
-- FAIL Edge cases (R1-01)
-- FAIL Errors handled explicitly (R1-01: client errors map to 500)
-- PASS No races; timers are `unref`'d and cleared
+- ❌ Edge cases (R1-01)
+- ❌ Errors handled explicitly (R1-01: client errors map to 500)
+- ✅ No races; timers are `unref`'d and cleared
 
 **Architecture and maintainability**
 
-- PASS Layers: `domain/shared` has no Express, SQLite, `fetch` or `process.env` (only `node:crypto` for UUIDs). Erasable syntax only (no `enum`, `namespace` or parameter properties); `FakeClock` uses plain fields. Every relative import ends in `.ts`, and type-only imports use `import type`.
-- FAIL Small modules, no speculative surface (R1-02 dead `AppDeps` field)
-- PASS Naming and placement follow §9
-- FAIL Comments explain _why_ (R1-05: one misleading comment)
+- ✅ Layers: `domain/shared` has no Express, SQLite, `fetch` or `process.env` (only `node:crypto` for UUIDs). Erasable syntax only (no `enum`, `namespace` or parameter properties); `FakeClock` uses plain fields. Every relative import ends in `.ts`, and type-only imports use `import type`.
+- ❌ Small modules, no speculative surface (R1-02 dead `AppDeps` field)
+- ✅ Naming and placement follow §9
+- ❌ Comments explain _why_ (R1-05: one misleading comment)
 
 **Type safety**
 
-- PASS No `any`. The only casts are a narrowed `(error as { type?: unknown })` after an object check in `error-handler.ts:6`, and test fixtures.
-- PASS Unions handled
+- ✅ No `any`. The only casts are a narrowed `(error as { type?: unknown })` after an object check in `error-handler.ts:6`, and test fixtures.
+- ✅ Unions handled
 
 **Security and privacy**
 
-- PASS No HTML sinks
-- PASS Env validated with zod
-- PASS No secrets or PII in logs (R1-03 is defence in depth only); the fixture phone is `+48000000000`, and no real number appears anywhere
+- ✅ No HTML sinks
+- ✅ Env validated with zod
+- ✅ No secrets or PII in logs (R1-03 is defence in depth only); the fixture phone is `+48000000000`, and no real number appears anywhere
 - N/A CSP for markup
 
 **Accessibility:** N/A
 
-**Responsive and performance:** N/A, except that no unapproved dependencies were added PASS
+**Responsive and performance:** N/A, except that no unapproved dependencies were added ✅
 
 **Tests**
 
-- FAIL Meaningful and would catch regressions (R1-03 redaction paths untested; R1-01 untested)
-- PASS Deterministic: `FakeClock`, sequential ids, fake timers, no network
+- ❌ Meaningful and would catch regressions (R1-03 redaction paths untested; R1-01 untested)
+- ✅ Deterministic: `FakeClock`, sequential ids, fake timers, no network
 
 **Process**
 
-- PASS Allowed files only
-- PASS Conventional Commits with the task ID
-- FAIL Report complete and honest (R1-04: the `Clock` signature change isn't reported as a deviation)
+- ✅ Allowed files only
+- ✅ Conventional Commits with the task ID
+- ❌ Report complete and honest (R1-04: the `Clock` signature change isn't reported as a deviation)
 
 ## Findings
 
