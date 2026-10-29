@@ -15,7 +15,9 @@ const { locale, seoKey, path } = Astro.props;
 const { og, ...pages } = seo(locale);
 const { title, description } = pages[seoKey];
 const site = Astro.site ?? new URL(Astro.url.origin);
-const ogImage = new URL(`/og/og-${locale}.png`, site).href;
+// One image for both locales. Social apps cache previews by image URL, so a new image needs a new
+// file name. Apps that don't animate GIFs show the first frame, which is a complete card on its own.
+const ogImage = new URL('/og/og-animation-v2.gif', site).href;
 const absolute = (target: Locale) => new URL(alternatePath(target, path), site).href;
 
 const indexable = seoKey !== 'notFound';
@@ -57,6 +59,7 @@ const personJson = JSON.stringify(person).replaceAll('<', String.raw`\u003c`);
   <meta property="og:locale:alternate" content={ogLocale(other)} />
 ))}
 <meta property="og:image" content={ogImage} />
+<meta property="og:image:type" content="image/gif" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:image:alt" content={og.alt} />

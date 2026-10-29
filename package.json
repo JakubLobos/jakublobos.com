@@ -24,7 +24,6 @@
     "check:budgets": "node tools/check-budgets.mjs",
     "check:release": "node tools/check-release-assets.mjs",
     "fonts:subset": "node tools/fonts/subset-display.mjs",
-    "og:generate": "node tools/og/render-og.ts",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "verify": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm check:budgets"

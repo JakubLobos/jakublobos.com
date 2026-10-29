@@ -16,7 +16,8 @@ const dist = resolve(values.dist);
 
 const SITE_URL = 'https://jakublobos.com';
 const API_URL = 'https://api.jakublobos.com';
-const OG_MAX_BYTES = 100 * 1024;
+// WhatsApp's documented cap, the strictest of the apps we target; larger images get no preview.
+const OG_MAX_BYTES = 600 * 1024;
 const problems = [];
 
 function read(name) {
@@ -27,20 +28,17 @@ function read(name) {
   }
 }
 
-// Social images: 1200x630 PNGs under 100 KB (T-035).
-for (const locale of ['en', 'pl']) {
-  const name = `og/og-${locale}.png`;
-  const png = read(name);
-  if (png === undefined) {
-    problems.push(`missing ${name}`);
-    continue;
+// Social image: one 1200x630 GIF for both locales (T-095).
+const ogName = 'og/og-animation-v2.gif';
+const gif = read(ogName);
+if (gif === undefined) problems.push(`missing ${ogName}`);
+else {
+  const isGif = /^GIF8[79]a$/.test(gif.subarray(0, 6).toString('latin1'));
+  if (!isGif) problems.push(`${ogName} is not a GIF`);
+  else if (gif.readUInt16LE(6) !== 1200 || gif.readUInt16LE(8) !== 630) {
+    problems.push(`${ogName} is ${gif.readUInt16LE(6)}x${gif.readUInt16LE(8)}, expected 1200x630`);
   }
-  const isPng = png.subarray(1, 4).toString('latin1') === 'PNG';
-  if (!isPng) problems.push(`${name} is not a PNG`);
-  else if (png.readUInt32BE(16) !== 1200 || png.readUInt32BE(20) !== 630) {
-    problems.push(`${name} is ${png.readUInt32BE(16)}x${png.readUInt32BE(20)}, expected 1200x630`);
-  }
-  if (png.length > OG_MAX_BYTES) problems.push(`${name} is ${png.length} bytes, over 100 KB`);
+  if (gif.length > OG_MAX_BYTES) problems.push(`${ogName} is ${gif.length} bytes, over 600 KB`);
 }
 
 const sitemap = read('sitemap-0.xml');

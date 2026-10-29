@@ -7,13 +7,13 @@ test.describe('@i18n head metadata', () => {
   test.use({ locale: 'en-US' });
 
   for (const locale of LOCALES) {
-    test(`${locale}: lang, title, hreflang and OG image match the locale`, async ({ page }) => {
+    test(`${locale}: lang, title, hreflang and OG image are set`, async ({ page }) => {
       await gotoLocale(page, locale);
       await expect(page.locator('html')).toHaveAttribute('lang', locale);
       await expect(page).toHaveTitle(/\S/);
       await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
         'content',
-        `${SITE}/og/og-${locale}.png`,
+        `${SITE}/og/og-animation-v2.gif`,
       );
       await expect(page.locator('link[rel="alternate"][hreflang="en"]')).toHaveAttribute(
         'href',
