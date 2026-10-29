@@ -193,26 +193,37 @@ const n = nav(locale);
     border-radius: var(--radius-sm);
   }
 
-  /* The sheet unrolls from the top edge. `display` and `overlay` are transitioned (discretely) so the
-     dialog stays rendered in the top layer while the exit plays; where `overlay` is unsupported
-     the exit is simply instant. Under reduced motion nothing here applies. */
+  /* The sheet unrolls from the top edge (the entrance transition lives on `dialog:modal`, so it needs
+     nothing beyond `clip-path` and works in every engine).
+
+     The exit is only animated where `overlay` is supported (Chromium): `display` and `overlay` are
+     transitioned discretely so the dialog stays rendered in the top layer while the sheet retracts.
+     Safari supports `allow-discrete` for `display` but not `overlay`; with the exit transition there,
+     the dialog stays rendered yet leaves the top layer and stops matching `:modal` at once, so the
+     retracting sheet is drawn in the wrong stacking context with its flex layout gone and the links
+     flash broken. Behind the `@supports` gate those engines get no exit transition: the close is
+     instant. Under reduced motion nothing here applies. */
   @media (prefers-reduced-motion: no-preference) {
     dialog {
-      --sheet-duration: calc(var(--duration-panel) * 0.65);
-
       clip-path: inset(0 0 100% 0);
       pointer-events: none;
-      transition:
-        clip-path var(--sheet-duration) var(--ease-standard),
-        display var(--sheet-duration) allow-discrete,
-        overlay var(--sheet-duration) allow-discrete;
+    }
+
+    @supports (overlay: auto) {
+      dialog {
+        --sheet-exit: calc(var(--duration-panel) * 0.65);
+
+        transition:
+          clip-path var(--sheet-exit) var(--ease-standard),
+          display var(--sheet-exit) allow-discrete,
+          overlay var(--sheet-exit) allow-discrete;
+      }
     }
 
     dialog:modal {
-      --sheet-duration: var(--duration-panel);
-
       clip-path: inset(0);
       pointer-events: auto;
+      transition: clip-path var(--duration-panel) var(--ease-standard);
     }
 
     @starting-style {
