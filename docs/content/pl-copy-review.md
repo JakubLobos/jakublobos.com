@@ -423,7 +423,7 @@ Source: `apps/web/src/content/experience.ts`
 | --- | -- | -- | ---------------- |
 | `vitresoft.date` | Sep 2023 — Present | wrz 2023 — obecnie |   |
 | `vitresoft.title` | Software Engineer · Vitresoft | Software Engineer · Vitresoft |   |
-| `vitresoft.sub` | One of Poland’s largest game server hosting providers · craftserve.com · intern Jul — Aug 2023 | Jeden z największych polskich dostawców hostingu serwerów gier · craftserve.com · praktyki lip — sie 2023 |   |
+| `vitresoft.sub` | One of Poland’s largest game server hosting providers · craftserve.com · intern Jul — Aug 2023 | Jeden z największych polskich dostawców hostingu serwerów gier · craftserve.com   |
 | `vitresoft.bullets[0]` | Co-built, from the pre-launch stage, a game server management platform that replaced the company’s legacy [Pterodactyl](https://pterodactyl.io/)-based solution; now develop it largely single-handedly as the sole frontend developer. | Współtworzyłem od etapu przed startem platformę do zarządzania serwerami gier, która zastąpiła dawne firmowe rozwiązanie oparte na [Pterodactylu](https://pterodactyl.io/); dziś rozwijam ją w większości samodzielnie, jako jedyny programista frontendu. |   |
 | `vitresoft.bullets[1]` | Design interfaces and own UI/UX decisions; design and run A/B tests aimed at improving user experience and sales. | Projektuję interfejsy i odpowiadam za decyzje UI/UX; projektuję i prowadzę testy A/B, które mają poprawiać doświadczenie użytkowników i sprzedaż. |   |
 | `vitresoft.bullets[2]` | Work with AI agents: delegate tasks, review generated code and verify changes. | Pracuję z agentami AI: deleguję zadania, sprawdzam wygenerowany kod i weryfikuję zmiany. |   |

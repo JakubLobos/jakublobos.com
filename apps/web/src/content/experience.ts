@@ -27,9 +27,9 @@ const entries: readonly ExperienceEntry[] = [
     org: 'Vitresoft',
     copy: {
       en: {
-        date: 'Sep 2023 — Present',
+        date: 'Jul 2023 — Present',
         title: 'Software Engineer · Vitresoft',
-        sub: 'One of Poland’s largest game server hosting providers · craftserve.com · intern Jul — Aug 2023',
+        sub: 'One of Poland’s largest game server hosting providers · craftserve.com',
         bullets: [
           'Co-built, from the pre-launch stage, a game server management platform that replaced the company’s legacy [Pterodactyl](https://pterodactyl.io/)-based solution; now develop it largely single-handedly as the sole frontend developer.',
           'Design interfaces and own UI/UX decisions; design and run A/B tests aimed at improving user experience and sales.',
@@ -39,9 +39,9 @@ const entries: readonly ExperienceEntry[] = [
         ],
       },
       pl: {
-        date: 'wrz 2023 — obecnie',
+        date: 'lip 2023 — obecnie',
         title: 'Software Engineer · Vitresoft',
-        sub: 'Jeden z największych polskich dostawców hostingu serwerów gier · craftserve.com · praktyki lip — sie 2023',
+        sub: 'Jeden z największych polskich dostawców hostingu serwerów gier · craftserve.com',
         bullets: [
           'Współtworzyłem od etapu przed startem platformę do zarządzania serwerami gier, która zastąpiła dawne firmowe rozwiązanie oparte na [Pterodactylu](https://pterodactyl.io/); dziś rozwijam ją w większości samodzielnie, jako jedyny programista frontendu.',
           'Projektuję interfejsy i odpowiadam za decyzje UI/UX; projektuję i prowadzę testy A/B, które mają poprawiać doświadczenie użytkowników i sprzedaż.',
