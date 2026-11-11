@@ -40,20 +40,24 @@ const labels = nav(locale).social;
     text-transform: uppercase;
   }
 
+  /* A paper capsule keeps the links legible where they cross the hero's city (D-38). */
   ul {
     display: flex;
     flex-direction: column;
-    gap: var(--space-6);
+    gap: var(--space-2);
     margin: 0;
-    padding: 0;
+    padding: var(--space-4);
     list-style: none;
+    background: var(--color-surface-veil);
+    border: var(--border-hairline) solid var(--color-line-strong);
+    border-radius: var(--radius-pill);
   }
 
   a {
     display: block;
     writing-mode: vertical-rl;
     padding: var(--space-12) var(--space-6);
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-pill);
   }
 
   a:hover {

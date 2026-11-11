@@ -229,6 +229,8 @@
   --leading-logo-mark: 1.55;
 
   /* Hero and its paper city (T-096). */
+  --color-surface-veil: rgb(251 251 250 / 0.88); /* paper capsule over the city (D-38) */
+  --radius-pill: 999px;
   --hero-pad-top: clamp(24px, 6svh, 72px);
   --hero-pad-top-mobile: clamp(40px, 9svh, 88px);
   --hero-header-h-mobile: 76px;
