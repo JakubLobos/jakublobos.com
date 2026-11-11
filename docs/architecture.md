@@ -103,7 +103,7 @@ apps/web/
    │  ├─ sections/            Hero, MarqueeBands, Experience, Projects, Skills, Guestbook, Contact
    │  ├─ guestbook/           LastVisitorQuote, GuestbookForm, PaintPicker, GuestbookModal
    │  ├─ contact/             ContactDetails, ContactForm, FormField
-   │  ├─ decor/               PaintDrips, Mascot, CookieIcon
+   │  ├─ decor/               PaintDrips, Mascot (404), PaperCity (hero, ADR-0019), CookieIcon
    │  └─ ui/                  Button, ChromeButton, SectionHeading, Highlight, Spinner, CheckIcon, TypingField
    ├─ scripts/                custom elements + DOM glue (one file per element), analytics.ts
    ├─ dev/                    showcase.astro, og.astro: dev-only, injected only under `astro dev`

@@ -228,6 +228,15 @@
   --nav-pill-x-compact: var(--space-10);
   --leading-logo-mark: 1.55;
 
+  /* Hero and its paper city (T-096). */
+  --hero-pad-top: clamp(24px, 6svh, 72px);
+  --hero-pad-top-mobile: clamp(40px, 9svh, 88px);
+  --hero-header-h-mobile: 76px;
+  --hero-city-bleed-top: 24px;
+  --hero-city-bleed-bottom: 40px;
+  --hero-city-blur: 1.6px;
+  --duration-city-fade: 900ms;
+
   /* Privacy and 404 pages (T-033). */
   --page-chrome-h: 240px; /* header + footer allowance when a page centres its content in the viewport */
   --policy-measure: 70ch;
