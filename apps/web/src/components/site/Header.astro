@@ -59,12 +59,16 @@ const { locale, path } = Astro.props;
     padding: var(--header-pad);
   }
 
+  /* One paper capsule for the navigation and the switcher, so the links stay legible over the
+     hero's city and over content scrolling under the transparent header (D-38). */
   .end {
     display: flex;
     align-items: center;
-    gap: var(--space-16);
-    /* Aligns the switcher's text, not its pill, with the page gutter. */
-    margin-right: calc(-1 * var(--space-10));
+    gap: var(--space-12);
+    padding: var(--space-4) var(--space-6);
+    background: var(--color-surface-veil);
+    border: var(--border-hairline) solid var(--color-line-strong);
+    border-radius: var(--radius-pill);
   }
 
   .divider {
