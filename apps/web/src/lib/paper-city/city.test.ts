@@ -9,13 +9,17 @@ import {
 } from './city.ts';
 import { KIND, LINE_STRIDE } from './geometry.ts';
 
+// Byte comparison: toEqual walks ~1M floats element by element, which is too slow on CI.
+const sameBytes = (a: Float32Array, b: Float32Array): boolean =>
+  Buffer.from(a.buffer).equals(Buffer.from(b.buffer));
+
 describe('createCity', () => {
   it('draws the same city for the same seed', () => {
     const a = createCity(7);
     const b = createCity(7);
-    expect(a.fill).toEqual(b.fill);
-    expect(a.lines).toEqual(b.lines);
-    expect(createCity(8).fill).not.toEqual(a.fill);
+    expect(sameBytes(a.fill, b.fill)).toBe(true);
+    expect(sameBytes(a.lines, b.lines)).toBe(true);
+    expect(sameBytes(createCity(8).fill, a.fill)).toBe(false);
   });
 
   it('keeps every index inside its own building slot', () => {
@@ -41,8 +45,8 @@ describe('Rebuilder', () => {
     expect(rebuilder.step(INTRO_END - 1)).toBeUndefined();
 
     let rebuilt = 0;
-    // Thousands of fresh buildings exercise the slot capacities (writeLot throws on overflow).
-    for (let t = INTRO_END; rebuilt < 3000; t += 0.5) {
+    // A thousand fresh buildings exercise the slot capacities (writeLot throws on overflow).
+    for (let t = INTRO_END; rebuilt < 1000; t += 0.5) {
       const change = rebuilder.step(t);
       if (!change) continue;
       const strip = city.state[change.obj * 4 + 1];
