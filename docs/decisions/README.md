@@ -21,5 +21,6 @@ Format: lightweight MADR (context → decision → alternatives → consequences
 | [0015](0015-phone-number-protection.md)                | Phone number behind a Turnstile-verified reveal; never in the repo      | Accepted (D-24, D-25)     |
 | [0016](0016-gemini-free-tier-review-providers.md)      | Gemini free-tier review providers alongside OpenAI                      | Accepted                  |
 | [0017](0017-guestbook-submission-status.md)            | Live guestbook submission status with general reasons                   | Accepted (D-29)           |
+| [0019](0019-paper-city-own-webgl-renderer.md)          | Paper city: own WebGL2 renderer instead of three.js                     | Accepted (D-37)           |
 
 Template: [`_template.md`](_template.md).

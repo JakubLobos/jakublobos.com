@@ -73,7 +73,12 @@ const ids = variant === 'bottom' ? [...PAINT_ORDER].reverse() : PAINT_ORDER;
     transform-origin: bottom right;
   }
 
+  /* Phones give the hero's sky to the text and the city, so only the footer strip remains. */
   @media (width < 760px) {
+    .drips[data-variant='top'] {
+      display: none;
+    }
+
     .drips[data-variant='bottom'] {
       transform: scale(0.6);
     }

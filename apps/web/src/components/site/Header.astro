@@ -18,7 +18,7 @@ const { locale, path } = Astro.props;
 
 <header data-site-header>
   <Logo locale={locale} {path} />
-  <div class="end">
+  <div class="end capsule">
     <DesktopNav locale={locale} {path} />
     <span class="divider" aria-hidden="true"></span>
     <LanguageSwitcher locale={locale} {path} />
@@ -59,12 +59,13 @@ const { locale, path } = Astro.props;
     padding: var(--header-pad);
   }
 
+  /* One paper capsule for the navigation and the switcher, so the links stay legible over the
+     hero's city and over content scrolling under the transparent header (D-38). */
   .end {
     display: flex;
     align-items: center;
-    gap: var(--space-16);
-    /* Aligns the switcher's text, not its pill, with the page gutter. */
-    margin-right: calc(-1 * var(--space-10));
+    gap: var(--space-12);
+    padding: var(--space-4) var(--space-6);
   }
 
   .divider {

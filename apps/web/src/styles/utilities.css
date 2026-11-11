@@ -24,6 +24,13 @@
   }
 }
 
+/* Paper capsule for chrome that floats over the hero's city (D-38); padding stays per component. */
+.capsule {
+  background: var(--color-surface-veil);
+  border: var(--border-hairline) solid var(--color-line-strong);
+  border-radius: var(--radius-pill);
+}
+
 /* Breaks out of a centred container to the full viewport width. */
 .full-bleed {
   width: 100vw;

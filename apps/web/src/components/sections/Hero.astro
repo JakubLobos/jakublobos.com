@@ -2,7 +2,7 @@
 import type { Locale } from '../../i18n/locales.ts';
 import { hero } from '../../i18n/messages/hero.ts';
 import { profile } from '../../content/profile.ts';
-import Mascot from '../decor/Mascot.astro';
+import PaperCity from '../decor/PaperCity.astro';
 import Button from '../ui/Button.astro';
 import Highlight from '../ui/Highlight.astro';
 import '../../styles/motion/hero.css';
@@ -20,9 +20,7 @@ const siteKey = typeof configuredKey === 'string' ? configuredKey : '';
 ---
 
 <section id="hero" class="hero" aria-labelledby="hero-heading">
-  <div class="sticker">
-    <Mascot />
-  </div>
+  <PaperCity />
   <h1 id="hero-heading" class="title">
     {t.title}
   </h1>
@@ -31,9 +29,11 @@ const siteKey = typeof configuredKey === 'string' ? configuredKey : '';
   <p class="intro">{t.intro.before}<span class="tech">{t.intro.build}</span>{t.intro.join}<Highlight>{t.intro.design}</Highlight>{t.intro.after}</p>
   <div class="divider" aria-hidden="true"></div>
   <div class="actions">
-    <Button href="#contact">{t.contact}</Button>
+    <Button href="#contact" size="adaptive">
+      {t.contact}
+    </Button>
     <resume-download data-locale={locale} data-site-key={siteKey}>
-      <Button variant="secondary" data-resume>
+      <Button variant="secondary" size="adaptive" data-resume>
         {t.resume}
       </Button>
       <span class="nojs">
@@ -52,15 +52,25 @@ const siteKey = typeof configuredKey === 'string' ? configuredKey : '';
 </script>
 
 <style>
+  /* Content sits in the sky above the city's horizon. On desktop the skill bands stay above the
+     fold; on phones the hero fills the screen under the header and the bands follow on scroll. */
   .hero {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: var(--space-28);
-    min-height: calc(100svh - 240px);
-    padding: var(--space-40) 0 var(--space-32);
+    min-height: calc(100svh - var(--page-chrome-h));
+    padding: var(--hero-pad-top) 0 var(--space-32);
     text-align: center;
+  }
+
+  @media (width < 760px) {
+    .hero {
+      min-height: calc(100svh - var(--hero-header-h-mobile));
+      padding-top: var(--hero-pad-top-mobile);
+    }
   }
 
   .title {
@@ -91,13 +101,20 @@ const siteKey = typeof configuredKey === 'string' ? configuredKey : '';
     background: var(--color-line-strong);
   }
 
+  /* The two buttons always share one row. */
   .actions {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: center;
     gap: var(--space-16);
     padding-top: var(--space-8);
     position: relative;
+  }
+
+  @media (width < 760px) {
+    .actions {
+      gap: var(--space-12);
+    }
   }
 
   /* Out of flow, so a status line or an interactive challenge never moves the hero. */
@@ -144,13 +161,9 @@ const siteKey = typeof configuredKey === 'string' ? configuredKey : '';
   }
 
   /* Entrance: the hero is stuck, inked and drawn onto the page like a sheet of paper. Backwards
-     fill leaves no animated value behind, so the buttons and mascot keep their own hover
+     fill leaves no animated value behind, so the buttons keep their own hover
      transforms. The h1 never starts at opacity 0 because it is the LCP candidate. */
   @media (prefers-reduced-motion: no-preference) {
-    .sticker {
-      animation: hero-stick var(--duration-enter) var(--ease-spring) backwards;
-    }
-
     .title {
       animation: hero-ink var(--duration-ink) var(--ease-ink) backwards;
     }
