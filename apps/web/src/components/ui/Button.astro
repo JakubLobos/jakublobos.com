@@ -7,7 +7,8 @@ import type { HTMLAttributes } from 'astro/types';
 
 interface Props extends Omit<HTMLAttributes<'button'>, 'type' | 'disabled' | 'class'> {
   variant?: 'primary' | 'secondary';
-  size?: 'lg' | 'sm';
+  /** `adaptive`: large on desktop, small on phones (the hero calls to action). */
+  size?: 'lg' | 'sm' | 'adaptive';
   href?: string;
   download?: boolean | string;
   mimeType?: string;
@@ -109,6 +110,23 @@ const data = { 'data-variant': variant, 'data-size': size, 'data-min-width': min
     padding: var(--space-10) var(--space-18);
     font-size: var(--text-button-sm);
     white-space: nowrap;
+  }
+
+  .btn[data-size='adaptive'] {
+    white-space: nowrap;
+  }
+
+  /* Same values as size sm; media queries can't join that selector list. */
+  @media (width < 760px) {
+    .btn[data-size='adaptive'] {
+      --btn-rest: var(--press-sm-rest);
+      --btn-hover: var(--press-sm-hover);
+      --btn-lift: var(--lift-sm-hover);
+      --btn-sink: var(--sink-sm-active);
+      min-height: var(--control-min-h);
+      padding: var(--space-10) var(--space-18);
+      font-size: var(--text-button-sm);
+    }
   }
 
   .btn[data-min-width='form'] {

@@ -18,7 +18,7 @@ const { locale, path } = Astro.props;
 
 <header data-site-header>
   <Logo locale={locale} {path} />
-  <div class="end">
+  <div class="end capsule">
     <DesktopNav locale={locale} {path} />
     <span class="divider" aria-hidden="true"></span>
     <LanguageSwitcher locale={locale} {path} />
@@ -66,9 +66,6 @@ const { locale, path } = Astro.props;
     align-items: center;
     gap: var(--space-12);
     padding: var(--space-4) var(--space-6);
-    background: var(--color-surface-veil);
-    border: var(--border-hairline) solid var(--color-line-strong);
-    border-radius: var(--radius-pill);
   }
 
   .divider {

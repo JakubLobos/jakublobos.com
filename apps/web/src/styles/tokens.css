@@ -7,6 +7,7 @@
   /* Colour: semantic roles */
   --color-bg: #f7f7f6;
   --color-surface: #fbfbfa;
+  --color-surface-veil: rgb(251 251 250 / 0.88); /* paper capsules over the hero city (D-38) */
   --color-ink: #2b2b2b;
   --color-text-body: #3d3d3b;
   --color-text-secondary: #5c5c5a;
@@ -152,6 +153,7 @@
 
   /* Shape, borders, shadows */
   --radius-sm: 6px;
+  --radius-pill: 999px;
   --radius-md: 8px;
   --radius-lg: 12px;
   --radius-drip: 11px;
@@ -229,8 +231,6 @@
   --leading-logo-mark: 1.55;
 
   /* Hero and its paper city (T-096). */
-  --color-surface-veil: rgb(251 251 250 / 0.88); /* paper capsule over the city (D-38) */
-  --radius-pill: 999px;
   --hero-pad-top: clamp(24px, 6svh, 72px);
   --hero-pad-top-mobile: clamp(40px, 9svh, 88px);
   --hero-header-h-mobile: 76px;
@@ -238,6 +238,16 @@
   --hero-city-bleed-bottom: 40px;
   --hero-city-blur: 1.6px;
   --duration-city-fade: 900ms;
+  /* City materials and lines, read by scripts/paper-city.ts (accent roofs reuse --paint-*). */
+  --city-paper: var(--color-surface);
+  --city-roof: #f2f1ee;
+  --city-lawn: #8fcd9b;
+  --city-lawn-deep: #7cc08a;
+  --city-trunk: #dcc3a6;
+  --city-ground: #f3f3f1;
+  --city-graphite: var(--color-ink);
+  --city-ink: #55575a;
+  --city-wire: #9a9c9f;
 
   /* Privacy and 404 pages (T-033). */
   --page-chrome-h: 240px; /* header + footer allowance when a page centres its content in the viewport */

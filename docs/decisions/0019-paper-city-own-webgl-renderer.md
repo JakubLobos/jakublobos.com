@@ -23,6 +23,6 @@ The owner wants a sketched 3D city behind the hero. The design prototype (`<pape
 
 ## Consequences
 
-- Custom GL code to maintain, about 600 lines across `lib/paper-city/*` and `scripts/paper-city.ts`.
-- `PALETTE` and line colours in `lib/paper-city/` are GL constants that mirror design tokens. Change them together.
+- Custom GL code to maintain, about 600 lines across `lib/paper-city/*` (camera, geometry primitives, city layout, palette, shaders) and `scripts/paper-city.ts`.
+- Colours are design tokens (`--city-*`, accent roofs reuse `--paint-*`). The renderer reads them with `getComputedStyle` and passes them to the shaders as uniforms (`lib/paper-city/palette.ts`). If a token is missing, the city doesn't start.
 - `city.test.ts` guards determinism and the slot capacities (thousands of rebuilds).

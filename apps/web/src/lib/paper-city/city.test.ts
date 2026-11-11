@@ -2,13 +2,12 @@ import { describe, expect, it } from 'vitest';
 import {
   createCity,
   INTRO_END,
-  KIND,
-  LINE_STRIDE,
   LOT_INDICES,
   LOT_VERTICES,
   Rebuilder,
   STATE_WIDTH,
 } from './city.ts';
+import { KIND, LINE_STRIDE } from './geometry.ts';
 
 describe('createCity', () => {
   it('draws the same city for the same seed', () => {

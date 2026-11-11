@@ -29,9 +29,11 @@ const siteKey = typeof configuredKey === 'string' ? configuredKey : '';
   <p class="intro">{t.intro.before}<span class="tech">{t.intro.build}</span>{t.intro.join}<Highlight>{t.intro.design}</Highlight>{t.intro.after}</p>
   <div class="divider" aria-hidden="true"></div>
   <div class="actions">
-    <Button href="#contact">{t.contact}</Button>
+    <Button href="#contact" size="adaptive">
+      {t.contact}
+    </Button>
     <resume-download data-locale={locale} data-site-key={siteKey}>
-      <Button variant="secondary" data-resume>
+      <Button variant="secondary" size="adaptive" data-resume>
         {t.resume}
       </Button>
       <span class="nojs">
@@ -109,18 +111,9 @@ const siteKey = typeof configuredKey === 'string' ? configuredKey : '';
     position: relative;
   }
 
-  .actions :global(.btn) {
-    white-space: nowrap;
-  }
-
   @media (width < 760px) {
     .actions {
       gap: var(--space-12);
-    }
-
-    .actions :global(.btn) {
-      padding: var(--space-10) var(--space-16);
-      font-size: var(--text-button-sm);
     }
   }
 

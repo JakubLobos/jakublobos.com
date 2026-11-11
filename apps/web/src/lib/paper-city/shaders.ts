@@ -1,9 +1,12 @@
-// GLSL ES 3.00 programs for the paper city. Kind and style numbers mirror KIND/STYLE in city.ts;
-// attribute locations mirror the vertex layouts there.
+// GLSL ES 3.00 programs for the paper city. Kind and style numbers mirror KIND/STYLE in
+// geometry.ts; attribute locations mirror the vertex layouts there; colours arrive as uniforms
+// read from the design tokens (palette.ts).
 import { RADIUS } from './camera.ts';
-import { KIND, PALETTE, STATE_WIDTH, STYLE } from './city.ts';
+import { STATE_WIDTH } from './city.ts';
+import { KIND, STYLE } from './geometry.ts';
+import { CITY_MATERIAL_TOKENS } from './palette.ts';
 
-const common = /* glsl */ `#version 300 es
+const vertexCommon = /* glsl */ `#version 300 es
 precision highp float;
 precision highp sampler2D;
 uniform mat4 uViewProj;
@@ -31,13 +34,38 @@ vec3 progress(vec4 s) {
   if (u <= 0.0) return vec3(0.0);
   return vec3(ioe(sat((u - 0.5) / 1.0)), cubeOut(sat(u / 0.6)), 0.55 * sat(u / 0.15) * (1.0 - sat((u - 1.5) / 0.45)));
 }
-float level(vec4 s, float f) { return s.z + (s.w - s.z) * f + 0.001; }
-float slabScale(vec4 s) { float k = sat((uTime - s.x) / 0.7); return k >= 1.0 ? 1.0 : max(1e-4, backOut(k)); }
-float carOffset(vec4 s) {
-  float lo = s.x < 1.5 ? -120.0 : -110.0;
-  float hi = s.x < 1.5 ? 45.0 : 110.0;
-  return lo + mod(s.y + s.z * uTime - lo, hi - lo);
+float clipY(vec4 s, float f) { return s.z + (s.w - s.z) * f + 0.001; }
+
+// Animates one vertex by its kind. Returns false when it is not drawn this frame; level is the
+// height above which a building is still unbuilt (1e9 = fully built).
+bool animate(int kind, vec4 s, inout vec3 p, out float level) {
+  level = 1e9;
+  if (kind == ${KIND.hidden}) return false;
+  if (kind == ${KIND.slab}) {
+    float k = sat((uTime - s.x) / 0.7);
+    if (k <= 0.0) return false;
+    p.y *= k >= 1.0 ? 1.0 : max(1e-4, backOut(k));
+  } else if (kind == ${KIND.body}) {
+    float f = progress(s).x;
+    if (f <= 0.0) return false;
+    if (f < 1.0) level = clipY(s, f);
+  } else if (kind == ${KIND.cap}) {
+    float f = progress(s).x;
+    if (f <= 0.0 || f >= 1.0) return false;
+    p.y = clipY(s, f);
+  } else if (kind == ${KIND.wire}) {
+    vec3 g = progress(s);
+    if (g.z <= 0.0) return false;
+    p.y = s.z + (p.y - s.z) * max(1e-4, g.y);
+  } else if (kind == ${KIND.car}) {
+    float lo = s.x < 1.5 ? -120.0 : -110.0;
+    float hi = s.x < 1.5 ? 45.0 : 110.0;
+    float c = lo + mod(s.y + s.z * uTime - lo, hi - lo);
+    if (s.x < 1.5) p.z += c; else p.x += c;
+  }
+  return true;
 }
+
 // Bends flat coordinates onto the ground cylinder (axis along x, top at y = 0).
 vec4 project(vec3 p) {
   float a = p.z / R;
@@ -46,7 +74,7 @@ vec4 project(vec3 p) {
 }
 `;
 
-export const fillVertex = /* glsl */ `${common}
+export const fillVertex = /* glsl */ `${vertexCommon}
 layout(location = 0) in vec3 aPos;
 layout(location = 1) in vec2 aUv;
 layout(location = 2) in float aMat;
@@ -59,40 +87,19 @@ flat out int vMat;
 
 void main() {
   vec3 p = aPos;
-  int kind = int(floor(aKind + 0.5));
-  vec4 s = stateOf(aObj);
   vUv = aUv;
   vMat = int(aMat + 0.5);
   vY = p.y;
-  vLevel = 1e9;
-  if (kind == ${KIND.hidden}) { gl_Position = OFF; return; }
-  if (kind == ${KIND.slab}) {
-    if (uTime <= s.x) { gl_Position = OFF; return; }
-    p.y *= slabScale(s);
-  } else if (kind == ${KIND.body}) {
-    float f = progress(s).x;
-    if (f <= 0.0) { gl_Position = OFF; return; }
-    if (f < 1.0) vLevel = level(s, f);
-  } else if (kind == ${KIND.cap}) {
-    float f = progress(s).x;
-    if (f <= 0.0 || f >= 1.0) { gl_Position = OFF; return; }
-    p.y = level(s, f);
-  } else if (kind == ${KIND.car}) {
-    if (s.x < 1.5) p.z += carOffset(s); else p.x += carOffset(s);
-  }
-  gl_Position = project(p);
+  float level;
+  gl_Position = animate(int(floor(aKind + 0.5)), stateOf(aObj), p, level) ? project(p) : OFF;
+  vLevel = level;
 }
 `;
 
-const rgb = (hex: string): string => {
-  const n = Number.parseInt(hex.slice(1), 16);
-  return [16, 8, 0].map((shift) => (((n >> shift) & 255) / 255).toFixed(4)).join(', ');
-};
-
 export const fillFragment = /* glsl */ `#version 300 es
 precision highp float;
-const vec3 PALETTE[${PALETTE.length}] = vec3[](${PALETTE.map((c) => `vec3(${rgb(c)})`).join(', ')});
-const vec3 GRAPHITE = vec3(${rgb('#2b2b2b')});
+uniform vec3 uPalette[${CITY_MATERIAL_TOKENS.length}];
+uniform vec3 uGraphite;
 in vec2 vUv;
 in float vY;
 flat in float vLevel;
@@ -128,13 +135,13 @@ float windowInk(vec2 uv, int kind) {
 
 void main() {
   if (vY > vLevel) discard;
-  vec3 c = PALETTE[vMat];
-  if (vMat >= 1 && vMat <= 3) c = mix(c, GRAPHITE, windowInk(vUv, vMat));
+  vec3 c = uPalette[vMat];
+  if (vMat >= 1 && vMat <= 3) c = mix(c, uGraphite, windowInk(vUv, vMat));
   outColor = vec4(c, 1.0);
 }
 `;
 
-export const lineVertex = /* glsl */ `${common}
+export const lineVertex = /* glsl */ `${vertexCommon}
 layout(location = 0) in vec3 aPos;
 layout(location = 1) in float aStyle;
 layout(location = 2) in float aKind;
@@ -150,35 +157,17 @@ void main() {
   vec4 s = stateOf(aObj);
   vStyle = int(aStyle + 0.5);
   vY = p.y;
-  vLevel = 1e9;
-  vAlpha = 0.42;
-  if (kind == ${KIND.hidden}) { gl_Position = OFF; return; }
-  if (kind == ${KIND.slab}) {
-    if (uTime <= s.x) { gl_Position = OFF; return; }
-    p.y *= slabScale(s);
-  } else if (kind == ${KIND.body}) {
-    float f = progress(s).x;
-    if (f <= 0.0) { gl_Position = OFF; return; }
-    if (f < 1.0) vLevel = level(s, f);
-  } else if (kind == ${KIND.cap}) {
-    float f = progress(s).x;
-    if (f <= 0.0 || f >= 1.0) { gl_Position = OFF; return; }
-    p.y = level(s, f);
-    vAlpha = 0.6;
-  } else if (kind == ${KIND.wire}) {
-    vec3 g = progress(s);
-    if (g.z <= 0.0) { gl_Position = OFF; return; }
-    p.y = s.z + (p.y - s.z) * max(1e-4, g.y);
-    vAlpha = g.z;
-  } else if (kind == ${KIND.car}) {
-    if (s.x < 1.5) p.z += carOffset(s); else p.x += carOffset(s);
-  }
-  gl_Position = project(p);
+  vAlpha = kind == ${KIND.wire} ? progress(s).z : kind == ${KIND.cap} ? 0.6 : 0.42;
+  float level;
+  gl_Position = animate(kind, s, p, level) ? project(p) : OFF;
+  vLevel = level;
 }
 `;
 
 export const lineFragment = /* glsl */ `#version 300 es
 precision highp float;
+uniform vec3 uInk;
+uniform vec3 uWire;
 in float vY;
 in float vAlpha;
 flat in float vLevel;
@@ -187,7 +176,7 @@ out vec4 outColor;
 
 void main() {
   if (vY > vLevel) discard;
-  vec3 c = vStyle == ${STYLE.ink} ? vec3(${rgb('#55575a')}) : vec3(${rgb('#9a9c9f')});
+  vec3 c = vStyle == ${STYLE.ink} ? uInk : uWire;
   outColor = vec4(c * vAlpha, vAlpha);
 }
 `;

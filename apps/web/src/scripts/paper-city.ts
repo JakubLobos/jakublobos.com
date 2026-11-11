@@ -5,14 +5,14 @@
 import { viewProjection } from '../lib/paper-city/camera.ts';
 import {
   createCity,
-  FILL_STRIDE,
   INTRO_END,
-  LINE_STRIDE,
   Rebuilder,
   STATE_WIDTH,
   type City,
   type LotUpload,
 } from '../lib/paper-city/city.ts';
+import { FILL_STRIDE, LINE_STRIDE } from '../lib/paper-city/geometry.ts';
+import { CITY_LINE_TOKENS, CITY_MATERIAL_TOKENS, readColors } from '../lib/paper-city/palette.ts';
 import { fillFragment, fillVertex, lineFragment, lineVertex } from '../lib/paper-city/shaders.ts';
 
 const MAX_PIXEL_RATIO = 1.5;
@@ -45,7 +45,10 @@ function compile(
     gl.deleteShader(shader);
   }
   gl.linkProgram(program);
-  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return undefined;
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+    gl.deleteProgram(program);
+    return undefined;
+  }
   return {
     program,
     viewProj: gl.getUniformLocation(program, 'uViewProj'),
@@ -97,7 +100,7 @@ class PaperCity extends HTMLElement {
     if (!gl || !this.setup(gl)) return;
     this.append(this.canvas);
     this.startedAt = performance.now();
-    this.canvas.addEventListener('webglcontextlost', this.stop);
+    this.canvas.addEventListener('webglcontextlost', this.lost);
     this.resizeObserver = new ResizeObserver(this.resize);
     this.resizeObserver.observe(this);
     this.intersectionObserver = new IntersectionObserver(([entry]) => {
@@ -115,13 +118,25 @@ class PaperCity extends HTMLElement {
     this.intersectionObserver?.disconnect();
     document.removeEventListener('visibilitychange', this.schedule);
     this.reducedMotion.removeEventListener('change', this.resize);
-    this.canvas.removeEventListener('webglcontextlost', this.stop);
+    this.canvas.removeEventListener('webglcontextlost', this.lost);
   }
 
   private setup(gl: WebGL2RenderingContext): boolean {
+    const style = getComputedStyle(this);
+    const read = (token: string): string => style.getPropertyValue(token);
+    const palette = readColors(CITY_MATERIAL_TOKENS, read);
+    const lineColors = readColors(CITY_LINE_TOKENS, read);
     const fill = compile(gl, fillVertex, fillFragment);
     const lines = compile(gl, lineVertex, lineFragment);
-    if (!fill || !lines) return false;
+    const [graphite, ink, wire] = lineColors ?? [];
+    if (!palette || !graphite || !ink || !wire || !fill || !lines) return false;
+    // Colours never change, so they are set once per program.
+    gl.useProgram(fill.program);
+    gl.uniform3fv(gl.getUniformLocation(fill.program, 'uPalette'), palette.flat());
+    gl.uniform3fv(gl.getUniformLocation(fill.program, 'uGraphite'), graphite);
+    gl.useProgram(lines.program);
+    gl.uniform3fv(gl.getUniformLocation(lines.program, 'uInk'), ink);
+    gl.uniform3fv(gl.getUniformLocation(lines.program, 'uWire'), wire);
     const city = createCity();
     this.gl = gl;
     this.city = city;
@@ -183,6 +198,12 @@ class PaperCity extends HTMLElement {
   private readonly stop = (): void => {
     cancelAnimationFrame(this.frame);
     this.frame = 0;
+  };
+
+  /** A lost context leaves a blank canvas; fade it out so the hero falls back to the grid. */
+  private readonly lost = (): void => {
+    this.stop();
+    delete this.dataset.ready;
   };
 
   private readonly schedule = (): void => {
